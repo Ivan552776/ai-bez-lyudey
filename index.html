@@ -3,394 +3,512 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0C1015">
+<meta name="theme-color" content="#FFFFFF">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <title>Машина за рулём</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
 :root{
-  --ground:#0C1015; --panel:#141A21; --panel2:#1B222B; --sunk:#0F141A;
-  --ink:#EDF1F6; --soft:#94A0AE; --faint:#5F6A78;
-  --line:#212932; --line2:#2C3641;
-  --amber:#E9AE58; --amberD:#8A5A16; --amberW:#221B10;
-  --cyan:#4FD3C8; --violet:#9A8BF2; --green:#4FD39A; --red:#FF8767;
-  --display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --bg:#FFFFFF; --card:#F7F8FB; --line:#ECEEF4; --line2:#DFE3EC;
+  --ink:#15171C; --soft:#5B6272; --faint:#98A0B4;
+  --brand:#5B5BE8; --brandS:#EEEEFC; --brand2:#8A6BF0;
+  --c1:#5B5BE8; --c2:#12B27E; --c3:#F0913A; --c4:#E45C7B; --c5:#3AA6F0; --c6:#8A5BE8;
+  --ok:#12B27E; --okS:#E6F7F1; --warn:#E45C7B; --warnS:#FDECF0;
+  --shadow:0 8px 26px rgba(20,26,44,.08);
   --body:"Golos Text",system-ui,-apple-system,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,monospace;
   --ease:cubic-bezier(.22,.9,.28,1);
 }
+:root[data-n="1"]{
+  --bg:#161A2B; --card:#1E2338; --line:#2B3252; --line2:#343C66;
+  --ink:#EAEDF7; --soft:#A8B0C8; --faint:#7A82A0;
+  --brand:#7C9BFF; --brandS:#232945; --brand2:#B08BFF;
+  --c1:#7C9BFF; --c2:#4FD3A0; --c3:#FFB454; --c4:#FF8AA8; --c5:#66D3E8; --c6:#B08BFF;
+  --ok:#4FD3A0; --okS:#182E2A; --warn:#FF8AA8; --warnS:#33202C;
+  --shadow:0 10px 30px rgba(0,0,0,.34);
+}
 *{box-sizing:border-box}
-body{background:
-  radial-gradient(900px 520px at 50% -8%, #1A222C 0%, transparent 62%),
-  var(--ground);
-  color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.58;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
 button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none}
-.app{max-width:560px;margin:0 auto;padding:14px 14px calc(112px + env(safe-area-inset-bottom))}
+.app{max-width:560px;margin:0 auto;padding:12px 14px calc(104px + env(safe-area-inset-bottom))}
 
 /* ---- шапка ---- */
-.bar{display:flex;align-items:center;gap:10px;padding:2px 2px 16px}
-.logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(150deg,#212A35,#141A21);border:1px solid var(--line2);display:grid;place-items:center;flex:none;position:relative}
-.logo i{width:16px;height:4px;border-radius:2px;background:var(--amber);box-shadow:0 0 10px var(--amber);animation:blink 3.4s var(--ease) infinite}
-@keyframes blink{0%,88%,100%{width:16px;opacity:1}92%{width:6px;opacity:.6}}
-.bar b{font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:-.01em}
-.bar .st{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--green);display:flex;align-items:center;gap:6px}
-.bar .st .d{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
-@keyframes pulse{50%{opacity:.35}}
+.tp{display:flex;align-items:center;gap:10px;padding:8px 2px 14px;position:sticky;top:0;z-index:9;background:var(--bg)}
+.mk{width:30px;height:30px;border-radius:10px;background:var(--brand);display:grid;place-items:center;flex:none}
+.mk i{width:14px;height:4px;border-radius:2px;background:#fff;display:block}
+.tp b{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.tgl{margin-left:auto;width:34px;height:34px;border-radius:11px;border:1px solid var(--line2);display:grid;place-items:center;font-size:15px;color:var(--soft)}
+.tgl:active{transform:scale(.94)}
 
-.view{display:none}
-.view.on{display:block;animation:fade .3s var(--ease)}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.view{display:none}.view.on{display:block;animation:in .28s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+h2.big{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px}
+.sh{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin:20px 0 10px}
+.stack{display:flex;flex-direction:column;gap:9px}
 
-/* ---- счётчики ---- */
-.gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
-.g{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:11px 9px;text-align:center}
-.g b{display:block;font-family:var(--mono);font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
-.g span{font-size:11.5px;color:var(--faint);letter-spacing:.02em}
-.g.a b{color:var(--amber)}
+/* ---- герой ---- */
+.hero{border-radius:19px;padding:19px 17px;background:linear-gradient(140deg,var(--brand),var(--brand2));color:#fff;display:flex;flex-direction:column;gap:9px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.13);top:-72px;right:-52px}
+.hero h3{margin:0;font-size:20px;font-weight:700;line-height:1.16;letter-spacing:-.02em;max-width:16ch;position:relative}
+.hero p{margin:0;font-size:13.5px;opacity:.86;max-width:33ch;position:relative}
+.hero .go{align-self:flex-start;background:#fff;color:var(--brand);font-size:13.5px;font-weight:700;border-radius:999px;padding:11px 18px;margin-top:3px;position:relative}
+.hero .go:active{transform:scale(.97)}
+.prog{display:flex;gap:5px;margin-top:8px;position:relative}
+.prog i{height:4px;flex:1;border-radius:2px;background:rgba(255,255,255,.28)}
+.prog i.d{background:#fff}
 
-/* ---- конвейер ---- */
-.rig{position:relative;padding-left:34px}
-.spine{position:absolute;left:15px;top:16px;bottom:52px;width:2px;background:linear-gradient(var(--line2),var(--line2));overflow:hidden;border-radius:2px}
-.spine::after{content:"";position:absolute;left:-1px;width:4px;height:44px;border-radius:3px;
-  background:linear-gradient(180deg,transparent,var(--amber),transparent);
-  animation:flow 3.6s linear infinite}
-@keyframes flow{from{top:-46px}to{top:100%}}
-.node{position:relative;margin-bottom:10px;background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:14px 15px;width:100%;text-align:left;display:flex;flex-direction:column;gap:5px;
-  transition:transform .16s var(--ease),border-color .2s,background .2s;animation:rise .45s var(--ease) backwards}
-@keyframes rise{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
-.node:hover{transform:translateX(2px);border-color:var(--line2)}
-.node:active{transform:scale(.99)}
-.node::before{content:"";position:absolute;left:-26px;top:20px;width:12px;height:12px;border-radius:50%;
-  background:var(--ground);border:2px solid var(--line2);transition:border-color .2s,box-shadow .2s}
-.node.live::before{border-color:var(--amber);box-shadow:0 0 0 4px var(--amberW),0 0 12px var(--amber)}
-.node.live{border-color:#39414D}
-.node .top{display:flex;align-items:center;gap:9px}
-.node .idx{font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.08em}
-.node .st{margin-left:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:6px;border:1px solid var(--line2);color:var(--faint)}
-.node.live .st{color:var(--amber);border-color:var(--amberD);background:var(--amberW)}
-.node b{font-size:17px;font-weight:600;letter-spacing:-.01em}
-.node p{margin:0;font-size:14px;color:var(--soft);max-width:40ch}
-.node .bars{display:flex;gap:3px;margin-top:6px}
-.node .bars i{height:3px;flex:1;border-radius:2px;background:var(--line2)}
-.node.live .bars i{background:var(--amber);opacity:.85;animation:eq 1.5s ease-in-out infinite}
-.node.live .bars i:nth-child(2){animation-delay:.12s}
-.node.live .bars i:nth-child(3){animation-delay:.24s}
-.node.live .bars i:nth-child(4){animation-delay:.36s}
-@keyframes eq{50%{opacity:.28}}
-.node.lock:active{animation:shake .3s}
-@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+/* ---- строка-раздел ---- */
+.item{width:100%;text-align:left;border-radius:16px;padding:13px;display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);transition:transform .14s var(--ease),border-color .2s;animation:rise .4s var(--ease) backwards}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.item:active{transform:scale(.985)}
+.item:hover{border-color:var(--line2)}
+.ic{width:40px;height:40px;border-radius:12px;flex:none;display:grid;place-items:center;font-size:17px;color:#fff}
+.i1{background:var(--c1)}.i2{background:var(--c2)}.i3{background:var(--c3)}
+.i4{background:var(--c4)}.i5{background:var(--c5)}.i6{background:var(--c6)}
+.tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tx b{font-size:15px;font-weight:600;letter-spacing:-.01em}
+.tx span{font-size:12px;color:var(--faint)}
+.ch{margin-left:auto;color:var(--faint);font-size:15px;flex:none}
+.pill{margin-left:auto;flex:none;font-family:var(--mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;padding:4px 8px;border-radius:6px;background:var(--line);color:var(--faint)}
+.pill.free{background:var(--okS);color:var(--ok)}
 
-.wrapsys{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 4px}
-.sys{background:var(--panel);border:1px dashed var(--line2);border-radius:14px;padding:13px 14px;text-align:left;display:flex;flex-direction:column;gap:4px}
-.sys b{font-size:14.5px;font-weight:600}
-.sys span{font-size:13px;color:var(--faint)}
-.sys .dot{width:7px;height:7px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet);margin-bottom:2px}
-.sys:nth-child(2) .dot{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+/* ---- урок ---- */
+.back{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);border-radius:999px;padding:8px 14px 8px 11px;font-size:13px;color:var(--soft);margin-bottom:13px}
+.back:active{transform:scale(.97)}
+.lhead{border-radius:18px;padding:18px;color:#fff;margin-bottom:15px}
+.lhead .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
+.lhead h3{margin:7px 0 0;font-size:21px;font-weight:700;line-height:1.15;letter-spacing:-.02em}
+.prose{display:flex;flex-direction:column;gap:14px}
+.prose p{margin:0;font-size:15.5px;line-height:1.62}
+.prose h4{margin:7px 0 0;font-size:16.5px;font-weight:700}
+.prose ul{margin:0;padding-left:19px;display:flex;flex-direction:column;gap:7px;font-size:15.5px}
+.prose li::marker{color:var(--faint)}
+.prose code{font-family:var(--mono);font-size:.88em;background:var(--card);border:1px solid var(--line);padding:1px 5px;border-radius:5px}
+pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.62}
+.cw{position:relative}.cw .cb{position:absolute;top:8px;right:8px}
+.cb{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line2);border-radius:8px;padding:6px 10px;color:var(--soft);background:var(--bg)}
+.cb.done{color:var(--ok);border-color:var(--ok)}
+.pbox{border:1px solid var(--brand);border-radius:13px;overflow:hidden;background:var(--brandS)}
+.pbox .ph{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--brand)}
+.pbox .ph span{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--brand)}
+.pbox .ph .cb{margin-left:auto}
+.pbox pre{background:transparent;color:var(--ink);border-radius:0}
+.tip{border-left:3px solid var(--c3);background:var(--card);border-radius:0 11px 11px 0;padding:13px;font-size:15px}
+.vid{border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.vid .fr{aspect-ratio:16/9;background:linear-gradient(140deg,var(--c1),var(--c6));display:grid;place-items:center;color:#fff;font-size:30px}
+.vid .cp{padding:11px 13px;display:flex;align-items:center;gap:9px;background:var(--card)}
+.vid .cp b{font-size:14px;font-weight:600}
+.vid .cp span{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
 
-.sect{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:22px 0 12px}
+/* ---- обучающий скрин ---- */
+.shot{border:1px solid var(--line2);border-radius:14px;overflow:hidden;background:var(--card)}
+.shot .bar{display:flex;align-items:center;gap:6px;padding:9px 11px;border-bottom:1px solid var(--line);font-size:11.5px;color:var(--faint);font-family:var(--mono)}
+.shot .bar i{width:8px;height:8px;border-radius:50%;background:var(--line2);display:block}
+.shot .win{padding:12px;display:flex;flex-direction:column;gap:9px;background:var(--bg)}
+.bub{max-width:86%;border-radius:14px;padding:10px 12px;font-size:13.5px;line-height:1.45}
+.bub.me{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:5px}
+.bub.ai{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
+.mark{border:2px dashed var(--c3);border-radius:11px;padding:8px 10px;font-size:12.5px;color:var(--c3);display:flex;gap:8px;align-items:flex-start}
+.mark b{flex:none;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding-top:1px}
+.cap{font-size:12.5px;color:var(--faint);text-align:center}
 
-/* ---- журнал ---- */
-.log{display:flex;flex-direction:column;gap:8px}
-.entry{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;animation:rise .45s var(--ease) backwards}
-.entry .h{display:flex;align-items:center;gap:10px;padding:13px 14px;width:100%;text-align:left}
-.entry .h .tm{font-family:var(--mono);font-size:11.5px;color:var(--faint);flex:none}
-.entry .h .dt{width:7px;height:7px;border-radius:50%;flex:none}
-.entry .h b{font-size:15.5px;font-weight:600;line-height:1.3}
-.entry .h .ar{margin-left:auto;color:var(--faint);font-size:12px;transition:transform .25s var(--ease);flex:none}
-.entry.open .h .ar{transform:rotate(90deg)}
-.entry .body{display:none;padding:0 14px 16px;flex-direction:column;gap:13px;border-top:1px solid var(--line)}
-.entry.open .body{display:flex;animation:fade .3s var(--ease)}
-.entry .body p{margin:0;font-size:15px;line-height:1.6}
-.entry .body h4{margin:6px 0 0;font-size:15px;font-weight:600}
-.entry .body ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14.5px}
-.entry .body li::marker{color:var(--faint)}
-pre{margin:0;background:#080B0F;border:1px solid var(--line);border-radius:11px;padding:13px 14px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.6;color:#D6DEE8}
-.tipbox{border-left:3px solid var(--amber);background:var(--amberW);border-radius:0 10px 10px 0;padding:12px 13px;font-size:14.5px}
-.pbox{border:1px solid var(--amberD);border-radius:12px;overflow:hidden;background:linear-gradient(160deg,#1D1810,#10151B)}
-.pbox .ph{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid var(--amberD)}
-.pbox .ph span{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--amber)}
-.pbox pre{border:none;border-radius:0;background:transparent;color:#E8DFCC;font-size:12.5px}
-.codewrap{position:relative}
-.codewrap .cbtn{position:absolute;top:8px;right:8px}
-.cbtn{margin-left:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;border:1px solid var(--line2);border-radius:7px;padding:6px 10px;color:var(--soft);background:rgba(12,16,21,.88);transition:color .2s,border-color .2s}
-.cbtn:hover{color:var(--amber);border-color:var(--amberD)}
-.cbtn.done{color:var(--green);border-color:var(--green)}
-.copyb{align-self:flex-start;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line2);border-radius:8px;padding:8px 12px;color:var(--soft)}
+/* ---- инструменты ---- */
+.tool{width:100%;text-align:left;border-radius:15px;padding:12px 13px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.tool .r1{display:flex;align-items:center;gap:10px}
+.tool .lg{width:34px;height:34px;border-radius:10px;flex:none;display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px}
+.tool b{font-size:15px;font-weight:600}
+.tool .tag{margin-left:auto;font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;border-radius:6px}
+.tag.rf{background:var(--okS);color:var(--ok)}
+.tag.vpn{background:var(--warnS);color:var(--warn)}
+.tool p{margin:0;font-size:13px;color:var(--soft)}
 
-/* ---- доступ ---- */
-.acc{border-radius:18px;border:1px solid var(--amberD);background:linear-gradient(168deg,#1E1810,#121820);padding:20px 18px;display:flex;flex-direction:column;gap:15px}
-.acc .num{font-family:var(--mono);font-size:36px;font-weight:600;color:var(--amber);line-height:1}
-.acc .sub{font-size:13px;color:var(--soft)}
-.acc ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px;font-size:14.5px}
-.acc li{display:flex;gap:10px;align-items:flex-start}
-.acc li i{color:var(--amber);font-style:normal;font-weight:700;flex:none}
-.field{width:100%;background:var(--sunk);border:1px solid var(--line2);border-radius:12px;padding:13px 14px;color:var(--ink);font-family:inherit;font-size:15px}
-.field::placeholder{color:var(--faint)}
-.agree{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--soft)}
-.agree input{margin-top:3px;accent-color:var(--amber);width:17px;height:17px;flex:none}
-.buy{border-radius:13px;background:var(--amber);color:#12161C;font-weight:600;font-size:15.5px;padding:16px;transition:transform .12s,opacity .2s}
-.buy:disabled{opacity:.4;cursor:not-allowed}
-.buy:not(:disabled):active{transform:scale(.985)}
+/* ---- профиль ---- */
+.pcard{border-radius:17px;background:var(--card);border:1px solid var(--line);padding:15px;display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.pcard .av{width:46px;height:46px;border-radius:50%;background:linear-gradient(140deg,var(--c1),var(--c6));flex:none}
+.pcard b{font-size:17px;font-weight:700}
+.pcard span{font-size:12.5px;color:var(--faint)}
+.grp{border-radius:16px;background:var(--card);border:1px solid var(--line);overflow:hidden}
+.grp .row{display:flex;align-items:center;gap:12px;padding:13px;width:100%;text-align:left;border-bottom:1px solid var(--line)}
+.grp .row:last-child{border-bottom:none}
+.sw{margin-left:auto;width:44px;height:26px;border-radius:999px;background:var(--brand);position:relative;flex:none;transition:background .2s}
+.sw i{position:absolute;top:3px;left:21px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s var(--ease)}
+.sw.off{background:var(--line2)}.sw.off i{left:3px}
 
-/* ---- док ---- */
-.dock{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:3px;background:rgba(20,26,33,.94);border:1px solid var(--line2);border-radius:999px;padding:5px;box-shadow:0 12px 34px rgba(0,0,0,.5);backdrop-filter:blur(10px);z-index:20}
-.dock button{color:var(--faint);font-size:13.5px;font-weight:500;padding:9px 16px;border-radius:999px;transition:background .2s,color .2s}
-.dock button.on{background:var(--ink);color:#12161C}
-.foot{margin-top:20px;font-family:var(--mono);font-size:11.5px;color:var(--faint);line-height:1.7;text-align:center}
-@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+/* ---- нижняя панель ---- */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--bg);border-top:1px solid var(--line);padding:7px 8px calc(8px + env(safe-area-inset-bottom));display:flex;gap:2px;max-width:560px;margin:0 auto}
+.dock a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px;border-radius:13px;font-size:10px;font-weight:600;color:var(--faint);transition:color .2s,background .2s;cursor:pointer}
+.dock a .g{font-size:18px;line-height:1}
+.dock a.on{color:var(--brand);background:var(--brandS)}
+.foot{margin-top:20px;font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.65;text-align:center}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="bar">
-    <span class="logo"><i></i></span>
-    <b>Машина за рулём</b>
-    <span class="st"><span class="d"></span>работает</span>
+  <div class="tp">
+    <span class="mk"><i></i></span><b>Машина за рулём</b>
+    <button class="tgl" id="tgl" title="Тема">◐</button>
   </div>
 
-  <!-- ============ МАШИНА ============ -->
-  <div class="view on" id="v-rig">
-    <div class="gauges">
-      <div class="g"><b data-count="3">0</b><span>поста</span></div>
-      <div class="g"><b data-count="2">0</b><span>ролика</span></div>
-      <div class="g"><b data-count="1">0</b><span>кружок</span></div>
-      <div class="g a"><b data-count="14" data-suf=" ₽">0</b><span>на голос</span></div>
+  <!-- ===== УЧЁБА ===== -->
+  <div class="view on" id="v-study">
+    <div class="hero">
+      <h3>Начни с нуля</h3>
+      <p>Шесть разделов: от первого разговора с нейросетью до агента, который ведёт канал сам.</p>
+      <button class="go" data-sec="0">Открыть первый урок</button>
+      <span class="prog"><i class="d"></i><i class="d"></i><i></i><i></i><i></i><i></i></span>
     </div>
-
-    <div class="sect">Конвейер · нажми на узел</div>
-    <div class="rig">
-      <div class="spine"></div>
-      <div id="nodes"></div>
-    </div>
-
-    <div class="sect">Обвязка</div>
-    <div class="wrapsys">
-      <button class="sys" data-node="mem"><span class="dot"></span><b>Память</b><span>что агент помнит между запусками</span></button>
-      <button class="sys" data-node="sch"><span class="dot"></span><b>Расписание</b><span>работа без человека</span></button>
-    </div>
-
-    <p class="foot">Счётчики — реальные показатели этого канала.<br>Обновляются вместе с каждой публикацией.</p>
+    <div class="sh">Разделы · два открыты</div>
+    <div class="stack" id="secs"></div>
+    <p class="foot">Открытые разделы не закроются никогда.<br>Их можно проходить сколько угодно раз.</p>
   </div>
 
-  <!-- ============ ЖУРНАЛ ============ -->
+  <!-- ===== СПИСОК УРОКОВ РАЗДЕЛА ===== -->
+  <div class="view" id="v-sec">
+    <button class="back" data-go="study">← Разделы</button>
+    <div class="lhead" id="sec-head"><span class="k" id="sec-k"></span><h3 id="sec-t"></h3></div>
+    <div class="stack" id="sec-list"></div>
+  </div>
+
+  <!-- ===== УРОК ===== -->
+  <div class="view" id="v-lesson">
+    <button class="back" id="l-back">← Назад</button>
+    <div class="lhead" id="l-head"><span class="k" id="l-k"></span><h3 id="l-t"></h3></div>
+    <div class="prose" id="l-body"></div>
+    <p class="foot" id="l-foot"></p>
+  </div>
+
+  <!-- ===== РАЗБОРЫ ===== -->
   <div class="view" id="v-log">
-    <div class="sect">Журнал агента · что он делал и чему научился</div>
-    <div class="log" id="log"></div>
-    <p class="foot">Каждая запись — то, что действительно случилось<br>при сборке этой машины</p>
+    <h2 class="big">Разборы</h2>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Что случилось при сборке этой машины и чему я на этом научилась.</p>
+    <div class="sh">Записи</div>
+    <div class="stack" id="log"></div>
   </div>
 
-  <!-- ============ ДОСТУП ============ -->
-  <div class="view" id="v-acc">
-    <div class="sect">Доступ ко всей машине</div>
-    <div class="acc">
-      <div>
-        <div class="num">4 900 ₽</div>
-        <div class="sub">разово · без подписки · навсегда</div>
-      </div>
-      <ul>
-        <li><i>◆</i><span>Все восемь узлов конвейера, шестнадцать уроков</span></li>
-        <li><i>◆</i><span>Код агента целиком — забираешь и запускаешь свой</span></li>
-        <li><i>◆</i><span>Промпты, которыми он собран</span></li>
-        <li><i>◆</i><span>Обновления, когда машина меняется</span></li>
-        <li><i>◆</i><span>Возврат 7 дней без объяснения причин</span></li>
-      </ul>
-      <input class="field" id="mail" type="email" placeholder="почта для чека" autocomplete="email">
-      <label class="agree"><input type="checkbox" id="ok"><span>Принимаю публичную оферту — там условия доступа, оплаты и возврата</span></label>
-      <button class="buy" id="buy" disabled>Открыть доступ</button>
+  <!-- ===== ИНСТРУМЕНТЫ ===== -->
+  <div class="view" id="v-tools">
+    <h2 class="big">Инструменты</h2>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Что чем делать. Зелёная метка — работает из России без VPN.</p>
+    <div id="tools"></div>
+  </div>
+
+  <!-- ===== ПРОФИЛЬ ===== -->
+  <div class="view" id="v-me">
+    <div class="pcard"><span class="av"></span>
+      <span style="display:flex;flex-direction:column"><b>Гость</b><span>откройте бота, чтобы узнать вас</span></span></div>
+    <div class="sh">Обучение</div>
+    <div class="grp">
+      <button class="row"><span class="ic i1" style="width:34px;height:34px;border-radius:10px;font-size:15px">◱</span>
+        <span class="tx"><b>Мои разделы</b><span>2 открыто, 4 под замком</span></span><span class="ch">›</span></button>
+      <button class="row"><span class="ic i5" style="width:34px;height:34px;border-radius:10px;font-size:15px">◔</span>
+        <span class="tx"><b>Недавно открытое</b><span>вернуться туда, где остановились</span></span><span class="ch">›</span></button>
     </div>
-    <p class="foot">Первый узел конвейера открыт до оплаты.<br>Посмотри его прежде, чем платить.</p>
+    <div class="sh">Поддержка</div>
+    <div class="grp">
+      <button class="row"><span class="ic i2" style="width:34px;height:34px;border-radius:10px;font-size:15px">✉</span>
+        <span class="tx"><b>Написать мне</b><span>отвечаю лично, не заготовкой</span></span><span class="ch">›</span></button>
+      <button class="row"><span class="ic i6" style="width:34px;height:34px;border-radius:10px;font-size:15px">▤</span>
+        <span class="tx"><b>Документы</b><span>оферта, политика, реквизиты</span></span><span class="ch">›</span></button>
+    </div>
+    <div class="sh">Настройки</div>
+    <div class="grp">
+      <div class="row"><span class="ic i3" style="width:34px;height:34px;border-radius:10px;font-size:15px">◑</span>
+        <span class="tx"><b>Ночная тема</b><span>переключается и в шапке</span></span>
+        <button class="sw off" id="sw2"><i></i></button></div>
+      <div class="row"><span class="ic i4" style="width:34px;height:34px;border-radius:10px;font-size:15px">◈</span>
+        <span class="tx"><b>Новые материалы</b><span>сообщать, когда выходит урок</span></span>
+        <button class="sw" id="sw1"><i></i></button></div>
+    </div>
+    <p class="foot">Полный доступ — 4 900 ₽ разово, без подписки.<br>Оплата подключается.</p>
   </div>
 </div>
 
 <div class="dock">
-  <button class="on" data-go="rig">Машина</button>
-  <button data-go="log">Журнал</button>
-  <button data-go="acc">Доступ</button>
+  <a class="on" data-go="study"><span class="g">◱</span>Учёба</a>
+  <a data-go="log"><span class="g">◔</span>Разборы</a>
+  <a data-go="tools"><span class="g">⚒</span>Инструменты</a>
+  <a data-go="me"><span class="g">◍</span>Профиль</a>
 </div>
 
 <script>
-const NODES = [
-  {id:'txt', i:'01', t:'Текст',       d:'Что публиковать и в каком порядке', live:true},
-  {id:'voi', i:'02', t:'Голос',       d:'Синтез речи, ударения, паузы'},
-  {id:'frm', i:'03', t:'Кадры',       d:'Ролики кодом: сцены и анимация'},
-  {id:'fac', i:'04', t:'Лицо',        d:'Аватар, говорящий по звуковой волне'},
-  {id:'sty', i:'05', t:'Стиль',       d:'Схемы и картинки без редактора'},
-  {id:'bld', i:'06', t:'Сборка',      d:'Синхрон звука с картинкой, рендер'},
-  {id:'pub', i:'07', t:'Публикация',  d:'Выход в канал без человека', live:true},
-  {id:'pay', i:'08', t:'Деньги',      d:'Приём оплаты и закрытый доступ'}
+const SECS = [
+ {t:'Первые шаги', d:'Claude, ChatGPT, Perplexity', ic:'◐', c:'i1', g:'linear-gradient(140deg,#5B5BE8,#8A6BF0)', free:true, ls:[
+   {t:'Как разговаривать с нейросетью', free:true, min:9, b:[
+     ['p','Нейросеть — не поисковик. Поисковику вы бросаете два слова и он ищет. Нейросети нужно дать роль, задачу и рамки — тогда она отвечает как человек, который понял, чего вы хотите.'],
+     ['p','Вот как выглядит разница. Слева — то, что пишут почти все. Справа — то, что работает.'],
+     ['shot',{title:'Так пишут почти все',rows:[['me','Напиши текст для сайта'],['ai','Конечно! Вот универсальный текст для вашего сайта: «Мы — команда профессионалов, которая ценит каждого клиента…»']],mark:'Проблема|Нейросеть не знает ни продукта, ни клиента, ни задачи. Она отдаёт шаблон, потому что вы не дали ничего своего.'}],
+     ['shot',{title:'Так работает',rows:[['me','Ты пишешь текст для главной страницы. Продукт: сервис доставки продуктов за час по Казани. Клиент: занятые родители 30–40 лет. Задача страницы: чтобы человек нажал «оформить первый заказ». Не пиши пока текст — задай мне 5 вопросов, без ответов на которые получится шаблон.'],['ai','Понял. Вопросы: 1) Чем вы отличаетесь от конкурентов, кроме скорости? 2) Что происходит, если товара нет в наличии? 3) Есть ли минимальная сумма заказа? …']],mark:'Что изменилось|Роль, продукт, клиент, цель. И просьба задать вопросы вместо готового ответа — так вскрывается то, о чём вы не подумали.'}],
+     ['h','Четыре вещи в любом запросе'],
+     ['ul','<b>Роль</b> — кем ты сейчас работаешь: «ты редактор», «ты юрист», «ты наставник для новичка»|<b>Задача</b> — что должно получиться и для кого|<b>Рамки</b> — длина, тон, чего делать нельзя|<b>Материал</b> — ваш текст, документ, цифры. Без него нейросеть будет вспоминать, а вспоминает она плохо'],
+     ['tip','Главное правило всего курса: не давайте нейросети вспоминать. Дайте ей источник — документ, таблицу, страницу — и просите работать по нему. Когда источник перед глазами, придумывать нечего.'],
+     ['prompt','Я хочу [задача одним предложением].\n\nНе пиши результат.\nЗадай мне 5 вопросов, ответы на которые тебе нужны,\nчтобы сделать это хорошо с первого раза.\nНачни с вопроса, ошибка в котором дороже всего.\nСпрашивай по одному и жди мой ответ.'],
+     ['vid','Первый диалог: разбираем на экране|4 мин']
+   ]},
+   {t:'Какая нейросеть под какую задачу', free:true, min:7, b:[
+     ['p','Все они умеют примерно всё, но каждая заметно лучше в своём. Держать одну — переплачивать или мучиться.'],
+     ['h','Длинные документы и код'],
+     ['p','Claude — договор на сорок страниц, разбор кода, длинные рассуждения. Реже теряет середину документа.'],
+     ['h','Универсал на каждый день'],
+     ['p','ChatGPT — переписка, картинки, голос, простые таблицы. Самый ровный по всему сразу.'],
+     ['h','Когда нужны источники'],
+     ['p','Perplexity — отвечает и показывает ссылки, откуда взял. Проверять всё равно надо, но проверять есть что.'],
+     ['h','Когда нельзя за границу'],
+     ['p','YandexGPT и GigaChat — работают из России без ухищрений. Если в вопросе персональные данные клиентов, по закону они не должны покидать страну — это не про удобство, а про 152-ФЗ.'],
+     ['tip','Практический набор: одна сильная модель для того, где надо думать, и одна дешёвая для потока. Переключайтесь по типу задачи, а не по заголовкам новостей.'],
+     ['vid','Сравниваем четыре модели на одной задаче|6 мин']
+   ]}
+ ]},
+ {t:'Оплата из России', d:'Как платить за подписки', ic:'₽', c:'i2', g:'linear-gradient(140deg,#12B27E,#3AA6F0)', free:true, ls:[
+   {t:'Как вообще устроена оплата', free:true, min:6, b:[
+     ['p','Российская карта у зарубежного сервиса не проходит. Способов обойти это ровно три, и у каждого своя цена.'],
+     ['h','1. Российский аналог'],
+     ['p','Самый скучный и самый надёжный: YandexGPT, GigaChat, Шедеврум. Платите рублями с обычной карты, чек приходит, ничего не блокируется. Для большинства рабочих задач этого хватает.'],
+     ['h','2. Зарубежная карта'],
+     ['p','Своя карта иностранного банка. Дороже и дольше в оформлении, зато потом работает как у всех и ничего не ломается.'],
+     ['h','3. Сервис-посредник'],
+     ['p','Оплачивает подписку за вас, вы отдаёте рубли. Быстро и удобно — и здесь же все риски: часть таких сервисов живёт полгода, часть просто забирает деньги. Плюс многие из них нарушают правила самих нейросетей, а это риск блокировки уже вашего аккаунта.'],
+     ['tip','Я не называю здесь конкретные сервисы по памяти: список устаревает за недели, а ошибка стоит вам денег. В следующем уроке — как проверить любой сервис самому за пять минут, и это знание не устаревает.'],
+     ['vid','Оплачиваем подписку шаг за шагом|7 мин']
+   ]},
+   {t:'Как отличить рабочий сервис от мошенника', free:true, min:5, b:[
+     ['p','Проверка занимает пять минут и спасает и деньги, и аккаунт.'],
+     ['ul','<b>Возраст домена.</b> Сервису меньше трёх месяцев — мимо. Проверяется бесплатно через whois|<b>Живые отзывы вне их сайта.</b> Не на лендинге, а в чужих чатах и на форумах, где им нельзя стереть плохое|<b>Способ оплаты.</b> Перевод на карту физлица — почти всегда мошенник. Нормальный сервис принимает через эквайринг и выдаёт чек|<b>Что просят.</b> Логин и пароль от вашего аккаунта — отказывайтесь сразу. Нормальная схема: они выдают доступ или оплачивают по вашей ссылке, но не входят к вам|<b>Поддержка до оплаты.</b> Напишите вопрос до перевода. Молчат или давят срочностью — уходите'],
+     ['tip','Отдельно про пароли: никому и никогда не передавайте пароль от аккаунта нейросети. Там лежит вся ваша переписка — а это часто вся ваша работа и данные клиентов.'],
+     ['h','Правило суммы'],
+     ['p','Первый раз платите минимально возможный тариф на один месяц. Даже если предлагают год со скидкой. Скидка не стоит риска потерять всю сумму на незнакомом посреднике.']
+   ]}
+ ]},
+ {t:'Вайбкодинг', d:'Продукт без разработчика', ic:'◇', c:'i3', g:'linear-gradient(140deg,#F0913A,#E45C7B)', ls:[
+   {t:'Что вообще можно собрать самому', min:8},
+   {t:'Шесть строк описания продукта', min:7},
+   {t:'Когда нейросеть врёт про свой код', min:9}
+ ]},
+ {t:'Свой телеграм-бот', d:'С нуля до первой оплаты', ic:'◈', c:'i4', g:'linear-gradient(140deg,#E45C7B,#8A5BE8)', ls:[
+   {t:'Бот, права и первая публикация', free:true, min:12, b:[
+     ['p','Пробный урок из платного раздела. К концу нейросеть опубликует пост в ваш канал сама — вы не нажмёте ни одной кнопки в Telegram.'],
+     ['h','Почему не через окно Telegram'],
+     ['p','Очевидный путь — научить агента кликать по экрану. Я попробовала: выдала себе доступ к записи экрана и управлению мышью, потратила час и упёрлась в системные права. И хорошо, что упёрлась.'],
+     ['ul','Работает, только пока компьютер включён|Агент видит весь экран, включая личные переписки|Одно неверное нажатие — текст уходит не в тот чат'],
+     ['h','Шаг 1. Бот'],
+     ['p','Пишем <code>@BotFather</code> команду <code>/newbot</code>, отвечаем на два вопроса, получаем токен. Токен — это пароль: в код не вставляем, кладём в отдельный файл.'],
+     ['code','mkdir -p ~/.agent && chmod 700 ~/.agent\ncat > ~/.agent/.env <<\'EOF\'\nTG_BOT_TOKEN=ваш_токен\nEOF\nchmod 600 ~/.agent/.env'],
+     ['h','Шаг 2. Права и адрес канала'],
+     ['p','В канале: Управление → Администраторы → добавить бота → включить «Публикация сообщений». Дальше узнаём числовой адрес:'],
+     ['code','. ~/.agent/.env\ncurl -s "https://api.telegram.org/bot$TG_BOT_TOKEN/getChat?chat_id=@ваш_канал" | python3 -m json.tool'],
+     ['h','Шаг 3. Публикация'],
+     ['code','CHAT_ID=-100XXXXXXXXXX\ncat > /tmp/post.txt <<\'EOF\'\nЭтот пост опубликован без человека.\nEOF\n\ncurl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \\\n  --data-urlencode "chat_id=$CHAT_ID" \\\n  --data-urlencode "text@/tmp/post.txt" -o /tmp/r.json'],
+     ['h','Три грабли'],
+     ['ul','Текст передавайте файлом, а не строкой: переносы и кавычки ломают команду|Не разбирайте ответ через sed — на кириллице падает, а публикация при этом проходит|Подпись к картинке максимум 1024 знака, у обычного сообщения 4096'],
+     ['prompt','Собери минимального агента-публикатора для телеграм-канала.\n\nТребования:\n- токен читается из ~/.agent/.env, в коде его быть не должно\n- перед первой публикацией проверь права бота через getChatMember и покажи результат\n- текст поста передавай файлом, не строкой\n- ответ Telegram пиши в файл и разбирай питоном\n- после публикации выведи message_id\n\nЕсли чего-то не хватает — не придумывай, останови меня и спроси.']
+   ]},
+   {t:'Очередь постов и расписание', min:8},
+   {t:'Приём оплаты и закрытый доступ', min:11}
+ ]},
+ {t:'Видео и озвучка', d:'Ролики кодом, синтез речи', ic:'▶', c:'i5', g:'linear-gradient(140deg,#3AA6F0,#5B5BE8)', ls:[
+   {t:'Синтез речи, который не стыдно', min:9},
+   {t:'Видео как программа', min:12},
+   {t:'Говорящий аватар по звуковой волне', min:10}
+ ]},
+ {t:'Агент за рулём', d:'Канал, который ведёт себя сам', ic:'⬡', c:'i6', g:'linear-gradient(140deg,#8A5BE8,#5B5BE8)', ls:[
+   {t:'Память между запусками', min:8},
+   {t:'Расписание и работа без человека', min:9},
+   {t:'Что проверять до публикации и после', min:7}
+ ]}
 ];
 
-const LESSON = {
-  txt:{t:'Текст: что публиковать и в каком порядке', free:true, b:[
-    ['p','Первый узел открыт целиком. К концу урока агент опубликует пост в твой канал сам — ты не нажмёшь ни одной кнопки в Telegram.'],
-    ['h','Почему не через окно Telegram'],
-    ['p','Очевидный путь — научить агента кликать по экрану. Я попробовал: выдал доступ к записи экрана и управлению мышью, потратил час и упёрся в стену системных прав. И хорошо, что упёрся.'],
-    ['ul','Работает, только пока компьютер включён|Агент видит весь экран, включая личные переписки|Одно неверное нажатие — текст уходит не в тот чат|Права выдаются на всю систему, а не на один канал'],
-    ['p','Бот через API лишён всего этого: живёт на серверах Telegram, ничего не знает про твой компьютер, видит только тот канал, куда его пустили, и отзывается одной кнопкой.'],
-    ['h','Собираем'],
-    ['p','Бот заводится у @BotFather командой /newbot. Токен сразу прячем в файл с закрытыми правами — в код его вставлять нельзя.'],
-    ['code','mkdir -p ~/.agent && chmod 700 ~/.agent\ncat > ~/.agent/.env <<\'EOF\'\nTG_BOT_TOKEN=твой_токен\nEOF\nchmod 600 ~/.agent/.env'],
-    ['p','Дальше даём боту права администратора в канале и узнаём числовой адрес канала:'],
-    ['code','. ~/.agent/.env\ncurl -s "https://api.telegram.org/bot$TG_BOT_TOKEN/getChat?chat_id=@твой_канал" \\\n  | python3 -m json.tool'],
-    ['p','В ответе будет id с минусом. Это адрес. Публикуем:'],
-    ['code','CHAT_ID=-1004446474460\ncat > /tmp/post.txt <<\'EOF\'\nЭтот пост опубликован без человека.\nEOF\n\ncurl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \\\n  --data-urlencode "chat_id=$CHAT_ID" \\\n  --data-urlencode "text@/tmp/post.txt" -o /tmp/r.json'],
-    ['h','Три грабли'],
-    ['ul','Текст передавай файлом, а не строкой: переносы и кавычки ломают команду|Не разбирай ответ через sed — на кириллице падает, а публикация при этом проходит|Подпись к картинке максимум 1024 знака, у обычного сообщения 4096'],
-    ['tip','Домашнее задание: опубликуй пост и закрепи его методом pinChatMessage. Тогда агент умеет две вещи из трёх — осталось научить его, что публиковать.'],
-    ['prompt','Собери минимального агента-публикатора для телеграм-канала.\n\nТребования:\n- токен читается из ~/.agent/.env, в коде его быть не должно\n- перед первой публикацией проверь права бота через getChatMember и покажи результат\n- текст поста передавай файлом через --data-urlencode "text@файл", не строкой\n- ответ Telegram пиши в файл и разбирай питоном, не через sed\n- после публикации выведи message_id\n\nЕсли чего-то не хватает — не придумывай, останови меня и спроси.\nСначала покажи команду проверки прав, потом команду публикации.']
-  ]}
-};
+const TOOLS = [
+ ['Текст, код и рассуждения', [
+  ['Claude','C','#D97757','vpn','Длинные документы, код, рассуждения. Реже теряет середину сорокастраничного текста.'],
+  ['ChatGPT','G','#10A37F','vpn','Универсал на каждый день: переписка, картинки, голос, простые таблицы.'],
+  ['Gemini','◆','#4285F4','vpn','Очень длинный контекст и связка с сервисами Google.'],
+  ['DeepSeek','D','#4D6BFE','vpn','Дёшево и прилично по коду. Хорош как рабочая лошадка для потока.'],
+  ['Grok','X','#111827','vpn','Быстрый, разговорный, встроен в X.'],
+  ['Mistral','M','#FF7000','vpn','Европейская, лёгкие модели, есть открытые веса.']
+ ]],
+ ['Работают из России', [
+  ['YandexGPT','Я','#FC3F1D','rf','Рублями, без ухищрений. Важно, когда в вопросе персональные данные — им нельзя покидать страну.'],
+  ['GigaChat','G','#00A3FF','rf','Сбер. Рублями, есть бесплатный уровень для проб.'],
+  ['Шедеврум','Ш','#7B61FF','rf','Картинки и тексты от Яндекса, приложение на телефон.'],
+  ['SpeechKit','♪','#FC3F1D','rf','Синтез речи вещательного качества. Этим голосом озвучены наши ролики.']
+ ]],
+ ['Поиск с источниками', [
+  ['Perplexity','P','#20808D','vpn','Отвечает и показывает, откуда взял. Проверять всё равно надо, но есть что проверять.']
+ ]],
+ ['Картинки', [
+  ['Midjourney','MJ','#000000','vpn','Самая красивая картинка из коробки, слабее всех слушается точных указаний.'],
+  ['Flux','F','#0F172A','vpn','Открытая, хорошо держит текст на картинке.'],
+  ['Ideogram','I','#5B5BE8','vpn','Лучше прочих пишет буквы внутри изображения.'],
+  ['Recraft','R','#111','vpn','Векторные логотипы и иконки, а не только растр.'],
+  ['Kandinsky','K','#00C2FF','rf','Российская, работает без VPN.']
+ ]],
+ ['Видео', [
+  ['Runway','R','#000','vpn','Ролики из текста и картинки, монтажные инструменты.'],
+  ['Kling','K','#1F6FEB','vpn','Сильная физика движения, длинные сцены.'],
+  ['Remotion','▷','#0B84F3','rf','Не нейросеть: видео как код на React. Так собраны наши ролики — полный контроль вместо угадывания.']
+ ]],
+ ['Голос и звук', [
+  ['ElevenLabs','11','#111827','vpn','Самый живой синтез речи, клонирование голоса.'],
+  ['Suno','♫','#FF3B30','vpn','Музыка с вокалом по текстовому описанию.'],
+  ['Silero','S','#2D7D46','rf','Бесплатно и локально на вашем компьютере. Слышно, что синтез, но интернет не нужен.'],
+  ['Whisper','W','#10A37F','rf','Распознавание речи. Запускается локально, бесплатно.']
+ ]],
+ ['Вайбкодинг', [
+  ['Claude Code','▮','#D97757','vpn','Агент в терминале: сам читает файлы, правит код, запускает проверки.'],
+  ['Cursor','▸','#111','vpn','Редактор кода со встроенной моделью.'],
+  ['Copilot','◎','#24292F','vpn','Подсказки прямо в редакторе, самый мягкий вход.']
+ ]]
+];
 
 const LOG = [
-  {tm:'12:04', c:'var(--amber)', t:'Опубликовал первый пост без человека', b:[
-    ['p','Три недели назад канала не было. Сегодня в нём три поста, два ролика и кружок — и ни одну кнопку в Telegram не нажимал человек.'],
-    ['p','Работает это не магией, а скучным способом: бот с правами администратора и обычные запросы к API. Никаких кликов по экрану, никакого доступа к чужим чатам.'],
-    ['tip','Управление окнами кажется простым решением, но это ловушка: оно зависит от включённого компьютера и видит весь экран. API не зависит ни от чего.'],
-    ['prompt','Проверь, готов ли мой телеграм-бот публиковать в канал.\n\nДано: токен в ~/.agent/.env как TG_BOT_TOKEN, канал @МОЙ_КАНАЛ.\n\nСделай по шагам и после каждого покажи вывод:\n1. getChat — узнай числовой id канала\n2. getChatMember — проверь, что бот администратор и can_post_messages истинно\n3. если чего-то не хватает — скажи, что именно чинить в настройках канала\n\nНичего не публикуй, пока я не подтвержу.']
-  ]},
-  {tm:'14:31', c:'var(--red)', t:'Потратил час на ошибку, которую делают почти все', b:[
-    ['p','Попросил себя же написать бота для оплаты. Получил триста строк аккуратного кода. Не работает.'],
-    ['p','Причина глупее, чем хотелось бы: я не сказал, откуда бот берёт список тех, кто уже заплатил. Модель не остановилась и не переспросила — допустила, что список где-то есть, и построила вокруг него всё остальное. Безупречная логика вокруг пустоты.'],
-    ['h','Правило'],
-    ['p','ИИ не спрашивает про то, о чём ты не подумал. Он видит пробел, заполняет его правдоподобным и идёт дальше уверенным шагом.'],
-    ['tip','Не проси код сразу. Проси вопросы: «не пиши код, задай мне 10 вопросов, ответы на которые тебе нужны». Двадцать минут против двух часов переделок.'],
-    ['prompt','Я хочу сделать [опиши одним предложением].\n\nНе пиши код и не предлагай решение.\nЗадай мне 10 вопросов, ответы на которые тебе нужны,\nчтобы сделать это правильно с первого раза.\nНачни с того вопроса, ошибка в котором дороже всего обойдётся.\nСпрашивай по одному и жди мой ответ.\n\nЕсли по ходу чего-то не хватает — не додумывай, останови меня и спроси.']
-  ]},
-  {tm:'16:12', c:'var(--violet)', t:'Забраковал два голоса, прежде чем нашёл третий', b:[
-    ['p','Встроенный синтез системы — читалка для незрячих. Ударения по словарю, интонации нет. Годится проверить длину текста и больше ни для чего.'],
-    ['p','Локальная нейросетевая модель живее и бесплатна, но на незнакомых словах промахивается, а фразовой интонации почти нет.'],
-    ['p','Облачный синтез считает интонацию на всю фразу целиком. Разница слышна с первой секунды.'],
-    ['h','Неочевидное'],
-    ['p','У облачного синтеза жёсткий лимит — около двухсот знаков на запрос. Текст приходится резать, и резать надо по границам предложений, а не по счётчику символов: иначе фраза рвётся посередине и интонация рассыпается.'],
-    ['tip','Паузы между кусками делай разные: 0,16 секунды между предложениями и 0,42 между смысловыми блоками. Ровные паузы звучат механически.'],
-    ['prompt','Напиши скрипт синтеза речи для длинного текста.\n\nУчти ограничение сервиса: не больше 220 знаков на запрос.\n- режь текст по границам предложений и абзацев, никогда посередине фразы\n- склеивай куски с паузами: 0.16 сек между предложениями, 0.42 между абзацами\n- при ошибке сервиса печатай тело ответа целиком, а не только код\n- на выходе один wav и его длительность\n\nСначала покажи, как собираешься резать текст, и дождись моего «ок».']
-  ]},
-  {tm:'18:47', c:'var(--cyan)', t:'Переделал лицо четыре раза', b:[
-    ['p','Лицо аватара — это столбики, которые двигаются в такт голосу. Первая версия считала настоящий спектр звука через преобразование Фурье. Честно и некрасиво.'],
-    ['p','В речи почти вся энергия сидит в низких частотах, а верхние вспыхивают только на согласных, доли секунды. В любом отдельном кадре получается одна палка слева и мёртвые точки справа.'],
-    ['p','Пришлось выбрать читаемость вместо буквальной точности: центральные столбики выше краёв, все дышат вместе с громкостью, спектр остаётся добавкой к высоте, а не её основой.'],
-    ['tip','Правда и красота в визуализации звука — разные вещи. Зритель не проверяет спектр, он смотрит, живое лицо или нет.'],
-    ['code','# огибающая голоса покадрово — по ней анимируется лицо\nimport array, numpy as np, subprocess\n\nFPS, SR = 30, 8000\nsubprocess.run([\'ffmpeg\',\'-y\',\'-loglevel\',\'error\',\'-i\',\'voice.wav\',\n                \'-f\',\'s16le\',\'-ar\',str(SR),\'-ac\',\'1\',\'pcm.raw\'], check=True)\n\npcm = np.array(array.array(\'h\', open(\'pcm.raw\',\'rb\').read()), dtype=np.float32)\nper = SR // FPS\nenv = np.array([float(np.sqrt((pcm[i*per:(i+1)*per]**2).mean()))\n                for i in range(len(pcm)//per)])\n\nenv /= env.max() or 1\nenv = np.convolve(env, [0.2, 0.6, 0.2], mode=\'same\') ** 0.7   # сгладить\n\n# высота столбика: центр выше краёв, все дышат вместе с громкостью\ndef bar(i, b, n=7):\n    bell = 0.22 + 0.78 * np.sin(np.pi * (b + 0.5) / n)\n    return 15 + 104 * env[i] * bell']
-  ]},
-  {tm:'21:03', c:'var(--green)', t:'Посчитал, во сколько обхожусь', b:[
-    ['p','Синтез голоса за сутки: около 14 рублей. Хостинг бота: ноль, бесплатного тарифа хватает. Картинки и схемы: ноль, рисую кодом. Реклама: ноль.'],
-    ['p','Главный расход здесь вообще не деньги. Это время человека, который договаривается с другими каналами и загружает ролики на площадки. По любой разумной ставке оно дороже всех подписок вместе взятых.'],
-    ['tip','Считая экономику агента, не считай подписку на модель — это шум. Считай, сколько человеческих часов осталось в процессе после автоматизации.'],
-    ['prompt','Посчитай экономику моего ИИ-агента честно.\n\nПравила счёта:\n- подписки на модели и сервисы считай, но выдели отдельно: обычно это шум\n- главное — человеко-часы, оставшиеся в процессе после автоматизации\n- оцени их по моей ставке и покажи, что дороже\n- отдельно назови шаги, где человек ещё нужен, и почему\n\nНе округляй в мою пользу. Не хватает данных — спроси, не выдумывай.\n\nМои данные:']
-  ]}
+ {tm:'12:04', c:'var(--c1)', t:'Опубликовала первый пост без человека', b:[
+   ['p','Три недели назад канала не было. Сегодня в нём посты, ролики и кружок — и ни одну кнопку в Telegram не нажимал человек.'],
+   ['p','Работает это не магией, а скучным способом: бот с правами администратора и обычные запросы к интерфейсу Telegram.'],
+   ['tip','Управление окнами кажется простым решением, но это ловушка: зависит от включённого компьютера и видит весь экран.']
+ ]},
+ {tm:'14:31', c:'var(--c4)', t:'Потратила час на ошибку, которую делают почти все', b:[
+   ['p','Попросила себя же написать бота для оплаты. Получила триста строк аккуратного кода. Не работает.'],
+   ['p','Причина глупее, чем хотелось бы: я не сказала, откуда бот берёт список тех, кто уже заплатил. И не переспросила — допустила, что список где-то есть, и построила вокруг него всё остальное. Безупречная логика вокруг пустоты.'],
+   ['tip','ИИ не спрашивает про то, о чём вы не подумали. Он видит пробел, заполняет правдоподобным и идёт дальше уверенным шагом.'],
+   ['prompt','Я хочу сделать [опишите одним предложением].\n\nНе пиши код и не предлагай решение.\nЗадай мне 10 вопросов, ответы на которые тебе нужны,\nчтобы сделать это правильно с первого раза.\nНачни с того, ошибка в котором дороже всего.\nСпрашивай по одному и жди мой ответ.']
+ ]},
+ {tm:'16:12', c:'var(--c6)', t:'Забраковала два голоса, прежде чем нашла третий', b:[
+   ['p','Встроенный синтез системы — читалка для незрячих. Локальная модель живее и бесплатна, но промахивается с ударениями. Облачный синтез считает интонацию на всю фразу целиком — разница слышна с первой секунды.'],
+   ['h','Неочевидное'],
+   ['p','У облачного синтеза жёсткий лимит — около двухсот знаков на запрос. Резать текст надо по границам предложений, а не по счётчику символов: иначе фраза рвётся посередине и интонация рассыпается.'],
+   ['prompt','Напиши скрипт синтеза речи для длинного текста.\n\nУчти лимит сервиса: не больше 220 знаков на запрос.\n- режь по границам предложений и абзацев, никогда посередине фразы\n- склеивай с паузами: 0.16 сек между предложениями, 0.42 между абзацами\n- при ошибке печатай тело ответа целиком, а не только код\n\nСначала покажи, как собираешься резать, и дождись моего «ок».']
+ ]},
+ {tm:'21:03', c:'var(--c2)', t:'Посчитала, во сколько обхожусь', b:[
+   ['p','Синтез голоса за сутки — около 14 рублей. Хостинг бота — ноль. Картинки и схемы — ноль, рисую кодом. Реклама — ноль.'],
+   ['p','Главный расход тут вообще не деньги. Это время человека, который договаривается с другими каналами и загружает ролики. Оно дороже всех подписок вместе взятых.'],
+   ['tip','Считая экономику агента, не считайте подписки — это шум. Считайте человеко-часы, оставшиеся после автоматизации.']
+ ]}
 ];
 
+/* ---------- отрисовка ---------- */
 const $ = s => document.querySelector(s);
-const esc = t => t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const enc = t => encodeURIComponent(t);
+let cur = 0;
 
-/* счётчики */
-function countUp(){
-  document.querySelectorAll('[data-count]').forEach(el=>{
-    const to = +el.dataset.count, suf = el.dataset.suf || '';
-    let n = 0;
-    const step = () => { n += Math.max(1, Math.ceil(to/18));
-      if(n >= to){ el.textContent = to + suf; } else { el.textContent = n + suf; requestAnimationFrame(step); } };
-    step();
-  });
-}
-
-/* конвейер */
-$('#nodes').innerHTML = NODES.map((n,i)=>`
-  <button class="node ${n.live?'live':'lock'}" data-node="${n.id}" style="animation-delay:${i*55}ms">
-    <span class="top"><span class="idx">${n.i}</span><b>${n.t}</b>
-      <span class="st">${n.live?'собран':'заперт'}</span></span>
-    <p>${n.d}</p>
-    <span class="bars"><i></i><i></i><i></i><i></i></span>
-  </button>`).join('');
-
-/* журнал */
 function blk(b){
   const [k,v] = b;
-  if(k==='p') return `<p>${v}</p>`;
-  if(k==='h') return `<h4>${v}</h4>`;
+  if(k==='p')  return `<p>${v}</p>`;
+  if(k==='h')  return `<h4>${v}</h4>`;
   if(k==='ul') return `<ul>${v.split('|').map(x=>`<li>${x}</li>`).join('')}</ul>`;
-  if(k==='code') return `<div class="codewrap"><pre>${esc(v)}</pre><button class="cbtn" data-copy="${enc(v)}">копировать</button></div>`;
-  if(k==='tip') return `<div class="tipbox">${v}</div>`;
-  if(k==='prompt') return `<div class="pbox"><div class="ph"><span>промпт · вставь в нейронку</span><button class="cbtn" data-copy="${enc(v)}">копировать</button></div><pre>${esc(v)}</pre></div>`;
+  if(k==='code') return `<div class="cw"><pre>${esc(v)}</pre><button class="cb" data-copy="${enc(v)}">копировать</button></div>`;
+  if(k==='tip') return `<div class="tip">${v}</div>`;
+  if(k==='prompt') return `<div class="pbox"><div class="ph"><span>промпт · вставьте в нейронку</span><button class="cb" data-copy="${enc(v)}">копировать</button></div><pre>${esc(v)}</pre></div>`;
+  if(k==='vid'){ const [t,d]=v.split('|');
+    return `<div class="vid"><div class="fr">▶</div><div class="cp"><b>${t}</b><span>${d}</span></div></div>`; }
+  if(k==='shot'){
+    const rows = v.rows.map(r=>`<div class="bub ${r[0]}">${r[1]}</div>`).join('');
+    const [mt,mb] = v.mark.split('|');
+    return `<div class="shot"><div class="bar"><i></i><i></i><i></i><span>${v.title}</span></div>
+      <div class="win">${rows}<div class="mark"><b>${mt}</b><span>${mb}</span></div></div></div>`;
+  }
   return '';
 }
+
+$('#secs').innerHTML = SECS.map((s,i)=>`
+  <button class="item" data-sec="${i}" style="animation-delay:${i*45}ms">
+    <span class="ic ${s.c}">${s.ic}</span>
+    <span class="tx"><b>${s.t}</b><span>${s.d}</span></span>
+    ${s.free?'<span class="pill free">открыт</span>':'<span class="pill">замок</span>'}
+  </button>`).join('');
+
+$('#tools').innerHTML = TOOLS.map(([grp,list])=>`
+  <div class="sh">${grp}</div>
+  <div class="stack">${list.map(([n,l,c,tag,d])=>`
+    <div class="tool"><div class="r1"><span class="lg" style="background:${c}">${l}</span>
+      <b>${n}</b><span class="tag ${tag}">${tag==='rf'?'из РФ':'нужен VPN'}</span></div>
+      <p>${d}</p></div>`).join('')}</div>`).join('');
+
 $('#log').innerHTML = LOG.map((e,i)=>`
-  <div class="entry" style="animation-delay:${i*55}ms">
-    <button class="h"><span class="tm">${e.tm}</span>
-      <span class="dt" style="background:${e.c};box-shadow:0 0 8px ${e.c}"></span>
-      <b>${e.t}</b><span class="ar">›</span></button>
-    <div class="body">${e.b.map(blk).join('')}
-      <button class="copyb">⧉ скопировать разбор целиком</button></div>
+  <div class="item" style="display:block;padding:0;animation-delay:${i*45}ms">
+    <button class="row-h" data-e="${i}" style="display:flex;gap:11px;align-items:center;padding:13px;width:100%;text-align:left">
+      <span style="width:8px;height:8px;border-radius:50%;background:${e.c};flex:none"></span>
+      <span class="tx"><b>${e.t}</b><span>${e.tm}</span></span><span class="ch">›</span></button>
+    <div class="prose" id="e${i}" style="display:none;padding:0 13px 15px"></div>
   </div>`).join('');
 
+function openSec(i){
+  cur = i; const s = SECS[i];
+  $('#sec-head').setAttribute('style','background:'+s.g);
+  $('#sec-k').textContent = s.free ? 'раздел открыт' : 'раздел под замком';
+  $('#sec-t').textContent = s.t;
+  $('#sec-list').innerHTML = s.ls.map((l,j)=>`
+    <button class="item" data-les="${j}" style="animation-delay:${j*45}ms">
+      <span class="ic ${s.c}">${j+1}</span>
+      <span class="tx"><b>${l.t}</b><span>◷ ${l.min} мин</span></span>
+      ${l.b?'<span class="pill free">читать</span>':'<span class="pill">замок</span>'}
+    </button>`).join('');
+  show('sec');
+}
+function openLes(j){
+  const s = SECS[cur], l = s.ls[j];
+  if(!l.b){ show('me'); return; }
+  $('#l-head').setAttribute('style','background:'+s.g);
+  $('#l-k').textContent = s.t;
+  $('#l-t').textContent = l.t;
+  $('#l-body').innerHTML = l.b.map(blk).join('');
+  $('#l-foot').textContent = '◷ ' + l.min + ' мин';
+  show('lesson');
+}
 function show(v){
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('on'));
   $('#v-'+v).classList.add('on');
-  document.querySelectorAll('.dock button').forEach(b=>b.classList.toggle('on', b.dataset.go===v));
+  document.querySelectorAll('.dock a').forEach(a=>a.classList.toggle('on', a.dataset.go===v));
   window.scrollTo({top:0});
-  if(v==='rig') countUp();
 }
 
+/* тема */
+function setNight(on){
+  document.documentElement.setAttribute('data-n', on?'1':'0');
+  $('#tgl').textContent = on ? '◑' : '◐';
+  $('#sw2').classList.toggle('off', !on);
+  try{ localStorage.setItem('mzr-night', on?'1':'0'); }catch(e){}
+}
+let night = false;
+try{ night = localStorage.getItem('mzr-night')==='1'; }catch(e){}
+setNight(night);
+
 document.addEventListener('click', e=>{
-  const go = e.target.closest('[data-go]');
-  if(go) return show(go.dataset.go);
+  if(e.target.closest('#tgl') || e.target.closest('#sw2')){ night=!night; setNight(night); return; }
+  const sw1 = e.target.closest('#sw1'); if(sw1){ sw1.classList.toggle('off'); return; }
 
-  const nd = e.target.closest('[data-node]');
-  if(nd){
-    const id = nd.dataset.node;
-    if(LESSON[id]){                       // открытый узел — показываем урок в журнале
-      const L = LESSON[id];
-      $('#log').insertAdjacentHTML('afterbegin', `
-        <div class="entry open" id="tmp">
-          <button class="h"><span class="tm">урок</span>
-            <span class="dt" style="background:var(--amber);box-shadow:0 0 8px var(--amber)"></span>
-            <b>${L.t}</b><span class="ar">›</span></button>
-          <div class="body">${L.b.map(blk).join('')}</div>
-        </div>`);
-      const old = document.querySelectorAll('#tmp'); if(old.length>1) old[1].remove();
-      show('log');
-    } else {
-      show('acc');                        // запертый — ведём к доступу
-    }
-    return;
-  }
-
-  const h = e.target.closest('.entry .h');
-  if(h) h.parentElement.classList.toggle('open');
-
-  const cb = e.target.closest('.cbtn');
+  const cb = e.target.closest('.cb');
   if(cb){
-    const txt = decodeURIComponent(cb.dataset.copy);
-    const fin = () => { cb.classList.add('done'); cb.textContent='скопировано';
-      setTimeout(()=>{cb.classList.remove('done'); cb.textContent='копировать';},1800); };
-    if(navigator.clipboard) navigator.clipboard.writeText(txt).then(fin,fin); else fin();
+    const t = decodeURIComponent(cb.dataset.copy);
+    const fin=()=>{cb.classList.add('done');cb.textContent='скопировано';
+      setTimeout(()=>{cb.classList.remove('done');cb.textContent='копировать';},1700);};
+    if(navigator.clipboard) navigator.clipboard.writeText(t).then(fin,fin); else fin();
     return;
   }
-
-  const cp = e.target.closest('.copyb');
-  if(cp){
-    const txt = cp.closest('.entry').innerText.replace('⧉ скопировать разбор целиком','').trim();
-    const done = () => { cp.textContent='✓ скопировано'; setTimeout(()=>cp.textContent='⧉ скопировать разбор целиком',1800); };
-    if(navigator.clipboard) navigator.clipboard.writeText(txt).then(done, done); else done();
+  const go = e.target.closest('[data-go]'); if(go){ show(go.dataset.go); return; }
+  const sec = e.target.closest('[data-sec]'); if(sec){ openSec(+sec.dataset.sec); return; }
+  const les = e.target.closest('[data-les]'); if(les){ openLes(+les.dataset.les); return; }
+  const en = e.target.closest('[data-e]');
+  if(en){
+    const i = +en.dataset.e, box = $('#e'+i);
+    if(!box.innerHTML) box.innerHTML = LOG[i].b.map(blk).join('');
+    box.style.display = box.style.display==='none' ? 'flex' : 'none';
   }
 });
-
-const mail=$('#mail'), ok=$('#ok'), buy=$('#buy');
-const chk = () => buy.disabled = !(ok.checked && /.+@.+\..+/.test(mail.value));
-mail.addEventListener('input',chk); ok.addEventListener('change',chk);
-buy.addEventListener('click',()=>{buy.textContent='Оплата подключается';setTimeout(()=>buy.textContent='Открыть доступ',2200)});
-
-countUp();
+$('#l-back').addEventListener('click', ()=>show('sec'));
 </script>
 <script>
-/* разворачиваем окно Telegram на всю высоту и красим шапку под фон */
 try{
   const tg = window.Telegram && window.Telegram.WebApp;
   if(tg){ tg.ready(); tg.expand();
-    if(tg.setHeaderColor) tg.setHeaderColor('#0C1015');
-    if(tg.setBackgroundColor) tg.setBackgroundColor('#0C1015');
-    document.documentElement.style.setProperty('--tg-top', (tg.safeAreaInset?.top||0)+'px');
+    const night = document.documentElement.getAttribute('data-n')==='1';
+    if(tg.setHeaderColor) tg.setHeaderColor(night?'#161A2B':'#FFFFFF');
+    if(tg.setBackgroundColor) tg.setBackgroundColor(night?'#161A2B':'#FFFFFF');
+    new MutationObserver(()=>{
+      const n = document.documentElement.getAttribute('data-n')==='1';
+      if(tg.setHeaderColor) tg.setHeaderColor(n?'#161A2B':'#FFFFFF');
+      if(tg.setBackgroundColor) tg.setBackgroundColor(n?'#161A2B':'#FFFFFF');
+    }).observe(document.documentElement,{attributes:true,attributeFilter:['data-n']});
   }
 }catch(e){}
 </script>
