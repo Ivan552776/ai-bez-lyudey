@@ -109,11 +109,15 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .pbox pre{background:transparent;color:var(--ink);border-radius:0}
 .tip{border-left:3px solid var(--c3);background:var(--card);border-radius:0 11px 11px 0;padding:13px;font-size:15px}
 .vid{border-radius:14px;overflow:hidden;border:1px solid var(--line)}
-.vid .vp{display:block;width:100%;max-height:70vh;background:#000}
+.vid .pw{position:relative;background:#000}
+.vid .vp{display:block;width:100%;aspect-ratio:9/16;max-height:74vh;background:#000;object-fit:contain}
+.vid .pb{position:absolute;inset:0;margin:auto;width:66px;height:66px;border:0;border-radius:50%;background:rgba(20,22,28,.62);backdrop-filter:blur(6px);color:#fff;font-size:24px;line-height:66px;padding:0 0 0 5px;cursor:pointer;transition:opacity .18s}
+.vid .pw.on .pb{opacity:0;pointer-events:none}
 .vid .fr{aspect-ratio:16/9;background:linear-gradient(140deg,var(--c1),var(--c6));display:grid;place-items:center;color:#fff;font-size:30px}
 .vid .cp{padding:11px 13px;display:flex;align-items:center;gap:9px;background:var(--card)}
 .vid .cp b{font-size:14px;font-weight:600}
-.vid .fr.soon{flex-direction:column;gap:6px;font-size:26px;opacity:.75}
+.vid .fr.soon{flex-direction:column;gap:7px;font-size:26px;opacity:.62}
+.vid .fr.soon i{font-style:normal;font-size:30px}
 .vid .fr.soon span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
 .vid .cp span{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
 
@@ -695,10 +699,10 @@ function blk(b){
     }).join('')}</div>`;
   if(k==='prompt') return `<div class="pbox"><div class="ph"><span>промпт · вставьте в нейронку</span><button class="cb" data-copy="${enc(v)}">копировать</button></div><pre>${esc(v)}</pre></div>`;
   if(k==='vid'){ const [t,d,f]=v.split('|');
-    return f
-      ? `<div class="vid"><video class="vp" controls preload="metadata" playsinline
-           poster="" src="v/${f}"></video><div class="cp"><b>${t}</b><span>${d}</span></div></div>`
-      : `<div class="vid"><div class="fr soon">▶<span>снимается</span></div><div class="cp"><b>${t}</b><span>${d}</span></div></div>`; }
+    if(f){ const base=f.replace(/\.mp4$/,'');
+      return `<div class="vid"><div class="pw"><video class="vp" controls preload="metadata" playsinline webkit-playsinline
+           poster="v/${base}.jpg" src="v/${f}"></video><button class="pb" aria-label="Смотреть">▶</button></div><div class="cp"><b>${t}</b><span>${d}</span></div></div>`; }
+    return `<div class="vid"><div class="fr soon"><i>▤</i><span>снимается</span></div><div class="cp"><b>${t}</b><span>${d}</span></div></div>`; }
   if(k==='shot'){
     const rows = v.rows.map(r=>`<div class="bub ${r[0]}">${r[1]}</div>`).join('');
     const [mt,mb] = v.mark.split('|');
@@ -858,6 +862,14 @@ document.addEventListener('click', e=>{
   if(e.target.closest('#tgl') || e.target.closest('#sw2')){ night=!night; setNight(night); return; }
   const sw1 = e.target.closest('#sw1'); if(sw1){ sw1.classList.toggle('off'); return; }
 
+  const pb = e.target.closest('.pb');
+  if(pb){
+    const pw = pb.parentNode, v = pw.querySelector('video');
+    pw.classList.add('on');
+    v.play().catch(()=>{ pw.classList.remove('on'); });
+    v.addEventListener('pause', ()=>{ if(v.currentTime>=v.duration-0.2) pw.classList.remove('on'); });
+    return;
+  }
   const cb = e.target.closest('.cb');
   if(cb){
     const t = decodeURIComponent(cb.dataset.copy);
