@@ -39,6 +39,20 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 .tp b{font-size:15px;font-weight:700;letter-spacing:-.01em}
 .tgl{margin-left:auto;width:34px;height:34px;border-radius:11px;border:1px solid var(--line2);display:grid;place-items:center;font-size:15px;color:var(--soft)}
 .tgl:active{transform:scale(.94)}
+.uav{width:30px;height:30px;border-radius:50%;background:var(--line);background-size:cover;background-position:center;flex:none;border:1px solid var(--line2)}
+.ic.sm{width:34px;height:34px;border-radius:10px;font-size:15px}
+.pcard .av{background-size:cover;background-position:center}
+.tcard{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--card);animation:rise .4s var(--ease) backwards}
+.tcard .cv{height:78px;position:relative;display:flex;align-items:flex-end;padding:11px 13px}
+.tcard .cv .nm{font-size:17px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.tcard .cv .bdg{position:absolute;top:10px;right:11px;font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;border-radius:6px;background:rgba(255,255,255,.22);color:#fff}
+.tcard .bd{padding:11px 13px;display:flex;flex-direction:column;gap:9px}
+.tcard .bd p{margin:0;font-size:13.5px;color:var(--soft)}
+.tcard .mt{display:flex;gap:6px;flex-wrap:wrap}
+.tcard .mt i{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:4px 7px;border-radius:6px;background:var(--line);color:var(--faint)}
+.tcard .go2{align-self:flex-start;font-size:12.5px;font-weight:600;border-radius:999px;padding:8px 14px;background:var(--brandS);color:var(--brand)}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media (max-width:380px){.tgrid{grid-template-columns:1fr}}
 
 .view{display:none}.view.on{display:block;animation:in .28s var(--ease)}
 @keyframes in{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
@@ -146,8 +160,9 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 <body>
 <div class="app">
   <div class="tp">
-    <span class="mk"><i></i></span><b>Машина за рулём</b>
+    <span class="mk"><i></i></span><b id="hi">Машина за рулём</b>
     <button class="tgl" id="tgl" title="Тема">◐</button>
+    <span class="uav" id="uav" hidden></span>
   </div>
 
   <!-- ===== УЧЁБА ===== -->
@@ -195,32 +210,61 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 
   <!-- ===== ПРОФИЛЬ ===== -->
   <div class="view" id="v-me">
-    <div class="pcard"><span class="av"></span>
-      <span style="display:flex;flex-direction:column"><b>Гость</b><span>откройте бота, чтобы узнать вас</span></span></div>
+    <div class="pcard"><span class="av" id="p-av"></span>
+      <span style="display:flex;flex-direction:column;min-width:0">
+        <b id="p-name">Гость</b><span id="p-sub">откройте приложение из бота</span></span></div>
     <div class="sh">Обучение</div>
     <div class="grp">
-      <button class="row"><span class="ic i1" style="width:34px;height:34px;border-radius:10px;font-size:15px">◱</span>
-        <span class="tx"><b>Мои разделы</b><span>2 открыто, 4 под замком</span></span><span class="ch">›</span></button>
-      <button class="row"><span class="ic i5" style="width:34px;height:34px;border-radius:10px;font-size:15px">◔</span>
-        <span class="tx"><b>Недавно открытое</b><span>вернуться туда, где остановились</span></span><span class="ch">›</span></button>
+      <button class="row" data-go="study"><span class="ic i1 sm">◱</span>
+        <span class="tx"><b>Мои разделы</b><span id="p-cnt">2 открыто, 4 под замком</span></span><span class="ch">›</span></button>
+      <button class="row" data-recent="1"><span class="ic i5 sm">◔</span>
+        <span class="tx"><b>Недавно открытое</b><span id="p-rec">пока пусто</span></span><span class="ch">›</span></button>
     </div>
     <div class="sh">Поддержка</div>
     <div class="grp">
-      <button class="row"><span class="ic i2" style="width:34px;height:34px;border-radius:10px;font-size:15px">✉</span>
+      <button class="row" data-write="1"><span class="ic i2 sm">✉</span>
         <span class="tx"><b>Написать мне</b><span>отвечаю лично, не заготовкой</span></span><span class="ch">›</span></button>
-      <button class="row"><span class="ic i6" style="width:34px;height:34px;border-radius:10px;font-size:15px">▤</span>
-        <span class="tx"><b>Документы</b><span>оферта, политика, реквизиты</span></span><span class="ch">›</span></button>
+      <button class="row" data-go="docs"><span class="ic i6 sm">▤</span>
+        <span class="tx"><b>Документы и реквизиты</b><span>оферта, политика, согласие</span></span><span class="ch">›</span></button>
     </div>
     <div class="sh">Настройки</div>
     <div class="grp">
-      <div class="row"><span class="ic i3" style="width:34px;height:34px;border-radius:10px;font-size:15px">◑</span>
+      <div class="row"><span class="ic i3 sm">◑</span>
         <span class="tx"><b>Ночная тема</b><span>переключается и в шапке</span></span>
         <button class="sw off" id="sw2"><i></i></button></div>
-      <div class="row"><span class="ic i4" style="width:34px;height:34px;border-radius:10px;font-size:15px">◈</span>
+      <div class="row"><span class="ic i4 sm">◈</span>
         <span class="tx"><b>Новые материалы</b><span>сообщать, когда выходит урок</span></span>
         <button class="sw" id="sw1"><i></i></button></div>
     </div>
     <p class="foot">Полный доступ — 4 900 ₽ разово, без подписки.<br>Оплата подключается.</p>
+  </div>
+
+  <!-- ===== НЕДАВНЕЕ ===== -->
+  <div class="view" id="v-recent">
+    <button class="back" data-go="me">← Профиль</button>
+    <h2 class="big">Недавно открытое</h2>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Чтобы вернуться туда, где остановились.</p>
+    <div class="sh">Материалы</div>
+    <div class="stack" id="recent"></div>
+  </div>
+
+  <!-- ===== ДОКУМЕНТЫ ===== -->
+  <div class="view" id="v-docs">
+    <button class="back" data-go="me">← Профиль</button>
+    <h2 class="big">Документы и реквизиты</h2>
+    <div class="sh">Документы</div>
+    <div class="stack" id="docs"></div>
+    <div class="sh">Реквизиты</div>
+    <div class="grp" id="req"></div>
+    <p class="foot">Документы вступают в силу с момента публикации.<br>Действующая редакция всегда здесь.</p>
+  </div>
+
+  <!-- ===== ТЕКСТ ДОКУМЕНТА ===== -->
+  <div class="view" id="v-doc">
+    <button class="back" data-go="docs">← Документы</button>
+    <h2 class="big" id="doc-t"></h2>
+    <p style="margin:0 0 10px;font-family:var(--mono);font-size:11px;color:var(--faint)" id="doc-d"></p>
+    <div class="prose" id="doc-b"></div>
   </div>
 </div>
 
@@ -317,47 +361,174 @@ const SECS = [
  ]}
 ];
 
+const G = {
+ cl:'linear-gradient(140deg,#D97757,#B4553A)', gpt:'linear-gradient(140deg,#10A37F,#0B7A5F)',
+ gem:'linear-gradient(140deg,#4285F4,#8A5BE8)', per:'linear-gradient(140deg,#20808D,#0F5560)',
+ ds:'linear-gradient(140deg,#4D6BFE,#2B45C4)', ya:'linear-gradient(140deg,#FC3F1D,#C42A0F)',
+ gc:'linear-gradient(140deg,#00A3FF,#0067C4)', mj:'linear-gradient(140deg,#2B2B3A,#0D0D14)',
+ fx:'linear-gradient(140deg,#334155,#0F172A)', id:'linear-gradient(140deg,#5B5BE8,#3A3AC0)',
+ kd:'linear-gradient(140deg,#00C2FF,#0077C4)', el:'linear-gradient(140deg,#2C3140,#12151E)',
+ su:'linear-gradient(140deg,#FF3B30,#C21F16)', wh:'linear-gradient(140deg,#10A37F,#0A6E56)',
+ rw:'linear-gradient(140deg,#3A3A46,#101014)', kl:'linear-gradient(140deg,#1F6FEB,#1348A0)',
+ cc:'linear-gradient(140deg,#D97757,#8A4630)', cu:'linear-gradient(140deg,#2A2A33,#0E0E13)',
+ rm:'linear-gradient(140deg,#0B84F3,#0757A8)', sl:'linear-gradient(140deg,#2D7D46,#17512B)'
+};
 const TOOLS = [
  ['Текст, код и рассуждения', [
-  ['Claude','C','#D97757','vpn','Длинные документы, код, рассуждения. Реже теряет середину сорокастраничного текста.'],
-  ['ChatGPT','G','#10A37F','vpn','Универсал на каждый день: переписка, картинки, голос, простые таблицы.'],
-  ['Gemini','◆','#4285F4','vpn','Очень длинный контекст и связка с сервисами Google.'],
-  ['DeepSeek','D','#4D6BFE','vpn','Дёшево и прилично по коду. Хорош как рабочая лошадка для потока.'],
-  ['Grok','X','#111827','vpn','Быстрый, разговорный, встроен в X.'],
-  ['Mistral','M','#FF7000','vpn','Европейская, лёгкие модели, есть открытые веса.']
+  ['Claude','cl','vpn','Длинные документы, код и рассуждения. Реже теряет середину сорокастраничного текста.',['текст','код','документы'],'claude'],
+  ['ChatGPT','gpt','vpn','Универсал на каждый день: переписка, картинки, голос, простые таблицы.',['текст','картинки','голос'],'chatgpt'],
+  ['Gemini','gem','vpn','Очень длинный контекст и связка с почтой и документами Google.',['текст','видео','google'],'gemini'],
+  ['DeepSeek','ds','vpn','Дёшево и прилично по коду. Рабочая лошадка для потока.',['код','дёшево'],null],
+  ['Perplexity','per','vpn','Отвечает и показывает ссылки, откуда взял. Проверять есть что.',['поиск','источники'],'perplexity']
  ]],
  ['Работают из России', [
-  ['YandexGPT','Я','#FC3F1D','rf','Рублями, без ухищрений. Важно, когда в вопросе персональные данные — им нельзя покидать страну.'],
-  ['GigaChat','G','#00A3FF','rf','Сбер. Рублями, есть бесплатный уровень для проб.'],
-  ['Шедеврум','Ш','#7B61FF','rf','Картинки и тексты от Яндекса, приложение на телефон.'],
-  ['SpeechKit','♪','#FC3F1D','rf','Синтез речи вещательного качества. Этим голосом озвучены наши ролики.']
- ]],
- ['Поиск с источниками', [
-  ['Perplexity','P','#20808D','vpn','Отвечает и показывает, откуда взял. Проверять всё равно надо, но есть что проверять.']
+  ['YandexGPT','ya','rf','Рублями, без ухищрений. Важно, когда в вопросе персональные данные.',['текст','рубли','152-ФЗ'],'yandex'],
+  ['GigaChat','gc','rf','Сбер. Рублями, есть бесплатный уровень для проб.',['текст','рубли'],'giga'],
+  ['Kandinsky','kd','rf','Картинки без VPN, приложение на телефон.',['картинки','рубли'],'kandinsky'],
+  ['SpeechKit','ya','rf','Синтез речи вещательного качества. Этим голосом озвучены наши ролики.',['голос','рубли'],null],
+  ['Silero','sl','rf','Синтез речи локально на вашем компьютере, бесплатно и без интернета.',['голос','бесплатно'],null]
  ]],
  ['Картинки', [
-  ['Midjourney','MJ','#000000','vpn','Самая красивая картинка из коробки, слабее всех слушается точных указаний.'],
-  ['Flux','F','#0F172A','vpn','Открытая, хорошо держит текст на картинке.'],
-  ['Ideogram','I','#5B5BE8','vpn','Лучше прочих пишет буквы внутри изображения.'],
-  ['Recraft','R','#111','vpn','Векторные логотипы и иконки, а не только растр.'],
-  ['Kandinsky','K','#00C2FF','rf','Российская, работает без VPN.']
+  ['Midjourney','mj','vpn','Самая красивая картинка из коробки, хуже всех слушается точных указаний.',['картинки','стиль'],'midjourney'],
+  ['Flux','fx','vpn','Открытая модель, хорошо держит текст на изображении.',['картинки','текст'],null],
+  ['Ideogram','id','vpn','Лучше прочих пишет буквы внутри картинки — для обложек и баннеров.',['картинки','надписи'],null]
  ]],
  ['Видео', [
-  ['Runway','R','#000','vpn','Ролики из текста и картинки, монтажные инструменты.'],
-  ['Kling','K','#1F6FEB','vpn','Сильная физика движения, длинные сцены.'],
-  ['Remotion','▷','#0B84F3','rf','Не нейросеть: видео как код на React. Так собраны наши ролики — полный контроль вместо угадывания.']
+  ['Runway','rw','vpn','Ролики из текста и картинки, монтажные инструменты внутри.',['видео'],null],
+  ['Kling','kl','vpn','Сильная физика движения, длинные сцены.',['видео'],null],
+  ['Remotion','rm','rf','Не нейросеть: видео как код. Так собраны наши ролики — полный контроль вместо угадывания.',['видео','код'],null]
  ]],
  ['Голос и звук', [
-  ['ElevenLabs','11','#111827','vpn','Самый живой синтез речи, клонирование голоса.'],
-  ['Suno','♫','#FF3B30','vpn','Музыка с вокалом по текстовому описанию.'],
-  ['Silero','S','#2D7D46','rf','Бесплатно и локально на вашем компьютере. Слышно, что синтез, но интернет не нужен.'],
-  ['Whisper','W','#10A37F','rf','Распознавание речи. Запускается локально, бесплатно.']
+  ['ElevenLabs','el','vpn','Самый живой синтез речи и клонирование голоса.',['голос'],null],
+  ['Suno','su','vpn','Музыка с вокалом по текстовому описанию.',['музыка'],null],
+  ['Whisper','wh','rf','Распознавание речи. Запускается локально, бесплатно.',['расшифровка','бесплатно'],null]
  ]],
  ['Вайбкодинг', [
-  ['Claude Code','▮','#D97757','vpn','Агент в терминале: сам читает файлы, правит код, запускает проверки.'],
-  ['Cursor','▸','#111','vpn','Редактор кода со встроенной моделью.'],
-  ['Copilot','◎','#24292F','vpn','Подсказки прямо в редакторе, самый мягкий вход.']
+  ['Claude Code','cc','vpn','Агент в терминале: сам читает файлы, правит код, запускает проверки.',['код','агент'],null],
+  ['Cursor','cu','vpn','Редактор кода со встроенной моделью.',['код'],null]
  ]]
+];
+
+const TL = {
+ claude:{t:'Claude', g:'cl', min:6, b:[
+  ['p','Модель Anthropic. Сильнее прочих на длинных текстах и рассуждениях: договор на сорок страниц она разбирает целиком, а не первые пять листов.'],
+  ['h','Кому'],
+  ['p','Тем, кто работает с документами, кодом и длинными задачами. Юристу, аналитику, основателю, который собирает продукт.'],
+  ['h','Как начать'],
+  ['ul','Открыть claude.ai и завести аккаунт|Бесплатного уровня хватит попробовать, дальше подписка|Оплата российской картой не проходит — см. раздел «Оплата из России»'],
+  ['h','Приём, который меняет всё'],
+  ['p','Не пересказывайте документ своими словами — приложите файл. Claude работает по источнику заметно точнее, чем по вашему пересказу.'],
+  ['prompt','Вот документ. Не пересказывай его целиком.\n\n1. Выпиши только те пункты, которые создают обязанности для меня.\n2. По каждому: чем грозит нарушение и что я могу изменить.\n3. Если чего-то в документе нет, а должно быть, — скажи отдельным списком.\n\nЦитируй строками из документа, не по памяти.'],
+  ['tip','Слабое место — арифметика в несколько шагов. Считайте сами или просите написать формулу, а не ответ.']
+ ]},
+ chatgpt:{t:'ChatGPT', g:'gpt', min:6, b:[
+  ['p','Самый ровный универсал: текст, картинки, голос, разбор таблиц. Если берёте одну нейросеть на всё — обычно эту.'],
+  ['h','Кому'],
+  ['p','Тем, кому нужно понемногу всего: написать, нарисовать, проговорить, посчитать.'],
+  ['h','Как начать'],
+  ['ul','chat.openai.com, вход по почте|Бесплатно доступна урезанная модель|Голосовой режим в приложении — им удобно диктовать на ходу'],
+  ['h','Что многие пропускают'],
+  ['p','Режим с загрузкой файлов считает по таблице кодом, а не «на глаз». Это единственный способ доверять цифрам от нейросети — и то с проверкой.'],
+  ['prompt','Вот таблица. Посчитай [что нужно] написанным кодом, а не в уме.\nПокажи сам код и промежуточные значения.\nЕсли данных не хватает — остановись и спроси, не подставляй свои.'],
+  ['tip','Просьба «посчитай в уме» даёт красивое и неверное число. Просьба «посчитай кодом» даёт проверяемое.']
+ ]},
+ gemini:{t:'Gemini', g:'gem', min:5, b:[
+  ['p','Модель Google. Держит очень длинный контекст и умеет разбирать видео, а ещё связана с почтой и документами Google.'],
+  ['h','Кому'],
+  ['p','Тем, кто живёт в Google Документах и Почте, и тем, кому надо скормить нейросети целую книгу.'],
+  ['h','Как начать'],
+  ['ul','gemini.google.com, вход через аккаунт Google|Часть возможностей доступна бесплатно|Внутри Google Документов вызывается прямо в боковой панели'],
+  ['prompt','Вот запись встречи (видео/расшифровка).\n\n1. Кто что пообещал и к какому сроку — списком, с отметкой времени.\n2. Что осталось нерешённым.\n3. Один абзац: что писать в чат по итогам.\n\nНе добавляй того, чего не было сказано.'],
+  ['tip','На очень длинном контексте любая модель начинает терять середину. Проверяйте выборочно то, что было в середине документа.']
+ ]},
+ perplexity:{t:'Perplexity', g:'per', min:5, b:[
+  ['p','Не столько собеседник, сколько поисковик с человеческим ответом: отвечает и сразу показывает, откуда взял.'],
+  ['h','Кому'],
+  ['p','Тем, кому важна проверяемость: рынок, конкуренты, цены, законы, свежие новости.'],
+  ['h','Как начать'],
+  ['ul','perplexity.ai, работает и без регистрации|Режим «Focus» ограничивает поиск — например только научными работами|Ссылки под ответом кликабельны, открывайте хотя бы одну'],
+  ['prompt','Вопрос: [ваш вопрос].\n\nОтветь коротко, но по каждому утверждению дай ссылку.\nОтдельно перечисли, в чём источники расходятся между собой.\nЕсли данные старше года — предупреди об этом.'],
+  ['tip','Ссылка под ответом не значит, что там написано именно это. Открывайте — модель иногда пересказывает источник неточно.']
+ ]},
+ yandex:{t:'YandexGPT и Алиса', g:'ya', min:6, b:[
+  ['p','Российская модель. Главное её преимущество не качество, а то, что она работает из России без ухищрений и не увозит данные за границу.'],
+  ['h','Когда это единственный вариант'],
+  ['p','Если в запросе персональные данные ваших клиентов — фамилии, телефоны, адреса, — по 152-ФЗ они не должны покидать страну. Это не про удобство, а про закон.'],
+  ['h','Как начать'],
+  ['ul','Через Алису — бесплатно, прямо в браузере или колонке|Через Yandex Cloud — если нужен доступ из своей программы|Оплата рублями с обычной карты, чек приходит'],
+  ['prompt','Ты помощник в [сфера]. Отвечай коротко и по делу.\n\nВот обращение клиента: [текст].\n\n1. Что человек на самом деле просит.\n2. Три варианта ответа: строгий, нейтральный, дружелюбный.\n3. Чего в ответе писать нельзя.'],
+  ['tip','На длинных рассуждениях уступает зарубежным. Зато для потоковой работы с русским текстом и звонков — ровно то, что нужно.']
+ ]},
+ giga:{t:'GigaChat', g:'gc', min:4, b:[
+  ['p','Модель Сбера. Работает из России, есть бесплатный уровень, оплата рублями.'],
+  ['h','Кому'],
+  ['p','Тем, кто хочет попробовать без карты и VPN, и тем, кто уже в контуре сервисов Сбера.'],
+  ['h','Как начать'],
+  ['ul','Через сайт или приложение — сразу, без ключей|Для доступа из своей программы нужен ключ в кабинете разработчика|Есть генерация картинок внутри того же диалога'],
+  ['tip','Полезно держать как запасной вариант: когда зарубежный сервис недоступен, работа не встаёт.']
+ ]},
+ midjourney:{t:'Midjourney', g:'mj', min:6, b:[
+  ['p','Даёт самую красивую картинку почти без усилий. И хуже всех слушается, когда нужно точно то, что вы задумали.'],
+  ['h','Кому'],
+  ['p','Для обложек, атмосферы, настроения. Не для схем и не для картинок с текстом.'],
+  ['h','Как устроен запрос'],
+  ['p','Описание строится от главного к деталям: что изображено → как снято → свет → стиль → пропорции.'],
+  ['prompt','flat vector illustration of a delivery courier on an e-bike in a rainy city,\nwarm amber light, cool grey background, minimal shapes, no text,\ncentered composition --ar 4:5 --style raw'],
+  ['h','Три частые ошибки'],
+  ['ul','Просить текст на картинке — почти всегда получится каша из букв|Перечислять десять объектов — модель смешает их в один|Забывать про пропорции: без указания получите квадрат'],
+  ['tip','Пишите запрос по-английски, даже если продукт русский: моделей учили в основном на английских описаниях, и разница в качестве заметная.']
+ ]},
+ kandinsky:{t:'Kandinsky', g:'kd', min:4, b:[
+  ['p','Российская модель для картинок. Работает без VPN, есть приложение на телефон и бесплатный уровень.'],
+  ['h','Кому'],
+  ['p','Тем, кому картинка нужна сегодня и без возни с оплатой из-за границы.'],
+  ['h','Как начать'],
+  ['ul','Через сайт или приложение Шедеврум|Русский запрос понимает нормально, английский не обязателен|Есть готовые стили — быстрее, чем описывать словами'],
+  ['prompt','Плоская векторная иллюстрация: курьер на электровелосипеде\nв дождливом городе. Тёплый янтарный свет, холодный серый фон,\nминимум деталей, без текста, композиция по центру, вертикальная 4:5.'],
+  ['tip','Уступает зарубежным в фотореализме, но в плоской иллюстрации и схемах разница почти незаметна — а платить и ждать не надо.']
+ ]}
+};
+
+const DOCS = [
+ {id:'oferta', t:'Публичная оферта', d:'Условия покупки доступа, оплата и возврат', b:[
+  ['p','<b>Внимание:</b> это черновик. Перед публикацией его должен вычитать юрист, а поля в квадратных скобках — заполнить вашими данными.'],
+  ['h','1. Продавец'],
+  ['p','[ФИО полностью], ИНН [ИНН], применяет налог на профессиональный доход. Адрес для связи: [почта].'],
+  ['h','2. Предмет'],
+  ['p','Продавец предоставляет доступ к обучающим материалам приложения. Доступ бессрочный. Материалы носят информационный характер, образовательной лицензии не требуют и документов об образовании не дают.'],
+  ['p','Продавец не гарантирует достижения покупателем какого-либо результата, включая получение дохода.'],
+  ['h','3. Стоимость и оплата'],
+  ['p','4 900 ₽ единовременно. НДС не облагается в связи с применением налога на профессиональный доход. Чек направляется на указанную покупателем почту в момент оплаты. Автоматических списаний нет.'],
+  ['h','4. Возврат'],
+  ['p','В течение 7 календарных дней с даты оплаты — полный возврат без объяснения причин, по сообщению в бот или на почту. Возврат тем же способом, которым была оплата, до 10 рабочих дней.'],
+  ['h','5. Права на материалы'],
+  ['p','Материалы предоставляются для личного использования. Перепродажа и размещение в открытом доступе не допускаются. Использовать код и промпты в собственных проектах покупателя можно без ограничений.'],
+  ['h','6. Персональные данные'],
+  ['p','Обрабатываются идентификатор Telegram, имя пользователя, адрес почты и сведения об оплате — для предоставления доступа и выполнения налоговых обязанностей. Третьим лицам не передаются, кроме платёжного сервиса и налогового органа.']
+ ]},
+ {id:'policy', t:'Политика обработки персональных данных', d:'Что собираем, зачем, сколько храним', b:[
+  ['p','<b>Черновик.</b> Поля в скобках заполнить, документ показать юристу.'],
+  ['h','Что собираем'],
+  ['ul','Идентификатор и имя пользователя Telegram — чтобы узнавать вас и выдавать доступ|Адрес электронной почты — чтобы отправить чек|Сведения об оплате от платёжного сервиса — без данных карты'],
+  ['h','Чего не собираем'],
+  ['p','Данные банковской карты не попадают к нам ни в каком виде: их обрабатывает платёжный сервис. Переписку в других чатах, контакты и файлы с вашего устройства приложение не читает.'],
+  ['h','Сколько храним и как удалить'],
+  ['p','Пока действует доступ и далее в сроки, установленные налоговым законодательством. Удаление — по запросу на [почта]; доступ при этом прекращается.'],
+  ['h','Где хранится'],
+  ['p','На серверах на территории Российской Федерации.']
+ ]},
+ {id:'consent', t:'Согласие на обработку данных', d:'Текст согласия, которое даётся при оплате', b:[
+  ['p','Оплачивая доступ, вы даёте согласие на обработку перечисленных данных в целях предоставления доступа и выполнения налоговых обязанностей.'],
+  ['p','Согласие даётся на срок действия доступа и отзывается сообщением на [почта]. Отзыв согласия влечёт прекращение доступа, поскольку без обработки данных предоставить его невозможно.'],
+  ['p','Согласие на получение рекламных сообщений даётся отдельно и на доступ к оплаченному не влияет — его можно отозвать переключателем в профиле.']
+ ]}
+];
+const REQ = [
+ ['Наименование','[ФИО полностью]'],
+ ['Статус','Плательщик налога на профессиональный доход'],
+ ['ИНН','[ИНН]'],
+ ['Электронная почта','[почта для документов]'],
+ ['Телеграм','@mashina_za_rulem_bot']
 ];
 
 const LOG = [
@@ -419,10 +590,15 @@ $('#secs').innerHTML = SECS.map((s,i)=>`
 
 $('#tools').innerHTML = TOOLS.map(([grp,list])=>`
   <div class="sh">${grp}</div>
-  <div class="stack">${list.map(([n,l,c,tag,d])=>`
-    <div class="tool"><div class="r1"><span class="lg" style="background:${c}">${l}</span>
-      <b>${n}</b><span class="tag ${tag}">${tag==='rf'?'из РФ':'нужен VPN'}</span></div>
-      <p>${d}</p></div>`).join('')}</div>`).join('');
+  <div class="tgrid">${list.map(([n,g,tag,d,meta,les],i)=>`
+    <div class="tcard" style="animation-delay:${i*40}ms">
+      <div class="cv" style="background:${G[g]}"><span class="nm">${n}</span>
+        <span class="bdg">${tag==='rf'?'из РФ':'VPN'}</span></div>
+      <div class="bd"><p>${d}</p>
+        <div class="mt">${meta.map(m=>`<i>${m}</i>`).join('')}</div>
+        ${les?`<button class="go2" data-tl="${les}">Открыть урок →</button>`
+             :'<span style="font-size:11.5px;color:var(--faint)">урок готовится</span>'}
+      </div></div>`).join('')}</div>`).join('');
 
 $('#log').innerHTML = LOG.map((e,i)=>`
   <div class="item" style="display:block;padding:0;animation-delay:${i*45}ms">
@@ -453,6 +629,8 @@ function openLes(j){
   $('#l-t').textContent = l.t;
   $('#l-body').innerHTML = l.b.map(blk).join('');
   $('#l-foot').textContent = '◷ ' + l.min + ' мин';
+  window.__lback = 'sec';
+  remember('lesson', cur+'-'+j, l.t);
   show('lesson');
 }
 function show(v){
@@ -460,6 +638,68 @@ function show(v){
   $('#v-'+v).classList.add('on');
   document.querySelectorAll('.dock a').forEach(a=>a.classList.toggle('on', a.dataset.go===v));
   window.scrollTo({top:0});
+}
+
+/* ---------- кто открыл приложение ---------- */
+const TG = (window.Telegram && window.Telegram.WebApp) || null;
+const U  = TG && TG.initDataUnsafe && TG.initDataUnsafe.user;
+if(U){
+  const name = U.first_name || 'друг';
+  $('#hi').textContent = 'Привет, ' + name;
+  $('#p-name').textContent = name + (U.last_name ? ' ' + U.last_name : '');
+  $('#p-sub').textContent = U.username ? '@' + U.username : 'вы вошли через Telegram';
+  if(U.photo_url){
+    $('#uav').style.backgroundImage = 'url(' + U.photo_url + ')';
+    $('#uav').hidden = false;
+    $('#p-av').style.backgroundImage = 'url(' + U.photo_url + ')';
+  }
+}
+
+/* ---------- недавно открытое ---------- */
+function recentList(){ try{ return JSON.parse(localStorage.getItem('mzr-rec')||'[]'); }catch(e){ return []; } }
+function remember(kind, key, title){
+  let r = recentList().filter(x => !(x.kind===kind && x.key===key));
+  r.unshift({kind, key, title, t: Date.now()});
+  r = r.slice(0, 12);
+  try{ localStorage.setItem('mzr-rec', JSON.stringify(r)); }catch(e){}
+  paintRecent();
+}
+function paintRecent(){
+  const r = recentList();
+  $('#p-rec').textContent = r.length ? r.length + ' материалов' : 'пока пусто';
+  $('#recent').innerHTML = r.length ? r.map((x,i)=>`
+    <button class="item" data-rec-open="${i}" style="animation-delay:${i*40}ms">
+      <span class="ic ${x.kind==='tool'?'i5':'i1'} sm">${x.kind==='tool'?'⚒':'◱'}</span>
+      <span class="tx"><b>${x.title}</b><span>${x.kind==='tool'?'инструмент':'урок'}</span></span>
+      <span class="ch">›</span></button>`).join('')
+    : '<p style="font-size:15px;color:var(--soft);margin:0">Здесь появятся материалы, которые вы открывали, — чтобы вернуться к ним не листая каталог.</p>';
+}
+
+/* ---------- документы ---------- */
+$('#docs').innerHTML = DOCS.map((d,i)=>`
+  <button class="item" data-doc="${d.id}" style="animation-delay:${i*40}ms">
+    <span class="ic i6 sm">▤</span>
+    <span class="tx"><b>${d.t}</b><span>${d.d}</span></span><span class="ch">›</span></button>`).join('');
+$('#req').innerHTML = REQ.map(([k,v])=>`
+  <div class="row"><span class="tx" style="flex:1"><span>${k}</span><b style="font-size:14.5px">${v}</b></span></div>`).join('');
+
+function openDoc(id){
+  const d = DOCS.find(x=>x.id===id);
+  $('#doc-t').textContent = d.t;
+  $('#doc-d').textContent = 'редакция 1 · черновик, требует вычитки юристом';
+  $('#doc-b').innerHTML = d.b.map(blk).join('');
+  show('doc');
+}
+function openToolLesson(k){
+  const l = TL[k];
+  $('#l-head').setAttribute('style','background:'+G[l.g]);
+  $('#l-k').textContent = 'Инструмент';
+  $('#l-t').textContent = l.t;
+  $('#l-body').innerHTML = l.b.map(blk).join('');
+  $('#l-foot').textContent = '◷ ' + l.min + ' мин';
+  window.__lback = 'tools';
+  remember('tool', k, l.t);
+  show('lesson');
 }
 
 /* тема */
@@ -485,6 +725,20 @@ document.addEventListener('click', e=>{
     if(navigator.clipboard) navigator.clipboard.writeText(t).then(fin,fin); else fin();
     return;
   }
+  const tl = e.target.closest('[data-tl]'); if(tl){ openToolLesson(tl.dataset.tl); return; }
+  const dc = e.target.closest('[data-doc]'); if(dc){ openDoc(dc.dataset.doc); return; }
+  if(e.target.closest('[data-recent]')){ paintRecent(); show('recent'); return; }
+  if(e.target.closest('[data-write]')){
+    if(TG && TG.close){ TG.close(); } else { location.href='https://t.me/mashina_za_rulem_bot'; }
+    return;
+  }
+  const ro = e.target.closest('[data-rec-open]');
+  if(ro){
+    const x = recentList()[+ro.dataset.recOpen];
+    if(x.kind==='tool') openToolLesson(x.key);
+    else { const [si,li] = x.key.split('-').map(Number); openSec(si); openLes(li); }
+    return;
+  }
   const go = e.target.closest('[data-go]'); if(go){ show(go.dataset.go); return; }
   const sec = e.target.closest('[data-sec]'); if(sec){ openSec(+sec.dataset.sec); return; }
   const les = e.target.closest('[data-les]'); if(les){ openLes(+les.dataset.les); return; }
@@ -495,20 +749,18 @@ document.addEventListener('click', e=>{
     box.style.display = box.style.display==='none' ? 'flex' : 'none';
   }
 });
-$('#l-back').addEventListener('click', ()=>show('sec'));
+$('#l-back').addEventListener('click', ()=>show(window.__lback||'sec'));
+paintRecent();
 </script>
 <script>
 try{
   const tg = window.Telegram && window.Telegram.WebApp;
   if(tg){ tg.ready(); tg.expand();
-    const night = document.documentElement.getAttribute('data-n')==='1';
-    if(tg.setHeaderColor) tg.setHeaderColor(night?'#161A2B':'#FFFFFF');
-    if(tg.setBackgroundColor) tg.setBackgroundColor(night?'#161A2B':'#FFFFFF');
-    new MutationObserver(()=>{
-      const n = document.documentElement.getAttribute('data-n')==='1';
+    const paint = () => { const n = document.documentElement.getAttribute('data-n')==='1';
       if(tg.setHeaderColor) tg.setHeaderColor(n?'#161A2B':'#FFFFFF');
-      if(tg.setBackgroundColor) tg.setBackgroundColor(n?'#161A2B':'#FFFFFF');
-    }).observe(document.documentElement,{attributes:true,attributeFilter:['data-n']});
+      if(tg.setBackgroundColor) tg.setBackgroundColor(n?'#161A2B':'#FFFFFF'); };
+    paint();
+    new MutationObserver(paint).observe(document.documentElement,{attributes:true,attributeFilter:['data-n']});
   }
 }catch(e){}
 </script>
