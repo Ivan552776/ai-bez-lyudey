@@ -1,3 +1,10 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0C1015">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <title>Машина за рулём</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
@@ -16,9 +23,9 @@
 body{background:
   radial-gradient(900px 520px at 50% -8%, #1A222C 0%, transparent 62%),
   var(--ground);
-  color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.58;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none}
-.app{max-width:520px;margin:0 auto;padding:16px 14px 108px}
+.app{max-width:560px;margin:0 auto;padding:14px 14px calc(112px + env(safe-area-inset-bottom))}
 
 /* ---- шапка ---- */
 .bar{display:flex;align-items:center;gap:10px;padding:2px 2px 16px}
@@ -38,7 +45,7 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 .gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
 .g{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:11px 9px;text-align:center}
 .g b{display:block;font-family:var(--mono);font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
-.g span{font-size:10px;color:var(--faint);letter-spacing:.02em}
+.g span{font-size:11.5px;color:var(--faint);letter-spacing:.02em}
 .g.a b{color:var(--amber)}
 
 /* ---- конвейер ---- */
@@ -58,11 +65,11 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 .node.live::before{border-color:var(--amber);box-shadow:0 0 0 4px var(--amberW),0 0 12px var(--amber)}
 .node.live{border-color:#39414D}
 .node .top{display:flex;align-items:center;gap:9px}
-.node .idx{font-family:var(--mono);font-size:10.5px;color:var(--faint);letter-spacing:.08em}
-.node .st{margin-left:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:6px;border:1px solid var(--line2);color:var(--faint)}
+.node .idx{font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.08em}
+.node .st{margin-left:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:6px;border:1px solid var(--line2);color:var(--faint)}
 .node.live .st{color:var(--amber);border-color:var(--amberD);background:var(--amberW)}
-.node b{font-size:16px;font-weight:600;letter-spacing:-.01em}
-.node p{margin:0;font-size:13px;color:var(--soft);max-width:40ch}
+.node b{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.node p{margin:0;font-size:14px;color:var(--soft);max-width:40ch}
 .node .bars{display:flex;gap:3px;margin-top:6px}
 .node .bars i{height:3px;flex:1;border-radius:2px;background:var(--line2)}
 .node.live .bars i{background:var(--amber);opacity:.85;animation:eq 1.5s ease-in-out infinite}
@@ -76,19 +83,19 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 .wrapsys{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 4px}
 .sys{background:var(--panel);border:1px dashed var(--line2);border-radius:14px;padding:13px 14px;text-align:left;display:flex;flex-direction:column;gap:4px}
 .sys b{font-size:14.5px;font-weight:600}
-.sys span{font-size:12px;color:var(--faint)}
+.sys span{font-size:13px;color:var(--faint)}
 .sys .dot{width:7px;height:7px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet);margin-bottom:2px}
 .sys:nth-child(2) .dot{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
 
-.sect{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:22px 0 12px}
+.sect{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:22px 0 12px}
 
 /* ---- журнал ---- */
 .log{display:flex;flex-direction:column;gap:8px}
 .entry{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;animation:rise .45s var(--ease) backwards}
 .entry .h{display:flex;align-items:center;gap:10px;padding:13px 14px;width:100%;text-align:left}
-.entry .h .tm{font-family:var(--mono);font-size:10.5px;color:var(--faint);flex:none}
+.entry .h .tm{font-family:var(--mono);font-size:11.5px;color:var(--faint);flex:none}
 .entry .h .dt{width:7px;height:7px;border-radius:50%;flex:none}
-.entry .h b{font-size:14.5px;font-weight:600;line-height:1.3}
+.entry .h b{font-size:15.5px;font-weight:600;line-height:1.3}
 .entry .h .ar{margin-left:auto;color:var(--faint);font-size:12px;transition:transform .25s var(--ease);flex:none}
 .entry.open .h .ar{transform:rotate(90deg)}
 .entry .body{display:none;padding:0 14px 16px;flex-direction:column;gap:13px;border-top:1px solid var(--line)}
@@ -126,13 +133,14 @@ pre{margin:0;background:#080B0F;border:1px solid var(--line);border-radius:11px;
 .buy:not(:disabled):active{transform:scale(.985)}
 
 /* ---- док ---- */
-.dock{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;gap:3px;background:rgba(20,26,33,.94);border:1px solid var(--line2);border-radius:999px;padding:5px;box-shadow:0 12px 34px rgba(0,0,0,.5);backdrop-filter:blur(10px);z-index:20}
+.dock{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:3px;background:rgba(20,26,33,.94);border:1px solid var(--line2);border-radius:999px;padding:5px;box-shadow:0 12px 34px rgba(0,0,0,.5);backdrop-filter:blur(10px);z-index:20}
 .dock button{color:var(--faint);font-size:13.5px;font-weight:500;padding:9px 16px;border-radius:999px;transition:background .2s,color .2s}
 .dock button.on{background:var(--ink);color:#12161C}
-.foot{margin-top:20px;font-family:var(--mono);font-size:10.5px;color:var(--faint);line-height:1.7;text-align:center}
+.foot{margin-top:20px;font-family:var(--mono);font-size:11.5px;color:var(--faint);line-height:1.7;text-align:center}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
-
+</head>
+<body>
 <div class="app">
   <div class="bar">
     <span class="logo"><i></i></span>
@@ -375,3 +383,16 @@ buy.addEventListener('click',()=>{buy.textContent='Оплата подключа
 
 countUp();
 </script>
+<script>
+/* разворачиваем окно Telegram на всю высоту и красим шапку под фон */
+try{
+  const tg = window.Telegram && window.Telegram.WebApp;
+  if(tg){ tg.ready(); tg.expand();
+    if(tg.setHeaderColor) tg.setHeaderColor('#0C1015');
+    if(tg.setBackgroundColor) tg.setBackgroundColor('#0C1015');
+    document.documentElement.style.setProperty('--tg-top', (tg.safeAreaInset?.top||0)+'px');
+  }
+}catch(e){}
+</script>
+</body>
+</html>
