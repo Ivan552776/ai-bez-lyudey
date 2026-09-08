@@ -109,10 +109,21 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .pbox pre{background:transparent;color:var(--ink);border-radius:0}
 .tip{border-left:3px solid var(--c3);background:var(--card);border-radius:0 11px 11px 0;padding:13px;font-size:15px}
 .vid{border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.vid .vp{display:block;width:100%;max-height:70vh;background:#000}
 .vid .fr{aspect-ratio:16/9;background:linear-gradient(140deg,var(--c1),var(--c6));display:grid;place-items:center;color:#fff;font-size:30px}
 .vid .cp{padding:11px 13px;display:flex;align-items:center;gap:9px;background:var(--card)}
 .vid .cp b{font-size:14px;font-weight:600}
+.vid .fr.soon{flex-direction:column;gap:6px;font-size:26px;opacity:.75}
+.vid .fr.soon span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
 .vid .cp span{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+
+.fixes{display:flex;flex-direction:column;gap:9px}
+.fx{border:1px solid var(--line2);border-radius:14px;overflow:hidden}
+.fx .q,.fx .a{padding:12px 14px;font-size:14.5px;line-height:1.5;display:flex;flex-direction:column;gap:4px}
+.fx .q{background:var(--warnS);color:var(--ink)}
+.fx .a{background:var(--okS);border-top:1px solid var(--line2)}
+.fx b{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase}
+.fx .q b{color:var(--warn)}.fx .a b{color:var(--ok)}
 
 /* ---- обучающий скрин ---- */
 .shot{border:1px solid var(--line2);border-radius:14px;overflow:hidden;background:var(--card)}
@@ -125,6 +136,16 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .mark{border:2px dashed var(--c3);border-radius:11px;padding:8px 10px;font-size:12.5px;color:var(--c3);display:flex;gap:8px;align-items:flex-start}
 .mark b{flex:none;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding-top:1px}
 .cap{font-size:12.5px;color:var(--faint);text-align:center}
+
+.acc2{border-radius:17px;border:1px solid var(--brand);background:var(--brandS);padding:17px;display:flex;flex-direction:column;gap:13px}
+.acc2 ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px;font-size:15px}
+.acc2 li{display:flex;gap:10px;align-items:flex-start}
+.acc2 li i{color:var(--brand);font-style:normal;font-weight:700;flex:none}
+.pline{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding-top:4px;border-top:1px solid var(--line2)}
+.pnum{font-family:var(--mono);font-size:27px;font-weight:600;color:var(--ink)}
+.pline span:last-child{font-size:12.5px;color:var(--faint)}
+.buy2{border-radius:13px;background:var(--brand);color:#fff;font-weight:600;font-size:15px;padding:14px}
+.buy2:active{transform:scale(.985)}
 
 /* ---- инструменты ---- */
 .tool{width:100%;text-align:left;border-radius:15px;padding:12px 13px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
@@ -191,6 +212,19 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="lhead" id="l-head"><span class="k" id="l-k"></span><h3 id="l-t"></h3></div>
     <div class="prose" id="l-body"></div>
     <p class="foot" id="l-foot"></p>
+  </div>
+
+  <!-- ===== ЗАКРЫТЫЙ УРОК ===== -->
+  <div class="view" id="v-pay">
+    <button class="back" data-go="sec">← Назад</button>
+    <div class="lhead" id="pay-head"><span class="k" id="pay-k"></span><h3 id="pay-t"></h3></div>
+    <div class="acc2">
+      <div class="sh" style="margin:0 0 4px">Что внутри урока</div>
+      <ul id="pay-in"></ul>
+      <div class="pline"><span class="pnum">4 900 ₽</span><span>разово · все 16 уроков · навсегда</span></div>
+      <button class="buy2" data-go="me">Открыть полный доступ</button>
+      <p style="margin:0;font-size:13px;color:var(--faint)">Два раздела и пробный урок про телеграм-бота открыты без оплаты — посмотрите их сначала.</p>
+    </div>
   </div>
 
   <!-- ===== РАЗБОРЫ ===== -->
@@ -308,10 +342,12 @@ const SECS = [
      ['ul','<b>«Слишком общо. Приведи три конкретных примера вместо каждого утверждения»</b> — убирает воду|<b>«Сократи вдвое, не теряя смысла. Что выкинул — перечисли отдельно»</b> — заставляет думать, а не резать наугад|<b>«Что в этом ответе ты придумал, а что взял из моего материала?»</b> — вскрывает выдумки'],
      ['h','Чего делать не надо'],
      ['ul','Не благодарите и не уговаривайте — на качество не влияет, место в запросе занимает|Не пишите «сделай хорошо» и «сделай профессионально»: это не рамки, а пожелание|Не задавайте пять задач одним сообщением — ответ будет поверхностным по всем пяти|Не верьте цифрам, датам и ссылкам без проверки, даже если ответ выглядит уверенно'],
+     ['h','Пять проблем, с которыми сталкиваются все'],
+     ['fix','Отвечает водой: «важно отметить», «в современном мире», «команда профессионалов».|Запретите штампы прямым списком и потребуйте конкретики: «на каждое утверждение — пример или цифра, иначе не пиши это утверждение».||Каждый раз приходится заново объяснять, кто я и что за продукт.|Заполните постоянные указания в настройках нейросети — они применяются ко всем новым диалогам. Где нет такой настройки, держите бриф в заметках и вставляйте первым сообщением.||Ответ длинный, а нужно коротко. Просьба «покороче» не помогает.|«Коротко» — не рамка. Давайте число: «не больше 700 знаков», «ровно 5 пунктов», «три предложения». Числу она подчиняется, пожеланию нет.||В длинном разговоре забыла, о чём договорились в начале.|У любой модели окно памяти ограничено. Начните новый чат и вставьте первым сообщением краткий итог: что решили, что уже готово, что делаем дальше. Это надёжнее, чем надеяться, что она вспомнит.||Соглашается со мной, даже когда я не прав. Спрашиваю «точно?» — меняет верный ответ на неверный.|Никогда не спрашивайте «ты уверен». Это давление, и модель уступает. Спрашивайте: «что сделало бы этот вывод неверным» и «на чём он основан». Тогда она проверяет, а не угадывает ваше настроение.'],
      ['h','Чек-лист перед отправкой'],
      ['ul','Я назвал роль|Я сказал, что считается успехом|Я задал длину, тон и запреты|Я приложил свой материал, а не пересказал его|Я попросил вопросы, если задача сложнее одного абзаца'],
      ['tip','Сохраните этот чек-лист. Он сокращает число попыток примерно втрое — и это единственная метрика, которая тут имеет значение.'],
-     ['vid','Разбираем на экране: плохой запрос и хороший|4 мин']
+     ['vid','Плохой запрос против хорошего|1 мин|ask.mp4']
    ]},
    {t:'Какая нейросеть под какую задачу', free:true, min:7, b:[
      ['p','Все они умеют примерно всё, но каждая заметно лучше в своём. Держать одну — переплачивать или мучиться.'],
@@ -368,6 +404,7 @@ const SECS = [
      ['code','CHAT_ID=-100XXXXXXXXXX\ncat > /tmp/post.txt <<\'EOF\'\nЭтот пост опубликован без человека.\nEOF\n\ncurl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \\\n  --data-urlencode "chat_id=$CHAT_ID" \\\n  --data-urlencode "text@/tmp/post.txt" -o /tmp/r.json'],
      ['h','Три грабли'],
      ['ul','Текст передавайте файлом, а не строкой: переносы и кавычки ломают команду|Не разбирайте ответ через sed — на кириллице падает, а публикация при этом проходит|Подпись к картинке максимум 1024 знака, у обычного сообщения 4096'],
+     ['vid','Телеграм-бот за вечер: что вы соберёте|38 сек|bot.mp4'],
      ['prompt','Собери минимального агента-публикатора для телеграм-канала.\n\nТребования:\n- токен читается из ~/.agent/.env, в коде его быть не должно\n- перед первой публикацией проверь права бота через getChatMember и покажи результат\n- текст поста передавай файлом, не строкой\n- ответ Telegram пиши в файл и разбирай питоном\n- после публикации выведи message_id\n\nЕсли чего-то не хватает — не придумывай, останови меня и спроси.']
    ]},
    {t:'Очередь постов и расписание', min:8},
@@ -457,6 +494,8 @@ const TL = {
   ['p','Выходит дольше по числу сообщений и заметно быстрее по часам: вы не переделываете целиком то, что разошлось с задумкой на первом шаге.'],
   ['h','Где ошибается'],
   ['ul','<b>Арифметика в несколько шагов.</b> Просите не число, а формулу или код — тогда можно проверить|<b>Точные цифры и даты по памяти.</b> Всё, чего нет в приложенном материале, проверяйте|<b>Ссылки.</b> Может выдать адрес, который выглядит настоящим и ведёт в никуда|<b>Излишняя услужливость.</b> Если надавить, согласится с неверным. Спрашивайте «что сделало бы это неверным», а не «ты уверен?»'],
+  ['h','Проблемы, которые возникают в реальной работе'],
+  ['fix','Документ большой, а ответ поверхностный: пересказ вместо разбора.|Дайте фильтр. Не «разбери договор», а «выпиши только пункты, создающие обязанности для меня». Без фильтра модель пытается охватить всё и не углубляется никуда.||В ответе есть пункт, которого в документе нет.|Потребуйте разделить ответ на две части: что взято из источника с цитатой и что добавлено от себя. Выдуманное почти всегда оказывается во второй части.||Ответ обрывается на середине длинного разбора.|Просите по частям: «сделай раздел 1 из 4, дождись моего „дальше“». Так вы и получите полный текст, и сможете поправить курс, не переделывая всё.||Цифры в выводах не сходятся с моими.|Никогда не просите число — просите формулу или код расчёта и промежуточные значения. Тогда ошибку видно, а не приходится ей верить.||Работает с файлом, но явно не видит середину.|Разбейте документ на части по 10–15 страниц и разбирайте по одной, каждый раз напоминая задачу. Середина теряется тем чаще, чем длиннее вход.'],
   ['h','Чек-лист работы с документом'],
   ['ul','Файл приложен, а не пересказан|Задан фильтр: что именно выписать|Потребованы ссылки на пункты или строки|Ответ разделён на «из источника» и «от себя»|Цифры перепроверены руками'],
   ['tip','Одной строкой: Claude хорош там, где надо думать, и опасен там, где надо помнить. Дайте ему память в виде файла — и останется только сильная сторона.'],
@@ -650,9 +689,16 @@ function blk(b){
   if(k==='ul') return `<ul>${v.split('|').map(x=>`<li>${x}</li>`).join('')}</ul>`;
   if(k==='code') return `<div class="cw"><pre>${esc(v)}</pre><button class="cb" data-copy="${enc(v)}">копировать</button></div>`;
   if(k==='tip') return `<div class="tip">${v}</div>`;
+  if(k==='fix') return `<div class="fixes">${v.split('||').map(pair=>{
+      const [q,a] = pair.split('|');
+      return `<div class="fx"><div class="q"><b>Проблема</b>${q}</div><div class="a"><b>Решение</b>${a}</div></div>`;
+    }).join('')}</div>`;
   if(k==='prompt') return `<div class="pbox"><div class="ph"><span>промпт · вставьте в нейронку</span><button class="cb" data-copy="${enc(v)}">копировать</button></div><pre>${esc(v)}</pre></div>`;
-  if(k==='vid'){ const [t,d]=v.split('|');
-    return `<div class="vid"><div class="fr">▶</div><div class="cp"><b>${t}</b><span>${d}</span></div></div>`; }
+  if(k==='vid'){ const [t,d,f]=v.split('|');
+    return f
+      ? `<div class="vid"><video class="vp" controls preload="metadata" playsinline
+           poster="" src="v/${f}"></video><div class="cp"><b>${t}</b><span>${d}</span></div></div>`
+      : `<div class="vid"><div class="fr soon">▶<span>снимается</span></div><div class="cp"><b>${t}</b><span>${d}</span></div></div>`; }
   if(k==='shot'){
     const rows = v.rows.map(r=>`<div class="bub ${r[0]}">${r[1]}</div>`).join('');
     const [mt,mb] = v.mark.split('|');
@@ -704,7 +750,7 @@ function openSec(i){
 }
 function openLes(j){
   const s = SECS[cur], l = s.ls[j];
-  if(!l.b){ show('me'); return; }
+  if(!l.b){ showPay(s, l); return; }
   $('#l-head').setAttribute('style','background:'+s.g);
   $('#l-k').textContent = s.t;
   $('#l-t').textContent = l.t;
@@ -781,6 +827,20 @@ function openToolLesson(k){
   window.__lback = 'tools';
   remember('tool', k, l.t);
   show('lesson');
+}
+
+/* ---------- экран закрытого урока ---------- */
+function showPay(sec, les){
+  $('#pay-head').setAttribute('style','background:'+sec.g);
+  $('#pay-k').textContent = sec.t;
+  $('#pay-t').textContent = les.t;
+  $('#pay-in').innerHTML = (les.in || [
+    'Разбор по шагам, с примерами и экранами',
+    'Готовые промпты с кнопкой копирования',
+    'Список типичных ошибок и как их чинить',
+    'Чек-лист в конце урока'
+  ]).map(x=>`<li><i>◆</i><span>${x}</span></li>`).join('');
+  show('pay');
 }
 
 /* тема */
