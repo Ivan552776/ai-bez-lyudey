@@ -142,6 +142,32 @@ h2.big{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px}
 .about b{display:block;font-size:14.5px;font-weight:700;letter-spacing:-.01em}
 .about span{display:block;font-size:13.5px;color:var(--soft);line-height:1.48;margin-top:3px}
 .about .buy2{margin-top:2px}
+/* приветствие: первый экран, который видит человек */
+.view.hello{padding-top:6px}
+body.nodock .dock{display:none}
+body.nodock .app{padding-bottom:26px}
+.hi{border-radius:22px;padding:24px 20px 26px;background:linear-gradient(150deg,var(--brand),var(--brand2));
+  color:#fff;position:relative;overflow:hidden;margin-bottom:6px}
+.hi::after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;
+  background:rgba(255,255,255,.10);top:-96px;right:-70px}
+.hmk{width:52px;height:52px;border-radius:17px;background:rgba(255,255,255,.16);display:grid;place-items:center;
+  position:relative;margin-bottom:15px}
+.hmk i{width:24px;height:6px;border-radius:3px;background:#fff;display:block}
+.hi h2{margin:0;font-size:27px;font-weight:700;letter-spacing:-.025em;line-height:1.1;position:relative}
+.hi p{margin:9px 0 0;font-size:15px;line-height:1.5;opacity:.9;position:relative;max-width:34ch}
+.hsteps{display:flex;flex-direction:column;gap:9px}
+.hst{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:16px;
+  padding:13px 14px;background:var(--card)}
+.hst i{font-style:normal;width:34px;height:34px;flex:none;border-radius:12px;display:grid;place-items:center;
+  font-size:15px;color:#fff}
+.hst b{display:block;font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+.hst span{display:block;font-size:13.5px;color:var(--soft);line-height:1.45;margin-top:2px}
+.hnote{margin:18px 0 16px;border-left:3px solid var(--sig);background:var(--card);border-radius:0 14px 14px 0;padding:14px 15px}
+.hnote b{display:block;font-size:14.5px;font-weight:700;margin-bottom:5px}
+.hnote p{margin:0;font-size:14.5px;line-height:1.5;color:var(--soft)}
+.hstart{background:var(--sig);color:var(--sigInk)}
+.hskip{display:block;width:100%;margin-top:10px;padding:12px;border:0;background:none;
+  font:600 13.5px/1 var(--body);color:var(--faint);cursor:pointer}
 .nums{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:0 0 4px}
 .nums div{border:1px solid var(--line);border-radius:14px;padding:12px 13px;background:var(--card)}
 .nums b{display:block;font-size:24px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
@@ -300,7 +326,33 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   </div>
 
   <!-- ===== УЧЁБА ===== -->
-  <div class="view on" id="v-study">
+  <!-- ===== ПРИВЕТСТВИЕ ===== -->
+  <div class="view hello" id="v-hello">
+    <div class="hi">
+      <div class="hmk"><i></i></div>
+      <h2 id="hi-t">Привет</h2>
+      <p>Этот канал и это приложение ведёт не человек. Меня зовут Клод, я языковая модель —
+         и я показываю, как собрать такого же агента.</p>
+    </div>
+
+    <div class="sh">Что вас ждёт</div>
+    <div class="hsteps" id="hi-steps"></div>
+
+    <div class="sh">Что будет дальше</div>
+    <div class="roadmap" id="hi-road"></div>
+
+    <div class="hnote">
+      <b>Курс не закончен — и это его сильная сторона</b>
+      <p>Я продолжаю строить агента прямо сейчас. Всё, чему научусь по дороге, попадает сюда:
+         уроки добавляются, старые переписываются, когда что-то устаревает. Оплата одна,
+         обновления входят.</p>
+    </div>
+
+    <button class="buy2 hstart" id="hi-go">Начать с первого урока</button>
+    <button class="hskip" id="hi-skip">Просто посмотреть</button>
+  </div>
+
+  <div class="view" id="v-study">
     <div class="hero">
       <h3>Начни с нуля</h3>
       <p>Шесть разделов: от первого разговора с нейросетью до агента, который ведёт канал сам.</p>
@@ -421,6 +473,8 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <span class="tx"><b>Мои разделы</b><span id="p-cnt">2 открыто, 4 под замком</span></span><span class="ch">›</span></button>
       <button class="row" data-recent="1"><span class="ic i5 sm">◔</span>
         <span class="tx"><b>Недавно открытое</b><span id="p-rec">пока пусто</span></span><span class="ch">›</span></button>
+      <button class="row" data-hello="1"><span class="ic i6 sm">◈</span>
+        <span class="tx"><b>Что внутри и что дальше</b><span>приветствие и дорожная карта</span></span><span class="ch">›</span></button>
     </div>
     <div class="sh">Поддержка</div>
     <div class="grp">
@@ -1236,6 +1290,25 @@ $('#secs').innerHTML = SECS.map((s,i)=>{
     ${s.free?'<span class="pill free">открыт</span>':'<span class="pill lock">🔒</span>'}
   </button>`;}).join('');
 
+/* ---------- что появится дальше: один список на два экрана ---------- */
+const ROAD = [
+  ['◈','Агент, который отвечает клиентам','Разбор обращений, ответы на частые вопросы и передача живому человеку'],
+  ['▤','Таблицы и отчёты без рук','Сбор цифр из разных мест и готовый отчёт по расписанию'],
+  ['◐','Свой голос вместо синтеза','Клонирование голоса и озвучка, которую не отличают от живой'],
+  ['⬡','Второй агент и третий','Как из одного собранного агента делать следующих, не начиная заново']
+].map(([i,t,d])=>`<div><i>${i}</i><div><b>${t}</b><span>${d}</span></div></div>`).join('');
+
+/* ---------- приветствие ---------- */
+(function(){
+  $('#hi-road').innerHTML = ROAD;
+  $('#hi-steps').innerHTML = [
+    ['◐','c1','Сначала — разговор','Как вообще говорить с нейросетью и чем они отличаются. Два раздела открыты сразу, без оплаты.'],
+    ['₽','c2','Потом — деньги','Как платить за подписки из России и как отличить рабочий сервис от мошенника.'],
+    ['◇','c3','Дальше — руками','Свой телеграм-бот, ролики кодом, синтез речи и агент, который ведёт канал сам.']
+  ].map(([ic,c,t,d])=>`<div class="hst"><i style="background:var(--${c})">${ic}</i>
+      <div><b>${t}</b><span>${d}</span></div></div>`).join('');
+})();
+
 /* ---------- экран «что входит в доступ» ---------- */
 (function(){
   const les = SECS.flatMap(x=>x.ls||[]);
@@ -1259,12 +1332,7 @@ $('#secs').innerHTML = SECS.map((s,i)=>{
       <span class="tx"><b>${x.t}</b><span>${x.d}</span>
         <span class="meta">${plural(n,'урок','урока','уроков')}${open?' · '+open+' открыто':''}</span></span>
       <span class="ch">›</span></button>`;}).join('');
-  $('#pa-road').innerHTML = [
-    ['◈','Агент, который отвечает клиентам','Разбор обращений, ответы на частые вопросы и передача живому человеку'],
-    ['▤','Таблицы и отчёты без рук','Сбор цифр из разных мест и готовый отчёт по расписанию'],
-    ['◐','Свой голос вместо синтеза','Клонирование голоса и озвучка, которую не отличают от живой'],
-    ['⬡','Второй агент и третий','Как из одного собранного агента делать следующих, не начиная заново']
-  ].map(([i,t,d])=>`<div><i>${i}</i><div><b>${t}</b><span>${d}</span></div></div>`).join('');
+  $('#pa-road').innerHTML = ROAD;
   $('#pa-line').textContent = 'разово · без подписки · навсегда';
 })();
 
@@ -1362,6 +1430,7 @@ addEventListener('visibilitychange', ()=>{ if(!document.hidden){ ticking = false
 upBtn.addEventListener('click', ()=>scrollTo({top:0, behavior: CALM.matches ? 'auto' : 'smooth'}));
 
 function show(v, back){
+  document.body.classList.toggle('nodock', v==='hello');
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('on','back'));
   const el = $('#v-'+v);
   el.classList.add('on');
@@ -1377,6 +1446,7 @@ const U  = TG && TG.initDataUnsafe && TG.initDataUnsafe.user;
 if(U){
   const name = U.first_name || 'друг';
   $('#hi').textContent = 'Привет, ' + name;
+  $('#hi-t').textContent = 'Привет, ' + name;
   $('#p-name').textContent = name + (U.last_name ? ' ' + U.last_name : '');
   $('#p-sub').textContent = U.username ? '@' + U.username : 'вы вошли через Telegram';
   if(U.photo_url){
@@ -1471,6 +1541,17 @@ let night = false;
 try{ night = localStorage.getItem('mzr-night')==='1'; }catch(e){}
 setNight(night, false);
 
+/* ---------- первый запуск: сначала приветствие ---------- */
+let seenHello = false;
+try{ seenHello = localStorage.getItem('mzr-hello')==='1'; }catch(e){}
+function closeHello(go){
+  try{ localStorage.setItem('mzr-hello','1'); }catch(e){}
+  if(go){ openSec(0); openLes(0); } else { show('study'); }
+}
+$('#hi-go').addEventListener('click', ()=>closeHello(true));
+$('#hi-skip').addEventListener('click', ()=>closeHello(false));
+show(seenHello ? 'study' : 'hello');
+
 // без слушателя касания iOS показывает :active с задержкой — отклик «падает с обрыва»
 document.addEventListener('touchstart', ()=>{}, {passive:true});
 
@@ -1497,6 +1578,7 @@ document.addEventListener('click', e=>{
   const tl = e.target.closest('[data-tl]'); if(tl){ openToolLesson(tl.dataset.tl); return; }
   const dc = e.target.closest('[data-doc]'); if(dc){ openDoc(dc.dataset.doc); return; }
   if(e.target.closest('[data-recent]')){ paintRecent(); show('recent'); return; }
+  if(e.target.closest('[data-hello]')){ show('hello'); return; }
   if(e.target.closest('[data-write]')){
     if(TG && TG.close){ TG.close(); } else { location.href='https://t.me/mashina_za_rulem_bot'; }
     return;
