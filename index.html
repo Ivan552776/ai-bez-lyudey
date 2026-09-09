@@ -111,7 +111,8 @@ h2.big{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px}
 .prog{display:flex;gap:5px;margin-top:8px;position:relative}
 .prog i{height:4px;flex:1;border-radius:2px;background:rgba(255,255,255,.28)}
 .prog i.d{background:var(--sig)}
-.prog i.h{background:linear-gradient(90deg,var(--sig) var(--f,50%),rgba(255,255,255,.28) var(--f,50%))}
+.prog i{overflow:hidden;position:relative}
+.prog i b{position:absolute;inset:0 auto 0 0;background:var(--sig);border-radius:2px}
 
 /* ---- строка-раздел ---- */
 .item{width:100%;text-align:left;border-radius:16px;padding:13px;display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);transition:transform .14s var(--ease),border-color .2s;animation:rise .4s var(--ease) backwards}
@@ -331,6 +332,18 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .dock a .g{font-size:18px;line-height:1}
 .dock a.on{color:var(--brand);background:var(--brandS)}
 .foot{margin-top:20px;font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.65;text-align:center}
+.toc{margin:0 14px 14px;border:1px solid var(--line2);border-radius:16px;background:var(--card);overflow:hidden}
+.toc[hidden]{display:none}
+.toc>button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  min-height:46px;padding:0 14px;border:0;background:none;color:var(--soft);cursor:pointer;
+  font:600 12px/1.2 var(--mono);letter-spacing:.04em;text-transform:uppercase}
+.toc>button i{font-style:normal;transition:transform .18s}
+.toc.open>button i{transform:rotate(90deg)}
+.toc ol{display:none;margin:0;padding:0 14px 12px 34px;list-style:decimal;color:var(--faint)}
+.toc.open ol{display:block}
+.toc li{margin:0 0 8px;font-size:14px;line-height:1.45}
+.toc a{color:var(--ink);text-decoration:none;border-bottom:1px solid transparent}
+.toc a:active{border-bottom-color:var(--brand)}
 .subbar{display:flex;align-items:center;gap:10px;margin:0 14px 10px;padding:11px 13px;
   border-radius:14px;background:var(--brandS);border:1px solid rgba(15,94,99,.16)}
 /* класс с display перебивает атрибут hidden — без этой строки плашка не прячется никогда */
@@ -438,6 +451,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="rp"><i id="rp-bar"></i></div>
     <button class="back" id="l-back">← Назад</button>
     <div class="lhead" id="l-head"><span class="k" id="l-k"></span><h3 id="l-t"></h3></div>
+    <nav class="toc" id="l-toc" hidden></nav>
     <div class="prose" id="l-body"></div>
     <div id="l-next"></div>
     <p class="foot" id="l-foot"></p>
@@ -1311,7 +1325,7 @@ let cur = 0;
 function blk(b){
   const [k,v] = b;
   if(k==='p')  return `<p>${v}</p>`;
-  if(k==='h')  return `<h4>${v}</h4>`;
+  if(k==='h')  return `<h4 id="h${blk.n=(blk.n||0)+1}">${v}</h4>`;
   if(k==='ul') return `<ul>${v.split('|').map(x=>`<li>${x}</li>`).join('')}</ul>`;
   if(k==='code') return `<div class="cw"><pre>${esc(v)}</pre><button class="cb" data-copy="${enc(v)}">копировать</button></div>`;
   if(k==='tip') return `<div class="tip">${v}</div>`;
@@ -1320,11 +1334,9 @@ function blk(b){
       return `<div class="fx"><div class="q"><b>Проблема</b>${q}</div><div class="a"><b>Решение</b>${a}</div></div>`;
     }).join('')}</div>`;
   if(k==='prompt') return `<div class="pbox"><div class="ph"><span>промпт · вставьте в нейронку</span><button class="cb" data-copy="${enc(v)}">копировать</button></div><pre>${esc(v)}</pre></div>`;
-  if(k==='vid'){ const [t,d,f]=v.split('|');
-    if(f){ const base=f.replace(/\.mp4$/,'');
-      return `<div class="vid"><div class="pw"><video class="vp" controls preload="metadata" playsinline webkit-playsinline
-           poster="v/${base}.jpg" src="v/${f}"></video><button class="pb" aria-label="Смотреть">▶</button></div><div class="cp"><b>${t}</b><span>${d}</span></div></div>`; }
-    return `<div class="vid"><div class="fr soon"><i>▤</i><span>снимается</span></div><div class="cp"><b>${t}</b><span>${d}</span></div></div>`; }
+  // Видео временно не показываем: ролики будут пересняты в конце, данные в уроках
+  // остаются нетронутыми — вернуть показ можно этой же строкой.
+  if(k==='vid') return '';
   if(k==='fig'){
     if(v.k==='steps') return `<figure class="fig steps"${v.t?` data-t="${v.t}"`:''}>
       ${v.t?`<figcaption>${v.t}</figcaption>`:''}
@@ -1365,19 +1377,7 @@ $('#secs').innerHTML = SECS.map((s,i)=>{
 
 /* ---------- что нового: пополняется вместе с приложением ---------- */
 const NEWS = [
- ['10 сентября','нов','Приветственный экран стал витриной курса','Что внутри, цифры, разделы, что добавится и что даёт полный доступ — теперь всё в одном месте, при первом открытии. Из разделов убрана врезка про оплату: примелькалась.'],
- ['10 сентября','нов','Прогресс считается честно','Шкала на главной заполняется по настоящему прочитанному, а короткие уроки наконец засчитываются — раньше зачёт ждал прокрутки, которой у них нет.'],
- ['9 сентября','+9','Закрытые разделы написаны целиком','Вайбкодинг, видео с озвучкой и агент без человека — девять уроков. Все с разбором проблем, схемами и промптами.'],
- ['9 сентября','нов','Курс переехал на свой сервер','Уроки закрытых разделов теперь приходят с сервера после проверки доступа, а бот работает круглосуточно и больше не зависит от чужого компьютера.'],
- ['9 сентября','нов','Свой кабинет и прогресс','Приложение узнаёт вас по Telegram, без регистрации. Прочитанное отмечается, кнопка на главной ведёт туда, где вы остановились.'],
- ['9 сентября','+15','Экраны и схемы во всех уроках по инструментам','Теперь у каждого урока есть разбор переписки, схема и блок «проблема — решение»: 24 экрана, 27 схем, 24 разбора проблем.'],
- ['9 сентября','+2','Два бота в разделе про телеграм','Издатель публикует по расписанию, приёмная принимает заявки и отвечает. Оба урока написаны целиком.'],
- ['9 сентября','+11','Уроки по всем инструментам каталога','ElevenLabs, Whisper, Claude Code, Cursor, Suno, DeepSeek, Flux, Ideogram, Runway с Kling, Remotion, SpeechKit с Silero. Карточек без урока не осталось.'],
- ['9 сентября','нов','Схемы внутри уроков','Шаги с соединительной линией, сравнение в два столбца и шкала величин — двадцать две штуки по всему приложению.'],
- ['9 сентября','нов','Приборная палитра','Петроль и сигнальный янтарь вместо прежнего градиента. Приложение, ролики и кружки теперь выглядят одной вещью.'],
- ['9 сентября','+8','Видеоуроки с субтитрами','Все восемь роликов пересняты: смотреть можно без звука, весь текст на экране.'],
- ['9 сентября','нов','Навигация внутри урока','Полоса прочитанного, кнопка наверх и переход к следующему уроку — длинные уроки перестали быть стеной.'],
- ['8 сентября','+6','Развёрнутые уроки про оплату и выбор модели','«Как устроена оплата», «Как отличить мошенника», Gemini, Perplexity, GigaChat, Kandinsky — каждый с разбором проблем и чек-листом.'],
+ ['10 сентября','нов','Курс открыт заново','Приложение переписано под новую концепцию: приветственный экран рассказывает, что внутри и что даёт полный доступ. Дальше здесь будут только записи про сам курс — новые уроки, разделы и разборы.'],
 ];
 
 /* ---------- прогресс на экранах ---------- */
@@ -1406,17 +1406,19 @@ function paintProgress(){
   const hp = $('#hero-prog');
   if(hp) hp.innerHTML = SECS.map((_,i)=>{
     const p = secProgress(i);
-    if(!p.total) return '<i></i>';
+    if(!p.total) return '<i></i>';                       // закрытый раздел — пустой сегмент
     if(p.pct >= 100) return '<i class="d"></i>';
-    return p.pct ? `<i class="h" style="--f:${p.pct}%"></i>` : '<i></i>';
+    return `<i><b style="width:${p.pct}%"></b></i>`;
   }).join('');
 
   // герой: продолжить с того места
   const nx = nextUnread(), h = $('#hero-go');
   if(h){
     const started = doneList().length > 0;
-    h.textContent = nx ? (started ? 'Продолжить: ' + nx.t : 'Открыть первый урок') : 'Открыть каталог инструментов';
+    h.textContent = nx ? (started ? 'Продолжить: ' + nx.t : 'Открыть первый урок')
+                       : 'Открыть весь курс — 500 ₽ в месяц';
     h.dataset.cont = nx ? nx.i+'-'+nx.j : '';
+    h.dataset.go = nx ? '' : 'pay-all';
   }
   // профиль
   const all = SECS.reduce((a,_,i)=>{const p=secProgress(i);return {d:a.d+p.done, t:a.t+p.total}},{d:0,t:0});
@@ -1462,7 +1464,7 @@ const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
   const numsHTML = `
     <div><b>${nLes}</b><span>${word(nLes,'урок','урока','уроков')} в курсе</span></div>
     <div><b>${Math.round(mins/60*10)/10} ч</b><span>если читать подряд</span></div>
-    <div><b>${vids}</b><span>${word(vids,'видеоурок','видеоурока','видеоуроков')}</span></div>
+    <div><b>${SECS.length}</b><span>${word(SECS.length,'раздел','раздела','разделов')}</span></div>
     <div><b>${tools}</b><span>${word(tools,'нейросеть разобрана','нейросети разобраны','нейросетей разобрано')}</span></div>`;
   const secsHTML = SECS.map(x=>{
     const n=(x.ls||[]).length, open=(x.ls||[]).filter(l=>l.b).length;
@@ -1519,6 +1521,26 @@ function openSec(i){
   $('#sec-foot').innerHTML = '';
   show('sec');
 }
+/** Оглавление урока: человек должен видеть, из чего урок состоит, а не листать вслепую. */
+function buildToc(){
+  const box = $('#l-toc');
+  const hs = [...$('#l-body').querySelectorAll('h4')];
+  if(hs.length < 3){ box.hidden = true; box.innerHTML = ''; return; }   // в коротком не нужно
+  box.hidden = false;
+  box.className = 'toc';
+  box.innerHTML = `<button type="button"><span>Оглавление · ${hs.length}</span><i>›</i></button>
+    <ol>${hs.map(h=>`<li><a href="#${h.id}">${h.textContent}</a></li>`).join('')}</ol>`;
+  box.querySelector('button').onclick = ()=> box.classList.toggle('open');
+  box.querySelectorAll('a').forEach(a=>{
+    a.onclick = e=>{
+      e.preventDefault();
+      const t = document.getElementById(a.getAttribute('href').slice(1));
+      if(t) scrollTo({top: t.getBoundingClientRect().top + scrollY - 64, behavior:'smooth'});
+      box.classList.remove('open');
+    };
+  });
+}
+
 /** Что читать следующим: соседний урок, иначе первый урок следующего раздела. */
 function nextAfter(si, li){
   const s = SECS[si];
@@ -1532,8 +1554,13 @@ function nextAfter(si, li){
 function paintNext(nx){
   const box = $('#l-next');
   if(!nx){ box.innerHTML =
-    `<button class="nx done" data-go="tools"><span><span class="k">раздел пройден</span>
-       <b>Посмотреть каталог инструментов</b></span><span class="ch">›</span></button>`; return; }
+    `<div class="teaser">
+       <div class="sh" style="margin:0 0 8px">Открытое закончилось</div>
+       <p>Вы прочитали всё, что открыто без оплаты. Дальше — закрытые разделы:
+          свой телеграм-бот, вайбкодинг, ролики кодом, синтез речи и агент целиком.</p>
+       <div class="pline" style="margin:0 0 12px"><span class="pnum">500 ₽</span><span>в месяц · год — 4 900 ₽</span></div>
+       <button class="buy2" data-go="pay-all">Открыть весь курс</button>
+     </div>`; return; }
   box.innerHTML = `<button class="nx" data-nx="${nx.si}-${nx.li}"><span><span class="k">${nx.k}</span>
       <b>${nx.t}</b></span><span class="ch">›</span></button>`;
 }
@@ -1550,7 +1577,9 @@ async function openLes(j){
   $('#l-head').setAttribute('style','background:'+s.g);
   $('#l-k').textContent = s.t;
   $('#l-t').textContent = l.t;
+  blk.n = 0;                       // нумерация якорей своя у каждого урока
   $('#l-body').innerHTML = l.b.map(blk).join('');
+  buildToc();
   $('#l-foot').textContent = '◷ ' + l.min + ' мин';
   paintNext(nextAfter(cur, j));
   window.__lback = 'sec';
@@ -1744,7 +1773,9 @@ function openToolLesson(k){
   $('#l-head').setAttribute('style','background:'+G[l.g]);
   $('#l-k').textContent = 'Инструмент';
   $('#l-t').textContent = l.t;
+  blk.n = 0;                       // нумерация якорей своя у каждого урока
   $('#l-body').innerHTML = l.b.map(blk).join('');
+  buildToc();
   $('#l-foot').textContent = '◷ ' + l.min + ' мин';
   $('#l-next').innerHTML = `<button class="nx" data-go="tools"><span><span class="k">дальше</span>
       <b>Выбрать другой инструмент</b></span><span class="ch">›</span></button>`;
