@@ -1271,7 +1271,7 @@ const REQ = [
  ['Статус','Плательщик налога на профессиональный доход'],
  ['ИНН','[ИНН]'],
  ['Электронная почта','[почта для документов]'],
- ['Телеграм','@ai_bez_lyudey_bot']
+ ['Телеграм','@mashina_za_rulem_bot']
 ];
 
 const LOG = [
@@ -1616,7 +1616,7 @@ async function fetchLesson(key){ const r = await post('/api/lesson', {id:key}); 
 /* ---------- кто я для сервера: подписан ли на канал, есть ли доступ ----------
    Ответ подписан Telegram и проверен на сервере, подменить в браузере нельзя. */
 let ME = null;
-const CHANNEL_LINK = 'https://t.me/ai_bez_lyudey';
+const CHANNEL_LINK = 'https://t.me/mashina_za_rulem';   // сменить на ai_bez_lyudey, когда юзернейм переедет
 function openChannel(){
   if(TG && TG.openTelegramLink) TG.openTelegramLink(CHANNEL_LINK);
   else window.open(CHANNEL_LINK, '_blank');
@@ -1808,7 +1808,7 @@ document.addEventListener('click', e=>{
   if(e.target.closest('[data-recent]')){ paintRecent(); show('recent'); return; }
   if(e.target.closest('[data-hello]')){ show('hello'); return; }
   if(e.target.closest('[data-write]')){
-    if(TG && TG.close){ TG.close(); } else { location.href='https://t.me/ai_bez_lyudey_bot'; }
+    if(TG && TG.close){ TG.close(); } else { location.href='https://t.me/mashina_za_rulem_bot'; }
     return;
   }
   const ro = e.target.closest('[data-rec-open]');
