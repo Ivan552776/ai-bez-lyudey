@@ -31,6 +31,12 @@
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
 /* тему переключаем одним общим переходом, а не только на body — иначе карточки прыгают */
 html.theming, html.theming *{transition:background-color .26s var(--ease),border-color .26s var(--ease),color .26s var(--ease) !important}
+@media (prefers-reduced-motion: reduce){
+  .view.on,.view.on.back{animation:fade .18s both}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .item,.tcard,.nx,.fx{animation:none !important}
+  *{scroll-behavior:auto !important}
+}
 button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none}
 :focus{outline:none}
 :focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:10px}
@@ -58,7 +64,12 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 @media (max-width:380px){.tgrid{grid-template-columns:1fr}}
 
-.view{display:none}.view.on{display:block;animation:in .28s var(--ease)}
+.view{display:none}
+.view.on{display:block;animation:inR .34s var(--ease) both}
+.view.on.back{animation:inL .34s var(--ease) both}
+/* пришли справа — уходим направо: путь входа и выхода один и тот же */
+@keyframes inR{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
 
 /* полоса прочитанного — единственная опора в уроке на восемь экранов */
 .rp{position:sticky;top:52px;z-index:8;height:3px;background:var(--line);border-radius:2px;margin:0 0 12px;overflow:hidden}
@@ -108,6 +119,14 @@ h2.big{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px}
 .i1{background:var(--c1)}.i2{background:var(--c2)}.i3{background:var(--c3)}
 .i4{background:var(--c4)}.i5{background:var(--c5)}.i6{background:var(--c6)}
 .tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tx .meta{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-top:3px}
+/* цветное свечение раздела: шесть одинаковых строк читались как список, а не как разделы */
+.item.sec{position:relative;overflow:hidden;padding:15px 13px}
+.item.sec .glow{position:absolute;left:-30px;top:-34px;width:130px;height:130px;border-radius:50%;
+  filter:blur(28px);opacity:.20;pointer-events:none}
+.item.sec .ic{position:relative;box-shadow:0 6px 16px rgba(20,26,44,.16)}
+.item.sec .tx,.item.sec .pill{position:relative}
+.pill.lock{background:transparent;border:1px solid var(--line2);font-size:11px;padding:5px 9px;letter-spacing:0}
 .tx b{font-size:15px;font-weight:600;letter-spacing:-.01em}
 .tx span{font-size:12px;color:var(--faint)}
 .ch{margin-left:auto;color:var(--faint);font-size:15px;flex:none}
@@ -149,6 +168,37 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .vid .fr.soon i{font-style:normal;font-size:30px}
 .vid .fr.soon span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
 .vid .cp span{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+
+.fig{margin:0;border:1px solid var(--line);border-radius:16px;padding:15px 14px;background:var(--card)}
+.fig figcaption{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+/* шаги: нумерованная цепочка с соединительной линией */
+.fig .fl{display:flex;flex-direction:column;gap:0}
+.fig .st{display:flex;gap:12px;position:relative;padding-bottom:14px}
+.fig .st:last-child{padding-bottom:0}
+.fig .st::before{content:"";position:absolute;left:15px;top:32px;bottom:2px;width:2px;background:var(--line2)}
+.fig .st:last-child::before{display:none}
+.fig .st i{width:32px;height:32px;flex:none;border-radius:11px;background:linear-gradient(140deg,var(--brand),var(--brand2));
+  color:#fff;font-style:normal;font-family:var(--mono);font-size:13px;font-weight:700;display:grid;place-items:center;
+  position:relative;z-index:1}
+.fig .st b{display:block;font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+.fig .st span{display:block;font-size:13.5px;color:var(--soft);margin-top:2px;line-height:1.45}
+/* сравнение: два столбца, плохо и хорошо */
+.fig .cols{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media (max-width:360px){.fig .cols{grid-template-columns:1fr}}
+.fig .col{border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px}
+.fig .col span{font-size:13px;line-height:1.42}
+.fig .col .hd{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.fig .col.bad{background:var(--warnS)}
+.fig .col.bad .hd{color:var(--warn)}
+.fig .col.good{background:var(--okS)}
+.fig .col.good .hd{color:var(--ok)}
+/* шкала: сравнение величин полосками */
+.fig .bar{display:flex;align-items:center;gap:10px;margin-top:9px}
+.fig .bar:first-of-type{margin-top:0}
+.fig .bar .lb{width:88px;flex:none;font-size:13px;font-weight:600}
+.fig .bar .tr{flex:1;height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.fig .bar .tr i{display:block;height:100%;border-radius:5px}
+.fig .bar .vl{width:66px;flex:none;text-align:right;font-family:var(--mono);font-size:11px;color:var(--faint)}
 
 .fixes{display:flex;flex-direction:column;gap:9px}
 .fx{border:1px solid var(--line2);border-radius:14px;overflow:hidden}
@@ -234,7 +284,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 
   <!-- ===== СПИСОК УРОКОВ РАЗДЕЛА ===== -->
   <div class="view" id="v-sec">
-    <button class="back" data-go="study">← Разделы</button>
+    <button class="back" data-back data-go="study">← Разделы</button>
     <div class="lhead" id="sec-head"><span class="k" id="sec-k"></span><h3 id="sec-t"></h3></div>
     <div class="stack" id="sec-list"></div>
   </div>
@@ -253,7 +303,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 
   <!-- ===== ЗАКРЫТЫЙ УРОК ===== -->
   <div class="view" id="v-pay">
-    <button class="back" data-go="sec">← Назад</button>
+    <button class="back" data-back data-go="sec">← Назад</button>
     <div class="lhead" id="pay-head"><span class="k" id="pay-k"></span><h3 id="pay-t"></h3></div>
     <div class="acc2">
       <div class="sh" style="margin:0 0 4px">Что внутри урока</div>
@@ -312,7 +362,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 
   <!-- ===== НЕДАВНЕЕ ===== -->
   <div class="view" id="v-recent">
-    <button class="back" data-go="me">← Профиль</button>
+    <button class="back" data-back data-go="me">← Профиль</button>
     <h2 class="big">Недавно открытое</h2>
     <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Чтобы вернуться туда, где остановились.</p>
     <div class="sh">Материалы</div>
@@ -321,7 +371,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 
   <!-- ===== ДОКУМЕНТЫ ===== -->
   <div class="view" id="v-docs">
-    <button class="back" data-go="me">← Профиль</button>
+    <button class="back" data-back data-go="me">← Профиль</button>
     <h2 class="big">Документы и реквизиты</h2>
     <div class="sh">Документы</div>
     <div class="stack" id="docs"></div>
@@ -332,7 +382,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 
   <!-- ===== ТЕКСТ ДОКУМЕНТА ===== -->
   <div class="view" id="v-doc">
-    <button class="back" data-go="docs">← Документы</button>
+    <button class="back" data-back data-go="docs">← Документы</button>
     <h2 class="big" id="doc-t"></h2>
     <p style="margin:0 0 10px;font-family:var(--mono);font-size:11px;color:var(--faint)" id="doc-d"></p>
     <div class="prose" id="doc-b"></div>
@@ -377,6 +427,7 @@ const SECS = [
      ['h','Как чинить ответ, который почти нравится'],
      ['p','Не переписывайте запрос с нуля — правьте точечно. Три формулировки закрывают почти все случаи:'],
      ['ul','<b>«Слишком общо. Приведи три конкретных примера вместо каждого утверждения»</b> — убирает воду|<b>«Сократи вдвое, не теряя смысла. Что выкинул — перечисли отдельно»</b> — заставляет думать, а не резать наугад|<b>«Что в этом ответе ты придумал, а что взял из моего материала?»</b> — вскрывает выдумки'],
+     ['fig',{k:'steps',t:'Из чего собран рабочий запрос',items:[['Роль','кем нейросеть работает в этом разговоре'],['Задача','что именно считается хорошим результатом'],['Рамки','длина, тон, что запрещено'],['Материал','ваш файл или текст, а не пересказ по памяти']]}],
      ['h','Чего делать не надо'],
      ['ul','Не благодарите и не уговаривайте — на качество не влияет, место в запросе занимает|Не пишите «сделай хорошо» и «сделай профессионально»: это не рамки, а пожелание|Не задавайте пять задач одним сообщением — ответ будет поверхностным по всем пяти|Не верьте цифрам, датам и ссылкам без проверки, даже если ответ выглядит уверенно'],
      ['h','Пять проблем, с которыми сталкиваются все'],
@@ -415,18 +466,20 @@ const SECS = [
 
      ['shot',{title:'Одна задача, два ответа',rows:[['me','Вот договор поставки на 12 страниц. Найди пункты, которые невыгодны покупателю, с номерами.'],['ai','Модель с длинным контекстом: Пункт 5.4 — срок поставки исчисляется с момента полной оплаты, а не с даты договора. Пункт 8.1 — претензии по качеству принимаются 5 дней, это короче обычного…'],['ai','Модель послабее: В договоре есть несколько пунктов, которые могут быть невыгодны покупателю, включая условия оплаты и сроки поставки. Рекомендуем внимательно изучить раздел об ответственности.']],mark:'Разница видна сразу|Первая называет номера пунктов и объясняет, чем именно плохо. Вторая пересказывает оглавление. Второй ответ выглядит вежливо и не стоит ничего.'}],
 
+     ['fig',{k:'compare',t:'Один вопрос — два способа спросить',a:['Так спрашивают все',['«Что лучше для работы с документами?»','Ответ общий и подходит кому угодно','Проверить его нечем']],b:['Так получают пользу',['«Договор 40 страниц, нужны только мои обязанности с номерами пунктов»','Ответ проверяем по исходнику','Видно, если модель придумала']]}],
      ['h','Проверьте сами за десять минут'],
      ['p','Не верьте ни мне, ни обзорам. Возьмите свою настоящую задачу — не тестовую — и прогоните её через две-три модели с одним и тем же запросом. Разница будет очевидна на вашем материале, а не на чужом.'],
      ['prompt','Вот моя задача: [опишите одним абзацем, как есть].\n\nСделай её так, как считаешь правильным.\nВ конце отдельно напиши:\n1) чего тебе не хватило в моём запросе,\n2) в чём ты не уверен и что стоит перепроверить.'],
      ['p','Вторая часть промпта важнее первой. Модель, которая честно говорит «я не уверен в цифрах за 2026 год», полезнее той, которая уверенно выдаёт всё подряд.'],
 
-     ['h','Пять проблем, на которых спотыкаются все'],
+  ['h','Пять проблем, на которых спотыкаются все'],
      ['fix','Модель уверенно называет цену, закон или дату — а всё оказывается выдумкой.|Любой факт, который вы собираетесь кому-то показать, спрашивайте у модели с доступом в интернет и ссылками. Остальным моделям задавайте вопросы «как рассуждать», а не «какой факт».||Загрузили большой документ — ответ про начало и конец, а середина будто не прочитана.|Режьте документ на части по 10–15 страниц и разбирайте по одной. Либо берите модель с длинным контекстом и прямо требуйте цитировать номера пунктов — это заставляет её действительно смотреть в текст.||Купили подписку, а через месяц оказалось, что для ваших задач хватило бы бесплатной версии.|Первый месяц живите на бесплатных тарифах всех четырёх. Платите только за ту, в которую упёрлись по лимитам — это и есть ваша рабочая модель.||Скинули в чат таблицу с фамилиями и телефонами клиентов, чтобы «быстро посчитать».|Так нельзя. Замените реальные данные на Клиент 1, Клиент 2 — для расчёта это ничего не меняет. Если обезличить нельзя, задача уходит в российскую модель.||Одна модель отвечает отлично, вторая на тот же запрос — плохо, и непонятно почему.|Проверьте, одинаковый ли у них вход. Часто во вторую вы вставили текст без файла, без предыдущей переписки или в другом порядке. Модели гораздо чувствительнее к формулировке, чем кажется.'],
 
      ['h','Сколько это стоит'],
      ['p','Бесплатные версии есть у всех, и на них реально можно работать — упираетесь вы обычно не в качество, а в лимиты: сколько сообщений в день, какой длины файл, сколько картинок.'],
      ['p','Платная подписка у зарубежных сервисов стоит около 20 долларов в месяц за штуку. Отсюда простой вывод: платить за все четыре бессмысленно. Разумный набор — одна платная сильная плюс бесплатные остальные под их задачи.'],
 
+     ['fig',{k:'scale',t:'Во что упираются на бесплатном тарифе',items:[['Длина файла',35,'var(--c4)','короткий'],['Сообщений в день',45,'var(--c3)','десятки'],['Скорость ответа',70,'var(--c5)','терпимо'],['Качество',92,'var(--c2)','почти то же']]}],
      ['h','Чек-лист выбора'],
      ['ul','В задаче есть данные людей? → российская модель или обезличить|Ответ увидит кто-то, кроме меня? → модель со ссылками на источники|Документ длиннее десяти страниц? → модель с длинным контекстом|Нужна картинка? → это вообще другая модель|Задача рутинная и простая? → бесплатной хватит, не тратьте лимит сильной'],
 
@@ -455,6 +508,7 @@ const SECS = [
      ['p','Он платит подписку за вас, вы отдаёте ему рубли. Быстро, удобно, работает сегодня же — и здесь же собраны все риски: часть таких сервисов живёт полгода и исчезает вместе с вашей подпиской, а иногда и с аккаунтом.'],
      ['p','Это рабочий вариант, если понимать, что берёшь на себя. Как проверять такой сервис за пять минут — в следующем уроке, и это единственный урок, который я прошу не пролистывать.'],
 
+     ['fig',{k:'steps',t:'Три пути, по возрастанию хлопот',items:[['Российский аналог','рубли, обычная карта, чек — но слабее на сложном'],['Зарубежная карта','недели на оформление — зато потом как у всех'],['Сервис-посредник','сегодня же — и весь риск на вас']]}],
      ['h','Сколько это стоит на самом деле'],
      ['ul','<b>Бесплатные версии есть у всех.</b> На них реально можно работать: упираетесь вы обычно не в качество, а в лимиты — сколько сообщений в день, какой длины файл|<b>Платная подписка у зарубежных</b> — порядка двадцати долларов в месяц за одну модель|<b>Российские</b> — от нуля до нескольких сотен рублей: часто платите за обращения, и тысяча обращений выходит в копейки|<b>Платить за все сразу бессмысленно.</b> Разумный набор — одна платная сильная плюс бесплатные остальные под их задачи'],
      ['p','Практический совет: первый месяц живите на бесплатных тарифах и смотрите, в какой из них вы упираетесь по лимитам. Вот за неё и платите — а не за ту, про которую больше пишут.'],
@@ -462,6 +516,7 @@ const SECS = [
      ['h','Пять проблем, с которыми сталкиваются все'],
      ['fix','Оплатили подписку, а лимиты остались прежними.|Проверьте, в тот ли аккаунт вы вошли. Самая частая причина — оплата прошла на аккаунт, заведённый через другую почту или другой способ входа. У зарубежных сервисов вход через Google и вход по почте создают два разных аккаунта.||Подписка есть, но с телефона сервис не открывается.|Это уже не про оплату, а про доступ: платёж и доступ к сайту — разные вещи, и решаются они разными способами. Если сервис не открывается в принципе, подписка эту проблему не решит.||Взяли годовой тариф со скидкой и потеряли деньги через два месяца.|Годовой тариф имеет смысл только там, где платите напрямую своей картой. Через посредника — только помесячно, сколько бы ни обещали скидки.||Платите за две-три подписки сразу и не понимаете, окупаются ли они.|Посчитайте грубо: сколько часов в неделю вы реально работаете в каждой. Та, что меньше двух часов, — кандидат на отключение, её задачи закроет бесплатный тариф соседней.||Боитесь, что платёж куда-то уйдёт, и поэтому не платите вообще.|Тогда начните с российского пути. Это не компромисс ради спокойствия: на восьмидесяти процентах обычных задач вы не заметите разницы, зато сразу увидите, каких именно задач вам не хватает — и уже под них будете выбирать.'],
 
+     ['fig',{k:'scale',t:'Порядок цен в месяц',items:[['Российские',8,'var(--c2)','копейки'],['Одна зарубежная',55,'var(--c5)','~20 $'],['Все четыре',100,'var(--c4)','~80 $']]}],
      ['h','Как выбрать свой путь'],
      ['ul','В работе есть данные клиентов → путь 1, и это не обсуждается|Нейросети нужны каждый день по работе → путь 2, он окупится|Нужно попробовать прямо сегодня → путь 3, помесячно и с проверкой|Хватает бесплатного → не платите ничего, серьёзно'],
 
@@ -479,6 +534,7 @@ const SECS = [
      ['h','Пять проверок за пять минут'],
      ['ul','<b>Возраст домена.</b> Меньше трёх месяцев — мимо. Смотрится бесплатно через любой whois-сервис по названию сайта: там есть дата регистрации|<b>Отзывы вне их сайта.</b> На лендинге отзывы всегда прекрасные. Ищите обсуждения на форумах и в чатах, где автор не контролирует комментарии|<b>Как принимают деньги.</b> Оплата картой на сайте — нормально. Перевод на карту физического лица или на криптокошелёк — почти всегда плохо|<b>Есть ли живая поддержка.</b> Напишите вопрос до оплаты. Ответили за час по делу — хороший знак. Отвечает бот заготовками — плохой|<b>Что просят от вас.</b> Нормальный посредник просит почту для чека. Ненормальный просит логин и пароль от вашего аккаунта'],
 
+     ['fig',{k:'steps',t:'Пять минут проверки',items:[['Возраст домена','младше трёх месяцев — дальше не смотрим'],['Отзывы вне их сайта','там, где автор не удаляет комментарии'],['Как принимают деньги','карта на сайте — да, перевод человеку — нет'],['Живая поддержка','вопрос до оплаты и внятный ответ на него'],['Что просят от вас','почту для чека, а не пароль от аккаунта']]}],
      ['shot',{title:'Проверка перед оплатой',rows:[['me','Здравствуйте. Что будет, если сервис перестанет продлевать подписку в середине оплаченного периода?'],['ai','Хороший ответ: «Вернём остаток на карту в течение трёх дней, был такой случай в марте, вот скриншот возврата».'],['ai','Плохой ответ: «Такого не бывает 🙂 Мы работаем с 2019 года, у нас тысячи клиентов!»']],mark:'Что вы проверили|Не честность — её так не проверить. Вы проверили, есть ли у них процедура на случай сбоя. Если её нет, значит сбой ещё не случался или его замалчивают.'}],
 
      ['h','Правило суммы'],
@@ -615,6 +671,7 @@ const TL = {
   ['fix','Документ большой, а ответ поверхностный: пересказ вместо разбора.|Дайте фильтр. Не «разбери договор», а «выпиши только пункты, создающие обязанности для меня». Без фильтра модель пытается охватить всё и не углубляется никуда.||В ответе есть пункт, которого в документе нет.|Потребуйте разделить ответ на две части: что взято из источника с цитатой и что добавлено от себя. Выдуманное почти всегда оказывается во второй части.||Ответ обрывается на середине длинного разбора.|Просите по частям: «сделай раздел 1 из 4, дождись моего „дальше“». Так вы и получите полный текст, и сможете поправить курс, не переделывая всё.||Цифры в выводах не сходятся с моими.|Никогда не просите число — просите формулу или код расчёта и промежуточные значения. Тогда ошибку видно, а не приходится ей верить.||Работает с файлом, но явно не видит середину.|Разбейте документ на части по 10–15 страниц и разбирайте по одной, каждый раз напоминая задачу. Середина теряется тем чаще, чем длиннее вход.'],
   ['h','Чек-лист работы с документом'],
   ['ul','Файл приложен, а не пересказан|Задан фильтр: что именно выписать|Потребованы ссылки на пункты или строки|Ответ разделён на «из источника» и «от себя»|Цифры перепроверены руками'],
+  ['fig',{k:'scale',t:'Где он заметно сильнее среднего',items:[['Длинный текст',95,'var(--c2)','его конёк'],['Разбор кода',88,'var(--c2)','сильно'],['Свежие факты',20,'var(--c4)','не знает'],['Картинки',10,'var(--c4)','не умеет']]}],
   ['tip','Одной строкой: Claude хорош там, где надо думать, и опасен там, где надо помнить. Дайте ему память в виде файла — и останется только сильная сторона.'],
   ['vid','Разбираем договор на экране, от файла до выводов|58 сек|dogovor.mp4']
  ]}, chatgpt:{t:'ChatGPT', g:'gpt', min:15, b:[
@@ -694,6 +751,7 @@ const TL = {
   ['shot',{title:'Разбор обращения клиента',rows:[['me','Ты помощник службы поддержки интернет-магазина. Вот обращение клиента: «Заказ 4412 не приехал, вторые сутки, никто не отвечает». Ответь строго по форме: 1) что человек просит на самом деле; 2) три варианта ответа — строгий, нейтральный, дружелюбный; 3) чего в ответе писать нельзя.'],['ai','1) Клиент просит не извинений, а срока: когда именно приедет заказ. 2) Строгий: «Заказ 4412 задержан на складе, новая дата — 12 сентября»… 3) Нельзя: обещать точное время без подтверждения склада, признавать вину компании до разбора.']],mark:'Что сработало|Роль, конкретный материал и пронумерованная форма ответа. Без формы модель уйдёт в общие рассуждения о важности клиентского сервиса.'}],
   ['prompt','Ты помощник в [сфера]. Отвечай строго по форме, без вступлений.\n\nМатериал: [текст обращения или документа]\n\n1. Что человек просит на самом деле.\n2. Три варианта ответа: строгий, нейтральный, дружелюбный.\n3. Чего в ответе писать нельзя и почему.\n\nНичего не добавляй от себя: если данных не хватает — так и напиши.'],
   ['shot',{title:'Обезличивание перед отправкой',rows:[['me','Было: «Иванова Мария, +7 917 340-11-02, заказ 88214, ул. Гагарина 7 — курьер не приехал второй раз»'],['me','Стало: «Клиент 1, заказ A, адрес A — курьер не приехал второй раз»'],['ai','Категория: срыв доставки, повтор. Срочность высокая. Что чинить: контроль повторных назначений курьера.']],mark:'Зачем это нужно|Для разбора смысл не изменился ни на грамм, а персональных данных в запросе больше нет. Это самый дешёвый способ закрыть вопрос с законом — и он работает с любой моделью.'}],
+  ['fig',{k:'steps',t:'Как обезличить перед отправкой',items:[['Убрать имена','Иванова Мария становится Клиент 1'],['Убрать контакты','телефон, адрес и почту вырезаем целиком'],['Заменить номера','заказ 88214 становится заказ A'],['Проверить остаток','по тексту не должно быть понятно, кто это']]}],
   ['h','Что она умеет кроме текста'],
   ['ul','<b>SpeechKit</b> — синтез речи вещательного качества. Этим голосом озвучены ролики нашего канала|<b>Распознавание речи</b> — расшифровка звонков и встреч|<b>YandexART</b> — картинки, без VPN'],
   ['h','Где уступает'],
@@ -736,6 +794,7 @@ const TL = {
   ['ul','<b>Что изображено</b> — объект и действие|<b>Как снято</b> — план, ракурс, композиция|<b>Свет</b> — время суток, источник, настроение|<b>Стиль</b> — техника, эпоха, материал|<b>Настройки</b> — пропорции и режим'],
   ['prompt','flat vector illustration of a delivery courier riding an e-bike\nthrough a rainy city street, side view, centered composition,\nwarm amber street light against cool grey buildings,\nminimal shapes, limited palette, no text\n--ar 4:5 --style raw'],
   ['shot',{title:'Одно описание, два результата',rows:[['me','beautiful illustration of a courier'],['ai','Получилась почтальонша из другой эпохи, на фоне замка, в тёплом свете. Красиво и мимо: вы не сказали ни что за курьер, ни где он, ни в каком стиле.'],['me','flat vector illustration of a delivery courier riding an e-bike through a rainy city at dusk, side view, wet asphalt reflections, limited palette, --ar 4:5']],mark:'Что изменилось|Появились объект и действие, ракурс, свет, стиль и пропорции. Модель перестала додумывать за вас — и картинка стала повторяемой.'}],
+  ['fig',{k:'compare',t:'Описание картинки',a:['Размывает результат',['Много красивых прилагательных','Пять правок за один раз','Просьба нарисовать текст']],b:['Даёт повторяемый результат',['Объект, ракурс, свет, стиль','Одна правка за шаг','Текст кладём сверху в редакторе']]}],
   ['h','Три настройки, которые нужны всегда'],
   ['ul','<b>--ar</b> — пропорции. Без неё получите квадрат. Для поста 4:5, для обложки 16:9, для истории 9:16|<b>--style raw</b> — убирает «красивость по умолчанию». Нужна, когда важна точность, а не эффектность|<b>--no</b> — чего не должно быть: <code>--no text, watermark, people</code>'],
   ['h','Почему запрос пишут по-английски'],
@@ -865,6 +924,24 @@ function blk(b){
       return `<div class="vid"><div class="pw"><video class="vp" controls preload="metadata" playsinline webkit-playsinline
            poster="v/${base}.jpg" src="v/${f}"></video><button class="pb" aria-label="Смотреть">▶</button></div><div class="cp"><b>${t}</b><span>${d}</span></div></div>`; }
     return `<div class="vid"><div class="fr soon"><i>▤</i><span>снимается</span></div><div class="cp"><b>${t}</b><span>${d}</span></div></div>`; }
+  if(k==='fig'){
+    if(v.k==='steps') return `<figure class="fig steps"${v.t?` data-t="${v.t}"`:''}>
+      ${v.t?`<figcaption>${v.t}</figcaption>`:''}
+      <div class="fl">${v.items.map((it,i)=>`<div class="st">
+        <i>${i+1}</i><div><b>${it[0]}</b><span>${it[1]}</span></div></div>`).join('')}</div></figure>`;
+    if(v.k==='compare') return `<figure class="fig cmp">
+      ${v.t?`<figcaption>${v.t}</figcaption>`:''}
+      <div class="cols">
+        <div class="col bad"><span class="hd">${v.a[0]}</span>${v.a[1].map(x=>`<span>${x}</span>`).join('')}</div>
+        <div class="col good"><span class="hd">${v.b[0]}</span>${v.b[1].map(x=>`<span>${x}</span>`).join('')}</div>
+      </div></figure>`;
+    if(v.k==='scale') return `<figure class="fig scl">
+      ${v.t?`<figcaption>${v.t}</figcaption>`:''}
+      ${v.items.map(it=>`<div class="bar"><span class="lb">${it[0]}</span>
+        <span class="tr"><i style="width:${it[1]}%;background:${it[2]||'var(--brand)'}"></i></span>
+        <span class="vl">${it[3]}</span></div>`).join('')}</figure>`;
+    return '';
+  }
   if(k==='shot'){
     const rows = v.rows.map(r=>`<div class="bub ${r[0]}">${r[1]}</div>`).join('');
     const [mt,mb] = v.mark.split('|');
@@ -874,12 +951,16 @@ function blk(b){
   return '';
 }
 
-$('#secs').innerHTML = SECS.map((s,i)=>`
-  <button class="item" data-sec="${i}" style="animation-delay:${i*45}ms">
+$('#secs').innerHTML = SECS.map((s,i)=>{
+  const n = (s.ls||[]).length, ready = (s.ls||[]).filter(l=>l.b).length;
+  return `
+  <button class="item sec" data-sec="${i}" style="animation-delay:${i*45}ms">
+    <span class="glow" style="background:${s.g}"></span>
     <span class="ic ${s.c}">${s.ic}</span>
-    <span class="tx"><b>${s.t}</b><span>${s.d}</span></span>
-    ${s.free?'<span class="pill free">открыт</span>':'<span class="pill">замок</span>'}
-  </button>`).join('');
+    <span class="tx"><b>${s.t}</b><span>${s.d}</span>
+      <span class="meta">${n} ${n===1?'урок':(n<5?'урока':'уроков')}${s.free?' · '+ready+' открыто':''}</span></span>
+    ${s.free?'<span class="pill free">открыт</span>':'<span class="pill lock">🔒</span>'}
+  </button>`;}).join('');
 
 $('#tools').innerHTML = TOOLS.map(([grp,list])=>`
   <div class="sh">${grp}</div>
@@ -965,9 +1046,11 @@ addEventListener('scroll', onScroll, {passive:true});
 addEventListener('visibilitychange', ()=>{ if(!document.hidden){ ticking = false; onScroll(); } });
 upBtn.addEventListener('click', ()=>scrollTo({top:0, behavior: CALM.matches ? 'auto' : 'smooth'}));
 
-function show(v){
-  document.querySelectorAll('.view').forEach(e=>e.classList.remove('on'));
-  $('#v-'+v).classList.add('on');
+function show(v, back){
+  document.querySelectorAll('.view').forEach(e=>e.classList.remove('on','back'));
+  const el = $('#v-'+v);
+  el.classList.add('on');
+  if(back) el.classList.add('back');
   document.querySelectorAll('.dock a').forEach(a=>a.classList.toggle('on', a.dataset.go===v));
   window.scrollTo({top:0});
   onScroll();
@@ -1073,6 +1156,9 @@ let night = false;
 try{ night = localStorage.getItem('mzr-night')==='1'; }catch(e){}
 setNight(night, false);
 
+// без слушателя касания iOS показывает :active с задержкой — отклик «падает с обрыва»
+document.addEventListener('touchstart', ()=>{}, {passive:true});
+
 document.addEventListener('click', e=>{
   if(e.target.closest('#tgl') || e.target.closest('#sw2')){ night=!night; setNight(night, true); return; }
   const sw1 = e.target.closest('#sw1'); if(sw1){ sw1.classList.toggle('off'); return; }
@@ -1109,7 +1195,7 @@ document.addEventListener('click', e=>{
   }
   const nx = e.target.closest('[data-nx]');
   if(nx){ const [si,li] = nx.dataset.nx.split('-').map(Number); openSec(si); openLes(li); return; }
-  const go = e.target.closest('[data-go]'); if(go){ show(go.dataset.go); return; }
+  const go = e.target.closest('[data-go]'); if(go){ show(go.dataset.go, 'back' in go.dataset); return; }
   const sec = e.target.closest('[data-sec]'); if(sec){ openSec(+sec.dataset.sec); return; }
   const les = e.target.closest('[data-les]'); if(les){ openLes(+les.dataset.les); return; }
   const en = e.target.closest('[data-e]');
@@ -1119,7 +1205,7 @@ document.addEventListener('click', e=>{
     box.style.display = box.style.display==='none' ? 'flex' : 'none';
   }
 });
-$('#l-back').addEventListener('click', ()=>show(window.__lback||'sec'));
+$('#l-back').addEventListener('click', ()=>show(window.__lback||'sec', true));
 paintRecent();
 </script>
 <script>
