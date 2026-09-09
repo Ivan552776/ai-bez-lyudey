@@ -730,7 +730,7 @@ const SECS = [
    {t:'Шесть строк описания продукта', min:7, d:'Формат задания, после которого нейросеть перестаёт додумывать за вас и переделывать не приходится'},
    {t:'Когда нейросеть врёт про свой код', min:9, d:'Как за минуту проверить, что программа делает то, что обещали, — не читая ни строчки кода'}
  ]},
- {t:'Свой телеграм-бот', d:'Заявки, ответы, публикации', ic:'◈', c:'i4', g:'linear-gradient(150deg,#B5452F,#A34433)', ls:[
+ {t:'Свой телеграм-бот', d:'Два бота: издатель и приёмная', ic:'◈', c:'i4', g:'linear-gradient(150deg,#B5452F,#A34433)', ls:[
    {t:'Бот, права и первая публикация', free:true, min:15, b:[
      ['p','Пробный урок из платного раздела. К концу нейросеть опубликует пост в ваш канал сама — вы не нажмёте ни одной кнопки в Telegram.'],
      ['h','Почему не через окно Telegram'],
@@ -751,8 +751,8 @@ const SECS = [
      ['vid','Телеграм-бот за вечер: что вы соберёте|43 сек|bot.mp4'],
      ['prompt','Собери минимального агента-публикатора для телеграм-канала.\n\nТребования:\n- токен читается из ~/.agent/.env, в коде его быть не должно\n- перед первой публикацией проверь права бота через getChatMember и покажи результат\n- текст поста передавай файлом, не строкой\n- ответ Telegram пиши в файл и разбирай питоном\n- после публикации выведи message_id\n\nЕсли чего-то не хватает — не придумывай, останови меня и спроси.']
    ]},
-   {t:'Очередь постов и расписание', min:8, d:'Бот публикует сам по календарю, пока вы спите. Что делать, когда компьютер выключен'},
-   {t:'Заявки от людей и ответы на них', min:11, d:'Бот принимает обращения, отвечает на частые сам и не теряет тех, кому нужен живой человек'}
+   {t:'Бот-издатель: очередь и расписание', min:14, key:'bot-izdatel', d:'Первый из двух ботов: публикует в канал сам по расписанию, пока вы спите, и не отправляет один пост дважды'},
+   {t:'Бот-приёмная: заявки и ответы', min:15, key:'bot-priemnaya', d:'Второй бот: принимает обращения, отвечает на частые сам, зовёт человека когда надо и открывает приложение кнопкой'}
  ]},
  {t:'Видео и озвучка', d:'Ролики кодом, синтез речи', ic:'▶', c:'i5', g:'linear-gradient(150deg,#3E6C8C,#3A5F7D)', ls:[
    {t:'Синтез речи, который не стыдно', min:9, d:'Голос без роботизма: разметка ударений, паузы, лимиты и почему маковский синтез не годится'},
@@ -1486,9 +1486,16 @@ function paintNext(nx){
   box.innerHTML = `<button class="nx" data-nx="${nx.si}-${nx.li}"><span><span class="k">${nx.k}</span>
       <b>${nx.t}</b></span><span class="ch">›</span></button>`;
 }
-function openLes(j){
+async function openLes(j){
   const s = SECS[cur], l = s.ls[j];
-  if(!l.b){ showPay(s, l); return; }
+  if(!l.b){
+    // Тело платного урока лежит на сервере: всё, что попадает в браузер,
+    // становится общедоступным. Есть доступ — сервер отдаст, нет — платный экран.
+    if(API && l.key){
+      const b = await fetchLesson(l.key);
+      if(b){ l.b = b; } else { showPay(s, l); return; }
+    } else { showPay(s, l); return; }
+  }
   $('#l-head').setAttribute('style','background:'+s.g);
   $('#l-k').textContent = s.t;
   $('#l-t').textContent = l.t;
@@ -1553,6 +1560,17 @@ if(U){
    Ключи разведены по идентификатору Telegram: на одном телефоне двое
    не делят прогресс, а при входе с другого устройства кабинет свой. */
 const UID = (TG && TG.initDataUnsafe && TG.initDataUnsafe.user && TG.initDataUnsafe.user.id) || 'guest';
+/* Адрес сервера. Пустой — приложение работает как раньше, платные уроки закрыты. */
+const API = '';
+async function post(path, body){
+  if(!API) return null;
+  try{
+    const r = await fetch(API + path, {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(Object.assign({initData: (TG && TG.initData) || ''}, body||{}))});
+    return r.ok ? await r.json() : null;
+  }catch(e){ return null; }
+}
+async function fetchLesson(key){ const r = await post('/api/lesson', {id:key}); return r && r.ok ? r.b : null; }
 const S = {
   k: n => 'mzr:' + UID + ':' + n,
   get(n, def){ try{ const v = localStorage.getItem(S.k(n)); return v===null ? def : JSON.parse(v); }catch(e){ return def; } },
