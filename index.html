@@ -135,6 +135,18 @@ h2.big{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px}
 .tx .tz{font-size:13px;color:var(--soft);line-height:1.42;margin-top:3px}
 .item.shut{background:var(--bg)}
 .item.shut b{color:var(--soft)}
+.news{display:flex;flex-direction:column;gap:9px}
+.allnews{width:100%;margin-top:9px;border:1px solid var(--line2);border-radius:14px;padding:12px;
+  background:none;font:600 13.5px/1 var(--body);color:var(--soft);cursor:pointer;
+  transition:transform .1s var(--ease)}
+.allnews:active{transform:scale(.985)}
+.nw{border:1px solid var(--line);border-radius:16px;padding:13px 14px;background:var(--card);display:flex;gap:12px}
+.nw .tag{flex:none;min-width:38px;height:26px;padding:0 8px;border-radius:9px;background:var(--sig);color:var(--sigInk);
+  font-family:var(--mono);font-size:11px;font-weight:700;display:grid;place-items:center}
+.nw b{display:block;font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+.nw .dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);
+  display:block;margin-bottom:3px}
+.nw span.d{display:block;font-size:13.5px;color:var(--soft);line-height:1.45;margin-top:3px}
 .about{border:1px solid var(--line);border-radius:18px;padding:15px;background:var(--card);display:flex;flex-direction:column;gap:14px}
 .about .ab{display:flex;gap:12px;align-items:flex-start}
 .about .ab i{font-style:normal;width:34px;height:34px;flex:none;border-radius:12px;
@@ -188,6 +200,10 @@ body.nodock .app{padding-bottom:26px}
 .ch{margin-left:auto;color:var(--faint);font-size:15px;flex:none}
 .pill{margin-left:auto;flex:none;font-family:var(--mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;padding:4px 8px;border-radius:6px;background:var(--line);color:var(--faint)}
 .pill.free{background:var(--okS);color:var(--ok)}
+.pill.done{background:var(--brandS);color:var(--brand)}
+.pg{display:inline-block;width:44px;height:5px;border-radius:3px;background:var(--line2);
+  overflow:hidden;vertical-align:middle;margin:0 3px}
+.pg i{display:block;height:100%;border-radius:3px;background:var(--sig)}
 
 /* ---- урок ---- */
 .back{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);border-radius:999px;padding:0 17px 0 14px;min-height:44px;font-size:13.5px;color:var(--soft);margin-bottom:13px;transition:transform .1s var(--ease)}
@@ -341,6 +357,9 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="sh">Что будет дальше</div>
     <div class="roadmap" id="hi-road"></div>
 
+    <div class="sh">Дописано на этой неделе</div>
+    <div class="news" id="hi-news"></div>
+
     <div class="hnote">
       <b>Курс не закончен — и это его сильная сторона</b>
       <p>Я продолжаю строить агента прямо сейчас. Всё, чему научусь по дороге, попадает сюда:
@@ -356,7 +375,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="hero">
       <h3>Начни с нуля</h3>
       <p>Шесть разделов: от первого разговора с нейросетью до агента, который ведёт канал сам.</p>
-      <button class="go" data-sec="0">Открыть первый урок</button>
+      <button class="go" id="hero-go" data-sec="0">Открыть первый урок</button>
       <span class="prog"><i class="d"></i><i class="d"></i><i></i><i></i><i></i><i></i></span>
     </div>
     <div class="sh">Разделы · два открыты</div>
@@ -382,6 +401,10 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
       </div>
       <button class="buy2" data-go="pay-all">Что входит в полный доступ</button>
     </div>
+
+    <div class="sh">Что нового</div>
+    <div class="news" id="news-home"></div>
+    <button class="allnews" data-go="news">Все обновления →</button>
 
     <p class="foot">Открытые разделы не закроются никогда.<br>Их можно проходить сколько угодно раз.</p>
   </div>
@@ -417,6 +440,17 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
       <button class="buy2" data-go="pay-all">Что входит в полный доступ</button>
       <p style="margin:0;font-size:13px;color:var(--faint)">Два раздела и пробный урок про телеграм-бота открыты без оплаты — посмотрите их сначала.</p>
     </div>
+  </div>
+
+  <!-- ===== ЧТО НОВОГО ===== -->
+  <div class="view" id="v-news">
+    <button class="back" data-back data-go="study">← Назад</button>
+    <h2 class="big">Что нового</h2>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Приложение дописывается почти каждый день:
+      выходят новые нейросети, появляются продукты, устаревают прошлые способы. Всё это попадает сюда
+      без доплаты.</p>
+    <div class="sh">Записи</div>
+    <div class="news" id="news-all"></div>
   </div>
 
   <!-- ===== ЧТО ВХОДИТ В ДОСТУП ===== -->
@@ -473,6 +507,8 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <span class="tx"><b>Мои разделы</b><span id="p-cnt">2 открыто, 4 под замком</span></span><span class="ch">›</span></button>
       <button class="row" data-recent="1"><span class="ic i5 sm">◔</span>
         <span class="tx"><b>Недавно открытое</b><span id="p-rec">пока пусто</span></span><span class="ch">›</span></button>
+      <button class="row" data-go="news"><span class="ic i3 sm">✦</span>
+        <span class="tx"><b>Что нового</b><span id="p-news">обновления курса</span></span><span class="ch">›</span></button>
       <button class="row" data-hello="1"><span class="ic i6 sm">◈</span>
         <span class="tx"><b>Что внутри и что дальше</b><span>приветствие и дорожная карта</span></span><span class="ch">›</span></button>
     </div>
@@ -1290,6 +1326,52 @@ $('#secs').innerHTML = SECS.map((s,i)=>{
     ${s.free?'<span class="pill free">открыт</span>':'<span class="pill lock">🔒</span>'}
   </button>`;}).join('');
 
+/* ---------- что нового: пополняется вместе с приложением ---------- */
+const NEWS = [
+ ['9 сентября','+11','Уроки по всем инструментам каталога','ElevenLabs, Whisper, Claude Code, Cursor, Suno, DeepSeek, Flux, Ideogram, Runway с Kling, Remotion, SpeechKit с Silero. Карточек без урока не осталось.'],
+ ['9 сентября','нов','Схемы внутри уроков','Шаги с соединительной линией, сравнение в два столбца и шкала величин — двадцать две штуки по всему приложению.'],
+ ['9 сентября','нов','Приборная палитра','Петроль и сигнальный янтарь вместо прежнего градиента. Приложение, ролики и кружки теперь выглядят одной вещью.'],
+ ['9 сентября','+8','Видеоуроки с субтитрами','Все восемь роликов пересняты: смотреть можно без звука, весь текст на экране.'],
+ ['9 сентября','нов','Навигация внутри урока','Полоса прочитанного, кнопка наверх и переход к следующему уроку — длинные уроки перестали быть стеной.'],
+ ['8 сентября','+6','Развёрнутые уроки про оплату и выбор модели','«Как устроена оплата», «Как отличить мошенника», Gemini, Perplexity, GigaChat, Kandinsky — каждый с разбором проблем и чек-листом.'],
+];
+
+/* ---------- прогресс на экранах ---------- */
+function nextUnread(){
+  const d = doneList();
+  for(let i=0;i<SECS.length;i++){
+    const S_ = SECS[i];
+    for(let j=0;j<(S_.ls||[]).length;j++){
+      if(S_.ls[j].b && !d.includes(i+'-'+j)) return {i, j, t:S_.ls[j].t};
+    }
+  }
+  return null;
+}
+function paintProgress(){
+  // строки разделов на главной
+  document.querySelectorAll('#secs .item.sec').forEach(el=>{
+    const i = +el.dataset.sec, p = secProgress(i), m = el.querySelector('.meta');
+    if(!m) return;
+    const n = (SECS[i].ls||[]).length;
+    const word = n===1?'урок':(n<5?'урока':'уроков');
+    m.innerHTML = p.total
+      ? `${n} ${word} · <span class="pg"><i style="width:${p.pct}%"></i></span> ${p.done} из ${p.total}`
+      : `${n} ${word}`;
+  });
+  // герой: продолжить с того места
+  const nx = nextUnread(), h = $('#hero-go');
+  if(h){
+    const started = doneList().length > 0;
+    h.textContent = nx ? (started ? 'Продолжить: ' + nx.t : 'Открыть первый урок') : 'Открыть каталог инструментов';
+    h.dataset.cont = nx ? nx.i+'-'+nx.j : '';
+  }
+  // профиль
+  const all = SECS.reduce((a,_,i)=>{const p=secProgress(i);return {d:a.d+p.done, t:a.t+p.total}},{d:0,t:0});
+  const tp = toolProgress();
+  const pc = $('#p-cnt');
+  if(pc) pc.textContent = `${all.d + tp.done} из ${all.t + tp.total} уроков прочитано`;
+}
+
 /* ---------- что появится дальше: один список на два экрана ---------- */
 const ROAD = [
   ['◈','Агент, который отвечает клиентам','Разбор обращений, ответы на частые вопросы и передача живому человеку'],
@@ -1299,7 +1381,13 @@ const ROAD = [
 ].map(([i,t,d])=>`<div><i>${i}</i><div><b>${t}</b><span>${d}</span></div></div>`).join('');
 
 /* ---------- приветствие ---------- */
+const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
+  <div class="nw"><span class="tag">${t}</span>
+    <div><span class="dt">${d}</span><b>${ti}</b><span class="d">${de}</span></div></div>`).join('');
 (function(){
+  $('#news-all').innerHTML = newsHTML(NEWS.length);
+  $('#hi-news').innerHTML = newsHTML(3);
+  $('#news-home').innerHTML = newsHTML(2);
   $('#hi-road').innerHTML = ROAD;
   $('#hi-steps').innerHTML = [
     ['◐','c1','Сначала — разговор','Как вообще говорить с нейросетью и чем они отличаются. Два раздела открыты сразу, без оплаты.'],
@@ -1366,7 +1454,9 @@ function openSec(i){
       <span class="ic ${s.c}">${j+1}</span>
       <span class="tx"><b>${l.t}</b>${l.d?`<span class="tz">${l.d}</span>`:''}
         <span class="meta">◷ ${l.min} мин</span></span>
-      ${l.b?'<span class="pill free">читать</span>':'<span class="pill lock">🔒</span>'}
+      ${l.b ? (doneList().includes(cur+'-'+j) ? '<span class="pill done">прочитан</span>'
+                                                : '<span class="pill free">читать</span>')
+            : '<span class="pill lock">🔒</span>'}
     </button>`).join('');
   const shut = s.ls.filter(l=>!l.b).length;
   $('#sec-foot').innerHTML = shut ? `
@@ -1407,6 +1497,7 @@ function openLes(j){
   paintNext(nextAfter(cur, j));
   window.__lback = 'sec';
   remember('lesson', cur+'-'+j, l.t);
+  watchRead(cur+'-'+j);
   show('lesson');
 }
 /* ---------- сколько прочитано и кнопка наверх ---------- */
@@ -1438,6 +1529,7 @@ function show(v, back){
   document.querySelectorAll('.dock a').forEach(a=>a.classList.toggle('on', a.dataset.go===v));
   window.scrollTo({top:0});
   onScroll();
+  if(v==='study' || v==='me') paintProgress();
 }
 
 /* ---------- кто открыл приложение ---------- */
@@ -1457,12 +1549,66 @@ if(U){
 }
 
 /* ---------- недавно открытое ---------- */
-function recentList(){ try{ return JSON.parse(localStorage.getItem('mzr-rec')||'[]'); }catch(e){ return []; } }
+/* ---------- своё хранилище на каждого, без регистрации ----------
+   Ключи разведены по идентификатору Telegram: на одном телефоне двое
+   не делят прогресс, а при входе с другого устройства кабинет свой. */
+const UID = (TG && TG.initDataUnsafe && TG.initDataUnsafe.user && TG.initDataUnsafe.user.id) || 'guest';
+const S = {
+  k: n => 'mzr:' + UID + ':' + n,
+  get(n, def){ try{ const v = localStorage.getItem(S.k(n)); return v===null ? def : JSON.parse(v); }catch(e){ return def; } },
+  set(n, v){ try{ localStorage.setItem(S.k(n), JSON.stringify(v)); }catch(e){} },
+};
+/* один раз переносим то, что лежало под общими ключами */
+(function(){
+  if(S.get('moved', false)) return;
+  try{
+    const old = localStorage.getItem('mzr-rec');
+    if(old && !localStorage.getItem(S.k('rec'))) localStorage.setItem(S.k('rec'), old);
+    const h = localStorage.getItem('mzr-hello');
+    if(h && localStorage.getItem(S.k('hello'))===null) S.set('hello', h==='1');
+  }catch(e){}
+  S.set('moved', true);
+})();
+
+function recentList(){ return S.get('rec', []); }
+
+/* ---------- прогресс чтения ---------- */
+function doneList(){ return S.get('done', []); }
+function markDone(id){
+  const d = doneList();
+  if(!d.includes(id)){ d.push(id); S.set('done', d); }
+}
+function secProgress(i){
+  const s = SECS[i], d = doneList();
+  const open = (s.ls||[]).filter(l=>l.b);
+  if(!open.length) return {done:0, total:0, pct:0};
+  const done = open.filter((l,j)=>d.includes(i+'-'+(s.ls.indexOf(l)))).length;
+  return {done, total:open.length, pct: Math.round(done/open.length*100)};
+}
+function toolProgress(){
+  const keys = Object.keys(TL), d = doneList();
+  const done = keys.filter(k=>d.includes('t-'+k)).length;
+  return {done, total:keys.length, pct: Math.round(done/keys.length*100)};
+}
+/** Урок засчитывается, когда человек дочитал до низа. */
+let readTimer = null, readId = null;
+function watchRead(id){
+  readId = id;
+  clearTimeout(readTimer);
+}
+addEventListener('scroll', ()=>{
+  if(!readId || !$('#v-lesson').classList.contains('on')) return;
+  const bottom = scrollY + innerHeight >= document.documentElement.scrollHeight - 260;
+  if(bottom){
+    clearTimeout(readTimer);
+    readTimer = setTimeout(()=>{ markDone(readId); paintProgress(); }, 900);
+  }
+}, {passive:true});
 function remember(kind, key, title){
   let r = recentList().filter(x => !(x.kind===kind && x.key===key));
   r.unshift({kind, key, title, t: Date.now()});
   r = r.slice(0, 12);
-  try{ localStorage.setItem('mzr-rec', JSON.stringify(r)); }catch(e){}
+  S.set('rec', r);
   paintRecent();
 }
 function paintRecent(){
@@ -1502,6 +1648,7 @@ function openToolLesson(k){
       <b>Выбрать другой инструмент</b></span><span class="ch">›</span></button>`;
   window.__lback = 'tools';
   remember('tool', k, l.t);
+  watchRead('t-'+k);
   show('lesson');
 }
 
@@ -1542,10 +1689,10 @@ try{ night = localStorage.getItem('mzr-night')==='1'; }catch(e){}
 setNight(night, false);
 
 /* ---------- первый запуск: сначала приветствие ---------- */
-let seenHello = false;
-try{ seenHello = localStorage.getItem('mzr-hello')==='1'; }catch(e){}
+let seenHello;
+seenHello = S.get('hello', false);
 function closeHello(go){
-  try{ localStorage.setItem('mzr-hello','1'); }catch(e){}
+  S.set('hello', true);
   if(go){ openSec(0); openLes(0); } else { show('study'); }
 }
 $('#hi-go').addEventListener('click', ()=>closeHello(true));
@@ -1594,7 +1741,12 @@ document.addEventListener('click', e=>{
   if(nx){ const [si,li] = nx.dataset.nx.split('-').map(Number); openSec(si); openLes(li); return; }
   const go = e.target.closest('[data-go]'); if(go){ show(go.dataset.go, 'back' in go.dataset); return; }
   const sg = e.target.closest('[data-sec-go]'); if(sg){ openSec(+sg.dataset.secGo); return; }
-  const sec = e.target.closest('[data-sec]'); if(sec){ openSec(+sec.dataset.sec); return; }
+  const sec = e.target.closest('[data-sec]');
+  if(sec){
+    const c = sec.dataset.cont;
+    if(c){ const [i,j]=c.split('-').map(Number); openSec(i); openLes(j); return; }
+    openSec(+sec.dataset.sec); return;
+  }
   const les = e.target.closest('[data-les]'); if(les){ openLes(+les.dataset.les); return; }
   const en = e.target.closest('[data-e]');
   if(en){
