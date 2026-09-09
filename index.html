@@ -588,6 +588,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <button class="back" data-back data-go="docs">← Документы</button>
     <h2 class="big" id="doc-t"></h2>
     <p style="margin:0 0 10px;font-family:var(--mono);font-size:11px;color:var(--faint)" id="doc-d"></p>
+    <nav class="toc" id="doc-toc" hidden></nav>
     <div class="prose" id="doc-b"></div>
   </div>
 </div>
@@ -775,7 +776,7 @@ const SECS = [
      ['p','В канале: Управление → Администраторы → добавить бота → включить «Публикация сообщений». Дальше узнаём числовой адрес:'],
      ['code','. ~/.agent/.env\ncurl -s "https://api.telegram.org/bot$TG_BOT_TOKEN/getChat?chat_id=@ваш_канал" | python3 -m json.tool'],
      ['h','Шаг 3. Публикация'],
-     ['code','CHAT_ID=-100XXXXXXXXXX\ncat > /tmp/post.txt <<\'EOF\'\nЭтот пост опубликован без человека.\nEOF\n\ncurl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \\\n  --data-urlencode "chat_id=$CHAT_ID" \\\n  --data-urlencode "text@/tmp/post.txt" -o /tmp/r.json'],
+     ['code','. ~/.agent/.env\nCHAT_ID=-100XXXXXXXXXX\ncat > /tmp/post.txt <<\'EOF\'\nЭтот пост опубликован без человека.\nEOF\n\ncurl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \\\n  --data-urlencode "chat_id=$CHAT_ID" \\\n  --data-urlencode "text@/tmp/post.txt" -o /tmp/r.json'],
      ['h','Три грабли'],
      ['ul','Текст передавайте файлом, а не строкой: переносы и кавычки ломают команду|Не разбирайте ответ через sed — на кириллице падает, а публикация при этом проходит|Подпись к картинке максимум 1024 знака, у обычного сообщения 4096'],
      ['h','Пять проблем, на которых спотыкаются все'],
@@ -1455,8 +1456,6 @@ const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
 (function(){
   const les = SECS.flatMap(x=>x.ls||[]);
   const mins = les.reduce((a,l)=>a+(l.min||0),0) + Object.values(TL).reduce((a,l)=>a+(l.min||0),0);
-  const vids = JSON.stringify(SECS).split('.mp4').length - 1
-             + JSON.stringify(TL).split('.mp4').length - 1;
   const tools = TOOLS.reduce((a,[,l])=>a+l.length,0);
   const plural=(n,a,b,c)=>{const d=n%100,e=n%10;return n+' '+(d>10&&d<20?c:e===1?a:e>1&&e<5?b:c)};
   const nLes = les.length + Object.keys(TL).length;
@@ -1522,9 +1521,9 @@ function openSec(i){
   show('sec');
 }
 /** Оглавление урока: человек должен видеть, из чего урок состоит, а не листать вслепую. */
-function buildToc(){
-  const box = $('#l-toc');
-  const hs = [...$('#l-body').querySelectorAll('h4')];
+function buildToc(bodyId, tocId){
+  const box = $(tocId || '#l-toc');
+  const hs = [...$(bodyId || '#l-body').querySelectorAll('h4')];
   if(hs.length < 3){ box.hidden = true; box.innerHTML = ''; return; }   // в коротком не нужно
   box.hidden = false;
   box.className = 'toc';
@@ -1765,7 +1764,9 @@ function openDoc(id){
   const d = DOCS.find(x=>x.id===id);
   $('#doc-t').textContent = d.t;
   $('#doc-d').textContent = 'редакция 1 · черновик, требует вычитки юристом';
+  blk.n = 0;
   $('#doc-b').innerHTML = d.b.map(blk).join('');
+  buildToc('#doc-b', '#doc-toc');
   show('doc');
 }
 function openToolLesson(k){
@@ -1823,9 +1824,9 @@ setNight(night, false);
 
 /* ---------- первый запуск: сначала приветствие ---------- */
 let seenHello;
-seenHello = S.get('hello', false);
+seenHello = S.get('hello2', false);
 function closeHello(go){
-  S.set('hello', true);
+  S.set('hello2', true);
   if(go){ openSec(0); openLes(0); } else { show('study'); }
 }
 $('#hi-go').addEventListener('click', ()=>closeHello(true));
