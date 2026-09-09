@@ -127,6 +127,34 @@ h2.big{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px}
 .item.sec .ic{position:relative;box-shadow:0 6px 16px rgba(20,26,44,.16)}
 .item.sec .tx,.item.sec .pill{position:relative}
 .pill.lock{background:transparent;border:1px solid var(--line2);font-size:11px;padding:5px 9px;letter-spacing:0}
+.item.les{align-items:flex-start}
+.item.les .ic{margin-top:1px}
+.item.les .pill{margin-top:3px}
+.tx .tz{font-size:13px;color:var(--soft);line-height:1.42;margin-top:3px}
+.item.shut{background:var(--bg)}
+.item.shut b{color:var(--soft)}
+.about{border:1px solid var(--line);border-radius:18px;padding:15px;background:var(--card);display:flex;flex-direction:column;gap:14px}
+.about .ab{display:flex;gap:12px;align-items:flex-start}
+.about .ab i{font-style:normal;width:34px;height:34px;flex:none;border-radius:12px;
+  background:linear-gradient(140deg,var(--brand),var(--brand2));color:#fff;display:grid;place-items:center;font-size:15px}
+.about b{display:block;font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.about span{display:block;font-size:13.5px;color:var(--soft);line-height:1.48;margin-top:3px}
+.about .buy2{margin-top:2px}
+.nums{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:0 0 4px}
+.nums div{border:1px solid var(--line);border-radius:14px;padding:12px 13px;background:var(--card)}
+.nums b{display:block;font-size:24px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.nums span{font-size:12px;color:var(--faint)}
+.roadmap{display:flex;flex-direction:column;gap:8px}
+.roadmap div{display:flex;gap:11px;align-items:flex-start;border:1px dashed var(--line2);border-radius:14px;padding:12px 13px}
+.roadmap i{font-style:normal;font-size:15px;flex:none;margin-top:1px}
+.roadmap b{display:block;font-size:14.5px;font-weight:600}
+.roadmap span{display:block;font-size:13px;color:var(--soft);margin-top:2px;line-height:1.42}
+.promise{margin:18px 0 16px;border-left:3px solid var(--brand);background:var(--brandS);border-radius:0 14px 14px 0;padding:14px 15px}
+.promise b{display:block;font-size:14.5px;font-weight:700;margin-bottom:4px}
+.promise p{margin:0 0 12px;font-size:14.5px;line-height:1.5;color:var(--soft)}
+.promise p:last-child{margin-bottom:0}
+.teaser{margin-top:16px;border:1px solid var(--line2);border-radius:18px;padding:16px;background:var(--card)}
+.teaser p{margin:0 0 13px;font-size:14.5px;line-height:1.5;color:var(--soft)}
 .tx b{font-size:15px;font-weight:600;letter-spacing:-.01em}
 .tx span{font-size:12px;color:var(--faint)}
 .ch{margin-left:auto;color:var(--faint);font-size:15px;flex:none}
@@ -279,6 +307,28 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     </div>
     <div class="sh">Разделы · два открыты</div>
     <div class="stack" id="secs"></div>
+
+    <div class="sh">Про курс</div>
+    <div class="about">
+      <div class="ab">
+        <i>◐</i>
+        <div><b>Что это</b><span>Курс о том, как собрать агента, который ведёт канал сам:
+          пишет, рисует, монтирует ролики и публикует. Этот канал он уже ведёт — вы читаете результат.</span></div>
+      </div>
+      <div class="ab">
+        <i>▤</i>
+        <div><b>С чего начинается</b><span>С нуля: как вообще разговаривать с нейросетью и чем они
+          отличаются. Дальше — оплата из России, вайбкодинг, свой бот, ролики кодом и агент целиком.</span></div>
+      </div>
+      <div class="ab">
+        <i>⬡</i>
+        <div><b>Курс не закончен — и это хорошо</b><span>Я продолжаю строить агента, и всё новое
+          попадает сюда. Уроки добавляются, старые переписываются, когда что-то устаревает.
+          Оплата одна, обновления входят.</span></div>
+      </div>
+      <button class="buy2" data-go="pay-all">Что входит в полный доступ</button>
+    </div>
+
     <p class="foot">Открытые разделы не закроются никогда.<br>Их можно проходить сколько угодно раз.</p>
   </div>
 
@@ -287,6 +337,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <button class="back" data-back data-go="study">← Разделы</button>
     <div class="lhead" id="sec-head"><span class="k" id="sec-k"></span><h3 id="sec-t"></h3></div>
     <div class="stack" id="sec-list"></div>
+    <div id="sec-foot"></div>
   </div>
 
   <!-- ===== УРОК ===== -->
@@ -308,9 +359,37 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="acc2">
       <div class="sh" style="margin:0 0 4px">Что внутри урока</div>
       <ul id="pay-in"></ul>
-      <div class="pline"><span class="pnum">4 900 ₽</span><span>разово · все 16 уроков · навсегда</span></div>
-      <button class="buy2" data-go="me">Открыть полный доступ</button>
+      <div class="pline"><span class="pnum">4 900 ₽</span><span>разово · без подписки · навсегда</span></div>
+      <button class="buy2" data-go="pay-all">Что входит в полный доступ</button>
       <p style="margin:0;font-size:13px;color:var(--faint)">Два раздела и пробный урок про телеграм-бота открыты без оплаты — посмотрите их сначала.</p>
+    </div>
+  </div>
+
+  <!-- ===== ЧТО ВХОДИТ В ДОСТУП ===== -->
+  <div class="view" id="v-pay-all">
+    <button class="back" data-back data-go="study">← Назад</button>
+    <div class="lhead" style="background:linear-gradient(140deg,#5B5BE8,#8A6BF0)">
+      <span class="k">полный доступ</span>
+      <h3>Один раз — и весь курс,<br>включая то, чего ещё нет</h3>
+    </div>
+    <div class="nums" id="pa-nums"></div>
+    <div class="sh">Что уже внутри</div>
+    <div class="stack" id="pa-secs"></div>
+    <div class="sh">Что добавится</div>
+    <div class="roadmap" id="pa-road"></div>
+    <div class="promise">
+      <b>Почему без подписки</b>
+      <p>Подписка выгодна тому, кто её продаёт. Здесь один платёж: курс остаётся у вас
+         навсегда, и новые уроки приходят без доплаты — сколько бы их ни вышло.</p>
+      <b>Почему уроки будут добавляться</b>
+      <p>Потому что я продолжаю строить этого агента и дальше. Всё, чему научусь по дороге,
+         попадает сюда — это не обещание на будущее, а то, как канал устроен сейчас.</p>
+    </div>
+    <div class="acc2">
+      <div class="pline"><span class="pnum">4 900 ₽</span><span id="pa-line">разово · навсегда</span></div>
+      <button class="buy2" data-write>Открыть полный доступ</button>
+      <p style="margin:0;font-size:13px;color:var(--faint)">Семь дней на возврат без объяснения причин.
+         Два раздела и пробный урок открыты до оплаты — посмотрите, как написано, прежде чем платить.</p>
     </div>
   </div>
 
@@ -555,9 +634,9 @@ const SECS = [
    ]}
  ]},
  {t:'Вайбкодинг', d:'Продукт без разработчика', ic:'◇', c:'i3', g:'linear-gradient(140deg,#F0913A,#E45C7B)', ls:[
-   {t:'Что вообще можно собрать самому', min:8},
-   {t:'Шесть строк описания продукта', min:7},
-   {t:'Когда нейросеть врёт про свой код', min:9}
+   {t:'Что вообще можно собрать самому', min:8, d:'Двенадцать вещей, которые непрограммист собирает за вечер — и три, за которые лучше не браться'},
+   {t:'Шесть строк описания продукта', min:7, d:'Формат задания, после которого нейросеть перестаёт додумывать за вас и переделывать не приходится'},
+   {t:'Когда нейросеть врёт про свой код', min:9, d:'Как за минуту проверить, что программа делает то, что обещали, — не читая ни строчки кода'}
  ]},
  {t:'Свой телеграм-бот', d:'Заявки, ответы, публикации', ic:'◈', c:'i4', g:'linear-gradient(140deg,#E45C7B,#8A5BE8)', ls:[
    {t:'Бот, права и первая публикация', free:true, min:15, b:[
@@ -580,18 +659,18 @@ const SECS = [
      ['vid','Телеграм-бот за вечер: что вы соберёте|43 сек|bot.mp4'],
      ['prompt','Собери минимального агента-публикатора для телеграм-канала.\n\nТребования:\n- токен читается из ~/.agent/.env, в коде его быть не должно\n- перед первой публикацией проверь права бота через getChatMember и покажи результат\n- текст поста передавай файлом, не строкой\n- ответ Telegram пиши в файл и разбирай питоном\n- после публикации выведи message_id\n\nЕсли чего-то не хватает — не придумывай, останови меня и спроси.']
    ]},
-   {t:'Очередь постов и расписание', min:8},
-   {t:'Заявки от людей и ответы на них', min:11}
+   {t:'Очередь постов и расписание', min:8, d:'Бот публикует сам по календарю, пока вы спите. Что делать, когда компьютер выключен'},
+   {t:'Заявки от людей и ответы на них', min:11, d:'Бот принимает обращения, отвечает на частые сам и не теряет тех, кому нужен живой человек'}
  ]},
  {t:'Видео и озвучка', d:'Ролики кодом, синтез речи', ic:'▶', c:'i5', g:'linear-gradient(140deg,#3AA6F0,#5B5BE8)', ls:[
-   {t:'Синтез речи, который не стыдно', min:9},
-   {t:'Видео как программа', min:12},
-   {t:'Говорящий аватар по звуковой волне', min:10}
+   {t:'Синтез речи, который не стыдно', min:9, d:'Голос без роботизма: разметка ударений, паузы, лимиты и почему маковский синтез не годится'},
+   {t:'Видео как программа', min:12, d:'Ролик собирается кодом с точностью до кадра. Бесплатно, повторяемо и без выдумок нейросети'},
+   {t:'Говорящий аватар по звуковой волне', min:10, d:'Лицо, которое открывает рот в такт вашему голосу. Разбор от громкости звука до готового кружка'}
  ]},
  {t:'Агент за рулём', d:'Канал, который ведёт себя сам', ic:'⬡', c:'i6', g:'linear-gradient(140deg,#8A5BE8,#5B5BE8)', ls:[
-   {t:'Память между запусками', min:8},
-   {t:'Расписание и работа без человека', min:9},
-   {t:'Что проверять до публикации и после', min:7}
+   {t:'Память между запусками', min:8, d:'Агент помнит, что уже публиковал и о чём с кем говорил, — иначе каждый запуск начинается с нуля'},
+   {t:'Расписание и работа без человека', min:9, d:'Как вынести агента с вашего компьютера, чтобы он работал круглосуточно за двести рублей в месяц'},
+   {t:'Что проверять до публикации и после', min:7, d:'Список проверок, без которых агент однажды опубликует то, чего вы не хотели показывать'}
  ]}
 ];
 
@@ -1033,7 +1112,7 @@ const DOCS = [
   ['h','1. Продавец'],
   ['p','[ФИО полностью], ИНН [ИНН], применяет налог на профессиональный доход. Адрес для связи: [почта].'],
   ['h','2. Предмет'],
-  ['p','Продавец предоставляет доступ к обучающим материалам приложения. Доступ бессрочный. Материалы носят информационный характер, образовательной лицензии не требуют и документов об образовании не дают.'],
+  ['p','Продавец предоставляет доступ к обучающим материалам приложения. Доступ бессрочный и распространяется на все материалы, которые будут добавлены в приложение после оплаты, без дополнительной платы. Материалы носят информационный характер, образовательной лицензии не требуют и документов об образовании не дают.'],
   ['p','Продавец не гарантирует достижения покупателем какого-либо результата, включая получение дохода.'],
   ['h','3. Стоимость и оплата'],
   ['p','4 900 ₽ единовременно. НДС не облагается в связи с применением налога на профессиональный доход. Чек направляется на указанную покупателем почту в момент оплаты. Автоматических списаний нет.'],
@@ -1155,6 +1234,38 @@ $('#secs').innerHTML = SECS.map((s,i)=>{
     ${s.free?'<span class="pill free">открыт</span>':'<span class="pill lock">🔒</span>'}
   </button>`;}).join('');
 
+/* ---------- экран «что входит в доступ» ---------- */
+(function(){
+  const les = SECS.flatMap(x=>x.ls||[]);
+  const mins = les.reduce((a,l)=>a+(l.min||0),0) + Object.values(TL).reduce((a,l)=>a+(l.min||0),0);
+  const vids = JSON.stringify(SECS).split('.mp4').length - 1
+             + JSON.stringify(TL).split('.mp4').length - 1;
+  const tools = TOOLS.reduce((a,[,l])=>a+l.length,0);
+  const plural=(n,a,b,c)=>{const d=n%100,e=n%10;return n+' '+(d>10&&d<20?c:e===1?a:e>1&&e<5?b:c)};
+  const nLes = les.length + Object.keys(TL).length;
+  const word=(n,a,b,c)=>{const d=n%100,e=n%10;return d>10&&d<20?c:e===1?a:e>1&&e<5?b:c};
+  $('#pa-nums').innerHTML = `
+    <div><b>${nLes}</b><span>${word(nLes,'урок','урока','уроков')} в курсе</span></div>
+    <div><b>${Math.round(mins/60*10)/10} ч</b><span>если читать подряд</span></div>
+    <div><b>${vids}</b><span>${word(vids,'видеоурок','видеоурока','видеоуроков')}</span></div>
+    <div><b>${tools}</b><span>${word(tools,'нейросеть разобрана','нейросети разобраны','нейросетей разобрано')}</span></div>`;
+  $('#pa-secs').innerHTML = SECS.map(x=>{
+    const n=(x.ls||[]).length, open=(x.ls||[]).filter(l=>l.b).length;
+    return `<button class="item sec" data-sec-go="${SECS.indexOf(x)}">
+      <span class="glow" style="background:${x.g}"></span>
+      <span class="ic ${x.c}">${x.ic}</span>
+      <span class="tx"><b>${x.t}</b><span>${x.d}</span>
+        <span class="meta">${plural(n,'урок','урока','уроков')}${open?' · '+open+' открыто':''}</span></span>
+      <span class="ch">›</span></button>`;}).join('');
+  $('#pa-road').innerHTML = [
+    ['◈','Агент, который отвечает клиентам','Разбор обращений, ответы на частые вопросы и передача живому человеку'],
+    ['▤','Таблицы и отчёты без рук','Сбор цифр из разных мест и готовый отчёт по расписанию'],
+    ['◐','Свой голос вместо синтеза','Клонирование голоса и озвучка, которую не отличают от живой'],
+    ['⬡','Второй агент и третий','Как из одного собранного агента делать следующих, не начиная заново']
+  ].map(([i,t,d])=>`<div><i>${i}</i><div><b>${t}</b><span>${d}</span></div></div>`).join('');
+  $('#pa-line').textContent = 'разово · без подписки · навсегда';
+})();
+
 $('#tools').innerHTML = TOOLS.map(([grp,list])=>`
   <div class="sh">${grp}</div>
   <div class="tgrid">${list.map(([n,g,tag,d,meta,les],i)=>`
@@ -1181,11 +1292,20 @@ function openSec(i){
   $('#sec-k').textContent = s.free ? 'раздел открыт' : 'раздел под замком';
   $('#sec-t').textContent = s.t;
   $('#sec-list').innerHTML = s.ls.map((l,j)=>`
-    <button class="item" data-les="${j}" style="animation-delay:${j*45}ms">
+    <button class="item les${l.b?'':' shut'}" data-les="${j}" style="animation-delay:${j*45}ms">
       <span class="ic ${s.c}">${j+1}</span>
-      <span class="tx"><b>${l.t}</b><span>◷ ${l.min} мин</span></span>
-      ${l.b?'<span class="pill free">читать</span>':'<span class="pill">замок</span>'}
+      <span class="tx"><b>${l.t}</b>${l.d?`<span class="tz">${l.d}</span>`:''}
+        <span class="meta">◷ ${l.min} мин</span></span>
+      ${l.b?'<span class="pill free">читать</span>':'<span class="pill lock">🔒</span>'}
     </button>`).join('');
+  const shut = s.ls.filter(l=>!l.b).length;
+  $('#sec-foot').innerHTML = shut ? `
+    <div class="teaser">
+      <div class="sh" style="margin:0 0 8px">${shut} ${shut===1?'урок закрыт':(shut<5?'урока закрыты':'уроков закрыто')}</div>
+      <p>Состав вы видите целиком — я не прячу, что внутри. Открывается всё сразу и навсегда,
+         вместе с теми уроками, которых ещё нет.</p>
+      <button class="buy2" data-go="pay-all">Что входит в доступ</button>
+    </div>` : '';
   show('sec');
 }
 /** Что читать следующим: соседний урок, иначе первый урок следующего раздела. */
@@ -1389,6 +1509,7 @@ document.addEventListener('click', e=>{
   const nx = e.target.closest('[data-nx]');
   if(nx){ const [si,li] = nx.dataset.nx.split('-').map(Number); openSec(si); openLes(li); return; }
   const go = e.target.closest('[data-go]'); if(go){ show(go.dataset.go, 'back' in go.dataset); return; }
+  const sg = e.target.closest('[data-sec-go]'); if(sg){ openSec(+sg.dataset.secGo); return; }
   const sec = e.target.closest('[data-sec]'); if(sec){ openSec(+sec.dataset.sec); return; }
   const les = e.target.closest('[data-les]'); if(les){ openLes(+les.dataset.les); return; }
   const en = e.target.closest('[data-e]');
