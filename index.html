@@ -67,8 +67,8 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 @media (max-width:380px){.tgrid{grid-template-columns:1fr}}
 
 .view{display:none}
-.view.on{display:block;animation:inR .34s var(--ease) both}
-.view.on.back{animation:inL .34s var(--ease) both}
+.view.on{display:block;animation:inR .34s var(--ease)}
+.view.on.back{animation:inL .34s var(--ease)}
 /* пришли справа — уходим направо: путь входа и выхода один и тот же */
 @keyframes inR{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
 @keyframes inL{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
