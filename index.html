@@ -10,7 +10,7 @@
 <style>
 :root{
   --bg:#FFFFFF; --card:#F7F8FB; --line:#ECEEF4; --line2:#DFE3EC;
-  --ink:#15171C; --soft:#5B6272; --faint:#98A0B4;
+  --ink:#15171C; --soft:#545B6B; --faint:#697185;
   --brand:#5B5BE8; --brandS:#EEEEFC; --brand2:#8A6BF0;
   --c1:#5B5BE8; --c2:#12B27E; --c3:#F0913A; --c4:#E45C7B; --c5:#3AA6F0; --c6:#8A5BE8;
   --ok:#12B27E; --okS:#E6F7F1; --warn:#E45C7B; --warnS:#FDECF0;
@@ -28,8 +28,12 @@
   --shadow:0 10px 30px rgba(0,0,0,.34);
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+/* тему переключаем одним общим переходом, а не только на body — иначе карточки прыгают */
+html.theming, html.theming *{transition:background-color .26s var(--ease),border-color .26s var(--ease),color .26s var(--ease) !important}
 button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none}
+:focus{outline:none}
+:focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:10px}
 .app{max-width:560px;margin:0 auto;padding:12px 14px calc(104px + env(safe-area-inset-bottom))}
 
 /* ---- шапка ---- */
@@ -37,7 +41,7 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 .mk{width:30px;height:30px;border-radius:10px;background:var(--brand);display:grid;place-items:center;flex:none}
 .mk i{width:14px;height:4px;border-radius:2px;background:#fff;display:block}
 .tp b{font-size:15px;font-weight:700;letter-spacing:-.01em}
-.tgl{margin-left:auto;width:34px;height:34px;border-radius:11px;border:1px solid var(--line2);display:grid;place-items:center;font-size:15px;color:var(--soft)}
+.tgl{margin-left:auto;width:44px;height:44px;border-radius:13px;border:1px solid var(--line2);display:grid;place-items:center;font-size:16px;color:var(--soft);transition:transform .1s var(--ease)}
 .tgl:active{transform:scale(.94)}
 .uav{width:30px;height:30px;border-radius:50%;background:var(--line);background-size:cover;background-position:center;flex:none;border:1px solid var(--line2)}
 .ic.sm{width:34px;height:34px;border-radius:10px;font-size:15px}
@@ -55,6 +59,30 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 @media (max-width:380px){.tgrid{grid-template-columns:1fr}}
 
 .view{display:none}.view.on{display:block;animation:in .28s var(--ease)}
+
+/* полоса прочитанного — единственная опора в уроке на восемь экранов */
+.rp{position:sticky;top:52px;z-index:8;height:3px;background:var(--line);border-radius:2px;margin:0 0 12px;overflow:hidden}
+.rp i{display:block;height:100%;width:0;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--brand2));transition:width .1s linear}
+
+/* наверх — появляется, когда уже далеко от начала */
+.up{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));width:46px;height:46px;border-radius:50%;
+  background:rgba(255,255,255,.72);backdrop-filter:blur(14px) saturate(160%);border:1px solid var(--line2);
+  color:var(--soft);font-size:17px;z-index:12;box-shadow:var(--shadow);
+  transition:opacity .2s var(--ease),transform .2s var(--ease)}
+:root[data-n="1"] .up{background:rgba(30,35,56,.72)}
+.up[hidden]{display:grid !important;opacity:0;transform:translateY(10px) scale(.9);pointer-events:none}
+.up{display:grid;place-items:center}
+.up:active{transform:scale(.93)}
+
+/* что дальше — чтобы урок не заканчивался тишиной */
+.nx{margin-top:22px;border:1px solid var(--line);border-radius:18px;background:var(--card);padding:15px 16px;
+  display:flex;align-items:center;gap:13px;width:100%;text-align:left;transition:transform .12s var(--ease),border-color .2s}
+.nx:active{transform:scale(.985)}
+.nx .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.nx b{display:block;font-size:15.5px;font-weight:600;letter-spacing:-.01em;margin-top:3px}
+.nx .ch{margin-left:auto;color:var(--faint);font-size:18px}
+.nx.done{background:var(--okS);border-color:var(--ok)}
+.nx.done .k{color:var(--ok)}
 @keyframes in{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 h2.big{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px}
 .sh{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin:20px 0 10px}
@@ -87,7 +115,7 @@ h2.big{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px}
 .pill.free{background:var(--okS);color:var(--ok)}
 
 /* ---- урок ---- */
-.back{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);border-radius:999px;padding:8px 14px 8px 11px;font-size:13px;color:var(--soft);margin-bottom:13px}
+.back{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);border-radius:999px;padding:0 17px 0 14px;min-height:44px;font-size:13.5px;color:var(--soft);margin-bottom:13px;transition:transform .1s var(--ease)}
 .back:active{transform:scale(.97)}
 .lhead{border-radius:18px;padding:18px;color:#fff;margin-bottom:15px}
 .lhead .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
@@ -100,7 +128,8 @@ h2.big{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px}
 .prose code{font-family:var(--mono);font-size:.88em;background:var(--card);border:1px solid var(--line);padding:1px 5px;border-radius:5px}
 pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.62}
 .cw{position:relative}.cw .cb{position:absolute;top:8px;right:8px}
-.cb{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line2);border-radius:8px;padding:6px 10px;color:var(--soft);background:var(--bg)}
+.cb{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line2);border-radius:10px;padding:0 14px;min-height:44px;display:inline-flex;align-items:center;color:var(--soft);background:var(--bg);transition:transform .1s var(--ease),background .16s}
+.cb:active{transform:scale(.95);background:var(--card)}
 .cb.done{color:var(--ok);border-color:var(--ok)}
 .pbox{border:1px solid var(--brand);border-radius:13px;overflow:hidden;background:var(--brandS)}
 .pbox .ph{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--brand)}
@@ -212,11 +241,15 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 
   <!-- ===== УРОК ===== -->
   <div class="view" id="v-lesson">
+    <div class="rp"><i id="rp-bar"></i></div>
     <button class="back" id="l-back">← Назад</button>
     <div class="lhead" id="l-head"><span class="k" id="l-k"></span><h3 id="l-t"></h3></div>
     <div class="prose" id="l-body"></div>
+    <div id="l-next"></div>
     <p class="foot" id="l-foot"></p>
   </div>
+
+  <button class="up" id="up" aria-label="Наверх" hidden>↑</button>
 
   <!-- ===== ЗАКРЫТЫЙ УРОК ===== -->
   <div class="view" id="v-pay">
@@ -792,6 +825,24 @@ function openSec(i){
     </button>`).join('');
   show('sec');
 }
+/** Что читать следующим: соседний урок, иначе первый урок следующего раздела. */
+function nextAfter(si, li){
+  const s = SECS[si];
+  for(let j=li+1; j<s.ls.length; j++) if(s.ls[j].b) return {si, li:j, t:s.ls[j].t, k:'следующий урок'};
+  for(let i=si+1; i<SECS.length; i++){
+    const n = SECS[i]; const j = (n.ls||[]).findIndex(x=>x.b);
+    if(j>-1) return {si:i, li:j, t:n.ls[j].t, k:'раздел «'+n.t+'»'};
+  }
+  return null;
+}
+function paintNext(nx){
+  const box = $('#l-next');
+  if(!nx){ box.innerHTML =
+    `<button class="nx done" data-go="tools"><span><span class="k">раздел пройден</span>
+       <b>Посмотреть каталог инструментов</b></span><span class="ch">›</span></button>`; return; }
+  box.innerHTML = `<button class="nx" data-nx="${nx.si}-${nx.li}"><span><span class="k">${nx.k}</span>
+      <b>${nx.t}</b></span><span class="ch">›</span></button>`;
+}
 function openLes(j){
   const s = SECS[cur], l = s.ls[j];
   if(!l.b){ showPay(s, l); return; }
@@ -800,15 +851,37 @@ function openLes(j){
   $('#l-t').textContent = l.t;
   $('#l-body').innerHTML = l.b.map(blk).join('');
   $('#l-foot').textContent = '◷ ' + l.min + ' мин';
+  paintNext(nextAfter(cur, j));
   window.__lback = 'sec';
   remember('lesson', cur+'-'+j, l.t);
   show('lesson');
 }
+/* ---------- сколько прочитано и кнопка наверх ---------- */
+const upBtn = $('#up'), rpBar = $('#rp-bar');
+let ticking = false;
+function onScroll(){
+  if(ticking) return; ticking = true;
+  requestAnimationFrame(()=>{
+    ticking = false;
+    const lesson = $('#v-lesson').classList.contains('on');
+    if(lesson){
+      const h = document.documentElement.scrollHeight - innerHeight;
+      rpBar.style.width = (h > 0 ? Math.min(100, scrollY / h * 100) : 0) + '%';
+    }
+    upBtn.hidden = !(lesson && scrollY > 700);
+  });
+}
+addEventListener('scroll', onScroll, {passive:true});
+// во вкладке на фоне requestAnimationFrame не тикает: снимаем флаг, иначе полоса замрёт навсегда
+addEventListener('visibilitychange', ()=>{ if(!document.hidden){ ticking = false; onScroll(); } });
+upBtn.addEventListener('click', ()=>scrollTo({top:0, behavior: CALM.matches ? 'auto' : 'smooth'}));
+
 function show(v){
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('on'));
   $('#v-'+v).classList.add('on');
   document.querySelectorAll('.dock a').forEach(a=>a.classList.toggle('on', a.dataset.go===v));
   window.scrollTo({top:0});
+  onScroll();
 }
 
 /* ---------- кто открыл приложение ---------- */
@@ -868,6 +941,8 @@ function openToolLesson(k){
   $('#l-t').textContent = l.t;
   $('#l-body').innerHTML = l.b.map(blk).join('');
   $('#l-foot').textContent = '◷ ' + l.min + ' мин';
+  $('#l-next').innerHTML = `<button class="nx" data-go="tools"><span><span class="k">дальше</span>
+      <b>Выбрать другой инструмент</b></span><span class="ch">›</span></button>`;
   window.__lback = 'tools';
   remember('tool', k, l.t);
   show('lesson');
@@ -888,18 +963,29 @@ function showPay(sec, les){
 }
 
 /* тема */
-function setNight(on){
-  document.documentElement.setAttribute('data-n', on?'1':'0');
+const CALM = matchMedia('(prefers-reduced-motion: reduce)');
+function setNight(on, animate){
+  const root = document.documentElement;
+  if(animate && !CALM.matches){                 // переход включаем только на время смены
+    root.classList.add('theming');
+    clearTimeout(setNight._t);
+    setNight._t = setTimeout(()=>root.classList.remove('theming'), 320);
+  }
+  root.setAttribute('data-n', on?'1':'0');
   $('#tgl').textContent = on ? '◑' : '◐';
   $('#sw2').classList.toggle('off', !on);
+  if(TG && TG.setBackgroundColor){              // красим и рамку Telegram, иначе шапка спорит с темой
+    try{ TG.setBackgroundColor(on ? '#161A2B' : '#FFFFFF');
+         TG.setHeaderColor(on ? '#161A2B' : '#FFFFFF'); }catch(e){}
+  }
   try{ localStorage.setItem('mzr-night', on?'1':'0'); }catch(e){}
 }
 let night = false;
 try{ night = localStorage.getItem('mzr-night')==='1'; }catch(e){}
-setNight(night);
+setNight(night, false);
 
 document.addEventListener('click', e=>{
-  if(e.target.closest('#tgl') || e.target.closest('#sw2')){ night=!night; setNight(night); return; }
+  if(e.target.closest('#tgl') || e.target.closest('#sw2')){ night=!night; setNight(night, true); return; }
   const sw1 = e.target.closest('#sw1'); if(sw1){ sw1.classList.toggle('off'); return; }
 
   const pb = e.target.closest('.pb');
@@ -932,6 +1018,8 @@ document.addEventListener('click', e=>{
     else { const [si,li] = x.key.split('-').map(Number); openSec(si); openLes(li); }
     return;
   }
+  const nx = e.target.closest('[data-nx]');
+  if(nx){ const [si,li] = nx.dataset.nx.split('-').map(Number); openSec(si); openLes(li); return; }
   const go = e.target.closest('[data-go]'); if(go){ show(go.dataset.go); return; }
   const sec = e.target.closest('[data-sec]'); if(sec){ openSec(+sec.dataset.sec); return; }
   const les = e.target.closest('[data-les]'); if(les){ openLes(+les.dataset.les); return; }
