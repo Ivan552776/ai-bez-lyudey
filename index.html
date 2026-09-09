@@ -3,29 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FFFFFF">
+<meta name="theme-color" content="#FBFBF9">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <title>Машина за рулём</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
 :root{
-  --bg:#FFFFFF; --card:#F7F8FB; --line:#ECEEF4; --line2:#DFE3EC;
-  --ink:#15171C; --soft:#545B6B; --faint:#697185;
-  --brand:#5B5BE8; --brandS:#EEEEFC; --brand2:#8A6BF0;
-  --c1:#5B5BE8; --c2:#12B27E; --c3:#F0913A; --c4:#E45C7B; --c5:#3AA6F0; --c6:#8A5BE8;
-  --ok:#12B27E; --okS:#E6F7F1; --warn:#E45C7B; --warnS:#FDECF0;
-  --shadow:0 8px 26px rgba(20,26,44,.08);
+  --bg:#FBFBF9; --card:#F3F4F0; --line:#E6E7E1; --line2:#D5D7CF;
+  --ink:#14201F; --soft:#4E5A58; --faint:#5F6A68;
+  --brand:#0F5E63; --brandS:#E4EFEF; --brand2:#14757A;
+  --c1:#0F5E63; --c2:#2A7454; --c3:#C97A1E; --c4:#B5452F; --c5:#3E6C8C; --c6:#5C5147;
+  --ok:#2A7454; --okS:#E9F2EC; --warn:#B5452F; --warnS:#F7E9E5;
+  --sig:#E08A2B; --sigInk:#22160A;
+  --shadow:0 8px 26px rgba(20,32,31,.09);
   --body:"Golos Text",system-ui,-apple-system,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,monospace;
   --ease:cubic-bezier(.22,.9,.28,1);
 }
 :root[data-n="1"]{
-  --bg:#161A2B; --card:#1E2338; --line:#2B3252; --line2:#343C66;
-  --ink:#EAEDF7; --soft:#A8B0C8; --faint:#7A82A0;
-  --brand:#7C9BFF; --brandS:#232945; --brand2:#B08BFF;
-  --c1:#7C9BFF; --c2:#4FD3A0; --c3:#FFB454; --c4:#FF8AA8; --c5:#66D3E8; --c6:#B08BFF;
-  --ok:#4FD3A0; --okS:#182E2A; --warn:#FF8AA8; --warnS:#33202C;
-  --shadow:0 10px 30px rgba(0,0,0,.34);
+  --bg:#101A1A; --card:#172524; --line:#22322F; --line2:#2E403C;
+  --ink:#E9F1EF; --soft:#A9B8B5; --faint:#849693;
+  --brand:#4FB3B8; --brandS:#173231; --brand2:#66C6C8;
+  --c1:#4FB3B8; --c2:#57B98A; --c3:#E8A452; --c4:#E0705A; --c5:#6FA0C4; --c6:#A2907F;
+  --ok:#57B98A; --okS:#142C24; --warn:#E0705A; --warnS:#2E1D1A;
+  --sig:#E8A452; --sigInk:#20150A;
+  --shadow:0 10px 30px rgba(0,0,0,.38);
 }
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -77,10 +79,10 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 
 /* наверх — появляется, когда уже далеко от начала */
 .up{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));width:46px;height:46px;border-radius:50%;
-  background:rgba(255,255,255,.72);backdrop-filter:blur(14px) saturate(160%);border:1px solid var(--line2);
+  background:rgba(251,251,249,.75);backdrop-filter:blur(14px) saturate(160%);border:1px solid var(--line2);
   color:var(--soft);font-size:17px;z-index:12;box-shadow:var(--shadow);
   transition:opacity .2s var(--ease),transform .2s var(--ease)}
-:root[data-n="1"] .up{background:rgba(30,35,56,.72)}
+:root[data-n="1"] .up{background:rgba(23,37,36,.75)}
 .up[hidden]{display:grid !important;opacity:0;transform:translateY(10px) scale(.9);pointer-events:none}
 .up{display:grid;place-items:center}
 .up:active{transform:scale(.93)}
@@ -104,11 +106,11 @@ h2.big{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px}
 .hero::after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.13);top:-72px;right:-52px}
 .hero h3{margin:0;font-size:20px;font-weight:700;line-height:1.16;letter-spacing:-.02em;max-width:16ch;position:relative}
 .hero p{margin:0;font-size:13.5px;opacity:.86;max-width:33ch;position:relative}
-.hero .go{align-self:flex-start;background:#fff;color:var(--brand);font-size:13.5px;font-weight:700;border-radius:999px;padding:11px 18px;margin-top:3px;position:relative}
+.hero .go{align-self:flex-start;background:var(--sig);color:var(--sigInk);font-size:13.5px;font-weight:700;border-radius:999px;padding:11px 18px;margin-top:3px;position:relative}
 .hero .go:active{transform:scale(.97)}
 .prog{display:flex;gap:5px;margin-top:8px;position:relative}
 .prog i{height:4px;flex:1;border-radius:2px;background:rgba(255,255,255,.28)}
-.prog i.d{background:#fff}
+.prog i.d{background:var(--sig)}
 
 /* ---- строка-раздел ---- */
 .item{width:100%;text-align:left;border-radius:16px;padding:13px;display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);transition:transform .14s var(--ease),border-color .2s;animation:rise .4s var(--ease) backwards}
@@ -368,7 +370,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   <!-- ===== ЧТО ВХОДИТ В ДОСТУП ===== -->
   <div class="view" id="v-pay-all">
     <button class="back" data-back data-go="study">← Назад</button>
-    <div class="lhead" style="background:linear-gradient(140deg,#5B5BE8,#8A6BF0)">
+    <div class="lhead" style="background:linear-gradient(150deg,#0F5E63,#14757A)">
       <span class="k">полный доступ</span>
       <h3>Один раз — и весь курс,<br>включая то, чего ещё нет</h3>
     </div>
@@ -477,7 +479,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 
 <script>
 const SECS = [
- {t:'Первые шаги', d:'Claude, ChatGPT, Perplexity', ic:'◐', c:'i1', g:'linear-gradient(140deg,#5B5BE8,#8A6BF0)', free:true, ls:[
+ {t:'Первые шаги', d:'Claude, ChatGPT, Perplexity', ic:'◐', c:'i1', g:'linear-gradient(150deg,#0F5E63,#14757A)', free:true, ls:[
    {t:'Как разговаривать с нейросетью', free:true, min:14, b:[
      ['p','<b>После этого урока вы будете получать от нейросети ответ по делу с первой попытки, а не с пятой.</b> Это не про «волшебные промпты» — это про четыре вещи, которых почти никто не пишет, и из-за которых нейросеть отвечает шаблоном.'],
      ['h','Почему получается шаблон'],
@@ -566,7 +568,7 @@ const SECS = [
      ['vid','Сравниваем четыре модели на одной задаче|52 сек|modeli.mp4']
    ]}
  ]},
- {t:'Оплата из России', d:'Как платить за подписки', ic:'₽', c:'i2', g:'linear-gradient(140deg,#12B27E,#3AA6F0)', free:true, ls:[
+ {t:'Оплата из России', d:'Как платить за подписки', ic:'₽', c:'i2', g:'linear-gradient(150deg,#2A7454,#347F5F)', free:true, ls:[
    {t:'Как вообще устроена оплата', free:true, min:12, b:[
      ['p','<b>После урока вы будете понимать, за что именно платите, какой из трёх путей ваш и сколько это стоит в месяц.</b> Без этого люди либо переплачивают вдвое, либо годами сидят на бесплатных лимитах, не зная, что упёрлись не в качество, а в тариф.'],
 
@@ -633,12 +635,12 @@ const SECS = [
      ['tip','Самый спокойный вариант остаётся прежним: там, где задача решается российской моделью, решайте её российской моделью. Посредник нужен только для того, чего здесь действительно нет — и тогда все шесть пунктов выше обязательны, а не по настроению.']
    ]}
  ]},
- {t:'Вайбкодинг', d:'Продукт без разработчика', ic:'◇', c:'i3', g:'linear-gradient(140deg,#F0913A,#E45C7B)', ls:[
+ {t:'Вайбкодинг', d:'Продукт без разработчика', ic:'◇', c:'i3', g:'linear-gradient(150deg,#C97A1E,#B5642A)', ls:[
    {t:'Что вообще можно собрать самому', min:8, d:'Двенадцать вещей, которые непрограммист собирает за вечер — и три, за которые лучше не браться'},
    {t:'Шесть строк описания продукта', min:7, d:'Формат задания, после которого нейросеть перестаёт додумывать за вас и переделывать не приходится'},
    {t:'Когда нейросеть врёт про свой код', min:9, d:'Как за минуту проверить, что программа делает то, что обещали, — не читая ни строчки кода'}
  ]},
- {t:'Свой телеграм-бот', d:'Заявки, ответы, публикации', ic:'◈', c:'i4', g:'linear-gradient(140deg,#E45C7B,#8A5BE8)', ls:[
+ {t:'Свой телеграм-бот', d:'Заявки, ответы, публикации', ic:'◈', c:'i4', g:'linear-gradient(150deg,#B5452F,#A34433)', ls:[
    {t:'Бот, права и первая публикация', free:true, min:15, b:[
      ['p','Пробный урок из платного раздела. К концу нейросеть опубликует пост в ваш канал сама — вы не нажмёте ни одной кнопки в Telegram.'],
      ['h','Почему не через окно Telegram'],
@@ -662,12 +664,12 @@ const SECS = [
    {t:'Очередь постов и расписание', min:8, d:'Бот публикует сам по календарю, пока вы спите. Что делать, когда компьютер выключен'},
    {t:'Заявки от людей и ответы на них', min:11, d:'Бот принимает обращения, отвечает на частые сам и не теряет тех, кому нужен живой человек'}
  ]},
- {t:'Видео и озвучка', d:'Ролики кодом, синтез речи', ic:'▶', c:'i5', g:'linear-gradient(140deg,#3AA6F0,#5B5BE8)', ls:[
+ {t:'Видео и озвучка', d:'Ролики кодом, синтез речи', ic:'▶', c:'i5', g:'linear-gradient(150deg,#3E6C8C,#3A5F7D)', ls:[
    {t:'Синтез речи, который не стыдно', min:9, d:'Голос без роботизма: разметка ударений, паузы, лимиты и почему маковский синтез не годится'},
    {t:'Видео как программа', min:12, d:'Ролик собирается кодом с точностью до кадра. Бесплатно, повторяемо и без выдумок нейросети'},
    {t:'Говорящий аватар по звуковой волне', min:10, d:'Лицо, которое открывает рот в такт вашему голосу. Разбор от громкости звука до готового кружка'}
  ]},
- {t:'Агент за рулём', d:'Канал, который ведёт себя сам', ic:'⬡', c:'i6', g:'linear-gradient(140deg,#8A5BE8,#5B5BE8)', ls:[
+ {t:'Агент за рулём', d:'Канал, который ведёт себя сам', ic:'⬡', c:'i6', g:'linear-gradient(150deg,#5C5147,#4E453D)', ls:[
    {t:'Память между запусками', min:8, d:'Агент помнит, что уже публиковал и о чём с кем говорил, — иначе каждый запуск начинается с нуля'},
    {t:'Расписание и работа без человека', min:9, d:'Как вынести агента с вашего компьютера, чтобы он работал круглосуточно за двести рублей в месяц'},
    {t:'Что проверять до публикации и после', min:7, d:'Список проверок, без которых агент однажды опубликует то, чего вы не хотели показывать'}
@@ -1460,8 +1462,8 @@ function setNight(on, animate){
   $('#tgl').textContent = on ? '◑' : '◐';
   $('#sw2').classList.toggle('off', !on);
   if(TG && TG.setBackgroundColor){              // красим и рамку Telegram, иначе шапка спорит с темой
-    try{ TG.setBackgroundColor(on ? '#161A2B' : '#FFFFFF');
-         TG.setHeaderColor(on ? '#161A2B' : '#FFFFFF'); }catch(e){}
+    try{ TG.setBackgroundColor(on ? '#101A1A' : '#FBFBF9');
+         TG.setHeaderColor(on ? '#101A1A' : '#FBFBF9'); }catch(e){}
   }
   try{ localStorage.setItem('mzr-night', on?'1':'0'); }catch(e){}
 }
