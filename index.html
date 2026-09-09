@@ -1583,7 +1583,7 @@ if(U){
    не делят прогресс, а при входе с другого устройства кабинет свой. */
 const UID = (TG && TG.initDataUnsafe && TG.initDataUnsafe.user && TG.initDataUnsafe.user.id) || 'guest';
 /* Адрес сервера. Пустой — приложение работает как раньше, платные уроки закрыты. */
-const API = '';
+const API = 'https://abstract-tolerant-ember.ruweb.place';
 async function post(path, body){
   if(!API) return null;
   try{
