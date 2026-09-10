@@ -66,6 +66,9 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 .tcard .mt{display:flex;gap:6px;flex-wrap:wrap}
 .tcard .mt i{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:4px 7px;border-radius:6px;background:var(--line);color:var(--faint)}
 .tcard .go2{align-self:flex-start;font-size:12.5px;font-weight:600;border-radius:999px;padding:8px 14px;background:var(--brandS);color:var(--brand)}
+.chk{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--faint);line-height:1.4}
+.chk.old{color:var(--c3);font-weight:600}
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 @media (max-width:380px){.tgrid{grid-template-columns:1fr}}
 
@@ -779,7 +782,8 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   <!-- ===== ИНСТРУМЕНТЫ ===== -->
   <div class="view" id="v-tools">
     <h2 class="big">Инструменты</h2>
-    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Что чем делать. Зелёная метка — работает из России без VPN.</p>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Что чем делать. Зелёная метка — работает из России без VPN.
+      Цены и условия сверяю руками: под каждой карточкой дата последней сверки.</p>
     <div class="sh">Что нужно сделать?</div>
     <div class="tasks" id="tk-list"></div>
     <div id="tk-out"></div>
@@ -2376,6 +2380,43 @@ const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
   $('#pa-line').textContent = 'в месяц · год — 4 900 ₽, два месяца в подарок';
 })();
 
+/* ---------- когда я последний раз сверяла цены и условия ----------
+   Цены нейросетей меняются каждый месяц, а в тексте они записаны намертво.
+   Дата стоит на каждой карточке: людям честно, а мне видно, что пора
+   садиться и проверять. Правится только здесь. */
+const СВЕРЕНО = {
+  'Claude':'2026-09-11', 'ChatGPT':'2026-09-11', 'Gemini':'2026-09-11',
+  'DeepSeek':'2026-09-11', 'Perplexity':'2026-09-11',
+  'YandexGPT':'2026-09-11', 'GigaChat':'2026-09-11', 'Kandinsky':'2026-09-11',
+  'SpeechKit':'2026-09-11', 'Silero':'2026-09-11',
+  'Midjourney':'2026-09-11', 'Flux':'2026-09-11', 'Ideogram':'2026-09-11',
+  'Runway':'2026-09-11', 'Kling':'2026-09-11', 'Remotion':'2026-09-11',
+  'ElevenLabs':'2026-09-11', 'Suno':'2026-09-11', 'Whisper':'2026-09-11',
+  'Claude Code':'2026-09-11', 'Cursor':'2026-09-11'
+};
+/* у разбора нейросети дата берётся по самой свежей карточке, которая на него ссылается */
+const СВЕРЕНО_УРОК = {};
+TOOLS.forEach(([, список]) => список.forEach(([имя,,,,, урок]) => {
+  const d = СВЕРЕНО[имя];
+  if(урок && d && (!СВЕРЕНО_УРОК[урок] || d > СВЕРЕНО_УРОК[урок])) СВЕРЕНО_УРОК[урок] = d;
+}));
+const МЕС = ['января','февраля','марта','апреля','мая','июня','июля','августа',
+             'сентября','октября','ноября','декабря'];
+function датаКоротко(d){
+  if(!d) return '';
+  const [г, м, ч] = d.split('-');
+  const текущий = new Date().getFullYear();
+  return +ч + ' ' + МЕС[+м - 1] + (+г === текущий ? '' : ' ' + г);
+}
+/** Больше двух с половиной месяцев — данные пора пересматривать.
+    Говорим об этом вслух: молчаливо устаревшая цена дороже неловкости. */
+const устарело = d => d && (Date.now() - new Date(d + 'T12:00:00')) > 75 * 86400000;
+function меткаСверки(d){
+  if(!d) return '';
+  return `<span class="chk${устарело(d) ? ' old' : ''}">сверено ${датаКоротко(d)}${
+    устарело(d) ? ' · пора обновить' : ''}</span>`;
+}
+
 $('#tools').innerHTML = TOOLS.map(([grp,list])=>`
   <div class="sh">${grp}</div>
   <div class="tgrid">${list.map(([n,g,tag,d,meta,les],i)=>`
@@ -2384,6 +2425,7 @@ $('#tools').innerHTML = TOOLS.map(([grp,list])=>`
         <span class="bdg">${tag==='rf'?'из РФ':'VPN'}</span></div>
       <div class="bd"><p>${d}</p>
         <div class="mt">${meta.map(m=>`<i>${m}</i>`).join('')}</div>
+        ${меткаСверки(СВЕРЕНО[n])}
         ${les?`<button class="go2" data-tl="${les}">Открыть урок →</button>`
              :'<span style="font-size:11.5px;color:var(--faint)">урок готовится</span>'}
       </div></div>`).join('')}</div>`).join('');
@@ -3222,7 +3264,8 @@ function openToolLesson(k){
   blk.n = 0; blk.q = 0;            // нумерация якорей и заданий своя у каждого урока
   $('#l-body').innerHTML = l.b.map(blk).join('');
   buildToc();
-  $('#l-foot').textContent = '◷ ' + l.min + ' мин';
+  $('#l-foot').innerHTML = '◷ ' + l.min + ' мин' + (СВЕРЕНО_УРОК[k]
+    ? ' · цены сверены ' + датаКоротко(СВЕРЕНО_УРОК[k]) : '');
   $('#l-next').innerHTML = `<button class="nx" data-go="tools"><span><span class="k">дальше</span>
       <b>Выбрать другой инструмент</b></span><span class="ch">›</span></button>`;
   window.__lback = 'tools';
