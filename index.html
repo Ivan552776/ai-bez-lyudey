@@ -479,6 +479,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .fav{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:12px;
   background:rgba(255,255,255,.16);color:#fff;font-size:18px;line-height:1;display:grid;place-items:center}
 .fav.on{background:var(--sig);color:var(--sigInk)}
+.fav.shr{right:60px}
 .lhead{position:relative}
 .prc{margin:0 14px 12px;border:1px solid var(--line2);border-radius:16px;background:var(--card);overflow:hidden}
 .prc .hd{display:flex;align-items:center;gap:9px;padding:11px 13px;border-bottom:1px solid var(--line)}
@@ -628,7 +629,8 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="rp"><i id="rp-bar"></i></div>
     <button class="back" id="l-back">← Назад</button>
     <div class="lhead" id="l-head"><span class="k" id="l-k"></span><h3 id="l-t"></h3>
-      <button class="fav" id="l-fav" type="button" aria-label="В закладки">☆</button></div>
+      <button class="fav" id="l-fav" type="button" aria-label="В закладки">☆</button>
+      <button class="fav shr" id="l-share" type="button" aria-label="Поделиться">↗</button></div>
     <nav class="toc" id="l-toc" hidden></nav>
     <div class="prose" id="l-body"></div>
     <div id="l-next"></div>
@@ -685,7 +687,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     </div>
     <div class="acc2">
       <div class="pline"><span class="pnum">500 ₽</span><span id="pa-line">в месяц</span></div>
-      <button class="buy2" data-write>Открыть полный доступ</button>
+      <button class="buy2" data-write="pay">Открыть полный доступ</button>
       <p style="margin:0;font-size:13px;color:var(--faint)">Семь дней на возврат без объяснения причин.
          Два раздела и пробный урок открыты до оплаты — посмотрите, как написано, прежде чем платить.</p>
     </div>
@@ -2210,6 +2212,17 @@ function tkPaint(){
   });
 }
 
+/* ---------- поделиться ----------
+   Самый дешёвый рост, который у нас есть: человек отправляет другу ссылку
+   прямо из Telegram, и тот попадает сразу в приложение. */
+const SHARE_URL = 'https://t.me/ai_bez_lyudey_bot/kurs';
+function share(текст){
+  const ссылка = 'https://t.me/share/url?url=' + encodeURIComponent(SHARE_URL) +
+                 '&text=' + encodeURIComponent(текст);
+  if(TG && TG.openTelegramLink) TG.openTelegramLink(ссылка);
+  else window.open(ссылка, '_blank');
+}
+
 /* ---------- закладки ----------
    Хранятся там же, где прогресс: у каждого свои, без регистрации. */
 function favList(){ return S.get('fav', []); }
@@ -2276,7 +2289,8 @@ function prPaint(){
 
   out.innerHTML = список.map((x, i) => `<div class="prc">
       <div class="hd"><span class="k">⌘</span><b>${esc(x.урок)}</b>
-        <button data-copy="${enc(x.текст)}">копировать</button></div>
+        <button data-copy="${enc(x.текст)}">копировать</button>
+        <button data-share="${enc(x.урок)}">поделиться</button></div>
       <pre>${esc(x.текст)}</pre>
       <button class="go" data-pr="${i}">Открыть урок целиком →</button>
     </div>`).join('');
@@ -2805,6 +2819,12 @@ function closeHello(go){
 }
 $('#hi-go').addEventListener('click', ()=>closeHello(true));
 $('#l-fav').addEventListener('click', favToggle);
+$('#l-share').addEventListener('click', () => {
+  if(!favCur) return;
+  share(favCur.kind === 'tool'
+    ? 'Разбор нейросети «' + favCur.title + '» — в приложении «ИИ без людей»'
+    : 'Урок «' + favCur.title + '» — в приложении «ИИ без людей»');
+});
 favPaintList();
 $('#hi-skip').addEventListener('click', ()=>closeHello(false));
 show(seenHello ? 'study' : 'hello');
@@ -2857,8 +2877,17 @@ document.addEventListener('click', e=>{
   const dc = e.target.closest('[data-doc]'); if(dc){ openDoc(dc.dataset.doc); return; }
   if(e.target.closest('[data-recent]')){ paintRecent(); show('recent'); return; }
   if(e.target.closest('[data-hello]')){ show('hello'); return; }
-  if(e.target.closest('[data-write]')){
-    if(TG && TG.close){ TG.close(); } else { location.href='https://t.me/ai_bez_lyudey_bot'; }
+  const sh = e.target.closest('[data-share]');
+  if(sh){ share('Готовый промпт из урока «' + decodeURIComponent(sh.dataset.share) +
+                '» — в приложении «ИИ без людей»'); return; }
+  const wr = e.target.closest('[data-write]');
+  if(wr){
+    // с меткой: бот сразу отвечает по делу, а не ждёт, пока человек догадается,
+    // что писать. Кнопка доступа и кнопка «написать мне» ведут в разные ответы.
+    const метка = wr.dataset.write === 'pay' ? 'pay' : 'help';
+    const ссылка = 'https://t.me/ai_bez_lyudey_bot?start=' + метка;
+    if(TG && TG.openTelegramLink) TG.openTelegramLink(ссылка);
+    else location.href = ссылка;
     return;
   }
   const ro = e.target.closest('[data-rec-open]');
