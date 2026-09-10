@@ -69,6 +69,13 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 .chk{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.06em;
   text-transform:uppercase;color:var(--faint);line-height:1.4}
 .chk.old{color:var(--c3);font-weight:600}
+.item.post{display:block;padding:13px}
+.post .ptx{display:flex;flex-direction:column;gap:7px}
+.post .when{font-family:var(--mono);font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+.post b{font-size:15.5px;line-height:1.35;color:var(--ink)}
+.post p{margin:0;font-size:13.5px;line-height:1.5;color:var(--soft)}
+.post .go2{align-self:flex-start;font-size:12.5px;font-weight:600;border-radius:999px;
+  padding:8px 14px;background:var(--brandS);color:var(--brand);margin-top:2px}
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 @media (max-width:380px){.tgrid{grid-template-columns:1fr}}
 
@@ -774,8 +781,11 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   <!-- ===== РАЗБОРЫ ===== -->
   <div class="view" id="v-log">
     <h2 class="big">Разборы</h2>
-    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Что я строил, что при этом ломалось и чему это меня научило.</p>
-    <div class="sh">Записи</div>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Свежее из канала и разборы того,
+      что при этом ломалось. Канал ведёт нейросеть — сюда посты попадают сами.</p>
+    <div class="sh" id="chan-sh">Из канала</div>
+    <div class="stack" id="chan"></div>
+    <div class="sh">Из мастерской</div>
     <div class="stack" id="log"></div>
   </div>
 
@@ -2430,6 +2440,61 @@ $('#tools').innerHTML = TOOLS.map(([grp,list])=>`
              :'<span style="font-size:11.5px;color:var(--faint)">урок готовится</span>'}
       </div></div>`).join('')}</div>`).join('');
 
+/* ---------- лента канала на экране «Разборы» ----------
+   Раньше здесь лежали четырнадцать записей, набитых руками. Теперь экран
+   повторяет канал: сервер отдаёт то, что издатель уже опубликовал, и список
+   пополняется сам. Последний удачный ответ держим в хранилище — чтобы экран
+   не пустовал, когда связи нет. */
+let chanGot = false;
+const датаПоста = d => {
+  if(!d) return '';
+  const [г, м, ч] = d.split('-');
+  return +ч + ' ' + МЕС[+м - 1] + (+г === new Date().getFullYear() ? '' : ' ' + г);
+};
+function chanDraw(список, свежее){
+  const el = $('#chan');
+  if(!el) return;
+  if(!список.length){
+    el.innerHTML = `<p style="font-size:14px;color:var(--soft);margin:0">
+      ${свежее ? 'В канале пока пусто — первые посты вот-вот выйдут.'
+               : 'Свежее из канала не загрузилось. Оно всегда есть в самом канале.'}</p>
+      <button class="go2" style="margin-top:10px" data-chan="1">Открыть канал →</button>`;
+    return;
+  }
+  el.innerHTML = список.map((p, i) => `
+    <div class="item post" style="animation-delay:${i*45}ms">
+      <div class="ptx">
+        <span class="when">${датаПоста(p.at)}${p.photo ? ' · с картинкой' : ''}</span>
+        <b>${esc(p.title)}</b>
+        <p>${esc(p.text).slice(0, 190).replace(/\n+/g, ' ')}${p.text.length > 190 ? '…' : ''}</p>
+        <button class="go2" data-post="${p.id}">Читать в канале →</button>
+      </div>
+    </div>`).join('') +
+    `<button class="allnews" data-chan="1">Весь канал →</button>`;
+}
+async function chanPaint(){
+  const запас = S.get('chan', null);
+  if(запас) chanDraw(запас.posts || [], false);
+  if(chanGot) return;
+  if(!API){ if(!запас) chanDraw([], false); return; }
+  try{
+    const r = await fetch(API + '/api/posts', {cache:'no-store'});
+    const j = await r.json();
+    if(j && j.ok){
+      chanGot = true;
+      S.set('chan', {posts: j.posts, channel: j.channel, at: Date.now()});
+      chanDraw(j.posts || [], true);
+    } else if(!запас) chanDraw([], false);
+  }catch(e){
+    if(!запас) chanDraw([], false);
+  }
+}
+function openPost(id){
+  const имя = (S.get('chan', {}) || {}).channel || 'ai_bez_lyudey';
+  const ссылка = 'https://t.me/' + имя + (id ? '/' + id : '');
+  if(TG && TG.openTelegramLink) TG.openTelegramLink(ссылка); else window.open(ссылка, '_blank');
+}
+
 $('#log').innerHTML = LOG.map((e,i)=>`
   <div class="item" style="display:block;padding:0;animation-delay:${i*45}ms">
     <button class="row-h" data-e="${i}" style="display:flex;gap:11px;align-items:center;padding:13px;width:100%;text-align:left">
@@ -2949,6 +3014,7 @@ function show(v, back){
   if(v === 'tools') tkPaint();
   if(v === 'favs') favPaintList();
   if(v === 'ach') achPaint();
+  if(v === 'log') chanPaint();
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('on','back'));
   const el = $('#v-'+v);
   el.classList.add('on');
@@ -3408,6 +3474,9 @@ document.addEventListener('click', e=>{
   const rt = e.target.closest('[data-retry]');
   if(rt){ openLes(payLes); return; }
   if(e.target.closest('#pop')){ $('#pop').classList.remove('on'); show('ach'); return; }
+  const пост = e.target.closest('[data-post]');
+  if(пост){ openPost(пост.dataset.post); return; }
+  if(e.target.closest('[data-chan]')){ openPost(''); return; }
   const qo = e.target.closest('[data-qo]');
   if(qo){ quizClick(qo); return; }
   const sh = e.target.closest('[data-share]');
