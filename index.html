@@ -35,8 +35,10 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16p
 /* тему переключаем одним общим переходом, а не только на body — иначе карточки прыгают */
 html.theming, html.theming *{transition:background-color .26s var(--ease),border-color .26s var(--ease),color .26s var(--ease) !important}
 @media (prefers-reduced-motion: reduce){
-  .view.on,.view.on.back{animation:fade .18s both}
-  @keyframes fade{from{opacity:0}to{opacity:1}}
+  /* Никакого fill-mode: both. Если анимация не проиграет — а в вебвью Telegram
+     это бывает — экран останется прозрачным навсегда. Видимость не должна
+     зависеть от анимации. Обжигались дважды. */
+  .view.on,.view.on.back{animation:none}
   .item,.tcard,.nx,.fx{animation:none !important}
   *{scroll-behavior:auto !important}
 }
@@ -68,6 +70,7 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 @media (max-width:380px){.tgrid{grid-template-columns:1fr}}
 
 .view{display:none}
+.view.on{opacity:1}
 .view.on{display:block;animation:inR .34s var(--ease)}
 .view.on.back{animation:inL .34s var(--ease)}
 /* пришли справа — уходим направо: путь входа и выхода один и тот же */
@@ -341,6 +344,54 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   background:var(--card);overflow:hidden}
 .slide .pic{display:block;width:100%;height:auto;background:var(--brandS)}
 .slide .cap{padding:13px 15px 15px}
+.win{min-height:232px;background:#0E1717;position:relative;overflow:hidden}
+.win.light{background:#FFFFFF}
+.wbar{display:flex;align-items:center;gap:7px;padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.07)}
+.win.light .wbar{border-bottom-color:#ECEFEC}
+.wbar .dot{width:8px;height:8px;border-radius:50%}
+.wbar .ttl{font:600 11.5px/1 var(--mono);letter-spacing:.03em;color:#7C9695;margin-left:4px}
+.win.light .wbar .ttl{color:#8A9694}
+.wbar .rt{margin-left:auto;font:600 10.5px/1 var(--mono);color:#5E7A79}
+.wbody{padding:12px 12px 14px}
+.msg{display:flex;gap:9px;margin:0 0 10px;opacity:0;transform:translateY(6px);
+  transition:opacity .2s var(--ease-out),transform .2s var(--ease-out)}
+.msg.in{opacity:1;transform:none}
+.msg .ava{flex:none;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;
+  font:700 11px/1 var(--sans);color:#fff}
+.msg .txt{font-size:13px;line-height:1.5;color:#D6E4E2;padding-top:3px}
+.win.light .msg .txt{color:#1B2726}
+.msg.user .txt{color:#9FB4B2}
+.win.light .msg.user .txt{color:#6B7877}
+.acts{display:flex;gap:14px;padding:8px 2px 0;border-top:1px solid rgba(255,255,255,.06);margin-top:10px}
+.win.light .acts{border-top-color:#EEF1EF}
+.acts span{font:600 10.5px/1 var(--mono);color:#5E7A79;letter-spacing:.03em}
+.tgw{background:#17212B;min-height:232px}
+.tgbar{display:flex;align-items:center;gap:9px;padding:10px 12px;background:#242F3D}
+.tgbar .ava{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  font:700 11px/1 var(--sans);color:#fff;background:#12666B}
+.tgbar b{font-size:13px;color:#fff}
+.tgbar span{font-size:10.5px;color:#6D8199;display:block;line-height:1.3}
+.tgb{max-width:86%;padding:7px 10px;border-radius:12px;font-size:12.5px;line-height:1.45;margin:0 0 7px;
+  opacity:0;transform:translateY(5px);transition:opacity .2s var(--ease-out),transform .2s var(--ease-out)}
+.tgb.in{opacity:1;transform:none}
+.tgb.out{margin-left:auto;background:#2B5278;color:#fff;border-bottom-right-radius:4px}
+.tgb.inb{background:#212C3A;color:#E5EDF3;border-bottom-left-radius:4px}
+.tgb .tm{display:block;text-align:right;font-size:9.5px;color:#7A8FA6;margin-top:3px}
+.tgkey{display:flex;gap:6px;margin:8px 0 0}
+.tgkey i{flex:1;padding:7px 0;text-align:center;border-radius:8px;background:#2B5278;color:#DCE9F5;
+  font:600 10.5px/1 var(--mono);font-style:normal}
+.code{font-family:var(--mono);font-size:11.5px;line-height:1.7}
+.code .ln{display:flex;gap:10px;opacity:0;transition:opacity .18s var(--ease-out)}
+.code .ln.in{opacity:1}
+.code .no{width:16px;text-align:right;color:#3E5655;flex:none}
+.code .kw{color:#79C0C4}.code .st{color:#E0A45E}.code .cm{color:#4E6B6A}.code .fn{color:#E9F1EF}
+.grid4{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.grid4 div{aspect-ratio:1;border-radius:8px;background:#1A2727;opacity:0;transition:opacity .3s var(--ease-out)}
+.grid4 div.in{opacity:1}
+.src{display:flex;gap:6px;margin-top:9px}
+.src i{flex:1;padding:7px 8px;border-radius:8px;background:rgba(255,255,255,.05);font-style:normal;
+  font:600 9.5px/1.3 var(--mono);color:#7C9695;opacity:0;transition:opacity .25s var(--ease-out)}
+.src i.in{opacity:1}
 .chatw{padding:14px 14px 4px;background:var(--brandS);min-height:214px}
 .chd{display:flex;align-items:center;gap:9px;margin:0 0 12px}
 .chd .av{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
@@ -425,12 +476,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
       <div class="track" id="hi-track"></div>
       <div class="dots" id="hi-dots"></div>
     </div>
-
-    <div class="sh">Чему научитесь</div>
-    <div class="slides">
-      <div class="track" id="hi-track2"></div>
-      <div class="dots" id="hi-dots2"></div>
-    </div>
+    <button class="buy2" style="margin:0 14px 18px;width:calc(100% - 28px)" data-go="tools">Каталог нейросетей</button>
 
     <div class="sh">В цифрах</div>
     <div class="nums" id="hi-nums"></div>
@@ -466,12 +512,11 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   </div>
 
   <div class="view" id="v-study">
-    <div class="hero">
-      <h3>Начни с нуля</h3>
-      <p>Шесть разделов: от первого разговора с нейросетью до агента, который ведёт канал сам.</p>
-      <button class="go" id="hero-go" data-sec="0">Открыть первый урок</button>
-      <span class="prog" id="hero-prog"></span>
+    <div class="slides" style="margin-top:2px">
+      <div class="track" id="st-track"></div>
+      <div class="dots" id="st-dots"></div>
     </div>
+    <button class="go" id="hero-go" data-sec="0" style="margin:0 14px 18px;width:calc(100% - 28px)">Открыть первый урок</button>
     <div class="sh">Разделы · два открыты</div>
     <div class="stack" id="secs"></div>
 
@@ -479,7 +524,6 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="news" id="news-home"></div>
     <button class="allnews" data-go="news">Все обновления →</button>
 
-    <button class="allnews" data-hello="1">О курсе и полном доступе →</button>
     <p class="foot">Открытые разделы не закроются никогда.<br>Их можно проходить сколько угодно раз.</p>
   </div>
 
@@ -586,8 +630,6 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <span class="tx"><b>Недавно открытое</b><span id="p-rec">пока пусто</span></span><span class="ch">›</span></button>
       <button class="row" data-go="news"><span class="ic i3 sm">✦</span>
         <span class="tx"><b>Что нового</b><span id="p-news">обновления курса</span></span><span class="ch">›</span></button>
-      <button class="row" data-hello="1"><span class="ic i6 sm">◈</span>
-        <span class="tx"><b>Что внутри и что дальше</b><span>приветствие и дорожная карта</span></span><span class="ch">›</span></button>
     </div>
     <div class="sh">Поддержка</div>
     <div class="grp">
@@ -1497,15 +1539,6 @@ function paintProgress(){
       ? `${n} ${word} · <span class="pg"><i style="width:${p.pct}%"></i></span> ${p.done} из ${p.total}`
       : `${n} ${word}`;
   });
-  // шкала в герое: по сегменту на раздел, заполнение — по прочитанному
-  const hp = $('#hero-prog');
-  if(hp) hp.innerHTML = SECS.map((_,i)=>{
-    const p = secProgress(i);
-    if(!p.total) return '<i></i>';                       // закрытый раздел — пустой сегмент
-    if(p.pct >= 100) return '<i class="d"></i>';
-    return `<i><b style="width:${p.pct}%"></b></i>`;
-  }).join('');
-
   // герой: продолжить с того места
   const nx = nextUnread(), h = $('#hero-go');
   if(h){
@@ -1538,72 +1571,118 @@ const ROAD = [
    у слайда, который человек сейчас видит; при выключенных анимациях текст
    показывается сразу целиком. */
 const TOOLSLIDES = [
-  {k:'chatgpt', n:'ChatGPT', c:'#10A37F', ask:'Перепиши это письмо клиенту: коротко и без канцелярита',
-   say:'Готово. Убрал «в связи с вышеизложенным» и три причастных оборота — стало 4 строки вместо 11. Смысл и просьба сохранены.',
-   cap:'Универсал на каждый день: письма, тексты, разбор файлов и таблиц.'},
-  {k:'claude', n:'Claude', c:'#C86A4A', ask:'Вот договор на 14 страниц. Что здесь опасного лично для меня?',
-   say:'Три пункта создают обязанности для вас: 4.2 — штраф без предупреждения, 6.1 — автопродление, 9.3 — споры в чужом городе. Цитирую по номерам.',
-   cap:'Длинные документы и код. Держит контекст и не теряет нить на середине.'},
-  {k:'midjourney', n:'Midjourney', c:'#4A4AC8', ask:'Обложка для поста: приборная панель, спокойные цвета, без людей',
-   say:'Сделал четыре варианта. Второй ближе к вашей палитре — могу поднять контраст и убрать блики.',
-   cap:'Картинки, на которые приятно смотреть. Стиль держится от кадра к кадру.'},
-  {k:'perplexity', n:'Perplexity', c:'#20808D', ask:'Что изменилось в законе о рекламе в этом месяце?',
-   say:'Нашёл три изменения, каждое со ссылкой на источник и датой. Одно ещё не вступило в силу — отметил отдельно.',
-   cap:'Когда нужны источники, а не пересказ по памяти. Каждый факт со ссылкой.'},
-  {k:'whisper', n:'Whisper', c:'#5A6ACF', ask:'Расшифруй часовую встречу и выдели, кто что пообещал',
-   say:'Готово: 8 200 слов, четыре голоса. Обещания собрал отдельным списком с таймкодами.',
-   cap:'Звук в текст: встречи, интервью, голосовые. Русский держит уверенно.'}
+  {k:'chatgpt', n:'ChatGPT', c:'#10A37F', light:true, app:'chatgpt.com',
+   ask:'Перепиши письмо клиенту: коротко, без канцелярита',
+   say:'Готово. Убрал «в связи с вышеизложенным» и три причастных оборота — стало четыре строки вместо одиннадцати. Просьба и срок на месте.',
+   acts:['Копировать','Ещё вариант','Поделиться']},
+  {k:'claude', n:'Claude', c:'#C8724A', light:false, app:'claude.ai',
+   ask:'Договор на 14 страниц. Что здесь опасного лично для меня?',
+   say:'Три пункта создают обязанности именно для вас: 4.2 — штраф без предупреждения, 6.1 — автопродление на год, 9.3 — споры в чужом городе. Цитирую по номерам.',
+   acts:['Копировать','Проверить цитаты','В документ']},
+  {k:'perplexity', n:'Perplexity', c:'#20808D', light:false, app:'perplexity.ai',
+   ask:'Что изменилось в законе о рекламе в этом месяце?',
+   say:'Нашёл три изменения. Каждое — с датой и ссылкой на первоисточник. Одно ещё не вступило в силу, отметил отдельно.',
+   acts:['Источники','Уточнить','Экспорт'], sources:['pravo.gov.ru','fas.gov.ru','consultant.ru']},
+  {k:'midjourney', n:'Midjourney', c:'#4A4AC8', light:false, app:'midjourney.com',
+   ask:'Обложка поста: приборная панель, спокойные цвета, без людей',
+   say:'Четыре варианта готовы. Второй ближе к вашей палитре — могу поднять контраст.',
+   acts:['Варианты','Увеличить','Ещё'], grid:true},
+  {k:'whisper', n:'Whisper', c:'#5A6ACF', light:false, app:'локально на компьютере',
+   ask:'Расшифруй часовую встречу и выдели, кто что пообещал',
+   say:'8 200 слов, четыре голоса. Обещания собрал отдельным списком с таймкодами: 14:20 — прислать смету, 31:05 — согласовать макет.',
+   acts:['Текст','Таймкоды','Субтитры']}
 ];
 
 const LESSONSLIDES = [
-  {sec:'Свой телеграм-бот', c:'#12666B', title:'Бот, который публикует сам',
-   lines:[['$','curl .../sendMessage --data-urlencode "text@post.txt"'],
-          ['>','{"ok":true,"message_id":42}'],
-          ['#','пост в канале, человек не участвовал']],
-   cap:'Пробный урок открыт целиком: бот, права, первая публикация.'},
-  {sec:'Вайбкодинг', c:'#4E5A58', title:'Код словами, а не руками',
-   lines:[['$','напиши скрипт, который сам публикует по расписанию'],
-          ['>','создал publish.py, добавил проверку прав и запись в журнал'],
-          ['#','вы правите смысл, а не синтаксис']],
+  {kind:'tg', sec:'Свой телеграм-бот', title:'Бот публикует сам',
+   bot:'ИИ без людей', status:'бот', 
+   msgs:[['out','/publish пост про новую модель','12:04'],
+         ['in','Проверил права в канале: публикация разрешена.','12:04'],
+         ['in','Опубликовано. message_id 42, канал «ИИ без людей».','12:04']],
+   keys:['Открыть пост','Ещё раз','Отменить'],
+   cap:'Пробный урок открыт целиком: бот, права и первая публикация.'},
+  {kind:'code', sec:'Вайбкодинг', title:'Код словами, а не руками', file:'publish.py',
+   lines:[['cm','# запускается по расписанию, токен из .env'],
+          ['kw','import os, json, urllib.request'],
+          ['fn','def publish(text):'],
+          ['st','    token = os.environ["TG_BOT_TOKEN"]'],
+          ['fn','    return call("sendMessage", text=text)']],
    cap:'Как ставить задачу нейросети-программисту и проверять, что она не соврала.'},
-  {sec:'Видео с озвучкой', c:'#14757A', title:'Ролик собирается кодом',
+  {kind:'term', sec:'Видео с озвучкой', title:'Ролик собирается кодом', file:'build.py oplata',
    lines:[['$','python build.py oplata'],
-          ['>','озвучил 14 реплик, склеил паузы, собрал субтитры'],
-          ['#','повторяемо и без выдумок нейросети']],
-   cap:'Синтез речи без роботизма, ударения руками и монтаж с точностью до кадра.'},
-  {sec:'Агент без человека', c:'#0F5E63', title:'Работает, пока вы спите',
+          ['>','озвучено 14 реплик · склейка пауз 0.16/0.42'],
+          ['>','рендер 1280×720 · 73 сек'],
+          ['#','готово: out/oplata.mp4']],
+   cap:'Синтез речи без роботизма и монтаж с точностью до кадра.'},
+  {kind:'term', sec:'Агент без человека', title:'Работает, пока вы спите', file:'agent',
    lines:[['$','systemctl status agent'],
-          ['>','active (running) · опубликовано 3 поста за сутки'],
-          ['#','память между запусками и проверки до публикации']],
-   cap:'Финал курса: расписание, память и то, без чего агент однажды напишет лишнее.'}
+          ['>','active (running) · uptime 6d 14h'],
+          ['>','за сутки: 3 поста, 11 ответов, 0 ошибок'],
+          ['#','проверки пройдены до публикации']],
+   cap:'Расписание, память между запусками и проверки перед публикацией.'}
 ];
 
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function chatSlide(t){
-  return `<div class="slide" data-type="chat" data-key="${t.k}">
-    <div class="chatw">
-      <div class="chd"><span class="av" style="background:${t.c}">${t.n[0]}</span>
-        <b>${t.n}</b><span data-status>печатает…</span></div>
-      <div class="bub me" data-ask>${t.ask}</div>
-      <div class="bub ai" data-say><span data-text></span><span class="car"></span></div>
+  return `<div class="slide" data-kind="chat" data-key="${t.k}">
+    <div class="win ${t.light?'light':''}">
+      <div class="wbar">
+        <span class="dot" style="background:${t.c}"></span>
+        <span class="dot" style="background:rgba(140,160,158,.35)"></span>
+        <span class="dot" style="background:rgba(140,160,158,.2)"></span>
+        <span class="ttl">${t.app}</span><span class="rt" data-status>онлайн</span>
+      </div>
+      <div class="wbody">
+        <div class="msg user" data-ask>
+          <span class="ava" style="background:#6B7877">Я</span>
+          <span class="txt">${t.ask}</span></div>
+        <div class="msg" data-say>
+          <span class="ava" style="background:${t.c}">${t.n[0]}</span>
+          <span class="txt"><span data-text></span><span class="car"></span></span></div>
+        ${t.grid?`<div class="grid4">${[0,1,2,3].map(n=>`<div data-cell="${n}"></div>`).join('')}</div>`:''}
+        ${t.sources?`<div class="src">${t.sources.map((x,n)=>`<i data-src="${n}">${x}</i>`).join('')}</div>`:''}
+        <div class="acts">${t.acts.map(a=>`<span>${a}</span>`).join('')}</div>
+      </div>
     </div>
-    <div class="cap"><b>${t.n}</b><span>${t.cap}</span>
-      <button class="buy2" style="margin-top:10px" data-tool-go="${t.k}">Открыть разбор</button></div>
+    <div class="cap"><b>${t.n}</b><span>${TL[t.k]?TL[t.k].d||'':''}</span></div>
   </div>`;
 }
-function termSlide(l, i){
-  return `<div class="slide" data-type="term" data-sec="${l.sec}">
-    <div class="chatw" style="background:#101A1A">
-      <div class="chd"><span class="av" style="background:${l.c}">▤</span>
-        <b style="color:#E9F1EF">${l.title}</b><span data-status>·</span></div>
-      ${l.lines.map((_,n)=>`<div class="bub ai" data-line="${n}"
-        style="background:#16292A;border-color:#22383A;color:#CFE3E1;font-family:var(--mono);font-size:12px;max-width:100%">
-        <span data-text></span></div>`).join('')}
-    </div>
-    <div class="cap"><b>${l.title}</b><span>${l.cap}</span>
-      <button class="buy2" style="margin-top:10px" data-sec-name="${l.sec}">Открыть раздел</button></div>
-  </div>`;
+
+function lessonSlide(l){
+  let inner = '';
+  if(l.kind==='tg'){
+    inner = `<div class="win tgw">
+      <div class="tgbar"><span class="ava">И</span>
+        <span><b>${l.bot}</b><span data-status>${l.status}</span></span></div>
+      <div class="wbody">
+        ${l.msgs.map((m,n)=>`<div class="tgb ${m[0]==='out'?'out':'inb'}" data-line="${n}">
+          <span data-text></span><span class="tm">${m[2]}</span></div>`).join('')}
+        <div class="tgkey">${l.keys.map(k=>`<i>${k}</i>`).join('')}</div>
+      </div></div>`;
+  } else if(l.kind==='code'){
+    inner = `<div class="win">
+      <div class="wbar"><span class="dot" style="background:#E0A45E"></span>
+        <span class="dot" style="background:rgba(140,160,158,.35)"></span>
+        <span class="dot" style="background:rgba(140,160,158,.2)"></span>
+        <span class="ttl">${l.file}</span><span class="rt" data-status>изменён</span></div>
+      <div class="wbody code">
+        ${l.lines.map((x,n)=>`<div class="ln" data-line="${n}">
+          <span class="no">${n+1}</span><span class="${x[0]}" data-text></span></div>`).join('')}
+      </div></div>`;
+  } else {
+    inner = `<div class="win">
+      <div class="wbar"><span class="dot" style="background:#12666B"></span>
+        <span class="dot" style="background:rgba(140,160,158,.35)"></span>
+        <span class="dot" style="background:rgba(140,160,158,.2)"></span>
+        <span class="ttl">${l.file}</span><span class="rt" data-status>·</span></div>
+      <div class="wbody code">
+        ${l.lines.map((x,n)=>`<div class="ln" data-line="${n}">
+          <span class="no">${x[0]}</span><span class="${x[0]==='#'?'cm':(x[0]==='>'?'st':'fn')}" data-text></span></div>`).join('')}
+      </div></div>`;
+  }
+  return `<div class="slide" data-kind="lesson" data-sec="${l.sec}">${inner}
+    <div class="cap"><b>${l.title}</b><span>${l.cap}</span></div></div>`;
 }
 
 /** Печатает текст в узел. Возвращает функцию отмены. */
@@ -1621,73 +1700,48 @@ function typeInto(node, text, speed, done){
 }
 
 function playChat(slide){
+  const t = TOOLSLIDES.find(x=>x.k===slide.dataset.key);
   const ask = slide.querySelector('[data-ask]'), say = slide.querySelector('[data-say]');
   const out = slide.querySelector('[data-text]'), st = slide.querySelector('[data-status]');
-  const full = TOOLSLIDES.find(t=>t.k===slide.dataset.key).say;
-  out.textContent = ''; ask.classList.remove('in'); say.classList.remove('in');
+  const cells = [...slide.querySelectorAll('[data-cell]')], srcs = [...slide.querySelectorAll('[data-src]')];
+  out.textContent = '';
+  [ask, say].forEach(x=>x.classList.remove('in'));
+  cells.concat(srcs).forEach(x=>x.classList.remove('in'));
   const timers = [];
   timers.push(setTimeout(()=>ask.classList.add('in'), 120));
-  timers.push(setTimeout(()=>{ say.classList.add('in'); st.textContent = 'печатает…';
-    const cancel = typeInto(out, full, 18, ()=>{ st.textContent = 'ответил'; });
-    timers.push({cancel});
-  }, 700));
-  return ()=>timers.forEach(t => t && (t.cancel ? t.cancel() : clearTimeout(t)));
+  timers.push(setTimeout(()=>{
+    say.classList.add('in'); st.textContent = 'печатает…';
+    timers.push({cancel: typeInto(out, t.say, 16, ()=>{
+      st.textContent = 'ответил';
+      cells.forEach((c,n)=>timers.push(setTimeout(()=>c.classList.add('in'), 90*n)));
+      srcs.forEach((c,n)=>timers.push(setTimeout(()=>c.classList.add('in'), 90*n)));
+    })});
+  }, 620));
+  return ()=>timers.forEach(x => x && (x.cancel ? x.cancel() : clearTimeout(x)));
 }
-function playTerm(slide){
+
+function playLesson(slide){
+  const l = LESSONSLIDES.find(x=>x.sec===slide.dataset.sec);
   const rows = [...slide.querySelectorAll('[data-line]')];
-  const data = LESSONSLIDES.find(l=>l.sec===slide.dataset.sec).lines;
+  const st = slide.querySelector('[data-status]');
   rows.forEach(r=>{ r.classList.remove('in'); r.querySelector('[data-text]').textContent=''; });
   const timers = [];
-  let delay = 150;
+  let delay = 180;
   rows.forEach((r,n)=>{
+    const text = l.kind==='tg' ? l.msgs[n][1] : (l.kind==='code' ? l.lines[n][1] : l.lines[n][1]);
+    const speed = l.kind==='tg' ? 16 : 13;
     timers.push(setTimeout(()=>{
       r.classList.add('in');
-      const [mark, text] = data[n];
-      const cancel = typeInto(r.querySelector('[data-text]'), mark + ' ' + text, n===0 ? 22 : 14);
-      timers.push({cancel});
+      if(st && l.kind==='tg') st.textContent = n < rows.length-1 ? 'печатает…' : 'бот';
+      timers.push({cancel: typeInto(r.querySelector('[data-text]'), text, speed)});
     }, delay));
-    delay += 900 + data[n][1].length * (n===0 ? 22 : 14);
+    delay += 520 + text.length * speed;
   });
-  return ()=>timers.forEach(t => t && (t.cancel ? t.cancel() : clearTimeout(t)));
-}
-
-function carousel(trackSel, dotsSel, html, play){
-  const track = $(trackSel), dots = $(dotsSel);
-  if(!track) return;
-  track.innerHTML = html;
-  dots.innerHTML = [...track.children].map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('');
-  const slides = [...track.children];
-  let idx = 0, timer = null, pause = 0, stopPlay = null;
-
-  const paint = () => [...dots.children].forEach((d,i)=>d.classList.toggle('on', i===idx));
-  const run = () => { stopPlay && stopPlay(); stopPlay = play(slides[idx]); };
-  const goto = i => {
-    idx = (i + slides.length) % slides.length;
-    const to = slides[idx].offsetLeft - track.offsetLeft - 8;
-    track.scrollTo({left: to, behavior: REDUCE ? 'auto' : 'smooth'});
-    // плавную прокрутку выполняют не везде — если не доехало, двигаем жёстко
-    setTimeout(()=>{ if(Math.abs(track.scrollLeft - to) > 24) track.scrollLeft = to; }, 500);
-    paint(); run();
-  };
-  const tickSlide = () => { if(Date.now() >= pause) goto(idx+1); };
-  const start = () => { if(!timer){ timer = setInterval(tickSlide, 7000); run(); } };
-  const stop  = () => { clearInterval(timer); timer = null; stopPlay && stopPlay(); stopPlay = null; };
-
-  ['pointerdown','touchstart'].forEach(e =>
-    track.addEventListener(e, ()=>{ pause = Date.now() + 12000; }, {passive:true}));
-  track.addEventListener('scroll', ()=>{
-    const near = slides.findIndex(sl => Math.abs(sl.offsetLeft - track.offsetLeft - track.scrollLeft) < sl.offsetWidth/2);
-    if(near>-1 && near!==idx){ idx = near; paint(); run(); }
-  }, {passive:true});
-
-  const tick = () => ($('#v-hello').classList.contains('on') && !document.hidden) ? start() : stop();
-  document.addEventListener('visibilitychange', tick);
-  setInterval(tick, 1500);
-  tick();
+  return ()=>timers.forEach(x => x && (x.cancel ? x.cancel() : clearTimeout(x)));
 }
 
 carousel('#hi-track', '#hi-dots', TOOLSLIDES.map(chatSlide).join(''), playChat);
-carousel('#hi-track2', '#hi-dots2', LESSONSLIDES.map(termSlide).join(''), playTerm);
+carousel('#st-track', '#st-dots', LESSONSLIDES.map(lessonSlide).join(''), playLesson);
 
 /* ---------- приветствие ---------- */
 const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
