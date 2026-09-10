@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
 :root{
+  --ease-out:cubic-bezier(.23,1,.32,1);
   --bg:#FBFBF9; --card:#F3F4F0; --line:#E6E7E1; --line2:#D5D7CF;
   --ink:#14201F; --soft:#4E5A58; --faint:#5F6A68;
   --brand:#0F5E63; --brandS:#E4EFEF; --brand2:#14757A;
@@ -340,6 +341,22 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   background:var(--card);overflow:hidden}
 .slide .pic{display:block;width:100%;height:auto;background:var(--brandS)}
 .slide .cap{padding:13px 15px 15px}
+.chatw{padding:14px 14px 4px;background:var(--brandS);min-height:214px}
+.chd{display:flex;align-items:center;gap:9px;margin:0 0 12px}
+.chd .av{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+  font:700 13px/1 var(--sans);color:#fff}
+.chd b{font-size:14px;color:var(--ink)}
+.chd span{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-left:auto}
+.bub{max-width:88%;padding:9px 12px;border-radius:14px;font-size:13.5px;line-height:1.45;
+  opacity:0;transform:translateY(6px);transition:opacity .2s var(--ease-out),transform .2s var(--ease-out)}
+.bub.in{opacity:1;transform:none}
+.bub.me{margin:0 0 8px auto;background:var(--brand);color:#fff;border-bottom-right-radius:5px}
+.bub.ai{margin:0 0 10px;background:var(--bg);color:var(--ink);border-bottom-left-radius:5px;
+  border:1px solid var(--line2)}
+.bub .car{display:inline-block;width:2px;height:1em;vertical-align:-2px;margin-left:1px;
+  background:var(--brand);animation:blink 1s steps(2,start) infinite}
+@keyframes blink{to{visibility:hidden}}
+@media (prefers-reduced-motion:reduce){.bub .car{animation:none}}
 .slide .cap b{display:block;font-size:15.5px;margin:0 0 4px;color:var(--ink)}
 .slide .cap span{font-size:13.5px;line-height:1.5;color:var(--soft)}
 .dots{display:flex;gap:6px;justify-content:center;margin:0 0 4px}
@@ -401,9 +418,16 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
          разобранных нейросетей: что умеет, сколько стоит, кому подходит, а кому нет.</p>
     </div>
 
+    <div class="sh">Нейросети внутри</div>
     <div class="slides">
       <div class="track" id="hi-track"></div>
       <div class="dots" id="hi-dots"></div>
+    </div>
+
+    <div class="sh">Чему научитесь</div>
+    <div class="slides">
+      <div class="track" id="hi-track2"></div>
+      <div class="dots" id="hi-dots2"></div>
     </div>
 
     <div class="sh">В цифрах</div>
@@ -1504,102 +1528,161 @@ const ROAD = [
 ].map(([i,t,d])=>`<div><i>${i}</i><div><b>${t}</b><span>${d}</span></div></div>`).join('');
 
 /* ---------- слайд-шоу на приветствии ----------
-   Не видео: рисованные картинки в палитре приложения. Крутится само,
-   но останавливается, как только человек трогает — навязчивая карусель хуже её отсутствия. */
-const SLIDES = [
-  ['Запрос, который работает',
-   'Четыре вещи — роль, задача, рамки, материал. Разбор на настоящей переписке: как выглядит шаблонный ответ и как тот же вопрос даёт ответ по делу.',
-   `<rect width="640" height="360" fill="#E4EFEF"/>
-    <rect x="40" y="42" width="330" height="44" rx="14" fill="#FFFFFF"/>
-    <rect x="60" y="58" width="210" height="12" rx="6" fill="#C3D6D5"/>
-    <rect x="230" y="108" width="370" height="86" rx="14" fill="#12666B"/>
-    <rect x="252" y="130" width="300" height="11" rx="5.5" fill="#8FC7C9"/>
-    <rect x="252" y="152" width="250" height="11" rx="5.5" fill="#8FC7C9"/>
-    <rect x="252" y="174" width="180" height="11" rx="5.5" fill="#8FC7C9"/>
-    <rect x="40" y="218" width="420" height="44" rx="14" fill="#FFFFFF"/>
-    <rect x="60" y="234" width="330" height="12" rx="6" fill="#C3D6D5"/>
-    <rect x="40" y="286" width="150" height="34" rx="17" fill="#E08A2B"/>`],
-  ['Двадцать одна нейросеть разобрана',
-   'Что умеет, сколько стоит, работает ли из России и кому честно не подходит. Без рейтингов — с проверкой на вашей задаче.',
-   `<rect width="640" height="360" fill="#F3F4F0"/>
-    ${[0,1,2,3,4,5].map(i=>`<g transform="translate(${44+(i%3)*186},${52+Math.floor(i/3)*136})">
-      <rect width="164" height="112" rx="18" fill="#FFFFFF"/>
-      <rect x="18" y="20" width="52" height="52" rx="16" fill="${['#12666B','#17858B','#E08A2B','#4E5A58','#14757A','#0F5E63'][i]}"/>
-      <rect x="18" y="84" width="104" height="10" rx="5" fill="#D9E0DD"/>
-      <rect x="82" y="30" width="62" height="9" rx="4.5" fill="#E1E7E4"/>
-      <rect x="82" y="48" width="44" height="9" rx="4.5" fill="#E9EEEB"/></g>`).join('')}`],
-  ['Схемы вместо стен текста',
-   'В каждом уроке — экран настоящей переписки, схема происходящего и готовый промпт с кнопкой копирования.',
-   `<rect width="640" height="360" fill="#E4EFEF"/>
-    ${[0,1,2,3].map(i=>`<g transform="translate(56,${44+i*76})">
-      <circle cx="20" cy="26" r="20" fill="#12666B"/>
-      <text x="20" y="33" text-anchor="middle" font-family="Helvetica" font-size="20" font-weight="700" fill="#FFFFFF">${i+1}</text>
-      <rect x="56" y="10" width="${300-i*40}" height="13" rx="6.5" fill="#FFFFFF"/>
-      <rect x="56" y="32" width="${210-i*30}" height="11" rx="5.5" fill="#CBDDDC"/>
-      ${i<3?'<rect x="18" y="48" width="4" height="28" rx="2" fill="#B9D2D1"/>':''}</g>`).join('')}
-    <rect x="452" y="250" width="132" height="40" rx="14" fill="#E08A2B"/>`],
-  ['Свой бот за вечер',
-   'Пробный урок открыт целиком: бот, права в канале, первая публикация — и разбор пяти ошибок, на которых спотыкаются все.',
-   `<rect width="640" height="360" fill="#F3F4F0"/>
-    <rect x="196" y="26" width="248" height="308" rx="34" fill="#101A1A"/>
-    <rect x="210" y="58" width="220" height="244" rx="18" fill="#16292A"/>
-    <rect x="228" y="80" width="150" height="12" rx="6" fill="#2E4A4B"/>
-    <rect x="228" y="112" width="184" height="52" rx="14" fill="#12666B"/>
-    <rect x="246" y="130" width="130" height="10" rx="5" fill="#7FBCBE"/>
-    <rect x="246" y="146" width="96" height="10" rx="5" fill="#7FBCBE"/>
-    <rect x="228" y="182" width="150" height="40" rx="14" fill="#22383A"/>
-    <rect x="228" y="244" width="184" height="40" rx="14" fill="#E08A2B"/>`],
-  ['Агент, который ведёт канал сам',
-   'Финал курса: память между запусками, работа по расписанию без вашего компьютера и проверки, без которых он однажды опубликует лишнее.',
-   `<rect width="640" height="360" fill="#101A1A"/>
-    <circle cx="320" cy="150" r="66" fill="#12666B"/>
-    ${[0,1,2,3,4,5,6].map(i=>{const t=(i-3)/3, h=Math.max(96*Math.exp(-1.4*t*t),26);
-      return `<rect x="${252+i*20}" y="${150-h/2}" width="11" height="${h}" rx="5.5" fill="#EAF4F3"/>`}).join('')}
-    ${[0,1,2].map(i=>`<rect x="${150+i*118}" y="262" width="98" height="46" rx="16" fill="#172524"/>
-      <rect x="${168+i*118}" y="280" width="${62-i*10}" height="10" rx="5" fill="#3C5A59"/>`).join('')}
-    <circle cx="320" cy="336" r="8" fill="#E08A2B"/>`]
+   Не видео и не картинки: живые сценки. В карточке нейросети печатается
+   настоящий ответ, в карточке урока — команда в терминале. Печать идёт только
+   у слайда, который человек сейчас видит; при выключенных анимациях текст
+   показывается сразу целиком. */
+const TOOLSLIDES = [
+  {k:'chatgpt', n:'ChatGPT', c:'#10A37F', ask:'Перепиши это письмо клиенту: коротко и без канцелярита',
+   say:'Готово. Убрал «в связи с вышеизложенным» и три причастных оборота — стало 4 строки вместо 11. Смысл и просьба сохранены.',
+   cap:'Универсал на каждый день: письма, тексты, разбор файлов и таблиц.'},
+  {k:'claude', n:'Claude', c:'#C86A4A', ask:'Вот договор на 14 страниц. Что здесь опасного лично для меня?',
+   say:'Три пункта создают обязанности для вас: 4.2 — штраф без предупреждения, 6.1 — автопродление, 9.3 — споры в чужом городе. Цитирую по номерам.',
+   cap:'Длинные документы и код. Держит контекст и не теряет нить на середине.'},
+  {k:'midjourney', n:'Midjourney', c:'#4A4AC8', ask:'Обложка для поста: приборная панель, спокойные цвета, без людей',
+   say:'Сделал четыре варианта. Второй ближе к вашей палитре — могу поднять контраст и убрать блики.',
+   cap:'Картинки, на которые приятно смотреть. Стиль держится от кадра к кадру.'},
+  {k:'perplexity', n:'Perplexity', c:'#20808D', ask:'Что изменилось в законе о рекламе в этом месяце?',
+   say:'Нашёл три изменения, каждое со ссылкой на источник и датой. Одно ещё не вступило в силу — отметил отдельно.',
+   cap:'Когда нужны источники, а не пересказ по памяти. Каждый факт со ссылкой.'},
+  {k:'whisper', n:'Whisper', c:'#5A6ACF', ask:'Расшифруй часовую встречу и выдели, кто что пообещал',
+   say:'Готово: 8 200 слов, четыре голоса. Обещания собрал отдельным списком с таймкодами.',
+   cap:'Звук в текст: встречи, интервью, голосовые. Русский держит уверенно.'}
 ];
 
-(function(){
-  const track = $('#hi-track'), dots = $('#hi-dots');
-  if(!track) return;
-  track.innerHTML = SLIDES.map(([t,d,art])=>`
-    <div class="slide">
-      <svg class="pic" viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">${art}</svg>
-      <div class="cap"><b>${t}</b><span>${d}</span></div>
-    </div>`).join('');
-  dots.innerHTML = SLIDES.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('');
+const LESSONSLIDES = [
+  {sec:'Свой телеграм-бот', c:'#12666B', title:'Бот, который публикует сам',
+   lines:[['$','curl .../sendMessage --data-urlencode "text@post.txt"'],
+          ['>','{"ok":true,"message_id":42}'],
+          ['#','пост в канале, человек не участвовал']],
+   cap:'Пробный урок открыт целиком: бот, права, первая публикация.'},
+  {sec:'Вайбкодинг', c:'#4E5A58', title:'Код словами, а не руками',
+   lines:[['$','напиши скрипт, который сам публикует по расписанию'],
+          ['>','создал publish.py, добавил проверку прав и запись в журнал'],
+          ['#','вы правите смысл, а не синтаксис']],
+   cap:'Как ставить задачу нейросети-программисту и проверять, что она не соврала.'},
+  {sec:'Видео с озвучкой', c:'#14757A', title:'Ролик собирается кодом',
+   lines:[['$','python build.py oplata'],
+          ['>','озвучил 14 реплик, склеил паузы, собрал субтитры'],
+          ['#','повторяемо и без выдумок нейросети']],
+   cap:'Синтез речи без роботизма, ударения руками и монтаж с точностью до кадра.'},
+  {sec:'Агент без человека', c:'#0F5E63', title:'Работает, пока вы спите',
+   lines:[['$','systemctl status agent'],
+          ['>','active (running) · опубликовано 3 поста за сутки'],
+          ['#','память между запусками и проверки до публикации']],
+   cap:'Финал курса: расписание, память и то, без чего агент однажды напишет лишнее.'}
+];
 
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function chatSlide(t){
+  return `<div class="slide" data-type="chat" data-key="${t.k}">
+    <div class="chatw">
+      <div class="chd"><span class="av" style="background:${t.c}">${t.n[0]}</span>
+        <b>${t.n}</b><span data-status>печатает…</span></div>
+      <div class="bub me" data-ask>${t.ask}</div>
+      <div class="bub ai" data-say><span data-text></span><span class="car"></span></div>
+    </div>
+    <div class="cap"><b>${t.n}</b><span>${t.cap}</span>
+      <button class="buy2" style="margin-top:10px" data-tool-go="${t.k}">Открыть разбор</button></div>
+  </div>`;
+}
+function termSlide(l, i){
+  return `<div class="slide" data-type="term" data-sec="${l.sec}">
+    <div class="chatw" style="background:#101A1A">
+      <div class="chd"><span class="av" style="background:${l.c}">▤</span>
+        <b style="color:#E9F1EF">${l.title}</b><span data-status>·</span></div>
+      ${l.lines.map((_,n)=>`<div class="bub ai" data-line="${n}"
+        style="background:#16292A;border-color:#22383A;color:#CFE3E1;font-family:var(--mono);font-size:12px;max-width:100%">
+        <span data-text></span></div>`).join('')}
+    </div>
+    <div class="cap"><b>${l.title}</b><span>${l.cap}</span>
+      <button class="buy2" style="margin-top:10px" data-sec-name="${l.sec}">Открыть раздел</button></div>
+  </div>`;
+}
+
+/** Печатает текст в узел. Возвращает функцию отмены. */
+function typeInto(node, text, speed, done){
+  if(REDUCE){ node.textContent = text; done && done(); return ()=>{}; }
+  let i = 0, stop = false;
+  const step = () => {
+    if(stop) return;
+    node.textContent = text.slice(0, ++i);
+    if(i < text.length) setTimeout(step, speed);
+    else done && done();
+  };
+  setTimeout(step, speed);
+  return ()=>{ stop = true; };
+}
+
+function playChat(slide){
+  const ask = slide.querySelector('[data-ask]'), say = slide.querySelector('[data-say]');
+  const out = slide.querySelector('[data-text]'), st = slide.querySelector('[data-status]');
+  const full = TOOLSLIDES.find(t=>t.k===slide.dataset.key).say;
+  out.textContent = ''; ask.classList.remove('in'); say.classList.remove('in');
+  const timers = [];
+  timers.push(setTimeout(()=>ask.classList.add('in'), 120));
+  timers.push(setTimeout(()=>{ say.classList.add('in'); st.textContent = 'печатает…';
+    const cancel = typeInto(out, full, 18, ()=>{ st.textContent = 'ответил'; });
+    timers.push({cancel});
+  }, 700));
+  return ()=>timers.forEach(t => t && (t.cancel ? t.cancel() : clearTimeout(t)));
+}
+function playTerm(slide){
+  const rows = [...slide.querySelectorAll('[data-line]')];
+  const data = LESSONSLIDES.find(l=>l.sec===slide.dataset.sec).lines;
+  rows.forEach(r=>{ r.classList.remove('in'); r.querySelector('[data-text]').textContent=''; });
+  const timers = [];
+  let delay = 150;
+  rows.forEach((r,n)=>{
+    timers.push(setTimeout(()=>{
+      r.classList.add('in');
+      const [mark, text] = data[n];
+      const cancel = typeInto(r.querySelector('[data-text]'), mark + ' ' + text, n===0 ? 22 : 14);
+      timers.push({cancel});
+    }, delay));
+    delay += 900 + data[n][1].length * (n===0 ? 22 : 14);
+  });
+  return ()=>timers.forEach(t => t && (t.cancel ? t.cancel() : clearTimeout(t)));
+}
+
+function carousel(trackSel, dotsSel, html, play){
+  const track = $(trackSel), dots = $(dotsSel);
+  if(!track) return;
+  track.innerHTML = html;
+  dots.innerHTML = [...track.children].map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('');
   const slides = [...track.children];
-  let idx = 0, timer = null, pause = 0;
+  let idx = 0, timer = null, pause = 0, stopPlay = null;
+
   const paint = () => [...dots.children].forEach((d,i)=>d.classList.toggle('on', i===idx));
+  const run = () => { stopPlay && stopPlay(); stopPlay = play(slides[idx]); };
   const goto = i => {
     idx = (i + slides.length) % slides.length;
     const to = slides[idx].offsetLeft - track.offsetLeft - 8;
-    track.scrollTo({left: to, behavior:'smooth'});
-    // плавную прокрутку выполняют не везде: в неактивной вкладке и при
-    // выключенных анимациях она просто игнорируется. Тогда двигаем жёстко —
-    // движение не должно зависеть от анимации.
+    track.scrollTo({left: to, behavior: REDUCE ? 'auto' : 'smooth'});
+    // плавную прокрутку выполняют не везде — если не доехало, двигаем жёстко
     setTimeout(()=>{ if(Math.abs(track.scrollLeft - to) > 24) track.scrollLeft = to; }, 500);
-    paint();
+    paint(); run();
   };
-  const start = () => { if(!timer) timer = setInterval(tickSlide, 4500); };
-  const stop  = () => { clearInterval(timer); timer = null; };
   const tickSlide = () => { if(Date.now() >= pause) goto(idx+1); };
+  const start = () => { if(!timer){ timer = setInterval(tickSlide, 7000); run(); } };
+  const stop  = () => { clearInterval(timer); timer = null; stopPlay && stopPlay(); stopPlay = null; };
 
-  // человек листает сам — замолкаем на десять секунд, потом продолжаем
   ['pointerdown','touchstart'].forEach(e =>
-    track.addEventListener(e, ()=>{ pause = Date.now() + 10000; }, {passive:true}));
+    track.addEventListener(e, ()=>{ pause = Date.now() + 12000; }, {passive:true}));
   track.addEventListener('scroll', ()=>{
-    const near = slides.findIndex(s => Math.abs(s.offsetLeft - track.offsetLeft - track.scrollLeft) < s.offsetWidth/2);
-    if(near>-1 && near!==idx){ idx = near; paint(); }
+    const near = slides.findIndex(sl => Math.abs(sl.offsetLeft - track.offsetLeft - track.scrollLeft) < sl.offsetWidth/2);
+    if(near>-1 && near!==idx){ idx = near; paint(); run(); }
   }, {passive:true});
-  // крутим, только когда приветствие на экране и вкладка активна
+
   const tick = () => ($('#v-hello').classList.contains('on') && !document.hidden) ? start() : stop();
   document.addEventListener('visibilitychange', tick);
-  setInterval(tick, 1200);
+  setInterval(tick, 1500);
   tick();
-})();
+}
+
+carousel('#hi-track', '#hi-dots', TOOLSLIDES.map(chatSlide).join(''), playChat);
+carousel('#hi-track2', '#hi-dots2', LESSONSLIDES.map(termSlide).join(''), playTerm);
 
 /* ---------- приветствие ---------- */
 const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
@@ -2023,6 +2106,12 @@ document.addEventListener('click', e=>{
     return;
   }
   const tl = e.target.closest('[data-tl]'); if(tl){ openToolLesson(tl.dataset.tl); return; }
+  // кнопки со слайдов приветствия
+  const tg = e.target.closest('[data-tool-go]');
+  if(tg){ closeHello(false); openToolLesson(tg.dataset.toolGo); return; }
+  const sn = e.target.closest('[data-sec-name]');
+  if(sn){ const i = SECS.findIndex(x=>x.t===sn.dataset.secName);
+          closeHello(false); if(i>-1) openSec(i); return; }
   const dc = e.target.closest('[data-doc]'); if(dc){ openDoc(dc.dataset.doc); return; }
   if(e.target.closest('[data-recent]')){ paintRecent(); show('recent'); return; }
   if(e.target.closest('[data-hello]')){ show('hello'); return; }
