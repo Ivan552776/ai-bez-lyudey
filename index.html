@@ -1571,7 +1571,7 @@ const SLIDES = [
   dots.innerHTML = SLIDES.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('');
 
   const slides = [...track.children];
-  let idx = 0, timer = null, touched = false;
+  let idx = 0, timer = null, pause = 0;
   const paint = () => [...dots.children].forEach((d,i)=>d.classList.toggle('on', i===idx));
   const goto = i => {
     idx = (i + slides.length) % slides.length;
@@ -1583,11 +1583,13 @@ const SLIDES = [
     setTimeout(()=>{ if(Math.abs(track.scrollLeft - to) > 24) track.scrollLeft = to; }, 500);
     paint();
   };
-  const start = () => { if(!touched && !timer) timer = setInterval(()=>goto(idx+1), 4500); };
+  const start = () => { if(!timer) timer = setInterval(tickSlide, 4500); };
   const stop  = () => { clearInterval(timer); timer = null; };
+  const tickSlide = () => { if(Date.now() >= pause) goto(idx+1); };
 
-  // человек листает сам — больше не дёргаем
-  ['pointerdown','touchstart','wheel'].forEach(e=>track.addEventListener(e, ()=>{ touched = true; stop(); }, {passive:true}));
+  // человек листает сам — замолкаем на десять секунд, потом продолжаем
+  ['pointerdown','touchstart'].forEach(e =>
+    track.addEventListener(e, ()=>{ pause = Date.now() + 10000; }, {passive:true}));
   track.addEventListener('scroll', ()=>{
     const near = slides.findIndex(s => Math.abs(s.offsetLeft - track.offsetLeft - track.scrollLeft) < s.offsetWidth/2);
     if(near>-1 && near!==idx){ idx = near; paint(); }
