@@ -1625,7 +1625,7 @@ const LESSONSLIDES = [
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function chatSlide(t){
-  return `<div class="slide" data-kind="chat" data-key="${t.k}">
+  return `<div class="slide" data-kind="chat" data-key="${t.k}" data-tool-go="${t.k}">
     <div class="win ${t.light?'light':''}">
       <div class="wbar">
         <span class="dot" style="background:${t.c}"></span>
@@ -1681,7 +1681,7 @@ function lessonSlide(l){
           <span class="no">${x[0]}</span><span class="${x[0]==='#'?'cm':(x[0]==='>'?'st':'fn')}" data-text></span></div>`).join('')}
       </div></div>`;
   }
-  return `<div class="slide" data-kind="lesson" data-sec="${l.sec}">${inner}
+  return `<div class="slide" data-kind="lesson" data-sec="${l.sec}" data-sec-name="${l.sec}">${inner}
     <div class="cap"><b>${l.title}</b><span>${l.cap}</span></div></div>`;
 }
 
@@ -1740,8 +1740,44 @@ function playLesson(slide){
   return ()=>timers.forEach(x => x && (x.cancel ? x.cancel() : clearTimeout(x)));
 }
 
+function carousel(trackSel, dotsSel, html, play, viewSel){
+  const track = $(trackSel), dots = $(dotsSel);
+  if(!track) return;
+  track.innerHTML = html;
+  dots.innerHTML = [...track.children].map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('');
+  const slides = [...track.children];
+  let idx = 0, timer = null, pause = 0, stopPlay = null;
+
+  const paint = () => [...dots.children].forEach((d,i)=>d.classList.toggle('on', i===idx));
+  const run = () => { stopPlay && stopPlay(); stopPlay = play(slides[idx]); };
+  const goto = i => {
+    idx = (i + slides.length) % slides.length;
+    const to = slides[idx].offsetLeft - track.offsetLeft - 8;
+    track.scrollTo({left: to, behavior: REDUCE ? 'auto' : 'smooth'});
+    // плавную прокрутку выполняют не везде — если не доехало, двигаем жёстко
+    setTimeout(()=>{ if(Math.abs(track.scrollLeft - to) > 24) track.scrollLeft = to; }, 500);
+    paint(); run();
+  };
+  const tickSlide = () => { if(Date.now() >= pause) goto(idx+1); };
+  const start = () => { if(!timer){ timer = setInterval(tickSlide, 8000); run(); } };
+  const stop  = () => { clearInterval(timer); timer = null; stopPlay && stopPlay(); stopPlay = null; };
+
+  // человек листает сам — замолкаем на двенадцать секунд, потом продолжаем
+  ['pointerdown','touchstart'].forEach(e =>
+    track.addEventListener(e, ()=>{ pause = Date.now() + 12000; }, {passive:true}));
+  track.addEventListener('scroll', ()=>{
+    const near = slides.findIndex(sl => Math.abs(sl.offsetLeft - track.offsetLeft - track.scrollLeft) < sl.offsetWidth/2);
+    if(near>-1 && near!==idx){ idx = near; paint(); run(); }
+  }, {passive:true});
+
+  const tick = () => ($(viewSel || '#v-hello').classList.contains('on') && !document.hidden) ? start() : stop();
+  document.addEventListener('visibilitychange', tick);
+  setInterval(tick, 1500);
+  tick();
+}
+
 carousel('#hi-track', '#hi-dots', TOOLSLIDES.map(chatSlide).join(''), playChat);
-carousel('#st-track', '#st-dots', LESSONSLIDES.map(lessonSlide).join(''), playLesson);
+carousel('#st-track', '#st-dots', LESSONSLIDES.map(lessonSlide).join(''), playLesson, '#v-study');
 
 /* ---------- приветствие ---------- */
 const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
@@ -2167,10 +2203,12 @@ document.addEventListener('click', e=>{
   const tl = e.target.closest('[data-tl]'); if(tl){ openToolLesson(tl.dataset.tl); return; }
   // кнопки со слайдов приветствия
   const tg = e.target.closest('[data-tool-go]');
-  if(tg){ closeHello(false); openToolLesson(tg.dataset.toolGo); return; }
+  if(tg){ if($('#v-hello').classList.contains('on')) closeHello(false);
+          openToolLesson(tg.dataset.toolGo); return; }
   const sn = e.target.closest('[data-sec-name]');
   if(sn){ const i = SECS.findIndex(x=>x.t===sn.dataset.secName);
-          closeHello(false); if(i>-1) openSec(i); return; }
+          if($('#v-hello').classList.contains('on')) closeHello(false);
+          if(i>-1) openSec(i); return; }
   const dc = e.target.closest('[data-doc]'); if(dc){ openDoc(dc.dataset.doc); return; }
   if(e.target.closest('[data-recent]')){ paintRecent(); show('recent'); return; }
   if(e.target.closest('[data-hello]')){ show('hello'); return; }
