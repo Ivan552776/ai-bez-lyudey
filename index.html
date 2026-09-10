@@ -738,7 +738,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <span class="tx"><b>Ночная тема</b><span>переключается и в шапке</span></span>
         <button class="sw off" id="sw2"><i></i></button></div>
       <div class="row"><span class="ic i4 sm">◈</span>
-        <span class="tx"><b>Новые материалы</b><span>сообщать, когда выходит урок</span></span>
+        <span class="tx"><b>Новые материалы</b><span id="sw1-note">сообщать, когда выходит урок</span></span>
         <button class="sw" id="sw1"><i></i></button></div>
     </div>
     <p class="foot" id="acc-foot">Полный доступ — 500 ₽ в месяц или 4 900 ₽ за год.<br>Оплата подключается.</p>
@@ -2628,6 +2628,12 @@ function paintMe(){
   const bar = document.getElementById('subbar');
   if(!ME){ bar.hidden = true; return; }
   bar.hidden = !!ME.subscribed;
+  const sw1 = document.getElementById('sw1');
+  if(sw1 && typeof ME.notify === 'boolean'){
+    sw1.classList.toggle('off', !ME.notify);
+    const п = document.getElementById('sw1-note');
+    if(п) п.textContent = ME.notify ? 'сообщу в боте, когда выйдет урок' : 'сообщать, когда выходит урок';
+  }
   const foot = document.getElementById('acc-foot');
   if(foot && ME.paid){
     foot.innerHTML = ME.until
@@ -2808,7 +2814,20 @@ document.addEventListener('touchstart', ()=>{}, {passive:true});
 
 document.addEventListener('click', e=>{
   if(e.target.closest('#tgl') || e.target.closest('#sw2')){ night=!night; setNight(night, true); return; }
-  const sw1 = e.target.closest('#sw1'); if(sw1){ sw1.classList.toggle('off'); return; }
+  const sw1 = e.target.closest('#sw1');
+  if(sw1){
+    const включаем = sw1.classList.contains('off');
+    sw1.classList.toggle('off', !включаем);
+    S.set('notify', включаем);
+    // без сервера обещание было бы пустым: он запоминает, кому писать
+    post('/api/notify', {on: включаем}).then(r => {
+      const подпись = $('#sw1-note');
+      if(!подпись) return;
+      if(!r) подпись.textContent = 'не получилось сохранить — попробуйте позже';
+      else подпись.textContent = r.on ? 'сообщу в боте, когда выйдет урок' : 'сообщать не буду';
+    });
+    return;
+  }
 
   const pb = e.target.closest('.pb');
   if(pb){
