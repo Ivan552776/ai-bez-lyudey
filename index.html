@@ -461,6 +461,20 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .toc a.seen .n:after{content:'✓'}
 .toc a.seen .n span{display:none}
 /* кнопка возврата к карте: появляется, когда оглавление уехало вверх */
+.chapnav{display:flex;align-items:center;gap:11px;width:100%;margin:18px 0 26px;padding:12px 14px;
+  border:1px solid var(--line2);border-radius:15px;background:var(--card);text-align:left;
+  min-height:52px;transition:border-color .16s var(--ease),background-color .16s var(--ease)}
+.chapnav:active{border-color:var(--brand);background:var(--brandS)}
+.chapnav .n{flex:none;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+  background:var(--brandS);color:var(--brand);font:700 12px/1 var(--mono)}
+.chapnav .tx{flex:1;min-width:0}
+.chapnav .tx span{display:block;font:600 10.5px/1 var(--mono);color:var(--faint);
+  letter-spacing:.04em;text-transform:uppercase;margin:0 0 4px}
+.chapnav .tx b{display:block;font-size:14.5px;line-height:1.35;color:var(--ink);font-weight:600}
+.chapnav .ch{flex:none;color:var(--faint);font-size:17px}
+.chapend{display:flex;gap:10px;margin:18px 0 26px}
+.chapend button{flex:1;min-height:46px;border:1px solid var(--line2);border-radius:14px;
+  background:var(--card);color:var(--soft);font:600 12.5px/1.2 var(--sans);padding:8px 10px}
 .totoc{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 74px);
   transform:translate(-50%,14px);z-index:40;display:flex;align-items:center;gap:7px;
   padding:9px 15px;border-radius:999px;background:var(--ink);color:var(--bg);
@@ -594,7 +608,6 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   </div>
 
   <button class="up" id="up" aria-label="Наверх" hidden>↑</button>
-  <button class="totoc" id="to-toc" type="button">↑ Оглавление</button>
 
   <!-- ===== ЗАКРЫТЫЙ УРОК ===== -->
   <div class="view" id="v-pay">
@@ -1749,6 +1762,25 @@ function typeInto(node, text, speed, done){
   return ()=>{ stop = true; };
 }
 
+/** Показывает слайд в готовом виде — без анимации. Нужно соседним слайдам:
+    они видны краем, и пустые окна выглядят поломкой. */
+function fillChat(slide){
+  const t = TOOLSLIDES.find(x=>x.k===slide.dataset.key);
+  slide.querySelectorAll('[data-ask],[data-say]').forEach(x=>x.classList.add('in'));
+  slide.querySelector('[data-text]').textContent = t.say;
+  slide.querySelector('[data-status]').textContent = 'ответил';
+  slide.querySelectorAll('[data-cell],[data-src]').forEach(x=>x.classList.add('in'));
+}
+function fillLesson(slide){
+  const l = LESSONSLIDES.find(x=>x.sec===slide.dataset.sec);
+  slide.querySelectorAll('[data-line]').forEach((r,n)=>{
+    r.classList.add('in');
+    r.querySelector('[data-text]').textContent = l.kind==='tg' ? l.msgs[n][1] : l.lines[n][1];
+  });
+  const st = slide.querySelector('[data-status]');
+  if(st && l.kind==='tg') st.textContent = 'бот';
+}
+
 function playChat(slide){
   const t = TOOLSLIDES.find(x=>x.k===slide.dataset.key);
   const ask = slide.querySelector('[data-ask]'), say = slide.querySelector('[data-say]');
@@ -1798,8 +1830,19 @@ function carousel(trackSel, dotsSel, html, play, viewSel){
   const slides = [...track.children];
   let idx = 0, timer = null, pause = 0, stopPlay = null;
 
+  // все слайды сразу в готовом виде: соседние видны краем экрана
+  const fill = play === playChat ? fillChat : fillLesson;
+  slides.forEach(fill);
+
   const paint = () => [...dots.children].forEach((d,i)=>d.classList.toggle('on', i===idx));
-  const run = () => { stopPlay && stopPlay(); stopPlay = play(slides[idx]); };
+  const run = () => {
+    stopPlay && stopPlay();
+    const sl = slides[idx];
+    // печатаем каждый слайд один раз; дальше он просто остаётся заполненным
+    if(sl.dataset.played){ stopPlay = null; fill(sl); return; }
+    sl.dataset.played = '1';
+    stopPlay = play(sl);
+  };
   const goto = i => {
     idx = (i + slides.length) % slides.length;
     const to = slides[idx].offsetLeft - track.offsetLeft - 8;
@@ -1810,7 +1853,10 @@ function carousel(trackSel, dotsSel, html, play, viewSel){
   };
   const tickSlide = () => { if(Date.now() >= pause) goto(idx+1); };
   const start = () => { if(!timer){ timer = setInterval(tickSlide, 8000); run(); } };
-  const stop  = () => { clearInterval(timer); timer = null; stopPlay && stopPlay(); stopPlay = null; };
+  const stop  = () => {
+    clearInterval(timer); timer = null;
+    if(stopPlay){ stopPlay(); stopPlay = null; fill(slides[idx]); }
+  };
 
   // человек листает сам — замолкаем на двенадцать секунд, потом продолжаем
   ['pointerdown','touchstart'].forEach(e =>
@@ -1948,14 +1994,48 @@ function buildToc(bodyId, tocId){
     };
   });
   tocSpy({box, hs});
+  chapterNav(bodyId);
+}
+
+/** В конце каждой главы — переход к следующей. Человек дочитал часть и сразу
+    выбирает, куда дальше, а не ищет, как вернуться к оглавлению. */
+function chapterNav(bodyId){
+  const body = $(bodyId || '#l-body');
+  const hs = [...body.querySelectorAll('h4')];
+  if(hs.length < 3) return;
+  hs.forEach((h, i) => {
+    const next = hs[i+1];
+    const nav = document.createElement(next ? 'button' : 'div');
+    if(next){
+      nav.className = 'chapnav';
+      nav.type = 'button';
+      nav.dataset.to = next.id;
+      nav.innerHTML = `<span class="n">${i+2}</span>
+        <span class="tx"><span>Следующая часть</span><b>${next.textContent}</b></span>
+        <span class="ch">↓</span>`;
+      nav.onclick = ()=> scrollTo({top: next.getBoundingClientRect().top + scrollY - 62,
+                                   behavior: CALM.matches ? 'auto' : 'smooth'});
+      body.insertBefore(nav, next);
+    } else {
+      nav.className = 'chapend';
+      nav.innerHTML = `<button type="button" data-toc>К оглавлению</button>
+                       <button type="button" data-top>В начало урока</button>`;
+      nav.querySelector('[data-toc]').onclick = ()=>{
+        const box = $('#l-toc');
+        if(box && !box.hidden){ box.classList.add('open');
+          scrollTo({top: box.getBoundingClientRect().top + scrollY - 62, behavior:'smooth'}); }
+      };
+      nav.querySelector('[data-top]').onclick = ()=> scrollTo({top:0, behavior:'smooth'});
+      body.appendChild(nav);
+    }
+  });
 }
 
 /** Подсветка части, которую человек читает сейчас, и кнопка возврата к карте. */
 let spy = null;
 function tocSpy(ctx){
   spy = ctx;
-  const btn = $('#to-toc');
-  if(!ctx){ btn.classList.remove('on'); return; }
+  if(!ctx) return;
   paintSpy();
 }
 function paintSpy(){
@@ -1968,9 +2048,8 @@ function paintSpy(){
     a.classList.toggle('here', i === cur);
     a.classList.toggle('seen', i < cur);
   });
-  // кнопка нужна, только когда карта уехала за верх экрана
-  const gone = box.getBoundingClientRect().bottom < 0;
-  $('#to-toc').classList.toggle('on', gone);
+  // плавающей кнопки больше нет: к оглавлению и к следующей главе ведут
+  // переходы прямо в тексте, в конце каждой части
 }
 
 /** Что читать следующим: соседний урок, иначе первый урок следующего раздела. */
@@ -2027,7 +2106,7 @@ function onScroll(){
   requestAnimationFrame(()=>{
     ticking = false;
     const lesson = $('#v-lesson').classList.contains('on');
-    if(lesson) paintSpy(); else $('#to-toc').classList.remove('on');
+    if(lesson) paintSpy();
     if(lesson){
       const h = document.documentElement.scrollHeight - innerHeight;
       rpBar.style.width = (h > 0 ? Math.min(100, scrollY / h * 100) : 0) + '%';
@@ -2042,7 +2121,6 @@ upBtn.addEventListener('click', ()=>scrollTo({top:0, behavior: CALM.matches ? 'a
 
 function show(v, back){
   document.body.classList.toggle('nodock', v==='hello');
-  if(v !== 'lesson'){ const b = $('#to-toc'); if(b) b.classList.remove('on'); }
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('on','back'));
   const el = $('#v-'+v);
   el.classList.add('on');
@@ -2265,14 +2343,6 @@ function closeHello(go){
   if(go){ openSec(0); openLes(0); } else { show('study'); }
 }
 $('#hi-go').addEventListener('click', ()=>closeHello(true));
-const toTocBtn = $('#to-toc');
-if(toTocBtn) toTocBtn.addEventListener('click', ()=>{
-  const box = $('#l-toc');
-  if(box && !box.hidden){
-    box.classList.add('open');
-    scrollTo({top: box.getBoundingClientRect().top + scrollY - 62, behavior:'smooth'});
-  }
-});
 $('#hi-skip').addEventListener('click', ()=>closeHello(false));
 show(seenHello ? 'study' : 'hello');
 
