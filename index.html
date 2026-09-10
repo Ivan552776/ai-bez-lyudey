@@ -465,13 +465,23 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .chapend{display:flex;gap:10px;margin:18px 0 26px}
 .chapend button{flex:1;min-height:46px;border:1px solid var(--line2);border-radius:14px;
   background:var(--card);color:var(--soft);font:600 12.5px/1.2 var(--sans);padding:8px 10px}
-.totoc{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 74px);
-  transform:translate(-50%,14px);z-index:40;display:flex;align-items:center;gap:7px;
-  padding:9px 15px;border-radius:999px;background:var(--ink);color:var(--bg);
-  font:600 12.5px/1 var(--sans);box-shadow:0 8px 22px -8px rgba(0,0,0,.45);
-  opacity:0;pointer-events:none;transition:opacity .18s var(--ease-out),transform .18s var(--ease-out)}
-.totoc.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-.subbar{display:flex;align-items:center.subbar{display:flex;align-items:center;gap:10px;margin:0 14px 10px;padding:11px 13px;
+.sr-field{position:relative;margin:0 14px 12px}
+.sr-field input{width:100%;min-height:48px;padding:0 44px 0 14px;border-radius:14px;
+  border:1px solid var(--line2);background:var(--card);color:var(--ink);
+  font:400 16px/1 var(--sans);-webkit-appearance:none}
+.sr-field input:focus{outline:none;border-color:var(--brand)}
+.sr-field button{position:absolute;right:7px;top:50%;transform:translateY(-50%);
+  width:34px;height:34px;border-radius:10px;color:var(--faint);font-size:15px}
+.sr-hint{margin:0 14px 14px;font-size:13.5px;line-height:1.5;color:var(--faint)}
+.sr-item{display:flex;gap:11px;align-items:flex-start;width:100%;text-align:left;
+  padding:12px 14px;border-bottom:1px solid var(--line)}
+.sr-item .k{flex:none;width:26px;height:26px;border-radius:9px;display:grid;place-items:center;
+  background:var(--brandS);color:var(--brand);font-size:13px}
+.sr-item .tx{flex:1;min-width:0}
+.sr-item .tx b{display:block;font-size:14.5px;line-height:1.35;color:var(--ink);font-weight:600}
+.sr-item .tx span{display:block;font-size:13px;line-height:1.45;color:var(--soft);margin-top:3px}
+.sr-item mark{background:var(--brandS);color:var(--brand);border-radius:3px;padding:0 2px}
+.subbar{display:flex;align-items:center;gap:10px;margin:0 14px 10px;padding:11px 13px;
   border-radius:14px;background:var(--brandS);border:1px solid rgba(15,94,99,.16)}
 /* класс с display перебивает атрибут hidden — без этой строки плашка не прячется никогда */
 .subbar[hidden]{display:none}
@@ -488,6 +498,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 <div class="app">
   <div class="tp">
     <span class="mk"><i></i></span><b id="hi">ИИ без людей</b>
+    <button class="tgl" id="sr-open" title="Поиск" aria-label="Поиск">⌕</button>
     <button class="tgl" id="tgl" title="Тема">◐</button>
     <span class="uav" id="uav" hidden></span>
   </div>
@@ -702,6 +713,17 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   </div>
 
   <!-- ===== НЕДАВНЕЕ ===== -->
+  <div class="view" id="v-search">
+    <button class="back" data-back data-go="study">← Назад</button>
+    <div class="sr-field">
+      <input id="sr-input" type="search" placeholder="Что ищете? Например: ударения"
+             autocomplete="off" enterkeyhint="search">
+      <button id="sr-clear" hidden aria-label="Очистить">✕</button>
+    </div>
+    <div id="sr-hint" class="sr-hint"></div>
+    <div id="sr-out"></div>
+  </div>
+
   <div class="view" id="v-recent">
     <button class="back" data-back data-go="me">← Профиль</button>
     <h2 class="big">Недавно открытое</h2>
@@ -2091,6 +2113,109 @@ function openSec(i){
   $('#sec-foot').innerHTML = '';
   show('sec');
 }
+/* ---------- поиск по всему приложению ----------
+   35 уроков, 21 нейросеть и два десятка промптов: без поиска человек листает
+   вслепую. Индекс собираем один раз при первом открытии поиска. */
+let SRIDX = null;
+
+function srBuild(){
+  if(SRIDX) return SRIDX;
+  const idx = [];
+  const текст = b => {
+    if(!Array.isArray(b)) return '';
+    const [k, v] = b;
+    if(typeof v === 'string') return v;
+    if(k === 'shot' && v && v.rows) return v.rows.map(r=>r[1]).join(' ') + ' ' + (v.mark||'');
+    if(k === 'fig' && v){
+      const части = [v.t || ''];
+      if(v.items) части.push(v.items.map(x=>x.join(' ')).join(' '));
+      if(v.a) части.push(v.a[0], (v.a[1]||[]).join(' '));
+      if(v.b) части.push(v.b[0], (v.b[1]||[]).join(' '));
+      return части.join(' ');
+    }
+    return '';
+  };
+  SECS.forEach((s, si) => (s.ls || []).forEach((l, li) => {
+    const тело = (l.b || []).map(текст).join(' ');
+    idx.push({вид:'урок', знак:'◱', имя:l.t, где:s.t, текст:тело,
+              открыть:()=>{ openSec(si); openLes(li); }});
+    (l.b || []).forEach(b => { if(b[0]==='prompt')
+      idx.push({вид:'промпт', знак:'⌘', имя:'Промпт из урока «'+l.t+'»', где:s.t, текст:b[1],
+                открыть:()=>{ openSec(si); openLes(li); }}); });
+  }));
+  Object.entries(TL).forEach(([k, l]) => {
+    idx.push({вид:'нейросеть', знак:'⚒', имя:l.t, где:'каталог', текст:(l.b||[]).map(текст).join(' '),
+              открыть:()=>openToolLesson(k)});
+    (l.b || []).forEach(b => { if(b[0]==='prompt')
+      idx.push({вид:'промпт', знак:'⌘', имя:'Промпт из разбора «'+l.t+'»', где:'каталог', текст:b[1],
+                открыть:()=>openToolLesson(k)}); });
+  });
+  SRIDX = idx;
+  return idx;
+}
+
+const srClean = t => (t||'').toLowerCase().replace(/<[^>]+>/g, ' ').replace(/ё/g, 'е');
+
+function srFind(q){
+  const слова = srClean(q).split(/\s+/).filter(w => w.length > 1);
+  if(!слова.length) return [];
+  return srBuild().map(x => {
+    const имя = srClean(x.имя), текст = srClean(x.текст);
+    let вес = 0, кусок = '';
+    for(const w of слова){
+      if(имя.includes(w)) вес += 10;
+      const i = текст.indexOf(w);
+      if(i > -1){ вес += 1; if(!кусок) кусок = x.текст.replace(/<[^>]+>/g,'').slice(Math.max(0,i-60), i+90); }
+    }
+    return вес ? {...x, вес, кусок} : null;
+  }).filter(Boolean).sort((a,b) => b.вес - a.вес).slice(0, 30);
+}
+
+function srPaint(q){
+  const out = $('#sr-out'), hint = $('#sr-hint');
+  const найдено = srFind(q);
+  $('#sr-clear').hidden = !q;
+  if(!q.trim()){
+    hint.textContent = 'Ищет по урокам, разборам нейросетей и промптам. Попробуйте: ударения, договор, оплата, бот.';
+    out.innerHTML = ''; return;
+  }
+  if(!найдено.length){
+    hint.textContent = 'Ничего не нашлось. Попробуйте одно слово вместо фразы.';
+    out.innerHTML = ''; return;
+  }
+  const слова = srClean(q).split(/\s+/).filter(w => w.length > 1);
+  const подсветить = t => {
+    let r = esc(t);
+    слова.forEach(w => { r = r.replace(new RegExp('(' + w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi'), '<mark>$1</mark>'); });
+    return r;
+  };
+  hint.textContent = найдено.length + (найдено.length === 1 ? ' совпадение' : ' совпадений');
+  out.innerHTML = найдено.map((x, i) => `<button class="sr-item" data-sr="${i}">
+      <span class="k">${x.знак}</span>
+      <span class="tx"><b>${подсветить(x.имя)}</b>
+        <span>${x.кусок ? подсветить(x.кусок.trim()) + '…' : x.вид + ' · ' + x.где}</span></span>
+    </button>`).join('');
+  out.querySelectorAll('[data-sr]').forEach(el => {
+    el.onclick = () => найдено[+el.dataset.sr].открыть();
+  });
+}
+
+(function(){
+  const поле = $('#sr-input');
+  if(!поле) return;
+  $('#sr-open').addEventListener('click', () => {
+    show('search');
+    setTimeout(() => поле.focus(), 120);
+    srPaint(поле.value);
+  });
+  let ждём = null;
+  поле.addEventListener('input', () => {
+    clearTimeout(ждём);
+    ждём = setTimeout(() => srPaint(поле.value), 120);
+  });
+  $('#sr-clear').addEventListener('click', () => { поле.value = ''; srPaint(''); поле.focus(); });
+})();
+
 /** Оглавление урока: человек должен видеть, из чего урок состоит, а не листать вслепую. */
 function buildToc(bodyId, tocId){
   const box = $(tocId || '#l-toc'), body = $(bodyId || '#l-body');
