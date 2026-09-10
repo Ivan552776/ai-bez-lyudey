@@ -465,6 +465,17 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .chapend{display:flex;gap:10px;margin:18px 0 26px}
 .chapend button{flex:1;min-height:46px;border:1px solid var(--line2);border-radius:14px;
   background:var(--card);color:var(--soft);font:600 12.5px/1.2 var(--sans);padding:8px 10px}
+.prc{margin:0 14px 12px;border:1px solid var(--line2);border-radius:16px;background:var(--card);overflow:hidden}
+.prc .hd{display:flex;align-items:center;gap:9px;padding:11px 13px;border-bottom:1px solid var(--line)}
+.prc .hd .k{flex:none;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;
+  background:var(--brandS);color:var(--brand);font-size:12px}
+.prc .hd b{flex:1;min-width:0;font-size:13.5px;line-height:1.3;color:var(--ink);font-weight:600}
+.prc .hd button{flex:none;padding:7px 11px;border-radius:9px;background:var(--brandS);
+  color:var(--brand);font:600 11.5px/1 var(--mono)}
+.prc pre{margin:0;padding:12px 13px;white-space:pre-wrap;word-break:break-word;
+  font-family:var(--mono);font-size:12.5px;line-height:1.6;color:var(--soft)}
+.prc .go{display:block;width:100%;text-align:left;padding:10px 13px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--faint)}
 .sr-field{position:relative;margin:0 14px 12px}
 .sr-field input{width:100%;min-height:48px;padding:0 44px 0 14px;border-radius:14px;
   border:1px solid var(--line2);background:var(--card);color:var(--ink);
@@ -690,6 +701,8 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <span class="tx"><b>Мои разделы</b><span id="p-cnt">2 открыто, 4 под замком</span></span><span class="ch">›</span></button>
       <button class="row" data-recent="1"><span class="ic i5 sm">◔</span>
         <span class="tx"><b>Недавно открытое</b><span id="p-rec">пока пусто</span></span><span class="ch">›</span></button>
+      <button class="row" data-go="prompts"><span class="ic i4 sm">⌘</span>
+        <span class="tx"><b>Промпты</b><span id="p-pr">все из уроков, в одном месте</span></span><span class="ch">›</span></button>
       <button class="row" data-go="news"><span class="ic i3 sm">✦</span>
         <span class="tx"><b>Что нового</b><span id="p-news">обновления курса</span></span><span class="ch">›</span></button>
     </div>
@@ -713,6 +726,15 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   </div>
 
   <!-- ===== НЕДАВНЕЕ ===== -->
+  <div class="view" id="v-prompts">
+    <button class="back" data-back data-go="me">← Профиль</button>
+    <h2 class="big">Промпты</h2>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Все готовые запросы из курса
+      в одном месте. Нажмите «копировать» и вставьте в нейросеть — квадратные скобки
+      замените своим.</p>
+    <div id="pr-out"></div>
+  </div>
+
   <div class="view" id="v-search">
     <button class="back" data-back data-go="study">← Назад</button>
     <div class="sr-field">
@@ -2113,6 +2135,36 @@ function openSec(i){
   $('#sec-foot').innerHTML = '';
   show('sec');
 }
+/* ---------- сборник промптов ----------
+   Промпты — самое переносимое, что есть в курсе. Собираем их из всех уроков
+   в одно место с копированием: искать по урокам ради одной формулировки глупо. */
+function prPaint(){
+  const out = $('#pr-out');
+  if(!out || out.dataset.ready) return;
+  const список = [];
+  SECS.forEach((s, si) => (s.ls || []).forEach((l, li) => {
+    (l.b || []).forEach(b => { if(b[0] === 'prompt')
+      список.push({текст:b[1], урок:l.t, где:s.t, закрыт:!l.b, открыть:()=>{ openSec(si); openLes(li); }}); });
+  }));
+  Object.entries(TL).forEach(([k, l]) => {
+    (l.b || []).forEach(b => { if(b[0] === 'prompt')
+      список.push({текст:b[1], урок:l.t, где:'разбор нейросети', открыть:()=>openToolLesson(k)}); });
+  });
+
+  out.innerHTML = список.map((x, i) => `<div class="prc">
+      <div class="hd"><span class="k">⌘</span><b>${esc(x.урок)}</b>
+        <button data-copy="${enc(x.текст)}">копировать</button></div>
+      <pre>${esc(x.текст)}</pre>
+      <button class="go" data-pr="${i}">Открыть урок целиком →</button>
+    </div>`).join('');
+  out.querySelectorAll('[data-pr]').forEach(el => {
+    el.onclick = () => список[+el.dataset.pr].открыть();
+  });
+  out.dataset.ready = '1';
+  const счёт = $('#p-pr');
+  if(счёт) счёт.textContent = список.length + ' готовых запроса из уроков';
+}
+
 /* ---------- поиск по всему приложению ----------
    35 уроков, 21 нейросеть и два десятка промптов: без поиска человек листает
    вслепую. Индекс собираем один раз при первом открытии поиска. */
@@ -2374,6 +2426,7 @@ upBtn.addEventListener('click', ()=>scrollTo({top:0, behavior: CALM.matches ? 'a
 
 function show(v, back){
   document.body.classList.toggle('nodock', v==='hello');
+  if(v === 'prompts') prPaint();
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('on','back'));
   const el = $('#v-'+v);
   el.classList.add('on');
