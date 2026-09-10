@@ -433,19 +433,41 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .dots{display:flex;gap:6px;justify-content:center;margin:0 0 4px}
 .dots i{width:6px;height:6px;border-radius:50%;background:var(--line2);transition:width .2s,background .2s}
 .dots i.on{width:18px;background:var(--brand)}
-.toc{margin:0 14px 14px;border:1px solid var(--line2);border-radius:16px;background:var(--card);overflow:hidden}
+.toc{margin:0 14px 16px;border:1px solid var(--line2);border-radius:18px;background:var(--card);
+  overflow:hidden}
 .toc[hidden]{display:none}
-.toc>button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;
-  min-height:46px;padding:0 14px;border:0;background:none;color:var(--soft);cursor:pointer;
+.toc>button{width:100%;display:flex;align-items:center;gap:9px;min-height:48px;padding:0 14px;
+  border:0;background:none;color:var(--soft);cursor:pointer;
   font:600 12px/1.2 var(--mono);letter-spacing:.04em;text-transform:uppercase}
-.toc>button i{font-style:normal;transition:transform .18s}
+.toc>button .grow{margin-left:auto;font-family:var(--sans);text-transform:none;letter-spacing:0;
+  font-size:12px;color:var(--faint)}
+.toc>button i{font-style:normal;transition:transform .2s var(--ease-out);color:var(--faint)}
 .toc.open>button i{transform:rotate(90deg)}
-.toc ol{display:none;margin:0;padding:0 14px 12px 34px;list-style:decimal;color:var(--faint)}
+.toc ol{display:none;margin:0;padding:2px 12px 12px;list-style:none}
 .toc.open ol{display:block}
-.toc li{margin:0 0 8px;font-size:14px;line-height:1.45}
-.toc a{color:var(--ink);text-decoration:none;border-bottom:1px solid transparent}
-.toc a:active{border-bottom-color:var(--brand)}
-.subbar{display:flex;align-items:center;gap:10px;margin:0 14px 10px;padding:11px 13px;
+.toc li{margin:0 0 6px}
+.toc a{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:13px;
+  text-decoration:none;color:var(--ink);min-height:44px;
+  transition:background-color .16s var(--ease),color .16s var(--ease)}
+.toc .n{flex:none;width:26px;height:26px;border-radius:9px;display:grid;place-items:center;
+  background:var(--line2);color:var(--soft);font:700 11.5px/1 var(--mono);
+  transition:background-color .18s var(--ease),color .18s var(--ease)}
+.toc .tt{flex:1;font-size:14px;line-height:1.35}
+.toc .mn{flex:none;font:600 10.5px/1 var(--mono);color:var(--faint)}
+.toc a.here{background:var(--brandS)}
+.toc a.here .n{background:var(--brand);color:#fff}
+.toc a.here .tt{font-weight:600;color:var(--brand)}
+.toc a.seen .n{background:var(--brandS);color:var(--brand)}
+.toc a.seen .n:after{content:'✓'}
+.toc a.seen .n span{display:none}
+/* кнопка возврата к карте: появляется, когда оглавление уехало вверх */
+.totoc{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 74px);
+  transform:translate(-50%,14px);z-index:40;display:flex;align-items:center;gap:7px;
+  padding:9px 15px;border-radius:999px;background:var(--ink);color:var(--bg);
+  font:600 12.5px/1 var(--sans);box-shadow:0 8px 22px -8px rgba(0,0,0,.45);
+  opacity:0;pointer-events:none;transition:opacity .18s var(--ease-out),transform .18s var(--ease-out)}
+.totoc.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.subbar{display:flex;align-items:center.subbar{display:flex;align-items:center;gap:10px;margin:0 14px 10px;padding:11px 13px;
   border-radius:14px;background:var(--brandS);border:1px solid rgba(15,94,99,.16)}
 /* класс с display перебивает атрибут hidden — без этой строки плашка не прячется никогда */
 .subbar[hidden]{display:none}
@@ -1896,23 +1918,58 @@ function openSec(i){
 }
 /** Оглавление урока: человек должен видеть, из чего урок состоит, а не листать вслепую. */
 function buildToc(bodyId, tocId){
-  const box = $(tocId || '#l-toc');
-  const hs = [...$(bodyId || '#l-body').querySelectorAll('h4')];
-  if(hs.length < 3){ box.hidden = true; box.innerHTML = ''; return; }   // в коротком не нужно
+  const box = $(tocId || '#l-toc'), body = $(bodyId || '#l-body');
+  const hs = [...body.querySelectorAll('h4')];
+  if(hs.length < 3){ box.hidden = true; box.innerHTML = ''; tocSpy(null); return; }
   box.hidden = false;
-  box.className = 'toc';
-  box.classList.add('open');
-  box.innerHTML = `<button type="button"><span>Оглавление · ${hs.length}</span><i>›</i></button>
-    <ol>${hs.map(h=>`<li><a href="#${h.id}">${h.textContent}</a></li>`).join('')}</ol>`;
+  box.className = 'toc open';
+
+  // сколько читать каждую часть — по объёму текста до следующего заголовка
+  const mins = hs.map((h,i)=>{
+    let n = 0, el = h.nextElementSibling;
+    while(el && el !== hs[i+1]){ n += (el.textContent||'').length; el = el.nextElementSibling; }
+    return Math.max(1, Math.round(n / 900));
+  });
+
+  box.innerHTML = `<button type="button"><i>›</i><span>Оглавление</span>
+      <span class="grow">${hs.length} частей</span></button>
+    <ol>${hs.map((h,i)=>`<li><a href="#${h.id}" data-i="${i}">
+      <span class="n"><span>${i+1}</span></span>
+      <span class="tt">${h.textContent}</span>
+      <span class="mn">${mins[i]} мин</span></a></li>`).join('')}</ol>`;
+
   box.querySelector('button').onclick = ()=> box.classList.toggle('open');
   box.querySelectorAll('a').forEach(a=>{
     a.onclick = e=>{
       e.preventDefault();
       const t = document.getElementById(a.getAttribute('href').slice(1));
-      if(t) scrollTo({top: t.getBoundingClientRect().top + scrollY - 64, behavior:'smooth'});
-      box.classList.remove('open');
+      if(t) scrollTo({top: t.getBoundingClientRect().top + scrollY - 62, behavior:'smooth'});
     };
   });
+  tocSpy({box, hs});
+}
+
+/** Подсветка части, которую человек читает сейчас, и кнопка возврата к карте. */
+let spy = null;
+function tocSpy(ctx){
+  spy = ctx;
+  const btn = $('#to-toc');
+  if(!ctx){ btn.classList.remove('on'); return; }
+  paintSpy();
+}
+function paintSpy(){
+  if(!spy || !$('#v-lesson').classList.contains('on')) return;
+  const {box, hs} = spy;
+  const links = [...box.querySelectorAll('a')];
+  let cur = 0;
+  hs.forEach((h,i)=>{ if(h.getBoundingClientRect().top < 120) cur = i; });
+  links.forEach((a,i)=>{
+    a.classList.toggle('here', i === cur);
+    a.classList.toggle('seen', i < cur);
+  });
+  // кнопка нужна, только когда карта уехала за верх экрана
+  const gone = box.getBoundingClientRect().bottom < 0;
+  $('#to-toc').classList.toggle('on', gone);
 }
 
 /** Что читать следующим: соседний урок, иначе первый урок следующего раздела. */
@@ -1969,6 +2026,7 @@ function onScroll(){
   requestAnimationFrame(()=>{
     ticking = false;
     const lesson = $('#v-lesson').classList.contains('on');
+    if(lesson) paintSpy(); else $('#to-toc').classList.remove('on');
     if(lesson){
       const h = document.documentElement.scrollHeight - innerHeight;
       rpBar.style.width = (h > 0 ? Math.min(100, scrollY / h * 100) : 0) + '%';
@@ -2205,6 +2263,13 @@ function closeHello(go){
   if(go){ openSec(0); openLes(0); } else { show('study'); }
 }
 $('#hi-go').addEventListener('click', ()=>closeHello(true));
+$('#to-toc').addEventListener('click', ()=>{
+  const box = $('#l-toc');
+  if(box && !box.hidden){
+    box.classList.add('open');
+    scrollTo({top: box.getBoundingClientRect().top + scrollY - 62, behavior:'smooth'});
+  }
+});
 $('#hi-skip').addEventListener('click', ()=>closeHello(false));
 show(seenHello ? 'study' : 'hello');
 
