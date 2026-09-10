@@ -1575,7 +1575,12 @@ const SLIDES = [
   const paint = () => [...dots.children].forEach((d,i)=>d.classList.toggle('on', i===idx));
   const goto = i => {
     idx = (i + slides.length) % slides.length;
-    track.scrollTo({left: slides[idx].offsetLeft - track.offsetLeft - 8, behavior:'smooth'});
+    const to = slides[idx].offsetLeft - track.offsetLeft - 8;
+    track.scrollTo({left: to, behavior:'smooth'});
+    // плавную прокрутку выполняют не везде: в неактивной вкладке и при
+    // выключенных анимациях она просто игнорируется. Тогда двигаем жёстко —
+    // движение не должно зависеть от анимации.
+    setTimeout(()=>{ if(Math.abs(track.scrollLeft - to) > 24) track.scrollLeft = to; }, 500);
     paint();
   };
   const start = () => { if(!touched && !timer) timer = setInterval(()=>goto(idx+1), 4500); };
