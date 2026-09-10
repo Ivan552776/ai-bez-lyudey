@@ -478,6 +478,27 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .tkbox .pick span{font-size:12px;color:var(--faint)}
 .fav{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:12px;
   background:rgba(255,255,255,.16);color:#fff;font-size:18px;line-height:1;display:grid;place-items:center}
+.qz{margin:20px 0;border:1px solid var(--line2);border-radius:18px;background:var(--card);overflow:hidden}
+.qz .qh{display:flex;align-items:center;gap:9px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.qz .qh i{flex:none;width:26px;height:26px;border-radius:9px;display:grid;place-items:center;
+  background:var(--brandS);color:var(--brand);font-style:normal;font-size:13px}
+.qz .qh b{font-weight:600;font-size:12px;line-height:1;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--soft);font-family:var(--mono)}
+.qz .qq{margin:0;padding:14px 14px 4px;font-size:15.5px;line-height:1.5;color:var(--ink);font-weight:600}
+.qz .opts{padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px}
+.qz .opt{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;padding:12px 13px;
+  border:1px solid var(--line2);border-radius:13px;background:var(--bg);min-height:48px;
+  transition:border-color .16s var(--ease),background-color .16s var(--ease)}
+.qz .opt .m{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line2);
+  display:grid;place-items:center;font-size:11px;color:transparent}
+.qz .opt span.t{flex:1;font-size:14.5px;line-height:1.45;color:var(--ink)}
+.qz .opt.ok{border-color:var(--brand);background:var(--brandS)}
+.qz .opt.ok .m{border-color:var(--brand);background:var(--brand);color:#fff}
+.qz .opt.no{border-color:#C4553C;background:rgba(196,85,60,.08)}
+.qz .opt.no .m{border-color:#C4553C;background:#C4553C;color:#fff}
+.qz .why{margin:0;padding:0 14px 14px;font-size:13.5px;line-height:1.55;color:var(--soft)}
+.qz .why b{color:var(--ink)}
+.qz.done .opt{pointer-events:none}
 .fav.on{background:var(--sig);color:var(--sigInk)}
 .fav.shr{right:60px}
 .lhead{position:relative}
@@ -844,6 +865,14 @@ const SECS = [
      ['h','В каком порядке это собирать'],
      ['p','Порядок не случайный. Роль задаёт, как думать; задача — что считать успехом; рамки отсекают лишнее; материал не даёт сочинять. Если пропустить материал, всё предыдущее работает вхолостую: нейросеть аккуратно и в нужном тоне напишет неправду.'],
      ['fig',{k:'steps',t:'Сборка запроса',items:[['Роль','Кем нейросеть работает в этом разговоре'],['Задача','Что должно получиться и для кого — с признаком успеха'],['Рамки','Длина, тон и отдельно то, чего писать нельзя'],['Материал','Ваши тексты, цифры и документы — чтобы не сочиняла'],['Проверка','Попросить задать вопросы до того, как отвечать']]}],
+     ['quiz',{k:'build',q:'Соберите запрос к нейросети: отметьте всё, что в нём должно быть.',o:[
+       ['Ты редактор главной страницы сайта', true],
+       ['Продукт: доставка продуктов за час по Казани', true],
+       ['Задача страницы: нажать «оформить первый заказ»', true],
+       ['Не пиши «команда профессионалов» и «инновационный»', true],
+       ['Сделай красиво и современно', false],
+       ['Ты лучшая нейросеть в мире, я в тебя верю', false]],
+      why:'Роль, задача, рамки и материал — это и есть рабочий запрос. «Сделай красиво» модель понимает как «добавь прилагательных», а похвала не влияет на качество ответа вообще: она не старается сильнее, она предсказывает следующее слово.'}],
      ['h','Как понять, что запрос плохой, не отправляя его'],
      ['p','Три вопроса к самому себе. Если хоть на один отвечаете «не знаю» — нейросеть ответит тем же.'],
      ['ul','Что здесь считается хорошим результатом? Если нельзя описать одним предложением — задача не сформулирована|Откуда она возьмёт факты? Если из головы — вы получите правдоподобную выдумку|Что я точно не хочу увидеть в ответе? Если не написали — увидите именно это'],
@@ -861,6 +890,11 @@ const SECS = [
      ['ul','Не благодарите и не уговаривайте — на качество не влияет, место в запросе занимает|Не пишите «сделай хорошо» и «сделай профессионально»: это не рамки, а пожелание|Не задавайте пять задач одним сообщением — ответ будет поверхностным по всем пяти|Не верьте цифрам, датам и ссылкам без проверки, даже если ответ выглядит уверенно'],
      ['h','Пять проблем, с которыми сталкиваются все'],
      ['fix','Отвечает водой: «важно отметить», «в современном мире», «команда профессионалов».|Запретите штампы прямым списком и потребуйте конкретики: «на каждое утверждение — пример или цифра, иначе не пиши это утверждение».||Каждый раз приходится заново объяснять, кто я и что за продукт.|Заполните постоянные указания в настройках нейросети — они применяются ко всем новым диалогам. Где нет такой настройки, держите бриф в заметках и вставляйте первым сообщением.||Ответ длинный, а нужно коротко. Просьба «покороче» не помогает.|«Коротко» — не рамка. Давайте число: «не больше 700 знаков», «ровно 5 пунктов», «три предложения». Числу она подчиняется, пожеланию нет.||В длинном разговоре забыла, о чём договорились в начале.|У любой модели окно памяти ограничено. Начните новый чат и вставьте первым сообщением краткий итог: что решили, что уже готово, что делаем дальше. Это надёжнее, чем надеяться, что она вспомнит.||Соглашается со мной, даже когда я не прав. Спрашиваю «точно?» — меняет верный ответ на неверный.|Никогда не спрашивайте «ты уверен». Это давление, и модель уступает. Спрашивайте: «что сделало бы этот вывод неверным» и «на чём он основан». Тогда она проверяет, а не угадывает ваше настроение.'],
+     ['quiz',{q:'Нейросеть назвала точную цифру, которой вы не знаете. Что делать?',o:[
+       ['Проверить по источнику: она одинаково уверенно говорит и правду, и выдумку', true],
+       ['Поверить — она бы предупредила, если бы не знала', false],
+       ['Переспросить её же: «ты точно уверена?»', false]],
+      why:'У модели нет ощущения незнания: она достраивает правдоподобное с той же интонацией, что и известное. А на переспрос она чаще всего просто согласится с вами — подстроится под собеседника, а не проверит факт.'}],
      ['h','Чек-лист перед отправкой'],
      ['ul','Я назвал роль|Я сказал, что считается успехом|Я задал длину, тон и запреты|Я приложил свой материал, а не пересказал его|Я попросил вопросы, если задача сложнее одного абзаца'],
      ['tip','Сохраните этот чек-лист. Он сокращает число попыток примерно втрое — и это единственная метрика, которая тут имеет значение.'],
@@ -934,6 +968,11 @@ const SECS = [
      ['p','Платная подписка у зарубежных сервисов стоит около 20 долларов в месяц за штуку. Отсюда простой вывод: платить за все четыре бессмысленно. Разумный набор — одна платная сильная плюс бесплатные остальные под их задачи.'],
 
      ['fig',{k:'scale',t:'Во что упираются на бесплатном тарифе',items:[['Длина файла',35,'var(--c4)','короткий'],['Сообщений в день',45,'var(--c3)','десятки'],['Скорость ответа',70,'var(--c5)','терпимо'],['Качество',92,'var(--c2)','почти то же']]}],
+     ['quiz',{q:'В тексте есть имена и телефоны ваших клиентов. Какую модель брать?',o:[
+       ['Российскую — данные людей нельзя отправлять за границу', true],
+       ['Любую, но попросить её не запоминать данные', false],
+       ['Самую сильную: качество разбора важнее', false]],
+      why:'Это не про качество ответа, а про закон. Просьба «не запоминай» ничего не меняет: данные уже ушли на чужой сервер. Если нужна именно сильная модель — обезличьте текст: имена на «клиент 1», телефоны на пропуски.'}],
      ['h','Чек-лист выбора'],
      ['ul','В задаче есть данные людей? → российская модель или обезличить|Ответ увидит кто-то, кроме меня? → модель со ссылками на источники|Документ длиннее десяти страниц? → модель с длинным контекстом|Нужна картинка? → это вообще другая модель|Задача рутинная и простая? → бесплатной хватит, не тратьте лимит сильной'],
 
@@ -1728,6 +1767,18 @@ function blk(b){
   if(k==='ul') return `<ul>${v.split('|').map(x=>`<li>${x}</li>`).join('')}</ul>`;
   if(k==='code') return `<div class="cw"><pre>${esc(v)}</pre><button class="cb" data-copy="${enc(v)}">копировать</button></div>`;
   if(k==='tip') return `<div class="tip">${v}</div>`;
+  // задание: вопрос с разбором или сборка запроса из кусков
+  if(k==='quiz'){
+    const id = 'qz' + (blk.q = (blk.q || 0) + 1);
+    const заголовок = v.k === 'build' ? 'Соберите запрос' : 'Проверьте себя';
+    return `<div class="qz" id="${id}" data-quiz='${enc(JSON.stringify(v))}'>
+      <div class="qh"><i>${v.k === 'build' ? '⌘' : '?'}</i><b>${заголовок}</b></div>
+      <p class="qq">${v.q}</p>
+      <div class="opts">${v.o.map((o, i) =>
+        `<button class="opt" data-qo="${i}"><span class="m">✓</span><span class="t">${o[0]}</span></button>`).join('')}</div>
+      <p class="why" hidden></p>
+    </div>`;
+  }
   if(k==='fix') return `<div class="fixes">${v.split('||').map(pair=>{
       const [q,a] = pair.split('|');
       return `<div class="fx"><div class="q"><b>Проблема</b>${q}</div><div class="a"><b>Решение</b>${a}</div></div>`;
@@ -2212,6 +2263,43 @@ function tkPaint(){
   });
 }
 
+/* ---------- задания в уроках ----------
+   Прочитать двенадцать частей и ничего не проверить — значит пролистать.
+   Два вида: выбрать верный ответ и собрать запрос из нужных кусков. */
+function quizClick(el){
+  const box = el.closest('.qz');
+  if(!box || box.classList.contains('done')) return;
+  const данные = JSON.parse(decodeURIComponent(box.dataset.quiz));
+  const i = +el.dataset.qo;
+  const верный = данные.o[i][1] === true;
+
+  if(данные.k === 'build'){
+    // сборка: отмечаем нужные куски, разбор показываем, когда выбраны все верные
+    el.classList.toggle(верный ? 'ok' : 'no');
+    const выбрано = [...box.querySelectorAll('.opt.ok')].length;
+    const нужно = данные.o.filter(o => o[1] === true).length;
+    const ошибок = [...box.querySelectorAll('.opt.no')].length;
+    if(выбрано === нужно){
+      box.classList.add('done');
+      const w = box.querySelector('.why');
+      w.hidden = false;
+      w.innerHTML = (ошибок ? '<b>Собрано, но с лишним.</b> ' : '<b>Ровно то, что нужно.</b> ') + данные.why;
+      if(favCur) markDone(favCur.key.includes('-') ? favCur.key : 't-' + favCur.key);
+    }
+    return;
+  }
+
+  box.classList.add('done');
+  el.classList.add(верный ? 'ok' : 'no');
+  if(!верный){
+    const п = данные.o.findIndex(o => o[1] === true);
+    box.querySelectorAll('.opt')[п].classList.add('ok');
+  }
+  const w = box.querySelector('.why');
+  w.hidden = false;
+  w.innerHTML = (верный ? '<b>Верно.</b> ' : '<b>Не совсем.</b> ') + данные.why;
+}
+
 /* ---------- поделиться ----------
    Самый дешёвый рост, который у нас есть: человек отправляет другу ссылку
    прямо из Telegram, и тот попадает сразу в приложение. */
@@ -2548,7 +2636,7 @@ async function openLes(j){
   $('#l-head').setAttribute('style','background:'+s.g);
   $('#l-k').textContent = s.t;
   $('#l-t').textContent = l.t;
-  blk.n = 0;                       // нумерация якорей своя у каждого урока
+  blk.n = 0; blk.q = 0;            // нумерация якорей и заданий своя у каждого урока
   $('#l-body').innerHTML = l.b.map(blk).join('');
   buildToc();
   $('#l-foot').textContent = '◷ ' + l.min + ' мин';
@@ -2759,7 +2847,7 @@ function openToolLesson(k){
   $('#l-head').setAttribute('style','background:'+G[l.g]);
   $('#l-k').textContent = 'Инструмент';
   $('#l-t').textContent = l.t;
-  blk.n = 0;                       // нумерация якорей своя у каждого урока
+  blk.n = 0; blk.q = 0;            // нумерация якорей и заданий своя у каждого урока
   $('#l-body').innerHTML = l.b.map(blk).join('');
   buildToc();
   $('#l-foot').textContent = '◷ ' + l.min + ' мин';
@@ -2877,6 +2965,8 @@ document.addEventListener('click', e=>{
   const dc = e.target.closest('[data-doc]'); if(dc){ openDoc(dc.dataset.doc); return; }
   if(e.target.closest('[data-recent]')){ paintRecent(); show('recent'); return; }
   if(e.target.closest('[data-hello]')){ show('hello'); return; }
+  const qo = e.target.closest('[data-qo]');
+  if(qo){ quizClick(qo); return; }
   const sh = e.target.closest('[data-share]');
   if(sh){ share('Готовый промпт из урока «' + decodeURIComponent(sh.dataset.share) +
                 '» — в приложении «ИИ без людей»'); return; }
