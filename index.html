@@ -75,7 +75,9 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 .post b{font-size:15.5px;line-height:1.35;color:var(--ink)}
 .post p{margin:0;font-size:13.5px;line-height:1.5;color:var(--soft)}
 .post .go2{align-self:flex-start;font-size:12.5px;font-weight:600;border-radius:999px;
-  padding:8px 14px;background:var(--brandS);color:var(--brand);margin-top:2px}
+  padding:8px 14px;background:var(--brandS);color:var(--brand);margin-top:2px;
+  text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+a.go2,a.allnews{text-decoration:none}
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 @media (max-width:380px){.tgrid{grid-template-columns:1fr}}
 
@@ -2458,7 +2460,8 @@ function chanDraw(список, свежее){
     el.innerHTML = `<p style="font-size:14px;color:var(--soft);margin:0">
       ${свежее ? 'В канале пока пусто — первые посты вот-вот выйдут.'
                : 'Свежее из канала не загрузилось. Оно всегда есть в самом канале.'}</p>
-      <button class="go2" style="margin-top:10px" data-chan="1">Открыть канал →</button>`;
+      <a class="go2" style="margin-top:10px;display:inline-block" href="${ссылкаПоста('')}"
+         target="_blank" rel="noopener" data-tg="${ссылкаПоста('')}">Открыть канал →</a>`;
     return;
   }
   el.innerHTML = список.map((p, i) => `
@@ -2467,10 +2470,12 @@ function chanDraw(список, свежее){
         <span class="when">${датаПоста(p.at)}${p.photo ? ' · с картинкой' : ''}</span>
         <b>${esc(p.title)}</b>
         <p>${esc(p.text).slice(0, 190).replace(/\n+/g, ' ')}${p.text.length > 190 ? '…' : ''}</p>
-        <button class="go2" data-post="${p.id}">Читать в канале →</button>
+        <a class="go2" href="${ссылкаПоста(p.id)}" target="_blank" rel="noopener"
+           data-tg="${ссылкаПоста(p.id)}">Читать в канале →</a>
       </div>
     </div>`).join('') +
-    `<button class="allnews" data-chan="1">Весь канал →</button>`;
+    `<a class="allnews" href="${ссылкаПоста('')}" target="_blank" rel="noopener"
+        data-tg="${ссылкаПоста('')}" style="display:block;text-align:center">Весь канал →</a>`;
 }
 async function chanPaint(){
   const запас = S.get('chan', null);
@@ -2489,11 +2494,8 @@ async function chanPaint(){
     if(!запас) chanDraw([], false);
   }
 }
-function openPost(id){
-  const имя = (S.get('chan', {}) || {}).channel || 'ai_bez_lyudey';
-  const ссылка = 'https://t.me/' + имя + (id ? '/' + id : '');
-  if(TG && TG.openTelegramLink) TG.openTelegramLink(ссылка); else window.open(ссылка, '_blank');
-}
+const имяКанала = () => (S.get('chan', {}) || {}).channel || 'ai_bez_lyudey';
+const ссылкаПоста = id => 'https://t.me/' + имяКанала() + (id ? '/' + id : '');
 
 $('#log').innerHTML = LOG.map((e,i)=>`
   <div class="item" style="display:block;padding:0;animation-delay:${i*45}ms">
@@ -2640,8 +2642,7 @@ const SHARE_URL = 'https://t.me/ai_bez_lyudey_bot/kurs';
 function share(текст){
   const ссылка = 'https://t.me/share/url?url=' + encodeURIComponent(SHARE_URL) +
                  '&text=' + encodeURIComponent(текст);
-  if(TG && TG.openTelegramLink) TG.openTelegramLink(ссылка);
-  else window.open(ссылка, '_blank');
+  tgGo(ссылка);
 }
 
 /* ---------- закладки ----------
@@ -3075,10 +3076,20 @@ async function fetchLesson(key){
    Ответ подписан Telegram и проверен на сервере, подменить в браузере нельзя. */
 let ME = null;
 const CHANNEL_LINK = 'https://t.me/ai_bez_lyudey';
-function openChannel(){
-  if(TG && TG.openTelegramLink) TG.openTelegramLink(CHANNEL_LINK);
-  else window.open(CHANNEL_LINK, '_blank');
+/** Уйти в Telegram по ссылке. Порядок важен: в мини-приложении работает
+    openTelegramLink, дальше openLink, и только потом обычные способы —
+    всплывающие окна в вебвью запрещены, поэтому window.open молча ничего
+    не делает и человек видит «кнопка не работает». */
+function tgGo(ссылка){
+  try{
+    if(TG && TG.openTelegramLink){ TG.openTelegramLink(ссылка); return true; }
+    if(TG && TG.openLink){ TG.openLink(ссылка); return true; }
+  }catch(e){}
+  const w = window.open(ссылка, '_blank');
+  if(!w) location.href = ссылка;
+  return true;
 }
+function openChannel(){ tgGo(CHANNEL_LINK); }
 function paintMe(){
   const bar = document.getElementById('subbar');
   if(!ME){ bar.hidden = true; return; }
@@ -3474,9 +3485,12 @@ document.addEventListener('click', e=>{
   const rt = e.target.closest('[data-retry]');
   if(rt){ openLes(payLes); return; }
   if(e.target.closest('#pop')){ $('#pop').classList.remove('on'); show('ach'); return; }
-  const пост = e.target.closest('[data-post]');
-  if(пост){ openPost(пост.dataset.post); return; }
-  if(e.target.closest('[data-chan]')){ openPost(''); return; }
+  const тг = e.target.closest('[data-tg]');
+  if(тг){
+    // в мини-приложении уводим сами, в браузере пусть работает обычная ссылка
+    if(TG && (TG.openTelegramLink || TG.openLink)){ e.preventDefault(); tgGo(тг.dataset.tg); }
+    return;
+  }
   const qo = e.target.closest('[data-qo]');
   if(qo){ quizClick(qo); return; }
   const sh = e.target.closest('[data-share]');
