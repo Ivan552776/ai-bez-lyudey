@@ -490,27 +490,6 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .tkbox .pick span{font-size:12px;color:var(--faint)}
 .fav{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:12px;
   background:rgba(255,255,255,.16);color:#fff;font-size:18px;line-height:1;display:grid;place-items:center}
-.qz{margin:20px 0;border:1px solid var(--line2);border-radius:18px;background:var(--card);overflow:hidden}
-.qz .qh{display:flex;align-items:center;gap:9px;padding:12px 14px;border-bottom:1px solid var(--line)}
-.qz .qh i{flex:none;width:26px;height:26px;border-radius:9px;display:grid;place-items:center;
-  background:var(--brandS);color:var(--brand);font-style:normal;font-size:13px}
-.qz .qh b{font-weight:600;font-size:12px;line-height:1;letter-spacing:.04em;text-transform:uppercase;
-  color:var(--soft);font-family:var(--mono)}
-.qz .qq{margin:0;padding:14px 14px 4px;font-size:15.5px;line-height:1.5;color:var(--ink);font-weight:600}
-.qz .opts{padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px}
-.qz .opt{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;padding:12px 13px;
-  border:1px solid var(--line2);border-radius:13px;background:var(--bg);min-height:48px;
-  transition:border-color .16s var(--ease),background-color .16s var(--ease)}
-.qz .opt .m{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line2);
-  display:grid;place-items:center;font-size:11px;color:transparent}
-.qz .opt span.t{flex:1;font-size:14.5px;line-height:1.45;color:var(--ink)}
-.qz .opt.ok{border-color:var(--brand);background:var(--brandS)}
-.qz .opt.ok .m{border-color:var(--brand);background:var(--brand);color:#fff}
-.qz .opt.no{border-color:#C4553C;background:rgba(196,85,60,.08)}
-.qz .opt.no .m{border-color:#C4553C;background:#C4553C;color:#fff}
-.qz .why{margin:0;padding:0 14px 14px;font-size:13.5px;line-height:1.55;color:var(--soft)}
-.qz .why b{color:var(--ink)}
-.qz.done .opt{pointer-events:none}
 /* ---------- проверка в конце урока ---------- */
 .tst{margin:18px 0 24px;border:1px solid var(--line2);border-radius:18px;background:var(--card);overflow:hidden}
 .tst .th{display:flex;align-items:center;gap:9px;padding:12px 14px;border-bottom:1px solid var(--line)}
@@ -2449,18 +2428,6 @@ function blk(b){
         <div class="tb"></div>
       </div>`;
   }
-  // задание: вопрос с разбором или сборка запроса из кусков
-  if(k==='quiz'){
-    const id = 'qz' + (blk.q = (blk.q || 0) + 1);
-    const заголовок = v.k === 'build' ? 'Соберите запрос' : 'Проверьте себя';
-    return `<div class="qz" id="${id}" data-quiz='${enc(JSON.stringify(v))}'>
-      <div class="qh"><i>${v.k === 'build' ? '⌘' : '?'}</i><b>${заголовок}</b></div>
-      <p class="qq">${v.q}</p>
-      <div class="opts">${v.o.map((o, i) =>
-        `<button class="opt" data-qo="${i}"><span class="m">✓</span><span class="t">${o[0]}</span></button>`).join('')}</div>
-      <p class="why" hidden></p>
-    </div>`;
-  }
   if(k==='fix') return `<div class="fixes">${v.split('||').map(pair=>{
       const [q,a] = pair.split('|');
       return `<div class="fx"><div class="q"><b>Проблема</b>${q}</div><div class="a"><b>Решение</b>${a}</div></div>`;
@@ -2509,6 +2476,10 @@ $('#secs').innerHTML = SECS.map((s,i)=>{
 
 /* ---------- что нового: пополняется вместе с приложением ---------- */
 const NEWS = [
+ ['11 сентября','нов','Проверка в конце каждого урока','Сто пятьдесят шесть вопросов: пять в уроках разделов, четыре в разборах нейросетей, пять в платных. Вопросы идут по одному, после ответа сразу разбор, в конце счёт. Пройденная проверка засчитывает урок прочитанным.'],
+ ['11 сентября','нов','Достижения и серия дней','На «Учёбе» видно, сколько дней подряд вы читаете, и точки последней недели. В профиле — восемь отметок: первый урок, три за вечер, раздел закрыт, неделя подряд и другие. Всё считается на вашем устройстве и никуда не отправляется.'],
+ ['11 сентября','нов','«Разборы» показывают канал','Экран перестал быть списком, набитым руками: свежие посты канала попадают туда сами, каждый открывается по нажатию. Ниже остались разборы того, что ломалось по дороге.'],
+ ['11 сентября','прав','Дата сверки в каталоге','Цены нейросетей меняются каждый месяц. Теперь под каждой карточкой видно, когда я их последний раз сверяла, — и если данные устарели, карточка скажет об этом сама.'],
  ['10 сентября','нов','Курс открыт заново','Приложение переписано под новую концепцию: приветственный экран рассказывает, что внутри и что даёт полный доступ. Дальше здесь будут только записи про сам курс — новые уроки, разделы и разборы.'],
 ];
 
@@ -3157,42 +3128,6 @@ function testAgain(кнопка){
   testPaint(el);
 }
 
-function quizClick(el){
-  const box = el.closest('.qz');
-  if(!box || box.classList.contains('done')) return;
-  const данные = JSON.parse(decodeURIComponent(box.dataset.quiz));
-  const i = +el.dataset.qo;
-  const верный = данные.o[i][1] === true;
-
-  if(данные.k === 'build'){
-    // сборка: отмечаем нужные куски, разбор показываем, когда выбраны все верные
-    el.classList.toggle(верный ? 'ok' : 'no');
-    const выбрано = [...box.querySelectorAll('.opt.ok')].length;
-    const нужно = данные.o.filter(o => o[1] === true).length;
-    const ошибок = [...box.querySelectorAll('.opt.no')].length;
-    if(выбрано === нужно){
-      box.classList.add('done');
-      if(!ошибок) S.set('qzok', S.get('qzok', 0) + 1);
-      checkAch();
-      const w = box.querySelector('.why');
-      w.hidden = false;
-      w.innerHTML = (ошибок ? '<b>Собрано, но с лишним.</b> ' : '<b>Ровно то, что нужно.</b> ') + данные.why;
-      if(favCur) markDone(favCur.key.includes('-') ? favCur.key : 't-' + favCur.key);
-    }
-    return;
-  }
-
-  box.classList.add('done');
-  el.classList.add(верный ? 'ok' : 'no');
-  if(верный){ S.set('qzok', S.get('qzok', 0) + 1); checkAch(); }
-  if(!верный){
-    const п = данные.o.findIndex(o => o[1] === true);
-    box.querySelectorAll('.opt')[п].classList.add('ok');
-  }
-  const w = box.querySelector('.why');
-  w.hidden = false;
-  w.innerHTML = (верный ? '<b>Верно.</b> ' : '<b>Не совсем.</b> ') + данные.why;
-}
 
 /* ---------- поделиться ----------
    Самый дешёвый рост, который у нас есть: человек отправляет другу ссылку
@@ -4073,8 +4008,6 @@ document.addEventListener('click', e=>{
   const to = e.target.closest('[data-to]'); if(to){ testAnswer(to); return; }
   const tn = e.target.closest('[data-tn]'); if(tn){ testNext(tn); return; }
   const tr = e.target.closest('[data-tr]'); if(tr){ testAgain(tr); return; }
-  const qo = e.target.closest('[data-qo]');
-  if(qo){ quizClick(qo); return; }
   const sh = e.target.closest('[data-share]');
   if(sh){ share('Готовый промпт из урока «' + decodeURIComponent(sh.dataset.share) +
                 '» — в приложении «ИИ без людей»'); return; }
