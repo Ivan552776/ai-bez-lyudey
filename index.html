@@ -764,6 +764,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <span class="tx"><b>Новые материалы</b><span id="sw1-note">сообщать, когда выходит урок</span></span>
         <button class="sw" id="sw1"><i></i></button></div>
     </div>
+    <p class="foot" id="sw-note">проверяю, работает ли без сети…</p>
     <p class="foot" id="acc-foot">Полный доступ — 500 ₽ в месяц или 4 900 ₽ за год.<br>Оплата подключается.</p>
   </div>
 
@@ -2266,10 +2267,19 @@ function tkPaint(){
 /* ---------- офлайн ----------
    Приложение должно открываться в метро. Уроки уже лежат внутри страницы,
    поэтому достаточно закешировать её саму. */
+function swNote(текст){
+  const n = document.getElementById('sw-note');
+  if(n) n.innerHTML = текст;
+}
 if('serviceWorker' in navigator){
   addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => swNote('Работает без сети: уроки открываются<br>даже в метро.'))
+      // молча падать нельзя: иначе никто не узнает, что офлайна нет
+      .catch(() => swNote('Без сети не откроется:<br>браузер не разрешил сохранить копию.'));
   });
+} else {
+  swNote('Без сети не откроется:<br>этот браузер так не умеет.');
 }
 
 /* ---------- задания в уроках ----------
