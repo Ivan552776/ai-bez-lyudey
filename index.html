@@ -2741,16 +2741,22 @@ async function post(path, body){
   try{
     const r = await fetch(API + path, {method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(Object.assign({initData: (TG && TG.initData) || ''}, body||{}))});
-    return r.ok ? await r.json() : null;
+    // Ответ сервера отдаём и когда он отказал: 402 «не оплачено» — это ответ,
+    // а не сбой. Раньше и то и другое превращалось в null, и отказ выглядел
+    // как обрыв связи.
+    const тело = await r.json().catch(() => ({}));
+    if(r.ok) return тело;
+    return {ok:false, status:r.status, error:тело.error};
   }catch(e){ return null; }
 }
 async function fetchLesson(key){
   const r = await post('/api/lesson', {id:key});
   // null — сервер не ответил (сеть, сбой). Отличаем от честного отказа:
   // показывать «купите доступ» тому, кто уже заплатил, — обман.
-  if(r === null) return {ошибка:'нет связи'};
+  if(r === null) return {ошибка:'нет связи'};        // сеть не ответила вовсе
   if(r.ok) return r.b;
-  return {ошибка: r.error === 'доступ не оплачен' ? 'не оплачен' : 'сбой'};
+  if(r.status === 402) return {ошибка:'не оплачен'};  // честный отказ сервера
+  return {ошибка:'сбой'};
 }
 
 /* ---------- кто я для сервера: подписан ли на канал, есть ли доступ ----------
