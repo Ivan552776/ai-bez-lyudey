@@ -594,6 +594,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   </div>
 
   <button class="up" id="up" aria-label="Наверх" hidden>↑</button>
+  <button class="totoc" id="to-toc" type="button">↑ Оглавление</button>
 
   <!-- ===== ЗАКРЫТЫЙ УРОК ===== -->
   <div class="view" id="v-pay">
@@ -2264,7 +2265,8 @@ function closeHello(go){
   if(go){ openSec(0); openLes(0); } else { show('study'); }
 }
 $('#hi-go').addEventListener('click', ()=>closeHello(true));
-$('#to-toc').addEventListener('click', ()=>{
+const toTocBtn = $('#to-toc');
+if(toTocBtn) toTocBtn.addEventListener('click', ()=>{
   const box = $('#l-toc');
   if(box && !box.hidden){
     box.classList.add('open');
