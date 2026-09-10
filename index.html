@@ -764,7 +764,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <span class="tx"><b>Новые материалы</b><span id="sw1-note">сообщать, когда выходит урок</span></span>
         <button class="sw" id="sw1"><i></i></button></div>
     </div>
-    <p class="foot" id="sw-note">проверяю, работает ли без сети…</p>
+    <p class="foot" id="sw-note" hidden></p>
     <p class="foot" id="acc-foot">Полный доступ — 500 ₽ в месяц или 4 900 ₽ за год.<br>Оплата подключается.</p>
   </div>
 
@@ -2267,28 +2267,24 @@ function tkPaint(){
 /* ---------- офлайн ----------
    Приложение должно открываться в метро. Уроки уже лежат внутри страницы,
    поэтому достаточно закешировать её саму. */
+/* Офлайн включается там, где он вообще возможен. В вебвью Telegram на iOS
+   Service Worker не предоставляется — это ограничение платформы, а не сбой.
+   Поэтому строку в профиле показываем только при успехе: обещание, которое
+   не выполняется, хуже его отсутствия. */
 function swNote(текст){
   const n = document.getElementById('sw-note');
-  if(n) n.innerHTML = текст;
+  if(!n) return;
+  if(!текст){ n.hidden = true; return; }
+  n.hidden = false;
+  n.innerHTML = текст;
 }
+swNote('');
 if('serviceWorker' in navigator){
   addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js', {scope: './'})
-      .then(reg => {
-        swNote('Работает без сети: уроки открываются<br>даже в метро.');
-        // установка может упасть уже после успешной регистрации
-        const w = reg.installing || reg.waiting || reg.active;
-        if(w) w.addEventListener('statechange', () => {
-          if(w.state === 'redundant') swNote('Без сети не откроется:<br>копия не сохранилась.');
-        });
-      })
-      // молча падать нельзя: иначе никто не узнает, что офлайна нет.
-      // Показываем настоящую причину — иначе чинить придётся вслепую.
-      .catch(err => swNote('Без сети не откроется.<br><span style="font-size:10px">' +
-        String(err && err.message || err).slice(0, 90) + '</span>'));
+      .then(() => swNote('Работает без сети: уроки открываются<br>даже в метро.'))
+      .catch(() => swNote(''));
   });
-} else {
-  swNote('Без сети не откроется:<br>этот браузер так не умеет.');
 }
 
 /* ---------- задания в уроках ----------
