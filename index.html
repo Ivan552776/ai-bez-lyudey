@@ -2928,7 +2928,7 @@ function chanDraw(список, свежее){
       ${свежее ? 'В канале пока пусто — первые посты вот-вот выйдут.'
                : 'Свежее из канала не загрузилось. Оно всегда есть в самом канале.'}</p>
       <a class="go2" style="margin-top:10px;display:inline-block" href="${ссылкаПоста('')}"
-         target="_blank" rel="noopener" data-tg="${ссылкаПоста('')}">Открыть канал →</a>`;
+         rel="noopener" data-tg="${ссылкаПоста('')}">Открыть канал →</a>`;
     return;
   }
   el.innerHTML = список.map((p, i) => `
@@ -2937,11 +2937,11 @@ function chanDraw(список, свежее){
         <span class="when">${датаПоста(p.at)}${p.photo ? ' · с картинкой' : ''}</span>
         <b>${esc(p.title)}</b>
         <p>${esc(p.text).slice(0, 190).replace(/\n+/g, ' ')}${p.text.length > 190 ? '…' : ''}</p>
-        <a class="go2" href="${ссылкаПоста(p.id)}" target="_blank" rel="noopener"
+        <a class="go2" href="${ссылкаПоста(p.id)}" rel="noopener"
            data-tg="${ссылкаПоста(p.id)}">Читать в канале →</a>
       </div>
     </div>`).join('') +
-    `<a class="allnews" href="${ссылкаПоста('')}" target="_blank" rel="noopener"
+    `<a class="allnews" href="${ссылкаПоста('')}" rel="noopener"
         data-tg="${ссылкаПоста('')}" style="display:block;text-align:center">Весь канал →</a>`;
 }
 async function chanPaint(){
@@ -3664,7 +3664,7 @@ function tgGo(ссылка){
 function перейти(ссылка){
   if(tgGo(ссылка)) return;
   const w = window.open(ссылка, '_blank');
-  if(!w) location.href = ссылка;
+  if(!w) location.href = ссылка;   // окно не открылось — уходим в той же вкладке
 }
 function openChannel(){ перейти(CHANNEL_LINK); }
 function paintMe(){
