@@ -337,7 +337,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .dock a.on{color:var(--brand);background:var(--brandS)}
 .foot{margin-top:20px;font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.65;text-align:center}
 .slides{position:relative;margin:0 0 6px}
-.track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+.track{display:flex;align-items:flex-start;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
   padding:2px 14px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .track::-webkit-scrollbar{display:none}
 .slide{flex:0 0 84%;scroll-snap-align:center;border:1px solid var(--line2);border-radius:20px;
@@ -1574,23 +1574,23 @@ const TOOLSLIDES = [
   {k:'chatgpt', n:'ChatGPT', c:'#10A37F', light:true, app:'chatgpt.com',
    ask:'Перепиши письмо клиенту: коротко, без канцелярита',
    say:'Готово. Убрал «в связи с вышеизложенным» и три причастных оборота — стало четыре строки вместо одиннадцати. Просьба и срок на месте.',
-   acts:['Копировать','Ещё вариант','Поделиться']},
+   acts:['Копировать','Ещё вариант','Поделиться'], cap:'Универсал на каждый день: письма, тексты, разбор таблиц и файлов.'},
   {k:'claude', n:'Claude', c:'#C8724A', light:false, app:'claude.ai',
    ask:'Договор на 14 страниц. Что здесь опасного лично для меня?',
    say:'Три пункта создают обязанности именно для вас: 4.2 — штраф без предупреждения, 6.1 — автопродление на год, 9.3 — споры в чужом городе. Цитирую по номерам.',
-   acts:['Копировать','Проверить цитаты','В документ']},
+   acts:['Копировать','Проверить цитаты','В документ'], cap:'Длинные документы и код. Держит контекст и не теряет нить на середине.'},
   {k:'perplexity', n:'Perplexity', c:'#20808D', light:false, app:'perplexity.ai',
    ask:'Что изменилось в законе о рекламе в этом месяце?',
    say:'Нашёл три изменения. Каждое — с датой и ссылкой на первоисточник. Одно ещё не вступило в силу, отметил отдельно.',
-   acts:['Источники','Уточнить','Экспорт'], sources:['pravo.gov.ru','fas.gov.ru','consultant.ru']},
+   acts:['Источники','Уточнить','Экспорт'], cap:'Когда нужны источники, а не пересказ по памяти. Каждый факт со ссылкой.', sources:['pravo.gov.ru','fas.gov.ru','consultant.ru']},
   {k:'midjourney', n:'Midjourney', c:'#4A4AC8', light:false, app:'midjourney.com',
    ask:'Обложка поста: приборная панель, спокойные цвета, без людей',
    say:'Четыре варианта готовы. Второй ближе к вашей палитре — могу поднять контраст.',
-   acts:['Варианты','Увеличить','Ещё'], grid:true},
+   acts:['Варианты','Увеличить','Ещё'], cap:'Картинки, на которые приятно смотреть. Стиль держится от кадра к кадру.', grid:true},
   {k:'whisper', n:'Whisper', c:'#5A6ACF', light:false, app:'локально на компьютере',
    ask:'Расшифруй часовую встречу и выдели, кто что пообещал',
    say:'8 200 слов, четыре голоса. Обещания собрал отдельным списком с таймкодами: 14:20 — прислать смету, 31:05 — согласовать макет.',
-   acts:['Текст','Таймкоды','Субтитры']}
+   acts:['Текст','Таймкоды','Субтитры'], cap:'Звук в текст: встречи, интервью, голосовые. Русский держит уверенно.'}
 ];
 
 const LESSONSLIDES = [
@@ -1645,7 +1645,7 @@ function chatSlide(t){
         <div class="acts">${t.acts.map(a=>`<span>${a}</span>`).join('')}</div>
       </div>
     </div>
-    <div class="cap"><b>${t.n}</b><span>${TL[t.k]?TL[t.k].d||'':''}</span></div>
+    <div class="cap"><b>${t.n}</b><span>${t.cap}</span></div>
   </div>`;
 }
 
