@@ -3201,7 +3201,7 @@ const SHARE_URL = 'https://t.me/ai_bez_lyudey_bot/kurs';
 function share(текст){
   const ссылка = 'https://t.me/share/url?url=' + encodeURIComponent(SHARE_URL) +
                  '&text=' + encodeURIComponent(текст);
-  tgGo(ссылка);
+  перейти(ссылка);
 }
 
 /* ---------- закладки ----------
@@ -3636,20 +3636,37 @@ async function fetchLesson(key){
    Ответ подписан Telegram и проверен на сервере, подменить в браузере нельзя. */
 let ME = null;
 const CHANNEL_LINK = 'https://t.me/ai_bez_lyudey';
-/** Уйти в Telegram по ссылке. Порядок важен: в мини-приложении работает
-    openTelegramLink, дальше openLink, и только потом обычные способы —
-    всплывающие окна в вебвью запрещены, поэтому window.open молча ничего
-    не делает и человек видит «кнопка не работает». */
+/** Мы правда внутри Telegram или это обычный браузер?
+    Проверять наличие window.Telegram бесполезно: скрипт Telegram
+    подключается всегда и в браузере тоже — там есть и openTelegramLink,
+    который молча ничего не делает. Настоящий признак — площадка и подпись:
+    вне Telegram платформа приходит как 'unknown', а initData пустая. */
+const вТелеграме = () => !!(TG && ((TG.initData && TG.initData.length)
+  || (TG.platform && TG.platform !== 'unknown')));
+
+/** Уйти в Telegram по ссылке. Возвращает true, только если увела сама.
+    Вне Telegram отдаёт false — пусть работает обычная ссылка. */
 function tgGo(ссылка){
+  if(!вТелеграме()) return false;
+  // openTelegramLink появился в версии 6.1: на старых клиентах он бросает
+  // ошибку, и раньше мы её глотали — со стороны это выглядело как мёртвая кнопка
   try{
-    if(TG && TG.openTelegramLink){ TG.openTelegramLink(ссылка); return true; }
-    if(TG && TG.openLink){ TG.openLink(ссылка); return true; }
+    if(TG.openTelegramLink && (!TG.isVersionAtLeast || TG.isVersionAtLeast('6.1'))){
+      TG.openTelegramLink(ссылка); return true;
+    }
   }catch(e){}
-  const w = window.open(ссылка, '_blank');
-  if(!w) location.href = ссылка;
+  try{ if(TG.openLink){ TG.openLink(ссылка); return true; } }catch(e){}
+  // последний путь: в вебвью переход по t.me перехватывает сам Telegram
+  location.href = ссылка;
   return true;
 }
-function openChannel(){ tgGo(CHANNEL_LINK); }
+/** Для кнопок, которые не ссылки: увести из браузера своими силами. */
+function перейти(ссылка){
+  if(tgGo(ссылка)) return;
+  const w = window.open(ссылка, '_blank');
+  if(!w) location.href = ссылка;
+}
+function openChannel(){ перейти(CHANNEL_LINK); }
 function paintMe(){
   const bar = document.getElementById('subbar');
   if(!ME){ bar.hidden = true; return; }
@@ -4048,8 +4065,9 @@ document.addEventListener('click', e=>{
   if(e.target.closest('#pop')){ $('#pop').classList.remove('on'); show('ach'); return; }
   const тг = e.target.closest('[data-tg]');
   if(тг){
-    // в мини-приложении уводим сами, в браузере пусть работает обычная ссылка
-    if(TG && (TG.openTelegramLink || TG.openLink)){ e.preventDefault(); tgGo(тг.dataset.tg); }
+    // отменяем переход по ссылке, только если увели сами: иначе в браузере
+    // не произойдёт вообще ничего
+    if(tgGo(тг.dataset.tg)) e.preventDefault();
     return;
   }
   const to = e.target.closest('[data-to]'); if(to){ testAnswer(to); return; }
