@@ -2041,6 +2041,7 @@ upBtn.addEventListener('click', ()=>scrollTo({top:0, behavior: CALM.matches ? 'a
 
 function show(v, back){
   document.body.classList.toggle('nodock', v==='hello');
+  if(v !== 'lesson'){ const b = $('#to-toc'); if(b) b.classList.remove('on'); }
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('on','back'));
   const el = $('#v-'+v);
   el.classList.add('on');
