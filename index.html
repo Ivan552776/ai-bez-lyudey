@@ -2273,10 +2273,19 @@ function swNote(текст){
 }
 if('serviceWorker' in navigator){
   addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(() => swNote('Работает без сети: уроки открываются<br>даже в метро.'))
-      // молча падать нельзя: иначе никто не узнает, что офлайна нет
-      .catch(() => swNote('Без сети не откроется:<br>браузер не разрешил сохранить копию.'));
+    navigator.serviceWorker.register('sw.js', {scope: './'})
+      .then(reg => {
+        swNote('Работает без сети: уроки открываются<br>даже в метро.');
+        // установка может упасть уже после успешной регистрации
+        const w = reg.installing || reg.waiting || reg.active;
+        if(w) w.addEventListener('statechange', () => {
+          if(w.state === 'redundant') swNote('Без сети не откроется:<br>копия не сохранилась.');
+        });
+      })
+      // молча падать нельзя: иначе никто не узнает, что офлайна нет.
+      // Показываем настоящую причину — иначе чинить придётся вслепую.
+      .catch(err => swNote('Без сети не откроется.<br><span style="font-size:10px">' +
+        String(err && err.message || err).slice(0, 90) + '</span>'));
   });
 } else {
   swNote('Без сети не откроется:<br>этот браузер так не умеет.');
