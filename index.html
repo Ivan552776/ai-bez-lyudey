@@ -2647,14 +2647,18 @@ function paintNext(nx){
   box.innerHTML = `<button class="nx" data-nx="${nx.si}-${nx.li}"><span><span class="k">${nx.k}</span>
       <b>${nx.t}</b></span><span class="ch">›</span></button>`;
 }
+let payLes = 0;
 async function openLes(j){
+  payLes = j;
   const s = SECS[cur], l = s.ls[j];
   if(!l.b){
     // Тело платного урока лежит на сервере: всё, что попадает в браузер,
     // становится общедоступным. Есть доступ — сервер отдаст, нет — платный экран.
     if(API && l.key){
       const b = await fetchLesson(l.key);
-      if(b){ l.b = b; } else { showPay(s, l); return; }
+      if(Array.isArray(b)){ l.b = b; }
+      else if(b && b.ошибка !== 'не оплачен'){ showTrouble(s, l); return; }
+      else { showPay(s, l); return; }
     } else { showPay(s, l); return; }
   }
   $('#l-head').setAttribute('style','background:'+s.g);
@@ -2740,7 +2744,14 @@ async function post(path, body){
     return r.ok ? await r.json() : null;
   }catch(e){ return null; }
 }
-async function fetchLesson(key){ const r = await post('/api/lesson', {id:key}); return r && r.ok ? r.b : null; }
+async function fetchLesson(key){
+  const r = await post('/api/lesson', {id:key});
+  // null — сервер не ответил (сеть, сбой). Отличаем от честного отказа:
+  // показывать «купите доступ» тому, кто уже заплатил, — обман.
+  if(r === null) return {ошибка:'нет связи'};
+  if(r.ok) return r.b;
+  return {ошибка: r.error === 'доступ не оплачен' ? 'не оплачен' : 'сбой'};
+}
 
 /* ---------- кто я для сервера: подписан ли на канал, есть ли доступ ----------
    Ответ подписан Telegram и проверен на сервере, подменить в браузере нельзя. */
@@ -2886,8 +2897,32 @@ function openToolLesson(k){
   show('lesson');
 }
 
+/** Урок не загрузился не потому, что не оплачен, а потому что связи нет.
+    Тогда и говорим об этом честно, а не предлагаем купить. */
+function showTrouble(sec, les){
+  $('#pay-head').setAttribute('style','background:'+sec.g);
+  $('#pay-k').textContent = sec.t;
+  $('#pay-t').textContent = les.t;
+  $('#pay-in').innerHTML = `<li>Не удалось получить урок с сервера.</li>
+    <li>Похоже, пропала связь или сервер недоступен.</li>
+    <li>Ваш доступ при этом никуда не делся.</li>`;
+  const строка = $('#v-pay .pline');
+  if(строка) строка.hidden = true;
+  const кнопка = $('#v-pay .buy2');
+  if(кнопка){ кнопка.textContent = 'Попробовать снова'; кнопка.dataset.retry = '1'; delete кнопка.dataset.go; }
+  show('pay');
+}
+
 /* ---------- экран закрытого урока ---------- */
 function showPay(sec, les){
+  const строка = $('#v-pay .pline');
+  if(строка) строка.hidden = false;
+  const кнопка = $('#v-pay .buy2');
+  if(кнопка && кнопка.dataset.retry){
+    кнопка.textContent = 'Что входит в полный доступ';
+    кнопка.dataset.go = 'pay-all';
+    delete кнопка.dataset.retry;
+  }
   $('#pay-head').setAttribute('style','background:'+sec.g);
   $('#pay-k').textContent = sec.t;
   $('#pay-t').textContent = les.t;
@@ -2989,6 +3024,8 @@ document.addEventListener('click', e=>{
   const dc = e.target.closest('[data-doc]'); if(dc){ openDoc(dc.dataset.doc); return; }
   if(e.target.closest('[data-recent]')){ paintRecent(); show('recent'); return; }
   if(e.target.closest('[data-hello]')){ show('hello'); return; }
+  const rt = e.target.closest('[data-retry]');
+  if(rt){ openLes(payLes); return; }
   const qo = e.target.closest('[data-qo]');
   if(qo){ quizClick(qo); return; }
   const sh = e.target.closest('[data-share]');
