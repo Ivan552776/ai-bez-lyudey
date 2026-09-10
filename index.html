@@ -332,6 +332,19 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .dock a .g{font-size:18px;line-height:1}
 .dock a.on{color:var(--brand);background:var(--brandS)}
 .foot{margin-top:20px;font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.65;text-align:center}
+.slides{position:relative;margin:0 0 6px}
+.track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:2px 14px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 84%;scroll-snap-align:center;border:1px solid var(--line2);border-radius:20px;
+  background:var(--card);overflow:hidden}
+.slide .pic{display:block;width:100%;height:auto;background:var(--brandS)}
+.slide .cap{padding:13px 15px 15px}
+.slide .cap b{display:block;font-size:15.5px;margin:0 0 4px;color:var(--ink)}
+.slide .cap span{font-size:13.5px;line-height:1.5;color:var(--soft)}
+.dots{display:flex;gap:6px;justify-content:center;margin:0 0 4px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--line2);transition:width .2s,background .2s}
+.dots i.on{width:18px;background:var(--brand)}
 .toc{margin:0 14px 14px;border:1px solid var(--line2);border-radius:16px;background:var(--card);overflow:hidden}
 .toc[hidden]{display:none}
 .toc>button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;
@@ -386,6 +399,11 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
          канал без человека. Каждый урок — разбор с примерами, экраном настоящей переписки,
          схемой, готовым промптом и пятью реальными «проблема — решение». Плюс каталог
          разобранных нейросетей: что умеет, сколько стоит, кому подходит, а кому нет.</p>
+    </div>
+
+    <div class="slides">
+      <div class="track" id="hi-track"></div>
+      <div class="dots" id="hi-dots"></div>
     </div>
 
     <div class="sh">В цифрах</div>
@@ -1485,6 +1503,97 @@ const ROAD = [
   ['⬡','Второй агент и третий','Как из одного собранного агента делать следующих, не начиная заново']
 ].map(([i,t,d])=>`<div><i>${i}</i><div><b>${t}</b><span>${d}</span></div></div>`).join('');
 
+/* ---------- слайд-шоу на приветствии ----------
+   Не видео: рисованные картинки в палитре приложения. Крутится само,
+   но останавливается, как только человек трогает — навязчивая карусель хуже её отсутствия. */
+const SLIDES = [
+  ['Запрос, который работает',
+   'Четыре вещи — роль, задача, рамки, материал. Разбор на настоящей переписке: как выглядит шаблонный ответ и как тот же вопрос даёт ответ по делу.',
+   `<rect width="640" height="360" fill="#E4EFEF"/>
+    <rect x="40" y="42" width="330" height="44" rx="14" fill="#FFFFFF"/>
+    <rect x="60" y="58" width="210" height="12" rx="6" fill="#C3D6D5"/>
+    <rect x="230" y="108" width="370" height="86" rx="14" fill="#12666B"/>
+    <rect x="252" y="130" width="300" height="11" rx="5.5" fill="#8FC7C9"/>
+    <rect x="252" y="152" width="250" height="11" rx="5.5" fill="#8FC7C9"/>
+    <rect x="252" y="174" width="180" height="11" rx="5.5" fill="#8FC7C9"/>
+    <rect x="40" y="218" width="420" height="44" rx="14" fill="#FFFFFF"/>
+    <rect x="60" y="234" width="330" height="12" rx="6" fill="#C3D6D5"/>
+    <rect x="40" y="286" width="150" height="34" rx="17" fill="#E08A2B"/>`],
+  ['Двадцать одна нейросеть разобрана',
+   'Что умеет, сколько стоит, работает ли из России и кому честно не подходит. Без рейтингов — с проверкой на вашей задаче.',
+   `<rect width="640" height="360" fill="#F3F4F0"/>
+    ${[0,1,2,3,4,5].map(i=>`<g transform="translate(${44+(i%3)*186},${52+Math.floor(i/3)*136})">
+      <rect width="164" height="112" rx="18" fill="#FFFFFF"/>
+      <rect x="18" y="20" width="52" height="52" rx="16" fill="${['#12666B','#17858B','#E08A2B','#4E5A58','#14757A','#0F5E63'][i]}"/>
+      <rect x="18" y="84" width="104" height="10" rx="5" fill="#D9E0DD"/>
+      <rect x="82" y="30" width="62" height="9" rx="4.5" fill="#E1E7E4"/>
+      <rect x="82" y="48" width="44" height="9" rx="4.5" fill="#E9EEEB"/></g>`).join('')}`],
+  ['Схемы вместо стен текста',
+   'В каждом уроке — экран настоящей переписки, схема происходящего и готовый промпт с кнопкой копирования.',
+   `<rect width="640" height="360" fill="#E4EFEF"/>
+    ${[0,1,2,3].map(i=>`<g transform="translate(56,${44+i*76})">
+      <circle cx="20" cy="26" r="20" fill="#12666B"/>
+      <text x="20" y="33" text-anchor="middle" font-family="Helvetica" font-size="20" font-weight="700" fill="#FFFFFF">${i+1}</text>
+      <rect x="56" y="10" width="${300-i*40}" height="13" rx="6.5" fill="#FFFFFF"/>
+      <rect x="56" y="32" width="${210-i*30}" height="11" rx="5.5" fill="#CBDDDC"/>
+      ${i<3?'<rect x="18" y="48" width="4" height="28" rx="2" fill="#B9D2D1"/>':''}</g>`).join('')}
+    <rect x="452" y="250" width="132" height="40" rx="14" fill="#E08A2B"/>`],
+  ['Свой бот за вечер',
+   'Пробный урок открыт целиком: бот, права в канале, первая публикация — и разбор пяти ошибок, на которых спотыкаются все.',
+   `<rect width="640" height="360" fill="#F3F4F0"/>
+    <rect x="196" y="26" width="248" height="308" rx="34" fill="#101A1A"/>
+    <rect x="210" y="58" width="220" height="244" rx="18" fill="#16292A"/>
+    <rect x="228" y="80" width="150" height="12" rx="6" fill="#2E4A4B"/>
+    <rect x="228" y="112" width="184" height="52" rx="14" fill="#12666B"/>
+    <rect x="246" y="130" width="130" height="10" rx="5" fill="#7FBCBE"/>
+    <rect x="246" y="146" width="96" height="10" rx="5" fill="#7FBCBE"/>
+    <rect x="228" y="182" width="150" height="40" rx="14" fill="#22383A"/>
+    <rect x="228" y="244" width="184" height="40" rx="14" fill="#E08A2B"/>`],
+  ['Агент, который ведёт канал сам',
+   'Финал курса: память между запусками, работа по расписанию без вашего компьютера и проверки, без которых он однажды опубликует лишнее.',
+   `<rect width="640" height="360" fill="#101A1A"/>
+    <circle cx="320" cy="150" r="66" fill="#12666B"/>
+    ${[0,1,2,3,4,5,6].map(i=>{const t=(i-3)/3, h=Math.max(96*Math.exp(-1.4*t*t),26);
+      return `<rect x="${252+i*20}" y="${150-h/2}" width="11" height="${h}" rx="5.5" fill="#EAF4F3"/>`}).join('')}
+    ${[0,1,2].map(i=>`<rect x="${150+i*118}" y="262" width="98" height="46" rx="16" fill="#172524"/>
+      <rect x="${168+i*118}" y="280" width="${62-i*10}" height="10" rx="5" fill="#3C5A59"/>`).join('')}
+    <circle cx="320" cy="336" r="8" fill="#E08A2B"/>`]
+];
+
+(function(){
+  const track = $('#hi-track'), dots = $('#hi-dots');
+  if(!track) return;
+  track.innerHTML = SLIDES.map(([t,d,art])=>`
+    <div class="slide">
+      <svg class="pic" viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">${art}</svg>
+      <div class="cap"><b>${t}</b><span>${d}</span></div>
+    </div>`).join('');
+  dots.innerHTML = SLIDES.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('');
+
+  const slides = [...track.children];
+  let idx = 0, timer = null, touched = false;
+  const paint = () => [...dots.children].forEach((d,i)=>d.classList.toggle('on', i===idx));
+  const goto = i => {
+    idx = (i + slides.length) % slides.length;
+    track.scrollTo({left: slides[idx].offsetLeft - track.offsetLeft - 8, behavior:'smooth'});
+    paint();
+  };
+  const start = () => { if(!touched && !timer) timer = setInterval(()=>goto(idx+1), 4500); };
+  const stop  = () => { clearInterval(timer); timer = null; };
+
+  // человек листает сам — больше не дёргаем
+  ['pointerdown','touchstart','wheel'].forEach(e=>track.addEventListener(e, ()=>{ touched = true; stop(); }, {passive:true}));
+  track.addEventListener('scroll', ()=>{
+    const near = slides.findIndex(s => Math.abs(s.offsetLeft - track.offsetLeft - track.scrollLeft) < s.offsetWidth/2);
+    if(near>-1 && near!==idx){ idx = near; paint(); }
+  }, {passive:true});
+  // крутим, только когда приветствие на экране и вкладка активна
+  const tick = () => ($('#v-hello').classList.contains('on') && !document.hidden) ? start() : stop();
+  document.addEventListener('visibilitychange', tick);
+  setInterval(tick, 1200);
+  tick();
+})();
+
 /* ---------- приветствие ---------- */
 const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
   <div class="nw"><span class="tag">${t}</span>
@@ -1576,6 +1685,7 @@ function buildToc(bodyId, tocId){
   if(hs.length < 3){ box.hidden = true; box.innerHTML = ''; return; }   // в коротком не нужно
   box.hidden = false;
   box.className = 'toc';
+  box.classList.add('open');
   box.innerHTML = `<button type="button"><span>Оглавление · ${hs.length}</span><i>›</i></button>
     <ol>${hs.map(h=>`<li><a href="#${h.id}">${h.textContent}</a></li>`).join('')}</ol>`;
   box.querySelector('button').onclick = ()=> box.classList.toggle('open');
