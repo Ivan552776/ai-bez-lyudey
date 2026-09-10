@@ -353,6 +353,8 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .bub.me{margin:0 0 8px auto;background:var(--brand);color:#fff;border-bottom-right-radius:5px}
 .bub.ai{margin:0 0 10px;background:var(--bg);color:var(--ink);border-bottom-left-radius:5px;
   border:1px solid var(--line2)}
+/* место под ответ резервируем заранее: иначе растущий пузырь дёргает вёрстку */
+.chatw .bub.ai[data-say]{min-height:74px}
 .bub .car{display:inline-block;width:2px;height:1em;vertical-align:-2px;margin-left:1px;
   background:var(--brand);animation:blink 1s steps(2,start) infinite}
 @keyframes blink{to{visibility:hidden}}
