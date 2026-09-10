@@ -1512,7 +1512,9 @@ function paintProgress(){
     h.textContent = nx ? (started ? 'Продолжить: ' + nx.t : 'Открыть первый урок')
                        : 'Открыть весь курс — 500 ₽ в месяц';
     h.dataset.cont = nx ? nx.i+'-'+nx.j : '';
-    h.dataset.go = nx ? '' : 'pay-all';
+    // пустой data-go — это не «нет перехода», а переход на экран без имени:
+    // обработчик срабатывал и прятал вообще всё. Атрибут надо снимать.
+    if(nx) h.removeAttribute('data-go'); else h.dataset.go = 'pay-all';
   }
   // профиль
   const all = SECS.reduce((a,_,i)=>{const p=secProgress(i);return {d:a.d+p.done, t:a.t+p.total}},{d:0,t:0});
@@ -2130,7 +2132,8 @@ document.addEventListener('click', e=>{
   }
   const nx = e.target.closest('[data-nx]');
   if(nx){ const [si,li] = nx.dataset.nx.split('-').map(Number); openSec(si); openLes(li); return; }
-  const go = e.target.closest('[data-go]'); if(go){ show(go.dataset.go, 'back' in go.dataset); return; }
+  const go = e.target.closest('[data-go]');
+  if(go && go.dataset.go){ show(go.dataset.go, 'back' in go.dataset); return; }
   const sg = e.target.closest('[data-sec-go]'); if(sg){ openSec(+sg.dataset.secGo); return; }
   const sec = e.target.closest('[data-sec]');
   if(sec){
