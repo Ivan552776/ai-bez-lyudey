@@ -410,24 +410,14 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   transition:opacity .25s var(--ease-out),transform .25s var(--ease-out)}
 .src i.in{opacity:1;transform:none}
 .slide{box-shadow:0 6px 20px -12px rgba(20,32,31,.28)}
-.chatw{padding:14px 14px 4px;background:var(--brandS);min-height:214px}
-.chd{display:flex;align-items:center;gap:9px;margin:0 0 12px}
-.chd .av{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
-  font:700 13px/1 var(--sans);color:#fff}
-.chd b{font-size:14px;color:var(--ink)}
-.chd span{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-left:auto}
-.bub{max-width:88%;padding:9px 12px;border-radius:14px;font-size:13.5px;line-height:1.45;
-  opacity:0;transform:translateY(6px);transition:opacity .2s var(--ease-out),transform .2s var(--ease-out)}
-.bub.in{opacity:1;transform:none}
-.bub.me{margin:0 0 8px auto;background:var(--brand);color:#fff;border-bottom-right-radius:5px}
-.bub.ai{margin:0 0 10px;background:var(--bg);color:var(--ink);border-bottom-left-radius:5px;
-  border:1px solid var(--line2)}
-/* место под ответ резервируем заранее: иначе растущий пузырь дёргает вёрстку */
-.chatw .bub.ai[data-say]{min-height:74px}
-.bub .car{display:inline-block;width:2px;height:1em;vertical-align:-2px;margin-left:1px;
+/* курсор печати в слайдах; класс .bub здесь не трогаем — он занят экранами
+   переписки в уроках, и прозрачность из старой версии делала их невидимыми */
+.car{display:inline-block;width:2px;height:1em;vertical-align:-2px;margin-left:1px;
   background:var(--brand);animation:blink 1s steps(2,start) infinite}
+.swin .msg .txt .car{background:currentColor}
 @keyframes blink{to{visibility:hidden}}
-@media (prefers-reduced-motion:reduce){.bub .car{animation:none}}
+@media (prefers-reduced-motion:reduce){.car{animation:none}}
+.swin .msg[data-say] .txt{min-height:74px}
 .slide .cap b{display:block;font-size:15.5px;margin:0 0 4px;color:var(--ink)}
 .slide .cap span{font-size:13.5px;line-height:1.5;color:var(--soft)}
 .dots{display:flex;gap:6px;justify-content:center;margin:0 0 4px}
