@@ -499,6 +499,52 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .qz .why{margin:0;padding:0 14px 14px;font-size:13.5px;line-height:1.55;color:var(--soft)}
 .qz .why b{color:var(--ink)}
 .qz.done .opt{pointer-events:none}
+/* ---------- серия дней и достижения ----------
+   Возвраты держатся не на напоминаниях, а на видимой цепочке: человек видит,
+   сколько дней подряд читал, и не хочет её рвать. */
+.strk{margin:0 14px 18px}
+.skl{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 13px;
+  border-radius:16px;background:var(--card);border:1px solid var(--line);
+  transition:transform .14s var(--ease),border-color .2s}
+.skl:active{transform:scale(.985)}
+.skl .fl{flex:none;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;
+  background:var(--sig);color:var(--sigInk);font-size:17px;font-style:normal}
+.skl .sn{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.skl .sn b{font-size:15px;line-height:1.25;color:var(--ink)}
+.skl .sn span{font-size:12.5px;line-height:1.3;color:var(--soft)}
+.week{display:flex;gap:4px;flex:none}
+.week i{width:7px;height:7px;border-radius:50%;background:var(--line2);font-style:normal}
+.week i.on{background:var(--sig)}
+.week i.now{box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--sig)}
+.skl .ch{color:var(--faint);font-size:17px;flex:none}
+
+.achs{display:flex;flex-direction:column;gap:9px}
+.ach{display:flex;gap:12px;align-items:flex-start;padding:13px;border-radius:16px;
+  background:var(--card);border:1px solid var(--line);animation:rise .4s var(--ease) backwards}
+.ach i{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+  font-size:17px;font-style:normal;background:var(--line2);color:var(--faint)}
+.ach .tx2{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ach .tx2 b{font-size:15px;line-height:1.3;color:var(--soft)}
+.ach .tx2 span{font-size:13px;line-height:1.45;color:var(--faint)}
+.ach.got{border-color:var(--line2)}
+.ach.got i{background:var(--sig);color:var(--sigInk)}
+.ach.got .tx2 b{color:var(--ink)}
+.ach.got .tx2 span{color:var(--soft)}
+.ach .when{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--faint);margin-top:2px}
+
+/* плашка о новом достижении: снизу, над панелью вкладок */
+.pop{position:fixed;left:50%;transform:translate(-50%,14px);bottom:calc(70px + env(safe-area-inset-bottom));
+  z-index:40;display:flex;align-items:center;gap:11px;padding:11px 15px 11px 11px;border-radius:16px;
+  background:var(--ink);color:var(--bg);box-shadow:0 10px 30px rgba(0,0,0,.22);max-width:min(92vw,420px);
+  opacity:0;pointer-events:none;transition:opacity .26s var(--ease),transform .26s var(--ease)}
+.pop.on{opacity:1;transform:translate(-50%,0);pointer-events:auto;cursor:pointer}
+.pop i{flex:none;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;
+  background:var(--sig);color:var(--sigInk);font-size:16px;font-style:normal}
+.pop .pt{display:flex;flex-direction:column;gap:1px;min-width:0}
+.pop .pt b{font-size:14.5px;line-height:1.2}
+.pop .pt span{font-size:12px;line-height:1.3;opacity:.72}
+@media (prefers-reduced-motion:reduce){.pop{transition:opacity .2s linear}}
 .fav.on{background:var(--sig);color:var(--sigInk)}
 .fav.shr{right:60px}
 .lhead{position:relative}
@@ -627,6 +673,14 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
       <div class="dots" id="st-dots"></div>
     </div>
     <button class="buy2" id="hero-go" data-sec="0" style="margin:0 14px 18px;width:calc(100% - 28px)">Открыть первый урок</button>
+    <div class="strk" id="strk" hidden>
+      <button class="skl" data-go="ach">
+        <i class="fl">✦</i>
+        <span class="sn"><b id="stk-n"></b><span id="stk-s"></span></span>
+        <span class="week" id="stk-week"></span>
+        <span class="ch">›</span>
+      </button>
+    </div>
     <div class="sh">Разделы · два открыты</div>
     <div class="stack" id="secs"></div>
 
@@ -747,6 +801,8 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <span class="tx"><b>Закладки</b><span id="p-fav">пока пусто</span></span><span class="ch">›</span></button>
       <button class="row" data-go="news"><span class="ic i3 sm">✦</span>
         <span class="tx"><b>Что нового</b><span id="p-news">обновления курса</span></span><span class="ch">›</span></button>
+      <button class="row" data-go="ach"><span class="ic i4 sm">✦</span>
+        <span class="tx"><b>Достижения</b><span id="p-ach">пока ни одного</span></span><span class="ch">›</span></button>
     </div>
     <div class="sh">Поддержка</div>
     <div class="grp">
@@ -766,6 +822,18 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     </div>
     <p class="foot" id="sw-note" hidden></p>
     <p class="foot" id="acc-foot">Полный доступ — 500 ₽ в месяц или 4 900 ₽ за год.<br>Оплата подключается.</p>
+  </div>
+
+  <!-- ===== ДОСТИЖЕНИЯ ===== -->
+  <div class="view" id="v-ach">
+    <button class="back" data-back data-go="me">← Профиль</button>
+    <h2 class="big">Достижения</h2>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Отметки о том, что уже сделано.
+      Ни на что не влияют и никуда не отправляются — просто видно, сколько пройдено.</p>
+    <div class="strk" id="strk2" style="margin:16px 0 0"></div>
+    <div class="sh">Отметки</div>
+    <div class="achs" id="ach-out"></div>
+    <p class="foot" id="ach-foot"></p>
   </div>
 
   <!-- ===== НЕДАВНЕЕ ===== -->
@@ -1999,6 +2067,7 @@ function paintProgress(){
   const tp = toolProgress();
   const pc = $('#p-cnt');
   if(pc) pc.textContent = `${all.d + tp.done} из ${all.t + tp.total} уроков прочитано`;
+  paintStreak();
 }
 
 /* ---------- что появится дальше: один список на два экрана ---------- */
@@ -2435,6 +2504,8 @@ function quizClick(el){
     const ошибок = [...box.querySelectorAll('.opt.no')].length;
     if(выбрано === нужно){
       box.classList.add('done');
+      if(!ошибок) S.set('qzok', S.get('qzok', 0) + 1);
+      checkAch();
       const w = box.querySelector('.why');
       w.hidden = false;
       w.innerHTML = (ошибок ? '<b>Собрано, но с лишним.</b> ' : '<b>Ровно то, что нужно.</b> ') + данные.why;
@@ -2445,6 +2516,7 @@ function quizClick(el){
 
   box.classList.add('done');
   el.classList.add(верный ? 'ok' : 'no');
+  if(верный){ S.set('qzok', S.get('qzok', 0) + 1); checkAch(); }
   if(!верный){
     const п = данные.o.findIndex(o => o[1] === true);
     box.querySelectorAll('.opt')[п].classList.add('ok');
@@ -2799,6 +2871,7 @@ async function openLes(j){
   buildToc();
   $('#l-foot').textContent = '◷ ' + l.min + ' мин';
   paintNext(nextAfter(cur, j));
+  touchDay();
   window.__lback = 'sec';
   favCur = {kind:'lesson', key:cur+'-'+j, title:l.t, sub:s.t};
   favPaintButton();
@@ -2833,6 +2906,7 @@ function show(v, back){
   if(v === 'prompts') prPaint();
   if(v === 'tools') tkPaint();
   if(v === 'favs') favPaintList();
+  if(v === 'ach') achPaint();
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('on','back'));
   const el = $('#v-'+v);
   el.classList.add('on');
@@ -2939,7 +3013,10 @@ function recentList(){ return S.get('rec', []); }
 function doneList(){ return S.get('done', []); }
 function markDone(id){
   const d = doneList();
-  if(!d.includes(id)){ d.push(id); S.set('done', d); }
+  if(!d.includes(id)){
+    d.push(id); S.set('done', d);
+    заДень(true); checkAch(); paintStreak();
+  }
 }
 function secProgress(i){
   const s = SECS[i], d = doneList();
@@ -2953,6 +3030,130 @@ function toolProgress(){
   const done = keys.filter(k=>d.includes('t-'+k)).length;
   return {done, total:keys.length, pct: Math.round(done/keys.length*100)};
 }
+/* ---------- серия дней и достижения ----------
+   Возвраты держатся не на напоминаниях, а на видимой цепочке: человек видит,
+   сколько дней подряд читал, и не хочет её рвать. Всё считается на устройстве
+   и никуда не отправляется. */
+const ACH = [
+  {k:'start', i:'✦', t:'Начало положено', d:'Первый урок прочитан до конца',        тест:s=>s.уроков>=1},
+  {k:'three', i:'◈', t:'Три за вечер',    d:'Три урока за один день',               тест:s=>s.лучшийДень>=3},
+  {k:'sec',   i:'◱', t:'Раздел закрыт',   d:'Все уроки одного раздела прочитаны',   тест:s=>s.разделов>=1},
+  {k:'qz10',  i:'✓', t:'Десять заданий',  d:'Десять верных ответов в заданиях',     тест:s=>s.заданий>=10},
+  {k:'t5',    i:'⚒', t:'Пять разборов',   d:'Пять разборов нейросетей прочитано',   тест:s=>s.разборов>=5},
+  {k:'d3',    i:'◐', t:'Третий день',     d:'Три дня подряд',                       тест:s=>s.серия>=3},
+  {k:'d7',    i:'⬡', t:'Неделя подряд',   d:'Семь дней подряд',                     тест:s=>s.серия>=7},
+  {k:'all',   i:'★', t:'Всё пройдено',    d:'Все открытые уроки и все разборы',     тест:s=>s.всё}
+];
+
+const день = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const сегодня = () => день(new Date());
+function сдвиг(дата, на){ const d = new Date(дата+'T12:00:00'); d.setDate(d.getDate()+на); return день(d); }
+function разница(a, b){ return Math.round((new Date(b+'T12:00:00') - new Date(a+'T12:00:00')) / 86400000); }
+
+/** День засчитывается за открытие любого урока, а не за дочитывание:
+    цепочку рвать обидно, и придираться к тому, докрутил человек до низа или нет,
+    здесь неуместно. */
+function touchDay(){
+  const t = сегодня(), d = S.get('days', {last:'', streak:0, best:0});
+  if(d.last !== t){
+    d.streak = (d.last && разница(d.last, t) === 1) ? d.streak + 1 : 1;
+    d.last = t;
+    if(d.streak > d.best) d.best = d.streak;
+    S.set('days', d);
+    const log = S.get('dlog', []);
+    if(!log.includes(t)) S.set('dlog', log.concat(t).slice(-40));
+  }
+  checkAch(); paintStreak();
+  return d;
+}
+function заДень(плюс){
+  const t = сегодня(), c = S.get('dayc', {d:'', n:0});
+  if(c.d !== t){ c.d = t; c.n = 0; }
+  if(плюс){ c.n++; S.set('dayc', c);
+    if(c.n > S.get('dayBest', 0)) S.set('dayBest', c.n); }
+  return c.n;
+}
+
+function achState(){
+  const дни = S.get('days', {streak:0, best:0}), tp = toolProgress();
+  let разделов = 0, открытых = 0, прочитано = 0;
+  SECS.forEach((_, i)=>{ const p = secProgress(i);
+    открытых += p.total; прочитано += p.done;
+    if(p.total && p.done === p.total) разделов++; });
+  return {уроков: прочитано + tp.done, разделов, разборов: tp.done,
+          серия: дни.streak, лучшийДень: S.get('dayBest', 0), заданий: S.get('qzok', 0),
+          всё: открытых > 0 && прочитано === открытых && tp.done === tp.total};
+}
+function checkAch(){
+  const s = achState(), было = S.get('ach', {}), новые = [];
+  ACH.forEach(a=>{ if(!было[a.k] && a.тест(s)){ было[a.k] = сегодня(); новые.push(a); } });
+  if(новые.length){ S.set('ach', было); popAch(новые[0], новые.length); }
+  return новые;
+}
+let popT = null;
+function popAch(a, сколько){
+  const el = $('#pop'); if(!el) return;
+  $('#pop-i').textContent = a.i;
+  $('#pop-t').textContent = a.t;
+  $('#pop-d').textContent = 'Достижение · ' + (сколько > 1 ? a.d + ' и ещё ' + (сколько - 1) : a.d);
+  el.classList.add('on');
+  if(TG && TG.HapticFeedback) try{ TG.HapticFeedback.notificationOccurred('success'); }catch(e){}
+  clearTimeout(popT);
+  popT = setTimeout(()=>el.classList.remove('on'), 4200);
+}
+
+const склон = (n, формы) => формы[(n%10===1 && n%100!==11) ? 0 : (n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2];
+const строкаСерии = n => n === 1 ? 'Первый день' : n + ' ' + склон(n, ['день','дня','дней']) + ' подряд';
+function неделя(){
+  const log = S.get('dlog', []), t = сегодня(), out = [];
+  for(let i = 6; i >= 0; i--){
+    const d = сдвиг(t, -i);
+    out.push('<i class="' + (log.includes(d) ? 'on' : '') + (i === 0 ? ' now' : '') + '"></i>');
+  }
+  return out.join('');
+}
+function paintStreak(){
+  const дни = S.get('days', {last:'', streak:0, best:0});
+  const собрано = Object.keys(S.get('ach', {})).length;
+  const полоса = $('#strk');
+  if(полоса){
+    полоса.hidden = !дни.streak;
+    if(дни.streak){
+      $('#stk-n').textContent = строкаСерии(дни.streak);
+      $('#stk-s').textContent = собрано ? 'Достижений: ' + собрано + ' из ' + ACH.length
+                                        : 'Достижения откроются по ходу';
+      $('#stk-week').innerHTML = неделя();
+    }
+  }
+  const вторая = $('#strk2');
+  if(вторая) вторая.innerHTML = `<div class="skl" style="cursor:default">
+      <i class="fl">✦</i>
+      <span class="sn"><b>${дни.streak ? строкаСерии(дни.streak) : 'Серии пока нет'}</b>
+        <span>${дни.best > 1 ? 'Лучшая серия — ' + дни.best + ' ' + склон(дни.best, ['день','дня','дней'])
+                : дни.streak ? 'Вернитесь завтра — счёт пойдёт дальше'
+                             : 'Откройте урок — и цепочка пойдёт'}</span></span>
+      <span class="week">${неделя()}</span></div>`;
+  const строка = $('#p-ach');
+  if(строка) строка.textContent = собрано ? собрано + ' из ' + ACH.length : 'пока ни одного';
+}
+const датаРус = d => { const m = ['января','февраля','марта','апреля','мая','июня','июля',
+    'августа','сентября','октября','ноября','декабря'];
+  const [г, мес, ч] = d.split('-'); return +ч + ' ' + m[+мес - 1]; };
+function achPaint(){
+  checkAch(); paintStreak();
+  const было = S.get('ach', {});
+  $('#ach-out').innerHTML = ACH.map((a, i)=>`
+    <div class="ach ${было[a.k] ? 'got' : ''}" style="animation-delay:${i*35}ms">
+      <i>${a.i}</i>
+      <span class="tx2"><b>${a.t}</b><span>${a.d}</span>${
+        было[a.k] ? `<span class="when">получено ${датаРус(было[a.k])}</span>` : ''}</span>
+    </div>`).join('');
+  const n = Object.keys(было).length;
+  $('#ach-foot').innerHTML = n === ACH.length
+    ? 'Все отметки собраны. Дальше — только новые уроки.'
+    : 'Собрано ' + n + ' из ' + ACH.length + '.<br>Отметки живут на этом устройстве и никуда не отправляются.';
+}
+
 /** Урок засчитывается, когда человек дочитал до низа.
     Если урок помещается на экран целиком, прокрутки не будет вовсе — такой
     засчитываем по времени, иначе короткие уроки не закрыть никогда. */
@@ -3030,6 +3231,7 @@ function openToolLesson(k){
   posRestore();
   remember('tool', k, l.t);
   watchRead('t-'+k);
+  touchDay();
   show('lesson');
 }
 
@@ -3162,6 +3364,7 @@ document.addEventListener('click', e=>{
   if(e.target.closest('[data-hello]')){ show('hello'); return; }
   const rt = e.target.closest('[data-retry]');
   if(rt){ openLes(payLes); return; }
+  if(e.target.closest('#pop')){ $('#pop').classList.remove('on'); show('ach'); return; }
   const qo = e.target.closest('[data-qo]');
   if(qo){ quizClick(qo); return; }
   const sh = e.target.closest('[data-share]');
@@ -3218,5 +3421,9 @@ try{
   }
 }catch(e){}
 </script>
+<div class="pop" id="pop" aria-live="polite">
+  <i id="pop-i">✦</i>
+  <span class="pt"><b id="pop-t"></b><span id="pop-d"></span></span>
+</div>
 </body>
 </html>
