@@ -465,6 +465,10 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .chapend{display:flex;gap:10px;margin:18px 0 26px}
 .chapend button{flex:1;min-height:46px;border:1px solid var(--line2);border-radius:14px;
   background:var(--card);color:var(--soft);font:600 12.5px/1.2 var(--sans);padding:8px 10px}
+.fav{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:12px;
+  background:rgba(255,255,255,.16);color:#fff;font-size:18px;line-height:1;display:grid;place-items:center}
+.fav.on{background:var(--sig);color:var(--sigInk)}
+.lhead{position:relative}
 .prc{margin:0 14px 12px;border:1px solid var(--line2);border-radius:16px;background:var(--card);overflow:hidden}
 .prc .hd{display:flex;align-items:center;gap:9px;padding:11px 13px;border-bottom:1px solid var(--line)}
 .prc .hd .k{flex:none;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;
@@ -612,7 +616,8 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   <div class="view" id="v-lesson">
     <div class="rp"><i id="rp-bar"></i></div>
     <button class="back" id="l-back">← Назад</button>
-    <div class="lhead" id="l-head"><span class="k" id="l-k"></span><h3 id="l-t"></h3></div>
+    <div class="lhead" id="l-head"><span class="k" id="l-k"></span><h3 id="l-t"></h3>
+      <button class="fav" id="l-fav" type="button" aria-label="В закладки">☆</button></div>
     <nav class="toc" id="l-toc" hidden></nav>
     <div class="prose" id="l-body"></div>
     <div id="l-next"></div>
@@ -701,6 +706,8 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <span class="tx"><b>Мои разделы</b><span id="p-cnt">2 открыто, 4 под замком</span></span><span class="ch">›</span></button>
       <button class="row" data-recent="1"><span class="ic i5 sm">◔</span>
         <span class="tx"><b>Недавно открытое</b><span id="p-rec">пока пусто</span></span><span class="ch">›</span></button>
+      <button class="row" data-go="favs"><span class="ic i2 sm">★</span>
+        <span class="tx"><b>Закладки</b><span id="p-fav">пока пусто</span></span><span class="ch">›</span></button>
       <button class="row" data-go="prompts"><span class="ic i4 sm">⌘</span>
         <span class="tx"><b>Промпты</b><span id="p-pr">все из уроков, в одном месте</span></span><span class="ch">›</span></button>
       <button class="row" data-go="news"><span class="ic i3 sm">✦</span>
@@ -726,6 +733,14 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   </div>
 
   <!-- ===== НЕДАВНЕЕ ===== -->
+  <div class="view" id="v-favs">
+    <button class="back" data-back data-go="me">← Профиль</button>
+    <h2 class="big">Закладки</h2>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">То, к чему вы захотели вернуться.
+      Звёздочка в правом верхнем углу урока добавляет и убирает.</p>
+    <div class="stack" id="fav-out"></div>
+  </div>
+
   <div class="view" id="v-prompts">
     <button class="back" data-back data-go="me">← Профиль</button>
     <h2 class="big">Промпты</h2>
@@ -2135,6 +2150,54 @@ function openSec(i){
   $('#sec-foot').innerHTML = '';
   show('sec');
 }
+/* ---------- закладки ----------
+   Хранятся там же, где прогресс: у каждого свои, без регистрации. */
+function favList(){ return S.get('fav', []); }
+function favKey(kind, key){ return kind + ':' + key; }
+let favCur = null;          // что открыто сейчас: {kind, key, title, sub}
+
+function favToggle(){
+  if(!favCur) return;
+  const k = favKey(favCur.kind, favCur.key);
+  const списк = favList();
+  const i = списк.findIndex(x => x.k === k);
+  if(i > -1) списк.splice(i, 1);
+  else списк.unshift({k, kind:favCur.kind, key:favCur.key, t:favCur.title, s:favCur.sub, at:Date.now()});
+  S.set('fav', списк);
+  favPaintButton();
+  favPaintList();
+}
+function favPaintButton(){
+  const b = $('#l-fav');
+  if(!b) return;
+  if(!favCur){ b.hidden = true; return; }
+  b.hidden = false;
+  const есть = favList().some(x => x.k === favKey(favCur.kind, favCur.key));
+  b.classList.toggle('on', есть);
+  b.textContent = есть ? '★' : '☆';
+  b.setAttribute('aria-label', есть ? 'Убрать из закладок' : 'В закладки');
+}
+function favPaintList(){
+  const out = $('#fav-out'), счёт = $('#p-fav');
+  const списк = favList();
+  if(счёт) счёт.textContent = списк.length ? списк.length + ' сохранено' : 'пока пусто';
+  if(!out) return;
+  out.innerHTML = списк.length ? списк.map((x, i) => `
+    <button class="item" data-fav="${i}">
+      <span class="ic i2 sm">${x.kind === 'tool' ? '⚒' : '◱'}</span>
+      <span class="tx"><b>${esc(x.t)}</b><span>${esc(x.s || '')}</span></span>
+      <span class="ch">›</span></button>`).join('')
+    : '<p class="foot">Здесь появится то, что вы отметите звёздочкой.</p>';
+  out.querySelectorAll('[data-fav]').forEach(el => {
+    el.onclick = () => {
+      const x = списк[+el.dataset.fav];
+      if(x.kind === 'tool') return openToolLesson(x.key);
+      const [si, li] = x.key.split('-').map(Number);
+      openSec(si); openLes(li);
+    };
+  });
+}
+
 /* ---------- сборник промптов ----------
    Промпты — самое переносимое, что есть в курсе. Собираем их из всех уроков
    в одно место с копированием: искать по урокам ради одной формулировки глупо. */
@@ -2162,7 +2225,11 @@ function prPaint(){
   });
   out.dataset.ready = '1';
   const счёт = $('#p-pr');
-  if(счёт) счёт.textContent = список.length + ' готовых запроса из уроков';
+  if(счёт){
+    const n = список.length, d = n % 100, e = n % 10;
+    const сл = d > 10 && d < 20 ? 'запросов' : e === 1 ? 'запрос' : e > 1 && e < 5 ? 'запроса' : 'запросов';
+    счёт.textContent = n + ' готовых ' + сл + ' из уроков';
+  }
 }
 
 /* ---------- поиск по всему приложению ----------
@@ -2267,6 +2334,25 @@ function srPaint(q){
   });
   $('#sr-clear').addEventListener('click', () => { поле.value = ''; srPaint(''); поле.focus(); });
 })();
+
+/* ---------- где человек остановился ----------
+   Запоминаем позицию в уроке: открыть длинный урок и снова начинать сверху — обидно. */
+function posSave(){
+  if(!favCur || !$('#v-lesson').classList.contains('on')) return;
+  const все = S.get('pos', {});
+  if(scrollY < 200) delete все[favKey(favCur.kind, favCur.key)];
+  else все[favKey(favCur.kind, favCur.key)] = Math.round(scrollY);
+  S.set('pos', все);
+}
+function posRestore(){
+  if(!favCur) return;
+  const y = (S.get('pos', {}))[favKey(favCur.kind, favCur.key)];
+  if(!y) return;
+  // ждём отрисовки, иначе прокручивать ещё некуда
+  setTimeout(() => {
+    if(document.documentElement.scrollHeight > y + innerHeight * 0.5) scrollTo({top:y, behavior:'auto'});
+  }, 260);
+}
 
 /** Оглавление урока: человек должен видеть, из чего урок состоит, а не листать вслепую. */
 function buildToc(bodyId, tocId){
@@ -2399,6 +2485,9 @@ async function openLes(j){
   $('#l-foot').textContent = '◷ ' + l.min + ' мин';
   paintNext(nextAfter(cur, j));
   window.__lback = 'sec';
+  favCur = {kind:'lesson', key:cur+'-'+j, title:l.t, sub:s.t};
+  favPaintButton();
+  posRestore();
   remember('lesson', cur+'-'+j, l.t);
   watchRead(cur+'-'+j);
   show('lesson');
@@ -2411,7 +2500,7 @@ function onScroll(){
   requestAnimationFrame(()=>{
     ticking = false;
     const lesson = $('#v-lesson').classList.contains('on');
-    if(lesson) paintSpy();
+    if(lesson){ paintSpy(); posSave(); }
     if(lesson){
       const h = document.documentElement.scrollHeight - innerHeight;
       rpBar.style.width = (h > 0 ? Math.min(100, scrollY / h * 100) : 0) + '%';
@@ -2427,6 +2516,7 @@ upBtn.addEventListener('click', ()=>scrollTo({top:0, behavior: CALM.matches ? 'a
 function show(v, back){
   document.body.classList.toggle('nodock', v==='hello');
   if(v === 'prompts') prPaint();
+  if(v === 'favs') favPaintList();
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('on','back'));
   const el = $('#v-'+v);
   el.classList.add('on');
@@ -2600,6 +2690,9 @@ function openToolLesson(k){
   $('#l-next').innerHTML = `<button class="nx" data-go="tools"><span><span class="k">дальше</span>
       <b>Выбрать другой инструмент</b></span><span class="ch">›</span></button>`;
   window.__lback = 'tools';
+  favCur = {kind:'tool', key:k, title:l.t, sub:'разбор нейросети'};
+  favPaintButton();
+  posRestore();
   remember('tool', k, l.t);
   watchRead('t-'+k);
   show('lesson');
@@ -2649,6 +2742,8 @@ function closeHello(go){
   if(go){ openSec(0); openLes(0); } else { show('study'); }
 }
 $('#hi-go').addEventListener('click', ()=>closeHello(true));
+$('#l-fav').addEventListener('click', favToggle);
+favPaintList();
 $('#hi-skip').addEventListener('click', ()=>closeHello(false));
 show(seenHello ? 'study' : 'hello');
 
