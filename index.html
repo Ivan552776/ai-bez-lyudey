@@ -1929,7 +1929,7 @@ function buildToc(bodyId, tocId){
   const mins = hs.map((h,i)=>{
     let n = 0, el = h.nextElementSibling;
     while(el && el !== hs[i+1]){ n += (el.textContent||'').length; el = el.nextElementSibling; }
-    return Math.max(1, Math.round(n / 900));
+    return Math.max(1, Math.round(n / 1100));
   });
 
   box.innerHTML = `<button type="button"><i>›</i><span>Оглавление</span>
@@ -1937,7 +1937,7 @@ function buildToc(bodyId, tocId){
     <ol>${hs.map((h,i)=>`<li><a href="#${h.id}" data-i="${i}">
       <span class="n"><span>${i+1}</span></span>
       <span class="tt">${h.textContent}</span>
-      <span class="mn">${mins[i]} мин</span></a></li>`).join('')}</ol>`;
+      <span class="mn">${mins[i] > 1 ? mins[i] + ' мин' : ''}</span></a></li>`).join('')}</ol>`;
 
   box.querySelector('button').onclick = ()=> box.classList.toggle('open');
   box.querySelectorAll('a').forEach(a=>{
