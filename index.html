@@ -61,8 +61,8 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 .tcard .cv{height:78px;position:relative;display:flex;align-items:flex-end;padding:11px 13px}
 .tcard .cv .nm{font-size:17px;font-weight:700;color:#fff;letter-spacing:-.01em}
 .tcard .cv .bdg{position:absolute;top:10px;right:11px;font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;border-radius:6px;background:rgba(255,255,255,.22);color:#fff}
-.tcard .bd{padding:11px 13px;display:flex;flex-direction:column;gap:9px}
-.tcard .bd p{margin:0;font-size:13.5px;color:var(--soft)}
+.tcard .bd{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.tcard .cv{display:flex}
 .tcard .mt{display:flex;gap:6px;flex-wrap:wrap}
 .tcard .mt i{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:4px 7px;border-radius:6px;background:var(--line);color:var(--faint)}
 .tcard .go2{align-self:flex-start;font-size:12.5px;font-weight:600;border-radius:999px;padding:8px 14px;background:var(--brandS);color:var(--brand)}
@@ -78,7 +78,17 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
   padding:8px 14px;background:var(--brandS);color:var(--brand);margin-top:2px;
   text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
 a.go2,a.allnews{text-decoration:none}
-.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.tgrp{margin-bottom:10px}
+.tgh{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:13px;
+  min-height:52px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
+.tgh b{flex:1;font-size:14.5px;font-weight:600;color:var(--ink)}
+.tgh .n{font-family:var(--mono);font-size:11px;color:var(--faint)}
+.tgh .ch{color:var(--faint);font-size:17px;transition:transform .2s var(--ease)}
+.tgrp.open .tgh .ch{transform:rotate(90deg)}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}
+.tcard .bd .ds{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;font-size:12.5px;line-height:1.4;color:var(--soft)}
+.tcard{text-align:left;display:block}
 @media (max-width:380px){.tgrid{grid-template-columns:1fr}}
 
 .view{display:none}
@@ -591,8 +601,11 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .prc .hd .ch{flex:none;color:var(--faint);font-size:17px;transition:transform .2s var(--ease)}
 .prc.open .hd .ch{transform:rotate(90deg)}
 .prc .acts{display:flex;gap:8px;flex-wrap:wrap;padding:0 13px 13px}
-.prc .acts button{padding:9px 13px;border-radius:10px;background:var(--brandS);min-height:40px;
-  color:var(--brand);font-weight:600;font-size:12px;line-height:1;font-family:var(--mono)}
+.prc .acts button{padding:11px 15px;border-radius:11px;min-height:44px;font-weight:600;
+  font-size:13px;line-height:1}
+.prc .acts .main{flex:1;background:var(--brand);color:#fff}
+.prc .acts .quiet{background:none;color:var(--faint);padding:11px 8px;font-weight:500;
+  font-size:12.5px;font-family:var(--mono)}
 .prc pre{margin:0;padding:12px 13px;white-space:pre-wrap;word-break:break-word;
   font-family:var(--mono);font-size:12.5px;line-height:1.6;color:var(--soft)}
 .sr-field{position:relative;margin:0 14px 12px}
@@ -644,8 +657,8 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="hi">
       <div class="hmk"><i></i></div>
       <h2 id="hi-t">Привет</h2>
-      <p>Это приложение ведёт не человек. Меня зовут Клод, я языковая модель — и я учу
-         пользоваться нейросетями в работе так, как делаю это сам.</p>
+      <p>Это приложение ведёт не человек — я языковая модель. Учу пользоваться
+         нейросетями в работе: короткие уроки, готовые запросы и проверка в конце каждого.</p>
     </div>
 
     <!-- Кнопка стоит первой намеренно: раньше она была под пятью экранами
@@ -678,10 +691,6 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   </div>
 
   <div class="view" id="v-study">
-    <div class="slides" style="margin-top:2px">
-      <div class="track" id="st-track"></div>
-      <div class="dots" id="st-dots"></div>
-    </div>
     <button class="buy2" id="hero-go" data-sec="0" style="margin:0 14px 18px;width:calc(100% - 28px)">Открыть первый урок</button>
     <div class="strk" id="strk" hidden>
       <button class="skl" data-go="ach">
@@ -808,14 +817,10 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <b id="p-name">Гость</b><span id="p-sub">откройте приложение из бота</span></span></div>
     <div class="sh">Обучение</div>
     <div class="grp">
-      <button class="row" data-go="study"><span class="ic i1 sm">◱</span>
-        <span class="tx"><b>Мои разделы</b><span id="p-cnt">2 открыто, 4 под замком</span></span><span class="ch">›</span></button>
       <button class="row" data-recent="1"><span class="ic i5 sm">◔</span>
         <span class="tx"><b>Недавно открытое</b><span id="p-rec">пока пусто</span></span><span class="ch">›</span></button>
       <button class="row" data-go="favs"><span class="ic i2 sm">★</span>
         <span class="tx"><b>Закладки</b><span id="p-fav">пока пусто</span></span><span class="ch">›</span></button>
-      <button class="row" data-go="news"><span class="ic i3 sm">✦</span>
-        <span class="tx"><b>Что нового</b><span id="p-news">обновления курса</span></span><span class="ch">›</span></button>
       <button class="row" data-go="ach"><span class="ic i4 sm">✦</span>
         <span class="tx"><b>Достижения</b><span id="p-ach">пока ни одного</span></span><span class="ch">›</span></button>
       <button class="row" data-go="log"><span class="ic i5 sm">◔</span>
@@ -863,10 +868,9 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   </div>
 
   <div class="view" id="v-prompts">
-    <h2 class="big">Промпты</h2>
-    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Все готовые запросы из курса
-      в одном месте. Нажмите «копировать» и вставьте в нейросеть — квадратные скобки
-      замените своим.</p>
+    <h2 class="big">Готовые запросы</h2>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Их же в уроках называют промптами.
+      Скопируйте и вставьте в нейросеть, квадратные скобки замените своим.</p>
     <div id="pr-out"></div>
   </div>
 
@@ -913,7 +917,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 <div class="dock">
   <a class="on" data-go="study"><span class="g">◱</span>Учёба</a>
   <a data-go="tools"><span class="g">◐</span>Нейросети</a>
-  <a data-go="prompts"><span class="g">⌘</span>Промпты</a>
+  <a data-go="prompts"><span class="g">⌘</span>Запросы</a>
   <a data-go="me"><span class="g">◍</span>Профиль</a>
 </div>
 
@@ -2500,8 +2504,7 @@ function paintProgress(){
   // профиль
   const all = SECS.reduce((a,_,i)=>{const p=secProgress(i);return {d:a.d+p.done, t:a.t+p.total}},{d:0,t:0});
   const tp = toolProgress();
-  const pc = $('#p-cnt');
-  if(pc) pc.textContent = `${all.d + tp.done} из ${all.t + tp.total} уроков прочитано`;
+
   paintStreak();
 }
 
@@ -2761,7 +2764,6 @@ function carousel(trackSel, dotsSel, html, play, viewSel){
 
 carousel('#hi-track', '#hi-dots', TOOLSLIDES.map(chatSlide).join(''), playChat);
 // в учёбе слайд-шоу просто показывает, чем занимаемся, и никуда не уводит
-carousel('#st-track', '#st-dots', LESSONSLIDES.map(l=>lessonSlide(l, false)).join(''), playLesson, '#v-study');
 
 /* ---------- приветствие ---------- */
 const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
@@ -2852,18 +2854,31 @@ function меткаСверки(d){
     устарело(d) ? ' · пора обновить' : ''}</span>`;
 }
 
-$('#tools').innerHTML = TOOLS.map(([grp,list])=>`
-  <div class="sh">${grp}</div>
-  <div class="tgrid">${list.map(([n,g,tag,d,meta,les],i)=>`
-    <div class="tcard" style="animation-delay:${i*40}ms">
-      <div class="cv" style="background:${G[g]}"><span class="nm">${n}</span>
-        <span class="bdg">${tag==='rf'?'из РФ':'VPN'}</span></div>
-      <div class="bd"><p>${d}</p>
-        <div class="mt">${meta.map(m=>`<i>${m}</i>`).join('')}</div>
-        ${меткаСверки(СВЕРЕНО[n])}
-        ${les?`<button class="go2" data-tl="${les}">Открыть урок →</button>`
-             :'<span style="font-size:11.5px;color:var(--faint)">урок готовится</span>'}
-      </div></div>`).join('')}</div>`).join('');
+/* Каталог был самым длинным экраном приложения: пять прокруток на 21 карточку,
+   шесть групп подряд. Теперь группы свёрнуты, открыта первая — выбор начинается
+   с подбора по задаче выше, а каталог листают те, кому нужно посмотреть всё.
+   Карточка нажимается целиком: отдельная кнопка «открыть урок» была лишней. */
+$('#tools').innerHTML = TOOLS.map(([grp,list],gi)=>`
+  <div class="tgrp${gi===0?' open':''}">
+    <button class="tgh" data-tg-open="${gi}">
+      <b>${grp}</b><span class="n">${list.length}</span><span class="ch">›</span>
+    </button>
+    <div class="tgrid"${gi===0?'':' hidden'}>${list.map(([n,g,tag,d,meta,les],i)=>`
+      <${les?'button':'div'} class="tcard"${les?` data-tl="${les}"`:''} style="animation-delay:${i*40}ms">
+        <span class="cv" style="background:${G[g]}"><span class="nm">${n}</span>
+          <span class="bdg">${tag==='rf'?'из РФ':'VPN'}</span></span>
+        <span class="bd"><span class="ds">${d}</span>
+          ${меткаСверки(СВЕРЕНО[n])}
+          ${les?'':'<span style="font-size:11.5px;color:var(--faint)">урок готовится</span>'}
+        </span></${les?'button':'div'}>`).join('')}</div>
+  </div>`).join('');
+
+function tgToggle(кнопка){
+  const группа = кнопка.closest('.tgrp');
+  const сетка = группа.querySelector('.tgrid');
+  сетка.hidden = !сетка.hidden;
+  группа.classList.toggle('open', !сетка.hidden);
+}
 
 /* ---------- лента канала на экране «Разборы» ----------
    Раньше здесь лежали четырнадцать записей, набитых руками. Теперь экран
@@ -3222,9 +3237,9 @@ function prPaint(){
           <div class="body" hidden>
             <pre>${esc(x.текст)}</pre>
             <div class="acts">
-              <button data-copy="${enc(x.текст)}">копировать</button>
-              <button data-share="${enc(x.урок)}">поделиться</button>
-              <button data-pr="${n}">открыть урок</button>
+              <button class="cb main" data-copy="${enc(x.текст)}">Скопировать</button>
+              <button class="quiet" data-pr="${n}">открыть урок</button>
+              <button class="quiet" data-share="${enc(x.урок)}">поделиться</button>
             </div>
           </div>
         </div>`;
@@ -4036,6 +4051,7 @@ document.addEventListener('click', e=>{
     if(tgGo(тг.dataset.tg)) e.preventDefault();
     return;
   }
+  const tgo = e.target.closest('[data-tg-open]'); if(tgo){ tgToggle(tgo); return; }
   const pro = e.target.closest('[data-pr-open]'); if(pro){ prToggle(pro); return; }
   const pr = e.target.closest('[data-pr]');
   if(pr && PRLIST){ PRLIST[+pr.dataset.pr].открыть(); return; }
