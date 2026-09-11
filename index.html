@@ -195,8 +195,8 @@ body.nodock .app{padding-bottom:26px}
 .hnote{margin:18px 0 16px;border-left:3px solid var(--sig);background:var(--card);border-radius:0 14px 14px 0;padding:14px 15px}
 .hnote b{display:block;font-size:14.5px;font-weight:700;margin-bottom:5px}
 .hnote p{margin:0;font-size:14.5px;line-height:1.5;color:var(--soft)}
-.hstart{background:var(--sig);color:var(--sigInk)}
-.hskip{display:block;width:100%;margin-top:10px;padding:12px;border:0;background:none;
+.hstart{display:block;width:calc(100% - 28px);margin:0 14px;background:var(--sig);color:var(--sigInk);min-height:52px;font-size:16px}
+.hskip{display:block;width:100%;margin:8px 0 18px;padding:12px;border:0;background:none;
   font:600 13.5px/1 var(--body);color:var(--faint);cursor:pointer}
 .nums{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:0 0 4px}
 .nums div{border:1px solid var(--line);border-radius:14px;padding:12px 13px;background:var(--card)}
@@ -580,16 +580,21 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .fav.shr{right:60px}
 .lhead{position:relative}
 .prc{margin:0 14px 12px;border:1px solid var(--line2);border-radius:16px;background:var(--card);overflow:hidden}
-.prc .hd{display:flex;align-items:center;gap:9px;padding:11px 13px;border-bottom:1px solid var(--line)}
-.prc .hd .k{flex:none;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;
+.prc .hd{display:flex;align-items:center;gap:11px;padding:12px 13px;width:100%;text-align:left;min-height:56px}
+.prc.open .hd{border-bottom:1px solid var(--line)}
+.prc .hd .k{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
   background:var(--brandS);color:var(--brand);font-size:12px}
-.prc .hd b{flex:1;min-width:0;font-size:13.5px;line-height:1.3;color:var(--ink);font-weight:600}
-.prc .hd button{flex:none;padding:7px 11px;border-radius:9px;background:var(--brandS);
-  color:var(--brand);font-weight:600;font-size:11.5px;line-height:1;font-family:var(--mono)}
+.prc .hd .tt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.prc .hd .tt b{font-size:14px;line-height:1.3;color:var(--ink);font-weight:600}
+.prc .hd .tt span{font-size:12.5px;line-height:1.35;color:var(--faint);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.prc .hd .ch{flex:none;color:var(--faint);font-size:17px;transition:transform .2s var(--ease)}
+.prc.open .hd .ch{transform:rotate(90deg)}
+.prc .acts{display:flex;gap:8px;flex-wrap:wrap;padding:0 13px 13px}
+.prc .acts button{padding:9px 13px;border-radius:10px;background:var(--brandS);min-height:40px;
+  color:var(--brand);font-weight:600;font-size:12px;line-height:1;font-family:var(--mono)}
 .prc pre{margin:0;padding:12px 13px;white-space:pre-wrap;word-break:break-word;
   font-family:var(--mono);font-size:12.5px;line-height:1.6;color:var(--soft)}
-.prc .go{display:block;width:100%;text-align:left;padding:10px 13px;border-top:1px solid var(--line);
-  font-size:12.5px;color:var(--faint)}
 .sr-field{position:relative;margin:0 14px 12px}
 .sr-field input{width:100%;min-height:48px;padding:0 44px 0 14px;border-radius:14px;
   border:1px solid var(--line2);background:var(--card);color:var(--ink);
@@ -643,13 +648,13 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
          пользоваться нейросетями в работе так, как делаю это сам.</p>
     </div>
 
-    <div class="hnote">
-      <b>Что здесь есть</b>
-      <p>Курс из шести разделов: от первого разговора с нейросетью до агента, который ведёт
-         канал без человека. Каждый урок — разбор с примерами, экраном настоящей переписки,
-         схемой, готовым промптом и пятью реальными «проблема — решение». Плюс каталог
-         разобранных нейросетей: что умеет, сколько стоит, кому подходит, а кому нет.</p>
-    </div>
+    <!-- Кнопка стоит первой намеренно: раньше она была под пятью экранами
+         рассказа, и до неё доходил только терпеливый. -->
+    <button class="buy2 hstart" id="hi-go">Начать с первого урока</button>
+    <button class="hskip" id="hi-skip">Просто посмотреть</button>
+
+    <div class="sh">Путь: три ступени</div>
+    <div class="hsteps" id="hi-steps"></div>
 
     <div class="sh">Нейросети внутри</div>
     <div class="slides">
@@ -658,47 +663,18 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     </div>
     <button class="buy2" style="margin:0 14px 18px;width:calc(100% - 28px)" data-go="tools">Каталог нейросетей</button>
 
-    <div class="sh">Чему научитесь</div>
-    <div class="slides">
-      <div class="track" id="hi-track2"></div>
-      <div class="dots" id="hi-dots2"></div>
-    </div>
-    <button class="buy2" style="margin:0 14px 18px;width:calc(100% - 28px)" id="hi-secs-go">Разделы курса</button>
-
     <div class="sh">В цифрах</div>
     <div class="nums" id="hi-nums"></div>
-
-    <div class="sh">Как устроено обучение</div>
-    <div class="hsteps" id="hi-how"></div>
-
-    <div class="sh">Три ступени</div>
-    <div class="hsteps" id="hi-steps"></div>
-
-    <div class="sh">Разделы курса</div>
-    <div class="stack" id="hi-secs"></div>
-
-    <div class="sh">Что добавится</div>
-    <div class="roadmap" id="hi-road"></div>
 
     <div class="acc2">
       <div class="sh" style="margin:0 0 4px">Полный доступ</div>
       <div class="pline"><span class="pnum">500 ₽</span><span>в месяц · год — 4 900 ₽, два месяца в подарок</span></div>
       <p style="margin:0 0 12px;font-size:13.5px;color:var(--soft);line-height:1.55">
-         Открывает всё закрытое сразу — и то, что появится потом. Автосписаний нет:
-         продление только вашей рукой. Семь дней на возврат без объяснения причин.</p>
+         Открывает всё закрытое сразу — и то, что появится потом: курс дописывается,
+         пока нейросети меняются. Автосписаний нет, продление только вашей рукой.</p>
       <p style="margin:0;font-size:13px;color:var(--faint)">Два раздела и пробный урок открыты
          без оплаты — посмотрите, как написано, прежде чем платить.</p>
     </div>
-
-    <div class="hnote">
-      <b>Курс не закончен — и это его сильная сторона</b>
-      <p>Нейросети меняются каждый месяц. Я дописываю курс по мере того, как они выходят:
-         уроки добавляются, старые переписываются, когда устаревают. Пока подписка активна,
-         всё новое входит без доплат.</p>
-    </div>
-
-    <button class="buy2 hstart" id="hi-go">Начать с первого урока</button>
-    <button class="hskip" id="hi-skip">Просто посмотреть</button>
   </div>
 
   <div class="view" id="v-study">
@@ -804,6 +780,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 
   <!-- ===== РАЗБОРЫ ===== -->
   <div class="view" id="v-log">
+    <button class="back" data-back data-go="me">← Профиль</button>
     <h2 class="big">Разборы</h2>
     <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Свежее из канала и разборы того,
       что при этом ломалось. Канал ведёт нейросеть — сюда посты попадают сами.</p>
@@ -815,7 +792,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 
   <!-- ===== ИНСТРУМЕНТЫ ===== -->
   <div class="view" id="v-tools">
-    <h2 class="big">Инструменты</h2>
+    <h2 class="big">Нейросети</h2>
     <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Что чем делать. Зелёная метка — работает из России без VPN.
       Цены и условия сверяю руками: под каждой карточкой дата последней сверки.</p>
     <div class="sh">Что нужно сделать?</div>
@@ -841,6 +818,8 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <span class="tx"><b>Что нового</b><span id="p-news">обновления курса</span></span><span class="ch">›</span></button>
       <button class="row" data-go="ach"><span class="ic i4 sm">✦</span>
         <span class="tx"><b>Достижения</b><span id="p-ach">пока ни одного</span></span><span class="ch">›</span></button>
+      <button class="row" data-go="log"><span class="ic i5 sm">◔</span>
+        <span class="tx"><b>Свежее из канала</b><span>посты, которые вышли, и разборы</span></span><span class="ch">›</span></button>
     </div>
     <div class="sh">Поддержка</div>
     <div class="grp">
@@ -933,8 +912,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 
 <div class="dock">
   <a class="on" data-go="study"><span class="g">◱</span>Учёба</a>
-  <a data-go="log"><span class="g">◔</span>Разборы</a>
-  <a data-go="tools"><span class="g">⚒</span>Инструменты</a>
+  <a data-go="tools"><span class="g">◐</span>Нейросети</a>
   <a data-go="prompts"><span class="g">⌘</span>Промпты</a>
   <a data-go="me"><span class="g">◍</span>Профиль</a>
 </div>
@@ -2782,11 +2760,8 @@ function carousel(trackSel, dotsSel, html, play, viewSel){
 }
 
 carousel('#hi-track', '#hi-dots', TOOLSLIDES.map(chatSlide).join(''), playChat);
-carousel('#hi-track2', '#hi-dots2', LESSONSLIDES.map(l=>lessonSlide(l, true)).join(''), playLesson);
 // в учёбе слайд-шоу просто показывает, чем занимаемся, и никуда не уводит
 carousel('#st-track', '#st-dots', LESSONSLIDES.map(l=>lessonSlide(l, false)).join(''), playLesson, '#v-study');
-const secsGo = $('#hi-secs-go');
-if(secsGo) secsGo.addEventListener('click', ()=>closeHello(false));
 
 /* ---------- приветствие ---------- */
 const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
@@ -2795,16 +2770,6 @@ const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
 (function(){
   $('#news-all').innerHTML = newsHTML(NEWS.length);
   $('#news-home').innerHTML = newsHTML(2);
-  $('#hi-road').innerHTML = ROAD;
-  $('#hi-how').innerHTML = [
-    ['✓','c1','Проверка в конце каждого урока',
-     'Вопросы идут по одному: ответили — сразу разбор, почему так. В конце счёт и можно пройти заново.'],
-    ['✦','c3','Видно, что вы не бросили',
-     'Сколько дней подряд читаете, какие разделы закрыты, восемь отметок за пройденное. Считается на вашем телефоне.'],
-    ['◱','c2','Возвращаетесь на то же место',
-     'Приложение помнит, где вы остановились, хранит закладки и ищет по всем урокам и промптам сразу.']
-  ].map(([ic,c,t,d])=>`<div class="hst"><i style="background:var(--${c})">${ic}</i>
-      <div><b>${t}</b><span>${d}</span></div></div>`).join('');
   $('#hi-steps').innerHTML = [
     ['◐','c1','Сначала — разговор','Как вообще говорить с нейросетью и чем они отличаются. Два раздела открыты сразу, без оплаты.'],
     ['₽','c2','Потом — деньги','Как платить за подписки из России и как отличить рабочий сервис от мошенника.'],
@@ -2846,7 +2811,6 @@ const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
   $('#pa-nums').innerHTML = numsHTML;
   $('#pa-secs').innerHTML = secsHTML;
   $('#hi-nums').innerHTML = numsHTML;
-  $('#hi-secs').innerHTML = secsHTML;
   $('#pa-road').innerHTML = ROAD;
   $('#pa-line').textContent = 'в месяц · год — 4 900 ₽, два месяца в подарок';
 })();
@@ -3212,31 +3176,67 @@ function favPaintList(){
 /* ---------- сборник промптов ----------
    Промпты — самое переносимое, что есть в курсе. Собираем их из всех уроков
    в одно место с копированием: искать по урокам ради одной формулировки глупо. */
+/** Экран промптов раньше был лентой в девять экранов: двадцать пять готовых
+    запросов, развёрнутых целиком, подряд, без единого заголовка. Найти в нём
+    что-то было нельзя. Теперь запросы сгруппированы по разделам курса и
+    свёрнуты: видно название и первую строку, остальное — по нажатию. */
+/** Русские окончания: «22 запроса», а не «22 запросов». */
+function скл(n, один, два, много){
+  const д = n % 100, е = n % 10;
+  if(д > 10 && д < 20) return много;
+  return е === 1 ? один : (е >= 2 && е <= 4 ? два : много);
+}
+let PRLIST = null;
 function prPaint(){
   const out = $('#pr-out');
   if(!out || out.dataset.ready) return;
-  const список = [];
+  const группы = new Map();
+  PRLIST = [];
+  const добавить = (группа, запись) => {
+    if(!группы.has(группа)) группы.set(группа, []);
+    группы.get(группа).push(запись);
+    PRLIST.push(запись);
+  };
   SECS.forEach((s, si) => (s.ls || []).forEach((l, li) => {
     (l.b || []).forEach(b => { if(b[0] === 'prompt')
-      список.push({текст:b[1], урок:l.t, где:s.t, закрыт:!l.b, открыть:()=>{ openSec(si); openLes(li); }}); });
+      добавить(s.t, {текст:b[1], урок:l.t, открыть:()=>{ openSec(si); openLes(li); }}); });
   }));
   Object.entries(TL).forEach(([k, l]) => {
     (l.b || []).forEach(b => { if(b[0] === 'prompt')
-      список.push({текст:b[1], урок:l.t, где:'разбор нейросети', открыть:()=>openToolLesson(k)}); });
+      добавить('Разборы нейросетей', {текст:b[1], урок:l.t, открыть:()=>openToolLesson(k)}); });
   });
 
-  out.innerHTML = список.map((x, i) => `<div class="prc">
-      <div class="hd"><span class="k">⌘</span><b>${esc(x.урок)}</b>
-        <button data-copy="${enc(x.текст)}">копировать</button>
-        <button data-share="${enc(x.урок)}">поделиться</button></div>
-      <pre>${esc(x.текст)}</pre>
-      <button class="go" data-pr="${i}">Открыть урок целиком →</button>
-    </div>`).join('');
-  out.querySelectorAll('[data-pr]').forEach(el => {
-    el.onclick = () => список[+el.dataset.pr].открыть();
-  });
+  let n = -1;
+  out.innerHTML = [...группы.entries()].map(([имя, список]) => {
+    const слово = скл(список.length, 'запрос', 'запроса', 'запросов');
+    return `<div class="sh">${имя} · ${список.length} ${слово}</div>` +
+      список.map(x => {
+        n++;
+        const первая = x.текст.split('\n').find(с => с.trim()) || '';
+        return `<div class="prc" id="pr${n}">
+          <button class="hd" data-pr-open="${n}">
+            <span class="k">⌘</span>
+            <span class="tt"><b>${esc(x.урок)}</b><span>${esc(первая).slice(0, 70)}…</span></span>
+            <span class="ch">›</span>
+          </button>
+          <div class="body" hidden>
+            <pre>${esc(x.текст)}</pre>
+            <div class="acts">
+              <button data-copy="${enc(x.текст)}">копировать</button>
+              <button data-share="${enc(x.урок)}">поделиться</button>
+              <button data-pr="${n}">открыть урок</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+  }).join('');
   out.dataset.ready = '1';
-
+}
+function prToggle(кнопка){
+  const карточка = кнопка.closest('.prc');
+  const тело = карточка.querySelector('.body');
+  тело.hidden = !тело.hidden;
+  карточка.classList.toggle('open', !тело.hidden);
 }
 
 /* ---------- поиск по всему приложению ----------
@@ -4036,6 +4036,9 @@ document.addEventListener('click', e=>{
     if(tgGo(тг.dataset.tg)) e.preventDefault();
     return;
   }
+  const pro = e.target.closest('[data-pr-open]'); if(pro){ prToggle(pro); return; }
+  const pr = e.target.closest('[data-pr]');
+  if(pr && PRLIST){ PRLIST[+pr.dataset.pr].открыть(); return; }
   const to = e.target.closest('[data-to]'); if(to){ testAnswer(to); return; }
   const tn = e.target.closest('[data-tn]'); if(tn){ testNext(tn); return; }
   const tr = e.target.closest('[data-tr]'); if(tr){ testAgain(tr); return; }
