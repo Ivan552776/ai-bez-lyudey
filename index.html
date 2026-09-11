@@ -3066,6 +3066,7 @@ function testPaint(el){
         <button class="nxt" type="button" data-tr="1">Пройти заново</button>
       </div>`;
     testDots(el);
+    if(el.__pass === 0) учесть('test', readId || '', верно, (favCur && favCur.title) || '');
     if(readId) { markDone(readId); paintProgress(); }
     return;
   }
@@ -3475,6 +3476,7 @@ async function openLes(j){
   $('#l-foot').textContent = '◷ ' + l.min + ' мин';
   paintNext(nextAfter(cur, j));
   touchDay();
+  учесть('lesson', cur + '-' + j, 0, l.t);
   window.__lback = 'sec';
   favCur = {kind:'lesson', key:cur+'-'+j, title:l.t, sub:s.t};
   favPaintButton();
@@ -3544,6 +3546,13 @@ if(U){
 const UID = (TG && TG.initDataUnsafe && TG.initDataUnsafe.user && TG.initDataUnsafe.user.id) || 'guest';
 /* Адрес сервера. Пустой — приложение работает как раньше, платные уроки закрыты. */
 const API = 'https://abstract-tolerant-ember.ruweb.place';
+/** Счётчик пользы: сколько людей открывает приложение, какие уроки читают,
+    как проходят проверки. Без этого непонятно, что чинить. Отправляем и
+    забываем: ответ не нужен, ошибка не должна мешать чтению. */
+function учесть(что, ключ, счёт, имя){
+  try{ post('/api/stat', {что, ключ: ключ || '', счёт: счёт || 0, имя: имя || ''}); }catch(e){}
+}
+
 async function post(path, body){
   if(!API) return null;
   try{
@@ -3620,7 +3629,7 @@ function paintMe(){
   }
 }
 document.getElementById('subbar-go').addEventListener('click', openChannel);
-(async function(){ ME = await post('/api/me'); paintMe(); })();
+(async function(){ ME = await post('/api/me'); paintMe(); учесть('open'); })();
 const S = {
   k: n => 'mzr:' + UID + ':' + n,
   get(n, def){ try{ const v = localStorage.getItem(S.k(n)); return v===null ? def : JSON.parse(v); }catch(e){ return def; } },
@@ -3865,6 +3874,7 @@ function openToolLesson(k){
   remember('tool', k, l.t);
   watchRead('t-'+k);
   touchDay();
+  учесть('lesson', 't-' + k, 0, l.t);
   show('lesson');
 }
 
