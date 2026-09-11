@@ -3991,7 +3991,17 @@ $('#l-share').addEventListener('click', () => {
 });
 favPaintList();
 $('#hi-skip').addEventListener('click', ()=>closeHello(false));
-show(seenHello ? 'study' : 'hello');
+/* Прямая ссылка на экран: ?ekran=tools откроет каталог, ?ekran=urok — первый
+   урок. Нужно, чтобы показать конкретное место человеку, у которого нет
+   Telegram, и чтобы не объяснять словами «нажмите там-то». */
+(function(){
+  let экран = null;
+  try{ экран = new URLSearchParams(location.search).get('ekran'); }catch(e){}
+  if(!экран){ show(seenHello ? 'study' : 'hello'); return; }
+  if(экран === 'urok'){ S.set('hello2', true); openSec(0); openLes(0); return; }
+  if(document.querySelector('#v-' + экран)){ S.set('hello2', true); show(экран); return; }
+  show(seenHello ? 'study' : 'hello');
+})();
 
 // без слушателя касания iOS показывает :active с задержкой — отклик «падает с обрыва»
 document.addEventListener('touchstart', ()=>{}, {passive:true});
