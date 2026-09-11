@@ -668,6 +668,9 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="sh">В цифрах</div>
     <div class="nums" id="hi-nums"></div>
 
+    <div class="sh">Как устроено обучение</div>
+    <div class="hsteps" id="hi-how"></div>
+
     <div class="sh">Три ступени</div>
     <div class="hsteps" id="hi-steps"></div>
 
@@ -2793,6 +2796,15 @@ const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
   $('#news-all').innerHTML = newsHTML(NEWS.length);
   $('#news-home').innerHTML = newsHTML(2);
   $('#hi-road').innerHTML = ROAD;
+  $('#hi-how').innerHTML = [
+    ['✓','c1','Проверка в конце каждого урока',
+     'Вопросы идут по одному: ответили — сразу разбор, почему так. В конце счёт и можно пройти заново.'],
+    ['✦','c3','Видно, что вы не бросили',
+     'Сколько дней подряд читаете, какие разделы закрыты, восемь отметок за пройденное. Считается на вашем телефоне.'],
+    ['◱','c2','Возвращаетесь на то же место',
+     'Приложение помнит, где вы остановились, хранит закладки и ищет по всем урокам и промптам сразу.']
+  ].map(([ic,c,t,d])=>`<div class="hst"><i style="background:var(--${c})">${ic}</i>
+      <div><b>${t}</b><span>${d}</span></div></div>`).join('');
   $('#hi-steps').innerHTML = [
     ['◐','c1','Сначала — разговор','Как вообще говорить с нейросетью и чем они отличаются. Два раздела открыты сразу, без оплаты.'],
     ['₽','c2','Потом — деньги','Как платить за подписки из России и как отличить рабочий сервис от мошенника.'],
@@ -2809,11 +2821,20 @@ const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
   const plural=(n,a,b,c)=>{const d=n%100,e=n%10;return n+' '+(d>10&&d<20?c:e===1?a:e>1&&e<5?b:c)};
   const nLes = les.length + Object.keys(TL).length;
   const word=(n,a,b,c)=>{const d=n%100,e=n%10;return d>10&&d<20?c:e===1?a:e>1&&e<5?b:c};
+  // вопросы: открытые считаем по месту, платные лежат на сервере —
+  // их число держим здесь и правим вместе с уроками (сейчас 11 уроков по пять)
+  const ВОПРОСЫ_ПЛАТНЫЕ = 55;
+  const вопросов = [...les.flatMap(l=>l.b||[]), ...Object.values(TL).flatMap(l=>l.b)]
+    .filter(b=>b[0]==='test').reduce((a,b)=>a+b[1].length, 0) + ВОПРОСЫ_ПЛАТНЫЕ;
+  const промптов = [...les.flatMap(l=>l.b||[]), ...Object.values(TL).flatMap(l=>l.b)]
+    .filter(b=>b[0]==='prompt').length;
   const numsHTML = `
     <div><b>${nLes}</b><span>${word(nLes,'урок','урока','уроков')} в курсе</span></div>
     <div><b>${Math.round(mins/60*10)/10} ч</b><span>если читать подряд</span></div>
     <div><b>${SECS.length}</b><span>${word(SECS.length,'раздел','раздела','разделов')}</span></div>
-    <div><b>${tools}</b><span>${word(tools,'нейросеть разобрана','нейросети разобраны','нейросетей разобрано')}</span></div>`;
+    <div><b>${tools}</b><span>${word(tools,'нейросеть разобрана','нейросети разобраны','нейросетей разобрано')}</span></div>
+    <div><b>${вопросов}</b><span>${word(вопросов,'вопрос','вопроса','вопросов')} в проверках</span></div>
+    <div><b>${промптов}</b><span>готовых ${word(промптов,'промпт','промпта','промптов')}</span></div>`;
   const secsHTML = SECS.map(x=>{
     const n=(x.ls||[]).length, open=(x.ls||[]).filter(l=>l.b).length;
     return `<button class="item sec" data-sec-go="${SECS.indexOf(x)}">
