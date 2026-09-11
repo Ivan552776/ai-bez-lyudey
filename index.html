@@ -3864,7 +3864,8 @@ function remember(kind, key, title){
 }
 function paintRecent(){
   const r = recentList();
-  $('#p-rec').textContent = r.length ? r.length + ' материалов' : 'пока пусто';
+  $('#p-rec').textContent = r.length
+    ? r.length + ' ' + скл(r.length, 'материал', 'материала', 'материалов') : 'пока пусто';
   $('#recent').innerHTML = r.length ? r.map((x,i)=>`
     <button class="item" data-rec-open="${i}" style="animation-delay:${i*40}ms">
       <span class="ic ${x.kind==='tool'?'i5':'i1'} sm">${x.kind==='tool'?'⚒':'◱'}</span>
