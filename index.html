@@ -93,7 +93,9 @@ a.go2,a.allnews{text-decoration:none}
 /* Карточка стала кнопкой — а у кнопки свой отступ по умолчанию (1px 6px),
    из-за него цветная шапка не доходила до краёв и всё выглядело съехавшим. */
 .tcard{text-align:left;display:block;padding:0}
-@media (max-width:380px){.tgrid{grid-template-columns:1fr}}
+/* Порог опущен: карточка стала короче, и две колонки помещаются уже на 360.
+   Раньше на этой ширине карточка растягивалась в широкую цветную полосу. */
+@media (max-width:334px){.tgrid{grid-template-columns:1fr}}
 
 .view{display:none}
 .view.on{opacity:1}
