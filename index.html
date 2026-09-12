@@ -66,6 +66,8 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 .tcard .mt{display:flex;gap:6px;flex-wrap:wrap}
 .tcard .mt i{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:4px 7px;border-radius:6px;background:var(--line);color:var(--faint)}
 .tcard .go2{align-self:flex-start;font-size:12.5px;font-weight:600;border-radius:999px;padding:8px 14px;background:var(--brandS);color:var(--brand)}
+.tcard .site{display:inline-block;margin-top:6px;font-size:12px;font-weight:600;
+  color:var(--brand);padding:6px 0}
 .chk{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.06em;
   text-transform:uppercase;color:var(--faint);line-height:1.4}
 .chk.old{color:var(--c3);font-weight:600}
@@ -345,6 +347,9 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .pcard .av{width:46px;height:46px;border-radius:50%;background:linear-gradient(140deg,var(--c1),var(--c6));flex:none}
 .pcard b{font-size:17px;font-weight:700}
 .pcard span{font-size:12.5px;color:var(--faint)}
+.row.status{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px;
+  margin:0 14px 4px;width:calc(100% - 28px);border-radius:16px;background:var(--card);
+  border:1px solid var(--line2);min-height:56px}
 .grp{border-radius:16px;background:var(--card);border:1px solid var(--line);overflow:hidden}
 .grp .row{display:flex;align-items:center;gap:12px;padding:13px;width:100%;text-align:left;border-bottom:1px solid var(--line)}
 .grp .row:last-child{border-bottom:none}
@@ -769,29 +774,41 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <button class="back" data-back data-go="study">← Назад</button>
     <div class="lhead" style="background:linear-gradient(150deg,#0F5E63,#14757A)">
       <span class="k">полный доступ</span>
-      <h3>Весь курс целиком,<br>включая то, чего ещё нет</h3>
+      <h3>Полный доступ<br>к курсу</h3>
     </div>
-    <div class="nums" id="pa-nums"></div>
-    <div class="sh">Что уже внутри</div>
-    <div class="stack" id="pa-secs"></div>
-    <div class="sh">Что добавится</div>
-    <div class="roadmap" id="pa-road"></div>
-    <div class="promise">
-      <b>Почему подписка, а не один платёж</b>
-      <p>Нейросети меняются каждый месяц: то, что здесь написано сегодня, через полгода
-         придётся переписать наполовину. Один платёж означал бы, что я обязана переписывать
-         это вечно бесплатно — а значит, однажды перестану. Подписка честнее: пока вы
-         платите, я дописываю.</p>
-      <b>Что это значит на деле</b>
-      <p>Всё новое входит в подписку без доплат. Автоматических списаний нет — продление
-         только вашей рукой. Не продлили: прочитанное остаётся, новое перестаёт открываться.</p>
-    </div>
+
+    <!-- Цена и кнопка стоят до программы намеренно: раньше человек пролистывал
+         три экрана описаний, прежде чем узнавал, сколько это стоит. -->
+    <div class="sh">Что открывается</div>
+    <div class="hsteps" id="pa-what"></div>
+
     <div class="acc2">
       <div class="pline"><span class="pnum">500 ₽</span><span id="pa-line">в месяц</span></div>
+      <p style="margin:0 0 10px;font-size:13.5px;color:var(--soft);line-height:1.5">
+         Год — 4 900 ₽ вместо 6 000 ₽: экономия 1 100 ₽, два месяца в подарок.</p>
       <button class="buy2" data-write="pay">Открыть полный доступ</button>
       <p style="margin:0;font-size:13px;color:var(--faint)">Семь дней на возврат без объяснения причин.
          Два раздела и пробный урок открыты до оплаты — посмотрите, как написано, прежде чем платить.</p>
     </div>
+
+    <div class="sh">Условия</div>
+    <div class="promise">
+      <b>Продление только вашей рукой</b>
+      <p>Автоматических списаний нет. Не продлили — прочитанное остаётся с вами,
+         новые платные уроки перестают открываться. Прогресс и закладки не пропадают.</p>
+      <b>Почему подписка, а не один платёж</b>
+      <p>Нейросети меняются каждый месяц: написанное сегодня через полгода придётся
+         переписывать наполовину. Пока вы платите — я дописываю, и всё новое входит
+         в подписку без доплат.</p>
+    </div>
+
+    <div class="sh">Программа</div>
+    <div class="nums" id="pa-nums"></div>
+    <div class="stack" id="pa-secs"></div>
+
+    <button class="allnews" id="pa-road-go">Что появится дальше →</button>
+    <div class="roadmap" id="pa-road" hidden></div>
+  </div>
   </div>
 
   <!-- ===== РАЗБОРЫ ===== -->
@@ -822,6 +839,10 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="pcard"><span class="av" id="p-av"></span>
       <span style="display:flex;flex-direction:column;min-width:0">
         <b id="p-name">Гость</b><span id="p-sub">откройте приложение из бота</span></span></div>
+    <button class="row status" id="p-status" data-go="pay-all">
+      <span class="ic i1 sm">◐</span>
+      <span class="tx"><b id="p-st-t">Бесплатный доступ</b><span id="p-st-d">два раздела и пробный урок</span></span>
+      <span class="ch">›</span></button>
     <div class="sh">Обучение</div>
     <div class="grp">
       <button class="row" data-recent="1"><span class="ic i5 sm">◔</span>
@@ -850,7 +871,8 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <button class="sw" id="sw1"><i></i></button></div>
     </div>
     <p class="foot" id="sw-note" hidden></p>
-    <p class="foot" id="acc-foot">Полный доступ — 500 ₽ в месяц или 4 900 ₽ за год.<br>Оплата подключается.</p>
+    <p class="foot" id="acc-foot">Полный доступ — 500 ₽ в месяц или 4 900 ₽ за год.<br>
+       Приём платежа подключается: пока открываю доступ вручную — напишите в бот.</p>
   </div>
 
   <!-- ===== ДОСТИЖЕНИЯ ===== -->
@@ -2825,6 +2847,12 @@ const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
       <span class="ch">›</span></button>`;}).join('');
   $('#pa-nums').innerHTML = numsHTML;
   $('#pa-secs').innerHTML = secsHTML;
+  $('#pa-what').innerHTML = [
+    ['◱','c1','Четыре закрытых раздела','Вайбкодинг, свой телеграм-бот, видео и озвучка, агент без человека'],
+    ['✓','c2','Проверки и задания','В конце каждого урока — вопросы с разбором, почему верно или нет'],
+    ['⌘','c3','Готовые запросы','Все запросы курса в одном месте: скопировал и вставил']
+  ].map(([ic,c,t,d])=>`<div class="hst"><i style="background:var(--${c})">${ic}</i>
+      <div><b>${t}</b><span>${d}</span></div></div>`).join('');
   $('#hi-nums').innerHTML = numsHTML;
   $('#pa-road').innerHTML = ROAD;
   $('#pa-line').textContent = 'в месяц · год — 4 900 ₽, два месяца в подарок';
@@ -2834,6 +2862,14 @@ const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
    Цены нейросетей меняются каждый месяц, а в тексте они записаны намертво.
    Дата стоит на каждой карточке: людям честно, а мне видно, что пора
    садиться и проверять. Правится только здесь. */
+/* Куда вести из каталога. Здесь только адреса, названные в самих уроках:
+   для остальных кнопки нет — ошибочная ссылка хуже отсутствующей. */
+const САЙТЫ = {
+  'Claude':'https://claude.ai', 'Gemini':'https://gemini.google.com',
+  'Perplexity':'https://perplexity.ai', 'DeepSeek':'https://chat.deepseek.com',
+  'ElevenLabs':'https://elevenlabs.io', 'Cursor':'https://cursor.com',
+  'Runway':'https://runwayml.com', 'Kling':'https://klingai.com'
+};
 const СВЕРЕНО = {
   'Claude':'2026-09-11', 'ChatGPT':'2026-09-11', 'Gemini':'2026-09-11',
   'DeepSeek':'2026-09-11', 'Perplexity':'2026-09-11',
@@ -2882,6 +2918,7 @@ $('#tools').innerHTML = TOOLS.map(([grp,list],gi)=>`
           <span class="bdg">${tag==='rf'?'из РФ':'VPN'}</span></span>
         <span class="bd"><span class="ds">${d}</span>
           ${меткаСверки(СВЕРЕНО[n])}
+          ${САЙТЫ[n] ? `<span class="site" data-site="${САЙТЫ[n]}">Открыть сервис ↗</span>` : ''}
           ${les?'':'<span style="font-size:11.5px;color:var(--faint)">урок готовится</span>'}
         </span></${les?'button':'div'}>`).join('')}</div>
   </div>`).join('');
@@ -3700,6 +3737,16 @@ function paintMe(){
     const п = document.getElementById('sw1-note');
     if(п) п.textContent = ME.notify ? 'сообщу в боте, когда выйдет урок' : 'сообщать, когда выходит урок';
   }
+  const ст = document.getElementById('p-st-t'), сд = document.getElementById('p-st-d');
+  if(ст && сд){
+    if(ME.paid){
+      ст.textContent = 'Полный доступ';
+      сд.textContent = ME.until ? 'до ' + ME.until.split('-').reverse().join('.') : 'открыт';
+    } else {
+      ст.textContent = 'Бесплатный доступ';
+      сд.textContent = 'два раздела и пробный урок · посмотреть полный';
+    }
+  }
   const foot = document.getElementById('acc-foot');
   if(foot && ME.paid){
     foot.innerHTML = ME.until
@@ -4048,6 +4095,42 @@ $('#hi-skip').addEventListener('click', ()=>closeHello(false));
   show(seenHello ? 'study' : 'hello');
 })();
 
+/* Ссылка на конкретный материал: ?urok=1-0 открывает первый урок второго
+   раздела, ?urok=t-claude — разбор нейросети, ?zapros=3 — готовый запрос.
+   Нужно каналу: пост ведёт прямо в то, о чём он, а не на общий экран. */
+(function(){
+  let урок = null, запрос = null;
+  try{
+    const п = new URLSearchParams(location.search);
+    урок = п.get('urok'); запрос = п.get('zapros');
+  }catch(e){}
+  const потерялось = что => {
+    show('study');
+    setTimeout(()=> alert('Не нашёл материал по ссылке «' + что + '». Открыл начало курса.'), 400);
+  };
+  if(урок){
+    S.set('hello2', true);
+    if(урок.startsWith('t-')){
+      const ключ = урок.slice(2);
+      if(TL[ключ]) openToolLesson(ключ); else потерялось(урок);
+      return;
+    }
+    const [i, j] = урок.split('-').map(Number);
+    if(SECS[i] && SECS[i].ls && SECS[i].ls[j]){ openSec(i); openLes(j); } else потерялось(урок);
+    return;
+  }
+  if(запрос){
+    S.set('hello2', true);
+    show('prompts');
+    setTimeout(()=>{
+      const карточка = document.querySelector('#pr' + (+запрос - 1));
+      if(!карточка) return потерялось('запрос ' + запрос);
+      карточка.querySelector('[data-pr-open]').click();
+      карточка.scrollIntoView({block:'center'});
+    }, 300);
+  }
+})();
+
 // без слушателя касания iOS показывает :active с задержкой — отклик «падает с обрыва»
 document.addEventListener('touchstart', ()=>{}, {passive:true});
 
@@ -4104,6 +4187,18 @@ document.addEventListener('click', e=>{
     // отменяем переход по ссылке, только если увели сами: иначе в браузере
     // не произойдёт вообще ничего
     if(tgGo(тг.dataset.tg)) e.preventDefault();
+    return;
+  }
+  if(e.target.closest('#pa-road-go')){
+    const к = $('#pa-road'); к.hidden = !к.hidden;
+    e.target.closest('#pa-road-go').textContent = к.hidden ? 'Что появится дальше →' : 'Свернуть планы';
+    return;
+  }
+  const сайт = e.target.closest('[data-site]');
+  if(сайт){
+    e.stopPropagation();
+    const ссылка = сайт.dataset.site;
+    if(TG && TG.openLink) TG.openLink(ссылка); else window.open(ссылка, '_blank');
     return;
   }
   const tgo = e.target.closest('[data-tg-open]'); if(tgo){ tgToggle(tgo); return; }
