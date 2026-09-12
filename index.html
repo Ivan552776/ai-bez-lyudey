@@ -92,7 +92,11 @@ a.go2,a.allnews{text-decoration:none}
   overflow:hidden;font-size:12.5px;line-height:1.4;color:var(--soft)}
 /* Карточка стала кнопкой — а у кнопки свой отступ по умолчанию (1px 6px),
    из-за него цветная шапка не доходила до краёв и всё выглядело съехавшим. */
-.tcard{text-align:left;display:block;padding:0}
+/* Карточки в ряду выравниваем по высоте: у части есть строка «Открыть
+   сервис», у части нет — ряд получался рваным. */
+.tcard{text-align:left;display:flex;flex-direction:column;padding:0}
+.tcard .bd{flex:1}
+.tcard .site{margin-top:auto}
 /* Порог опущен: карточка стала короче, и две колонки помещаются уже на 360.
    Раньше на этой ширине карточка растягивалась в широкую цветную полосу. */
 @media (max-width:334px){.tgrid{grid-template-columns:1fr}}
