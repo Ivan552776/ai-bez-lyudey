@@ -43,7 +43,7 @@ html.theming, html.theming *{transition:background-color .26s var(--ease),border
   .item,.tcard,.nx,.fx{animation:none !important}
   *{scroll-behavior:auto !important}
 }
-button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none}
+button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 :focus{outline:none}
 :focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:10px}
 .app{max-width:560px;margin:0 auto;padding:12px 14px calc(104px + env(safe-area-inset-bottom))}
@@ -102,10 +102,10 @@ a.go2,a.allnews{text-decoration:none}
    Раньше на этой ширине карточка растягивалась в широкую цветную полосу. */
 @media (max-width:334px){.tgrid{grid-template-columns:1fr}}
 
-.view{display:none}
-.view.on{opacity:1}
-.view.on{display:block;animation:inR .34s var(--ease)}
-.view.on.back{animation:inL .34s var(--ease)}
+.view{display:none;pointer-events:none}
+/* Экран меняется сразу: при навигации человек ждёт следующую страницу,
+   а не анимацию, которая выглядит как случайный сдвиг всего приложения. */
+.view.on,.view.on.back{display:block;opacity:1;animation:none;pointer-events:auto}
 /* пришли справа — уходим направо: путь входа и выхода один и тот же */
 @keyframes inR{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
 @keyframes inL{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
@@ -424,10 +424,12 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .sw.off{background:var(--line2)}.sw.off i{left:3px}
 
 /* ---- нижняя панель ---- */
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--bg);border-top:1px solid var(--line);padding:7px 8px calc(8px + env(safe-area-inset-bottom));display:flex;gap:2px;max-width:560px;margin:0 auto}
-.dock a{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 1px;border-radius:13px;font-size:11px;font-weight:600;color:var(--faint);transition:color .2s,background .2s;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dock a .g{font-size:18px;line-height:1}
-.dock a.on{color:var(--brand);background:var(--brandS)}
+/* Это не нижнее меню из четырёх разделов. Только короткий переключатель:
+   вернуться к обучению или открыть свой кабинет. */
+.dock{position:fixed;left:50%;bottom:14px;z-index:20;transform:translateX(-50%);display:flex;gap:3px;width:max-content;max-width:calc(100% - 32px);padding:5px;border:1px solid var(--line);border-radius:999px;background:color-mix(in srgb,var(--card) 92%,transparent);box-shadow:0 10px 28px rgba(18,25,38,.14);backdrop-filter:blur(14px)}
+.dock a{min-width:0;display:flex;align-items:center;gap:7px;padding:9px 14px;border-radius:999px;font-size:12px;font-weight:700;color:var(--faint);transition:color .2s,background .2s;cursor:pointer;white-space:nowrap}
+.dock a .g{font-size:17px;line-height:1}
+.dock a.on{color:#fff;background:var(--ink)}
 .foot{margin-top:20px;font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.65;text-align:center}
 .slides{position:relative;margin:0 0 6px}
 .track{display:flex;align-items:flex-start;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
@@ -746,11 +748,6 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="sh">Путь: три ступени</div>
     <div class="hsteps" id="hi-steps"></div>
 
-    <div class="sh">Нейросети внутри</div>
-    <div class="slides">
-      <div class="track" id="hi-track"></div>
-      <div class="dots" id="hi-dots"></div>
-    </div>
     <button class="buy2" style="margin:0 14px 18px;width:calc(100% - 28px)" data-go="tools">Каталог нейросетей</button>
 
     <div class="sh">В цифрах</div>
@@ -779,29 +776,9 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
       <button class="study-map" data-go="route"><span><b>Карта обучения</b><span>6 разделов · 16 уроков</span></span><i>›</i></button>
     </section>
 
-    <section class="study-showcase" aria-label="Примеры работы в курсе">
-      <div class="show-head"><h3>Смотрите, как это работает</h3><span>листайте</span></div>
-      <div class="slides">
-        <div class="track" id="study-track"></div>
-        <div class="dots" id="study-dots"></div>
-      </div>
-    </section>
-
-    <div class="home-tabs" aria-label="Фильтр разделов">
-      <button class="home-tab on" data-home-cat="all">Все</button><button class="home-tab" data-home-cat="start">Старт</button>
-      <button class="home-tab" data-home-cat="product">Продукт</button><button class="home-tab" data-home-cat="bot">Боты</button><button class="home-tab" data-home-cat="video">Видео</button>
-    </div>
     <div class="home-access"><i>✓</i><span><b>Первые разделы открыты</b><small>Сначала посмотрите уроки, потом решайте про полный доступ.</small></span><button data-go="route">Программа</button></div>
 
-    <div class="strk" id="strk" hidden>
-      <button class="skl" data-go="ach">
-        <i class="fl">✦</i>
-        <span class="sn"><b id="stk-n"></b><span id="stk-s"></span></span>
-        <span class="week" id="stk-week"></span>
-        <span class="ch">›</span>
-      </button>
-    </div>
-    <div class="sh">Разделы · два открыты</div>
+    <div class="sh">Программа · два раздела открыты</div>
     <div class="stack" id="secs"></div>
 
     <div class="sh">Что нового</div>
@@ -944,12 +921,10 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="grp">
       <button class="row" data-recent="1"><span class="ic i5 sm">◔</span>
         <span class="tx"><b>Недавно открытое</b><span id="p-rec">пока пусто</span></span><span class="ch">›</span></button>
+      <button class="row" data-go="tools"><span class="ic i1 sm">◐</span>
+        <span class="tx"><b>Инструменты</b><span>нейросети и готовые сценарии</span></span><span class="ch">›</span></button>
       <button class="row" data-go="favs"><span class="ic i2 sm">★</span>
         <span class="tx"><b>Закладки</b><span id="p-fav">пока пусто</span></span><span class="ch">›</span></button>
-      <button class="row" data-go="ach"><span class="ic i4 sm">✦</span>
-        <span class="tx"><b>Достижения</b><span id="p-ach">пока ни одного</span></span><span class="ch">›</span></button>
-      <button class="row" data-go="log"><span class="ic i5 sm">◔</span>
-        <span class="tx"><b>Свежее из канала</b><span>посты, которые вышли, и разборы</span></span><span class="ch">›</span></button>
     </div>
     <div class="sh">Поддержка</div>
     <div class="grp">
@@ -1041,9 +1016,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 </div>
 
 <div class="dock">
-  <a class="on" data-go="study"><span class="g">◱</span>Учёба</a>
-  <a data-go="tools"><span class="g">◐</span>Нейросети</a>
-  <a data-go="prompts"><span class="g">⌘</span>Запросы</a>
+  <a class="on" data-go="study"><span class="g">◱</span>Главная</a>
   <a data-go="me"><span class="g">◍</span>Профиль</a>
 </div>
 
@@ -2940,11 +2913,6 @@ function carousel(trackSel, dotsSel, html, play, viewSel){
   tick();
 }
 
-carousel('#hi-track', '#hi-dots', TOOLSLIDES.map(chatSlide).join(''), playChat);
-// На постоянной главной — короткие сцены из самого курса. Это не чужие
-// кабинеты, а наглядные примеры: после них человек понимает, чему научится.
-carousel('#study-track', '#study-dots', REELSLIDES.map(reelSlide).join(''), playReel, '#v-study');
-
 /* ---------- приветствие ---------- */
 const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
   <div class="nw"><span class="tag">${t}</span>
@@ -3765,6 +3733,10 @@ addEventListener('visibilitychange', ()=>{ if(!document.hidden){ ticking = false
 upBtn.addEventListener('click', ()=>scrollTo({top:0, behavior: CALM.matches ? 'auto' : 'smooth'}));
 
 function show(v, back){
+  // Проверяем экран до того, как спрячем текущий. Ошибка в названии перехода
+  // больше не может оставить пользователя на пустом, не нажимающемся экране.
+  const el = $('#v-'+v);
+  if(!el){ console.warn('Не найден экран:', v); return; }
   document.body.classList.toggle('nodock', v==='hello');
   if(v === 'prompts') prPaint();
   if(v === 'tools') tkPaint();
@@ -3773,10 +3745,11 @@ function show(v, back){
   if(v === 'log') chanPaint();
   if(v === 'route') routePaint();
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('on','back'));
-  const el = $('#v-'+v);
   el.classList.add('on');
   if(back) el.classList.add('back');
-  document.querySelectorAll('.dock a').forEach(a=>a.classList.toggle('on', a.dataset.go===v));
+  const homeViews = new Set(['study','route','sec','lesson','pay','pay-all','news','tools','prompts']);
+  document.querySelectorAll('.dock a').forEach(a=>a.classList.toggle('on',
+    a.dataset.go===v || (a.dataset.go==='study' && homeViews.has(v))));
   window.scrollTo({top:0});
   onScroll();
   if(v==='study' || v==='me') paintProgress();
