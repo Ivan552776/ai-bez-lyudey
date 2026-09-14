@@ -269,9 +269,25 @@ body.nodock .app{padding-bottom:26px}
 .study-showcase .show-head span{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
 .study-showcase .slides{margin:0 -14px}
 .study-showcase .track{padding-left:14px;padding-right:14px}
-.study-showcase .slide{border-radius:18px}
-.study-showcase .swin{height:245px}
-.study-showcase .cap{min-height:82px}
+.study-showcase .slide{flex-basis:100%;border-radius:20px;background:#151A1A;border-color:#253130;box-shadow:0 12px 28px -20px rgba(20,32,31,.65)}
+.reel{height:310px;padding:14px 14px 12px;display:flex;flex-direction:column;color:#F5FAF8;background:radial-gradient(circle at 88% 10%,rgba(60,130,126,.32),transparent 35%),#151A1A;overflow:hidden}
+.reel-head{display:flex;align-items:center;gap:8px;min-height:28px;color:#B9C9C6}
+.reel-head b{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12.5px;color:#F5FAF8}
+.reel-head b i{font-style:normal;width:17px;height:17px;border-radius:6px;display:grid;place-items:center;background:var(--reel,#1E9780);font-size:10px}
+.reel-head span{margin-left:auto;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:#8FA6A2}
+.reel-stage{position:relative;flex:1;min-height:0;margin-top:12px;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08)}
+.reel-prompt{position:absolute;left:14px;right:14px;top:16px;padding:11px 12px;border-radius:12px;background:rgba(255,255,255,.10);font-size:15px;line-height:1.28;letter-spacing:-.015em}
+.reel-prompt small{display:block;margin-top:4px;color:#A9C0BC;font-family:var(--mono);font-size:9.5px;letter-spacing:.03em}
+.reel-code{position:absolute;left:14px;right:14px;top:88px;border-radius:12px;padding:9px 10px;background:#0F1313;border:1px solid rgba(255,255,255,.08);font-family:var(--mono);font-size:10px;line-height:1.66;color:#D9E6E3}
+.reel-code span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.reel-code .cm{color:#78928D}.reel-code .ok{color:#78D49B}.reel-code .bl{color:#6FB7FF}
+.reel-result{position:absolute;left:18px;right:18px;bottom:14px;display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:13px;background:#F6FAF8;color:#172221;box-shadow:0 12px 24px rgba(0,0,0,.22)}
+.reel-result i{font-style:normal;width:28px;height:28px;border-radius:9px;background:var(--reel,#1E9780);display:grid;place-items:center;color:#fff;font-size:13px;flex:none}.reel-result b{display:block;font-size:12px;line-height:1.2}.reel-result span{display:block;margin-top:2px;font-size:10.5px;color:#66716F}.reel-result em{margin-left:auto;font-style:normal;color:var(--reel,#1E9780);font-size:17px}
+.reel-foot{display:flex;align-items:center;gap:9px;padding-top:11px;font-size:11.5px;color:#A8BCB8}.reel-foot i{width:6px;height:6px;border-radius:50%;background:var(--reel,#1E9780);box-shadow:0 0 0 4px color-mix(in srgb,var(--reel,#1E9780) 18%,transparent)}.reel-foot b{margin-left:auto;font-size:12px;color:#F5FAF8}
+/* В одном кадре сцены появляются по очереди: это объясняет ход работы,
+   а не заставляет пользователя ждать интерфейс. */
+.reel.playing .reel-prompt{animation:reelIn .42s var(--ease-out) both}.reel.playing .reel-code{animation:reelIn .42s .28s var(--ease-out) both}.reel.playing .reel-result{animation:reelIn .42s .62s var(--ease-out) both}.reel.playing .reel-foot{animation:reelIn .34s .82s var(--ease-out) both}
+@keyframes reelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.reel.playing .reel-prompt,.reel.playing .reel-code,.reel.playing .reel-result,.reel.playing .reel-foot{animation:none}}
 
 /* ---- урок ---- */
 .back{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);border-radius:999px;padding:0 17px 0 14px;min-height:44px;font-size:13.5px;color:var(--soft);margin-bottom:13px;transition:transform .1s var(--ease)}
@@ -2663,6 +2679,23 @@ const LESSONSLIDES = [
    cap:'Сначала видите черновик, потом сами решаете: править или публиковать.'}
 ];
 
+/* Главный ролик — не запись чужого кабинета и не обещание «одной кнопки». Это
+   три честных кадра будущей работы: поставить задачу, проверить, получить итог. */
+const REELSLIDES = [
+  {k:'chat', app:'ChatGPT', icon:'✦', color:'#10A37F',
+   ask:'Собери план запуска Telegram-бота для моего канала', hint:'контекст, задача и критерий готовности',
+   lines:[['cm','# сначала уточняет недостающие детали'],['bl','1. сценарий и кнопки'],['bl','2. черновик текста'],['ok','✓ план готов за одну итерацию']],
+   out:'План собран', cap:'Из размытой идеи — в понятный план действий.'},
+  {k:'code', app:'Claude Code', icon:'✦', color:'#D9784B',
+   ask:'Теперь собери бота и проверь, что он не выдаст ошибку', hint:'код собирается после согласования сценария',
+   lines:[['cm','# создаю обработчик сообщения'],['bl','bot.on("message", answer)'],['bl','tests.run()'],['ok','✓ 12 проверок пройдены']],
+   out:'Бот проверен', cap:'Нейросеть пишет код, а вы знаете, что проверить до запуска.'},
+  {k:'done', app:'Результат в Telegram', icon:'✓', color:'#2789D9',
+   ask:'Покажи черновик поста и не публикуй без моего «да»', hint:'последнее слово всегда остаётся за вами',
+   lines:[['cm','# черновик — только в личные сообщения'],['bl','пост: крючок + 3 тезиса'],['bl','кнопки: изменить / опубликовать'],['ok','✓ ждёт вашего решения']],
+   out:'Черновик готов', cap:'Результат приходит в Telegram — остаётся посмотреть и решить.'}
+];
+
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function chatSlide(t){
@@ -2728,6 +2761,20 @@ function lessonSlide(l, link){
     <div class="cap"><b>${l.title}</b><span>${l.cap}</span></div></div>`;
 }
 
+function reelSlide(r,n){
+  return `<div class="slide" data-kind="reel" data-reel="${r.k}" style="--reel:${r.color}">
+    <div class="reel">
+      <div class="reel-head"><b><i>${r.icon}</i>${r.app}</b><span>ДЕМО · ${n+1}/3</span></div>
+      <div class="reel-stage">
+        <div class="reel-prompt">${r.ask}<small>${r.hint}</small></div>
+        <div class="reel-code">${r.lines.map(x=>`<span class="${x[0]}">${x[1]}</span>`).join('')}</div>
+        <div class="reel-result"><i>✓</i><div><b>${r.out}</b><span>можно открыть и поправить</span></div><em>›</em></div>
+      </div>
+      <div class="reel-foot"><i></i><span>${r.cap}</span><b>Смотреть →</b></div>
+    </div>
+  </div>`;
+}
+
 /** Печатает текст в узел. Возвращает функцию отмены. */
 function typeInto(node, text, speed, done){
   if(REDUCE){ node.textContent = text; done && done(); return ()=>{}; }
@@ -2760,6 +2807,7 @@ function fillLesson(slide){
   const st = slide.querySelector('[data-status]');
   if(st && l.kind==='tg') st.textContent = 'бот';
 }
+function fillReel(slide){ slide.classList.remove('playing'); }
 
 function playChat(slide){
   const t = TOOLSLIDES.find(x=>x.k===slide.dataset.key);
@@ -2801,6 +2849,12 @@ function playLesson(slide){
   });
   return ()=>timers.forEach(x => x && (x.cancel ? x.cancel() : clearTimeout(x)));
 }
+function playReel(slide){
+  slide.classList.remove('playing');
+  // Перезапуск даёт одинаковое вступление после ручного перелистывания и автосмены.
+  requestAnimationFrame(()=>slide.classList.add('playing'));
+  return ()=>slide.classList.remove('playing');
+}
 
 function carousel(trackSel, dotsSel, html, play, viewSel){
   const track = $(trackSel), dots = $(dotsSel);
@@ -2811,7 +2865,7 @@ function carousel(trackSel, dotsSel, html, play, viewSel){
   let idx = 0, timer = null, pause = 0, stopPlay = null;
 
   // все слайды сразу в готовом виде: соседние видны краем экрана
-  const fill = play === playChat ? fillChat : fillLesson;
+  const fill = play === playChat ? fillChat : play === playReel ? fillReel : fillLesson;
   slides.forEach(fill);
 
   const paint = () => [...dots.children].forEach((d,i)=>d.classList.toggle('on', i===idx));
@@ -2855,7 +2909,7 @@ function carousel(trackSel, dotsSel, html, play, viewSel){
 carousel('#hi-track', '#hi-dots', TOOLSLIDES.map(chatSlide).join(''), playChat);
 // На постоянной главной — короткие сцены из самого курса. Это не чужие
 // кабинеты, а наглядные примеры: после них человек понимает, чему научится.
-carousel('#study-track', '#study-dots', LESSONSLIDES.map(lessonSlide).join(''), playLesson, '#v-study');
+carousel('#study-track', '#study-dots', REELSLIDES.map(reelSlide).join(''), playReel, '#v-study');
 
 /* ---------- приветствие ---------- */
 const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
