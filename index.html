@@ -288,6 +288,8 @@ body.nodock .app{padding-bottom:26px}
 .reel-result{position:absolute;left:14px;right:14px;bottom:9px;display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:13px;background:#F6FAF8;color:#172221;box-shadow:0 12px 24px rgba(0,0,0,.22)}
 .reel-result i{font-style:normal;width:28px;height:28px;border-radius:9px;background:var(--reel,#1E9780);display:grid;place-items:center;color:#fff;font-size:13px;flex:none}.reel-result b{display:block;font-size:12px;line-height:1.2}.reel-result span{display:block;margin-top:2px;font-size:10.5px;color:#66716F}.reel-result em{margin-left:auto;font-style:normal;color:var(--reel,#1E9780);font-size:17px}
 .reel-foot{display:flex;align-items:center;gap:9px;padding-top:11px;font-size:11.5px;color:#A8BCB8}.reel-foot i{width:6px;height:6px;border-radius:50%;background:var(--reel,#1E9780);box-shadow:0 0 0 4px color-mix(in srgb,var(--reel,#1E9780) 18%,transparent)}.reel-cta{margin-left:auto;min-height:32px;padding:0 10px;border-radius:9px;background:rgba(255,255,255,.10);color:#F5FAF8;font-size:12px;font-weight:700}.reel-cta:active{transform:scale(.96)}
+/* Реальные экраны без плашек поверх: подпись и действие живут под кадром. */
+.reel.real{height:336px}.reel.real .reel-stage{display:block;min-height:0;margin-top:10px;background:#0B1012}.reel-shot{position:relative;width:100%;height:100%;overflow:hidden;background:#0B1012}.reel-shot:after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),inset 0 -28px 30px -24px rgba(0,0,0,.8);pointer-events:none}.reel-shot img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 8s linear}.slide.playing .reel-shot img{transform:scale(1.045)}.reel-shot.chat img{object-position:51% 43%}.reel-shot.claude img{object-position:51% 42%}.reel-shot.telegram img{object-position:17% 40%}.reel.real .reel-foot{padding-top:9px}.reel.real .reel-foot span{min-width:0;flex:1;line-height:1.25}.reel.real .reel-foot b{display:block;color:#F5FAF8;font-size:11.5px}.reel.real .reel-foot small{display:block;margin-top:2px;color:#A8BCB8;font-size:10.5px}
 /* В одном кадре сцены появляются по очереди: это объясняет ход работы,
    а не заставляет пользователя ждать интерфейс. */
 .reel.playing .reel-scene{animation:reelIn .42s var(--ease-out) both}.reel.playing .reel-result{animation:reelIn .42s .42s var(--ease-out) both}.reel.playing .reel-foot{animation:reelIn .34s .65s var(--ease-out) both}
@@ -766,24 +768,6 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   </div>
 
   <div class="view" id="v-study">
-    <section class="desktop-home" aria-label="Рабочий стол курса">
-      <div class="desktop-label"><b>Рабочий стол курса</b><span>нажмите иконку</span></div>
-      <div class="laptop">
-        <div class="desktop-scene" id="desktop-scene">
-          <div class="desktop-topbar"><i></i><b>ИИ без людей</b><span>сегодня · учёба</span></div>
-          <div class="desktop-welcome"><span>ваш MacBook курса</span><h2>Соберите<br>что-то рабочее.</h2><p>Откройте папку — внутри короткие уроки, действия и результат.</p></div>
-          <div class="desk-icons" aria-label="Разделы курса">
-            <button class="desk-icon" data-desk-icon data-sec="0"><i class="di start">◐</i><strong>Первые шаги</strong></button>
-            <button class="desk-icon" data-desk-icon data-sec="2"><i class="di product">◇</i><strong>Вайбкодинг</strong></button>
-            <button class="desk-icon" data-desk-icon data-sec="3"><i class="di bot">◈</i><strong>Свой бот</strong></button>
-            <button class="desk-icon" data-desk-icon data-sec="4"><i class="di video">▶</i><strong>Видео и звук</strong></button>
-            <button class="desk-icon" data-desk-icon data-sec="5"><i class="di agent">⬡</i><strong>Агент</strong></button>
-            <button class="desk-icon" data-desk-icon data-go="route"><i class="di map">▤</i><strong>Вся программа</strong></button>
-          </div>
-          <div class="desktop-dock"><span>●</span><div><b>Первый урок открыт</b><span>Начните с задачи, а не с теории</span></div><button class="desk-go" data-sec="0">Открыть</button></div>
-        </div>
-      </div>
-    </section>
     <section class="study-hero" aria-label="Начало обучения">
       <span class="study-kicker">практический курс</span>
       <h2>Не читайте про ИИ. Соберите результат.</h2>
@@ -2611,24 +2595,6 @@ function setHomeCategory(cat){
 }
 document.querySelectorAll('[data-home-cat]').forEach(b=>b.addEventListener('click',()=>setHomeCategory(b.dataset.homeCat)));
 
-// На курсорных экранах папка слегка приближается; на телефоне остаётся обычной
-// кнопкой. Выделение не перехватывает нажатие и не создаёт кликабельный фон.
-(() => {
-  const desk = $('#desktop-scene');
-  if(!desk) return;
-  const clear = () => { desk.classList.remove('focus'); desk.querySelectorAll('[data-desk-icon]').forEach(x=>x.classList.remove('selected')); };
-  desk.querySelectorAll('[data-desk-icon]').forEach(icon => {
-    icon.addEventListener('pointerenter', () => {
-      if(window.matchMedia('(hover:hover)').matches){ clear(); desk.classList.add('focus'); icon.classList.add('selected'); }
-    });
-    icon.addEventListener('pointerleave', () => {
-      if(window.matchMedia('(hover:hover)').matches) clear();
-    });
-    icon.addEventListener('focus', () => { clear(); desk.classList.add('focus'); icon.classList.add('selected'); });
-    icon.addEventListener('blur', clear);
-  });
-})();
-
 /* ---------- что нового: пополняется вместе с приложением ---------- */
 const NEWS = [
  ['11 сентября','нов','Проверка в конце каждого урока','Сто пятьдесят шесть вопросов: пять в уроках разделов, четыре в разборах нейросетей, пять в платных. Вопросы идут по одному, после ответа сразу разбор, в конце счёт. Пройденная проверка засчитывает урок прочитанным.'],
@@ -2754,21 +2720,15 @@ const LESSONSLIDES = [
    cap:'Сначала видите черновик, потом сами решаете: править или публиковать.'}
 ];
 
-/* Главный ролик — не запись чужого кабинета и не обещание «одной кнопки». Это
-   три честных кадра будущей работы: поставить задачу, проверить, получить итог. */
+/* Реальные чистые экраны автора: задача в ChatGPT, рабочее место Claude и
+   собственный бот. Они показывают путь работы, а не копируют чужое приложение. */
 const REELSLIDES = [
-  {k:'chat', sec:0, app:'ChatGPT', icon:'✦', color:'#10A37F',
-   ask:'Собери план запуска Telegram-бота для моего канала', hint:'контекст, задача и критерий готовности',
-   lines:[['cm','# сначала уточняет недостающие детали'],['bl','1. сценарий и кнопки'],['bl','2. черновик текста'],['ok','✓ план готов за одну итерацию']],
-   out:'План собран', cap:'Из размытой идеи — в понятный план действий.'},
-  {k:'code', sec:2, app:'Claude Code', icon:'✦', color:'#D9784B',
-   ask:'Теперь собери бота и проверь, что он не выдаст ошибку', hint:'код собирается после согласования сценария',
-   lines:[['cm','# создаю обработчик сообщения'],['bl','bot.on("message", answer)'],['bl','tests.run()'],['ok','✓ 12 проверок пройдены']],
-   out:'Бот проверен', cap:'Нейросеть пишет код, а вы знаете, что проверить до запуска.'},
-  {k:'done', sec:3, app:'Результат в Telegram', icon:'✓', color:'#2789D9',
-   ask:'Покажи черновик поста и не публикуй без моего «да»', hint:'последнее слово всегда остаётся за вами',
-   lines:[['cm','# черновик — только в личные сообщения'],['bl','пост: крючок + 3 тезиса'],['bl','кнопки: изменить / опубликовать'],['ok','✓ ждёт вашего решения']],
-   out:'Черновик готов', cap:'Результат приходит в Telegram — остаётся посмотреть и решить.'}
+  {k:'chat', sec:0, app:'ChatGPT', icon:'✦', color:'#10A37F', media:'v/demo-chatgpt.png',
+   out:'Задача начинается с чистого чата', cap:'Формулируем задачу, критерий готовности и первый шаг.'},
+  {k:'code', sec:2, app:'Claude', icon:'✦', color:'#D9784B', media:'v/demo-claude.png',
+   out:'Работа собирается в проекте', cap:'Идея превращается в файлы, проверки и понятный результат.'},
+  {k:'done', sec:3, app:'Свой бот в Telegram', icon:'✓', color:'#2789D9', media:'v/demo-bot.png',
+   out:'Результат приходит в Telegram', cap:'Бот открывает обучение и остаётся точкой управления.'}
 ];
 
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2837,27 +2797,14 @@ function lessonSlide(l, link){
 }
 
 function reelSlide(r,n){
-  const scene = r.k==='chat' ? `
-    <div class="reel-scene chat-ui"><div class="mini-top"><i></i>Новый чат<span>GPT-5</span></div>
-      <div class="chat-ask">${r.ask}</div>
-      <div class="chat-answer"><div class="mark">✦</div><div><b>Понял задачу.</b><span>Соберу сценарий, кнопки и первый текст. Сначала покажу черновик.</span></div></div>
-      <div class="typing">Написать сообщение…</div></div>`
-    : r.k==='code' ? `
-    <div class="reel-scene code-ui"><div class="mini-top"><i></i>claude — ~/telegram-bot<span>main</span></div>
-      <div class="term"><span class="term-line"><b>$</b> ${r.ask}</span><span class="term-line blue">▸ handlers/message.ts</span><span class="term-line blue">▸ tests/bot.spec.ts</span><span class="term-line green">✓ 12 проверок пройдены</span></div>
-      <div class="files"><span>message.ts</span><span>bot.spec.ts</span><span>✓ ready</span></div></div>`
-    : `
-    <div class="reel-scene tg-ui"><div class="mini-top"><i></i>Тестовый бот<span>бот</span></div>
-      <div class="tg-date">сегодня</div><div class="user-bubble">${r.ask}</div><div class="bot-bubble">Черновик готов. Ничего не публикую без вашего подтверждения.</div>
-      <div class="tg-buttons"><span>Изменить</span><span>Опубликовать</span></div><div class="sent">✓✓</div></div>`;
+  const klass = r.k==='chat' ? 'chat' : r.k==='code' ? 'claude' : 'telegram';
   return `<div class="slide" data-kind="reel" data-reel="${r.k}" style="--reel:${r.color}">
-    <div class="reel">
+    <div class="reel real">
       <div class="reel-head"><b><i>${r.icon}</i>${r.app}</b><span>СЦЕНА · ${n+1}/3</span></div>
       <div class="reel-stage">
-        ${scene}
-        <div class="reel-result"><i>✓</i><div><b>${r.out}</b><span>можно открыть и поправить</span></div><em>›</em></div>
+        <div class="reel-shot ${klass}"><img src="${r.media}" alt="${r.app}: рабочий экран"></div>
       </div>
-      <div class="reel-foot"><i></i><span>${r.cap}</span><button class="reel-cta" data-sec="${r.sec}">Смотреть →</button></div>
+      <div class="reel-foot"><i></i><span><b>${r.out}</b><small>${r.cap}</small></span><button class="reel-cta" data-sec="${r.sec}">Открыть →</button></div>
     </div>
   </div>`;
 }
