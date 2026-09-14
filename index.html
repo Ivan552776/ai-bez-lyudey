@@ -288,8 +288,8 @@ body.nodock .app{padding-bottom:26px}
 .reel-result{position:absolute;left:14px;right:14px;bottom:9px;display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:13px;background:#F6FAF8;color:#172221;box-shadow:0 12px 24px rgba(0,0,0,.22)}
 .reel-result i{font-style:normal;width:28px;height:28px;border-radius:9px;background:var(--reel,#1E9780);display:grid;place-items:center;color:#fff;font-size:13px;flex:none}.reel-result b{display:block;font-size:12px;line-height:1.2}.reel-result span{display:block;margin-top:2px;font-size:10.5px;color:#66716F}.reel-result em{margin-left:auto;font-style:normal;color:var(--reel,#1E9780);font-size:17px}
 .reel-foot{display:flex;align-items:center;gap:9px;padding-top:11px;font-size:11.5px;color:#A8BCB8}.reel-foot i{width:6px;height:6px;border-radius:50%;background:var(--reel,#1E9780);box-shadow:0 0 0 4px color-mix(in srgb,var(--reel,#1E9780) 18%,transparent)}.reel-cta{margin-left:auto;min-height:32px;padding:0 10px;border-radius:9px;background:rgba(255,255,255,.10);color:#F5FAF8;font-size:12px;font-weight:700}.reel-cta:active{transform:scale(.96)}
-/* Реальные экраны без плашек поверх: подпись и действие живут под кадром. */
-.reel.real{height:336px}.reel.real .reel-stage{display:block;min-height:0;margin-top:10px;background:#0B1012}.reel-shot{position:relative;width:100%;height:100%;overflow:hidden;background:#0B1012}.reel-shot:after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),inset 0 -28px 30px -24px rgba(0,0,0,.8);pointer-events:none}.reel-shot img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 8s linear}.slide.playing .reel-shot img{transform:scale(1.045)}.reel-shot.chat img{object-position:51% 43%}.reel-shot.claude img{object-position:51% 42%}.reel-shot.telegram img{object-position:17% 40%}.reel.real .reel-foot{padding-top:9px}.reel.real .reel-foot span{min-width:0;flex:1;line-height:1.25}.reel.real .reel-foot b{display:block;color:#F5FAF8;font-size:11.5px}.reel.real .reel-foot small{display:block;margin-top:2px;color:#A8BCB8;font-size:10.5px}
+/* Оригинальные сцены без плашек поверх: подпись и действие живут под кадром. */
+.reel.workflow{height:336px}.reel.workflow .reel-stage{display:block;min-height:0;margin-top:10px;background:#0B1012}.reel-shot{position:relative;width:100%;height:100%;overflow:hidden;background:#0B1012}.reel-shot:after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),inset 0 -28px 30px -24px rgba(0,0,0,.8);pointer-events:none}.reel-shot img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 8s linear}.slide.playing .reel-shot img{transform:scale(1.045)}.reel-shot.chat img{object-position:51% 43%}.reel-shot.code img{object-position:52% 43%}.reel-shot.done img{object-position:51% 44%}.reel.workflow .reel-foot{padding-top:9px}.reel.workflow .reel-foot span{min-width:0;flex:1;line-height:1.25}.reel.workflow .reel-foot b{display:block;color:#F5FAF8;font-size:11.5px}.reel.workflow .reel-foot small{display:block;margin-top:2px;color:#A8BCB8;font-size:10.5px}
 /* В одном кадре сцены появляются по очереди: это объясняет ход работы,
    а не заставляет пользователя ждать интерфейс. */
 .reel.playing .reel-scene{animation:reelIn .42s var(--ease-out) both}.reel.playing .reel-result{animation:reelIn .42s .42s var(--ease-out) both}.reel.playing .reel-foot{animation:reelIn .34s .65s var(--ease-out) both}
@@ -2720,15 +2720,15 @@ const LESSONSLIDES = [
    cap:'Сначала видите черновик, потом сами решаете: править или публиковать.'}
 ];
 
-/* Реальные чистые экраны автора: задача в ChatGPT, рабочее место Claude и
-   собственный бот. Они показывают путь работы, а не копируют чужое приложение. */
+/* Оригинальные визуальные сцены показывают путь: задача, сборка, результат.
+   Это не личные переписки и не копии чужих кабинетов. */
 const REELSLIDES = [
-  {k:'chat', sec:0, app:'ChatGPT', icon:'✦', color:'#10A37F', media:'v/demo-chatgpt.png',
-   out:'Задача начинается с чистого чата', cap:'Формулируем задачу, критерий готовности и первый шаг.'},
-  {k:'code', sec:2, app:'Claude', icon:'✦', color:'#D9784B', media:'v/demo-claude.png',
-   out:'Работа собирается в проекте', cap:'Идея превращается в файлы, проверки и понятный результат.'},
-  {k:'done', sec:3, app:'Свой бот в Telegram', icon:'✓', color:'#2789D9', media:'v/demo-bot.png',
-   out:'Результат приходит в Telegram', cap:'Бот открывает обучение и остаётся точкой управления.'}
+  {k:'chat', sec:0, app:'Постановка задачи', icon:'01', color:'#10A37F', media:'v/workflow-chat.png',
+   out:'Формулируем, что должно получиться', cap:'Задача, критерий готовности и первый шаг — в одном месте.'},
+  {k:'code', sec:2, app:'Сборка проекта', icon:'02', color:'#D9784B', media:'v/workflow-code.png',
+   out:'Собираем и проверяем результат', cap:'Идея превращается в файлы, действия и понятную проверку.'},
+  {k:'done', sec:3, app:'Готовый бот', icon:'03', color:'#2789D9', media:'v/workflow-bot.png',
+   out:'Передаём готовое в бот', cap:'Результат становится доступным и остаётся точкой управления.'}
 ];
 
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2797,9 +2797,9 @@ function lessonSlide(l, link){
 }
 
 function reelSlide(r,n){
-  const klass = r.k==='chat' ? 'chat' : r.k==='code' ? 'claude' : 'telegram';
+  const klass = r.k;
   return `<div class="slide" data-kind="reel" data-reel="${r.k}" style="--reel:${r.color}">
-    <div class="reel real">
+    <div class="reel workflow">
       <div class="reel-head"><b><i>${r.icon}</i>${r.app}</b><span>СЦЕНА · ${n+1}/3</span></div>
       <div class="reel-stage">
         <div class="reel-shot ${klass}"><img src="${r.media}" alt="${r.app}: рабочий экран"></div>
