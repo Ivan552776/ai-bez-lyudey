@@ -243,6 +243,36 @@ body.nodock .app{padding-bottom:26px}
   overflow:hidden;vertical-align:middle;margin:0 3px}
 .pg i{display:block;height:100%;border-radius:3px;background:var(--sig)}
 
+/* ---- постоянная главная ----
+   Первый экран должен объяснять курс за несколько секунд. Сцены ниже не
+   скриншоты чужих кабинетов, а собственные примеры того, что делает ученик. */
+.study-hero{position:relative;isolation:isolate;overflow:hidden;border-radius:22px;padding:20px 18px 18px;
+  color:#fff;background:linear-gradient(145deg,#103E42 0%,var(--brand) 58%,var(--brand2) 100%);margin:0 0 20px}
+.study-hero::before{content:"";position:absolute;z-index:-1;width:210px;height:210px;border-radius:50%;
+  right:-86px;top:-92px;background:rgba(255,255,255,.14)}
+.study-hero::after{content:"";position:absolute;z-index:-1;width:180px;height:180px;border-radius:50%;
+  left:-94px;bottom:-122px;background:rgba(224,138,43,.30)}
+.study-kicker{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:9.5px;
+  line-height:1;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.78)}
+.study-kicker::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--sig);box-shadow:0 0 0 4px rgba(224,138,43,.20)}
+.study-hero h2{max-width:15ch;margin:12px 0 7px;font-size:25px;line-height:1.08;font-weight:700;letter-spacing:-.03em}
+.study-hero p{max-width:34ch;margin:0;color:rgba(255,255,255,.84);font-size:14px;line-height:1.48}
+.study-flow{display:flex;align-items:center;gap:6px;margin:17px 0 15px;overflow:hidden}
+.study-flow span{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 10px;border-radius:999px;
+  white-space:nowrap;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.13);font-size:11.5px;font-weight:600}
+.study-flow i{font-style:normal;color:rgba(255,255,255,.66);font-size:14px}
+.study-go{width:100%;min-height:50px;border-radius:13px;background:#fff;color:var(--brand);font-size:15px;font-weight:700}
+.study-go:active{transform:scale(.985)}
+.study-showcase{margin:0 0 21px}
+.study-showcase .show-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:0 0 9px}
+.study-showcase h3{margin:0;font-size:17px;line-height:1.22;font-weight:700;letter-spacing:-.015em}
+.study-showcase .show-head span{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+.study-showcase .slides{margin:0 -14px}
+.study-showcase .track{padding-left:14px;padding-right:14px}
+.study-showcase .slide{border-radius:18px}
+.study-showcase .swin{height:245px}
+.study-showcase .cap{min-height:82px}
+
 /* ---- урок ---- */
 .back{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);border-radius:999px;padding:0 17px 0 14px;min-height:44px;font-size:13.5px;color:var(--soft);margin-bottom:13px;transition:transform .1s var(--ease)}
 .back:active{transform:scale(.97)}
@@ -280,35 +310,35 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .vid .fr.soon span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
 .vid .cp span{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
 
-.fig{margin:0;border:1px solid var(--line);border-radius:16px;padding:15px 14px;background:var(--card)}
-.fig figcaption{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+.fig{margin:0;border:1px solid var(--line);border-radius:17px;padding:15px 14px;background:var(--card);box-shadow:0 7px 20px -19px rgba(20,32,31,.58)}
+.fig figcaption{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:13px}
+.fig figcaption::before{content:"";width:18px;height:18px;border-radius:6px;background:var(--brandS);border:1px solid var(--line2)}
 /* шаги: нумерованная цепочка с соединительной линией */
 .fig .fl{display:flex;flex-direction:column;gap:0}
-.fig .st{display:flex;gap:12px;position:relative;padding-bottom:14px}
+.fig .st{display:flex;gap:12px;position:relative;padding-bottom:15px}
 .fig .st:last-child{padding-bottom:0}
-.fig .st::before{content:"";position:absolute;left:15px;top:32px;bottom:2px;width:2px;background:var(--line2)}
+.fig .st::before{content:"";position:absolute;left:15px;top:32px;bottom:1px;width:2px;background:linear-gradient(var(--brand),var(--line2))}
 .fig .st:last-child::before{display:none}
 .fig .st i{width:32px;height:32px;flex:none;border-radius:11px;background:linear-gradient(140deg,var(--brand),var(--brand2));
-  color:#fff;font-style:normal;font-family:var(--mono);font-size:13px;font-weight:700;display:grid;place-items:center;
-  position:relative;z-index:1}
+  color:#fff;font-style:normal;font-family:var(--mono);font-size:13px;font-weight:700;display:grid;place-items:center;box-shadow:0 5px 12px rgba(15,94,99,.22);position:relative;z-index:1}
 .fig .st b{display:block;font-size:14.5px;font-weight:600;letter-spacing:-.01em}
 .fig .st span{display:block;font-size:13.5px;color:var(--soft);margin-top:2px;line-height:1.45}
 /* сравнение: два столбца, плохо и хорошо */
 .fig .cols{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 @media (max-width:360px){.fig .cols{grid-template-columns:1fr}}
-.fig .col{border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px}
+.fig .col{border-radius:13px;padding:12px;display:flex;flex-direction:column;gap:7px;border:1px solid transparent}
 .fig .col span{font-size:13px;line-height:1.42}
 .fig .col .hd{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
-.fig .col.bad{background:var(--warnS)}
+.fig .col.bad{background:var(--warnS);border-color:color-mix(in srgb,var(--warn) 18%,transparent)}
 .fig .col.bad .hd{color:var(--warn)}
-.fig .col.good{background:var(--okS)}
+.fig .col.good{background:var(--okS);border-color:color-mix(in srgb,var(--ok) 18%,transparent)}
 .fig .col.good .hd{color:var(--ok)}
 /* шкала: сравнение величин полосками */
-.fig .bar{display:flex;align-items:center;gap:10px;margin-top:9px}
+.fig .bar{display:flex;align-items:center;gap:10px;margin-top:10px}
 .fig .bar:first-of-type{margin-top:0}
 .fig .bar .lb{width:88px;flex:none;font-size:13px;font-weight:600}
-.fig .bar .tr{flex:1;height:10px;border-radius:5px;background:var(--line);overflow:hidden}
-.fig .bar .tr i{display:block;height:100%;border-radius:5px}
+.fig .bar .tr{flex:1;height:11px;border-radius:6px;background:var(--line);overflow:hidden;box-shadow:inset 0 1px 2px rgba(20,32,31,.07)}
+.fig .bar .tr i{display:block;height:100%;border-radius:6px;box-shadow:inset 0 1px rgba(255,255,255,.28)}
 .fig .bar .vl{width:66px;flex:none;text-align:right;font-family:var(--mono);font-size:11px;color:var(--faint)}
 
 .fixes{display:flex;flex-direction:column;gap:9px}
@@ -320,14 +350,17 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .fx .q b{color:var(--warn)}.fx .a b{color:var(--ok)}
 
 /* ---- обучающий скрин ---- */
-.shot{border:1px solid var(--line2);border-radius:14px;overflow:hidden;background:var(--card)}
-.shot .bar{display:flex;align-items:center;gap:6px;padding:9px 11px;border-bottom:1px solid var(--line);font-size:11.5px;color:var(--faint);font-family:var(--mono)}
-.shot .bar i{width:8px;height:8px;border-radius:50%;background:var(--line2);display:block}
-.shot .win{padding:12px;display:flex;flex-direction:column;gap:9px;background:var(--bg)}
-.bub{max-width:86%;border-radius:14px;padding:10px 12px;font-size:13.5px;line-height:1.45}
-.bub.me{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:5px}
+.shot{border:1px solid var(--line2);border-radius:16px;overflow:hidden;background:var(--card);box-shadow:0 9px 23px -20px rgba(20,32,31,.6)}
+.shot .bar{display:flex;align-items:center;gap:6px;padding:9px 11px;border-bottom:1px solid var(--line);font-size:11.5px;color:var(--faint);font-family:var(--mono);background:linear-gradient(90deg,var(--card),var(--bg))}
+.shot .bar i{width:8px;height:8px;border-radius:50%;background:var(--line2);display:block}.shot .bar i:first-child{background:var(--brand)}
+.shot .bar span:last-child{margin-left:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shot .win{padding:11px 12px 12px;display:flex;flex-direction:column;gap:9px;background:var(--bg)}
+.shot .shot-note{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;line-height:1;letter-spacing:.09em;text-transform:uppercase;color:var(--faint)}
+.shot .shot-note i{width:16px;height:16px;border-radius:5px;background:var(--brandS);color:var(--brand);font-style:normal;display:grid;place-items:center;font-size:10px}
+.bub{max-width:88%;border-radius:14px;padding:10px 12px;font-size:13.5px;line-height:1.45;position:relative}
+.bub.me{align-self:flex-end;background:linear-gradient(140deg,var(--brand),var(--brand2));color:#fff;border-bottom-right-radius:5px;box-shadow:0 4px 10px rgba(15,94,99,.14)}
 .bub.ai{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
-.mark{border:2px dashed var(--c3);border-radius:11px;padding:8px 10px;font-size:12.5px;color:var(--c3);display:flex;gap:8px;align-items:flex-start}
+.mark{border:1px dashed var(--c3);background:color-mix(in srgb,var(--warnS) 50%,var(--bg));border-radius:11px;padding:9px 10px;font-size:12.5px;color:var(--c3);display:flex;gap:8px;align-items:flex-start}
 .mark b{flex:none;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding-top:1px}
 .cap{font-size:12.5px;color:var(--faint);text-align:center}
 
@@ -711,7 +744,24 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   </div>
 
   <div class="view" id="v-study">
-    <button class="buy2" id="hero-go" data-sec="0" style="margin:0 14px 18px;width:calc(100% - 28px)">Открыть первый урок</button>
+    <section class="study-hero" aria-label="Начало обучения">
+      <span class="study-kicker">практический курс</span>
+      <h2>Не читайте про ИИ. Соберите результат.</h2>
+      <p>В каждом уроке есть короткая задача, готовые слова для нейросети и проверка в конце.</p>
+      <div class="study-flow" aria-label="Как устроен урок">
+        <span>Задача</span><i>→</i><span>Нейросеть</span><i>→</i><span>Результат</span>
+      </div>
+      <button class="study-go" id="hero-go" data-sec="0">Открыть первый урок</button>
+    </section>
+
+    <section class="study-showcase" aria-label="Примеры работы в курсе">
+      <div class="show-head"><h3>Смотрите, как это работает</h3><span>листайте</span></div>
+      <div class="slides">
+        <div class="track" id="study-track"></div>
+        <div class="dots" id="study-dots"></div>
+      </div>
+    </section>
+
     <div class="strk" id="strk" hidden>
       <button class="skl" data-go="ach">
         <i class="fl">✦</i>
@@ -2482,7 +2532,8 @@ function blk(b){
     const rows = v.rows.map(r=>`<div class="bub ${r[0]}">${r[1]}</div>`).join('');
     const [mt,mb] = v.mark.split('|');
     return `<div class="shot"><div class="bar"><i></i><i></i><i></i><span>${v.title}</span></div>
-      <div class="win">${rows}<div class="mark"><b>${mt}</b><span>${mb}</span></div></div></div>`;
+      <div class="win"><span class="shot-note"><i>✦</i><span>пример диалога</span></span>
+      ${rows}<div class="mark"><b>${mt}</b><span>${mb}</span></div></div></div>`;
   }
   return '';
 }
@@ -2590,32 +2641,26 @@ const TOOLSLIDES = [
 ];
 
 const LESSONSLIDES = [
-  {kind:'tg', sec:'Свой телеграм-бот', title:'Бот публикует сам',
-   bot:'ИИ без людей', status:'бот', 
-   msgs:[['out','/publish пост про новую модель','12:04'],
-         ['in','Проверил права в канале: публикация разрешена.','12:04'],
-         ['in','Опубликовано, message_id 42.','12:04']],
-   keys:['Открыть пост','Ещё раз'],
-   cap:'Пробный урок открыт целиком: бот, права и первая публикация.'},
-  {kind:'code', sec:'Вайбкодинг', title:'Код словами, а не руками', file:'publish.py',
-   lines:[['cm','# токен из .env, запуск по расписанию'],
-          ['kw','import os, json'],
-          ['fn','def publish(text):'],
-          ['st','    token = os.environ["TOKEN"]'],
-          ['fn','    return send(text)']],
-   cap:'Как ставить задачу нейросети-программисту и проверять, что она не соврала.'},
-  {kind:'term', sec:'Видео с озвучкой', title:'Ролик собирается кодом', file:'build.py oplata',
-   lines:[['$','python build.py oplata'],
-          ['>','озвучено 14 реплик · склейка пауз 0.16/0.42'],
-          ['>','рендер 1280×720 · 73 сек'],
-          ['#','готово: out/oplata.mp4']],
-   cap:'Синтез речи без роботизма и монтаж с точностью до кадра.'},
-  {kind:'term', sec:'Агент без человека', title:'Работает, пока вы спите', file:'agent',
-   lines:[['$','systemctl status agent'],
-          ['>','active (running) · uptime 6d 14h'],
-          ['>','за сутки: 3 поста, 11 ответов, 0 ошибок'],
-          ['#','проверки пройдены до публикации']],
-   cap:'Расписание, память между запусками и проверки перед публикацией.'}
+  {kind:'code', sec:'Вайбкодинг', app:'Claude Code · пример', title:'Объясняете задачу — код собирается', file:'bot.py',
+   lines:[['cm','# бот отвечает на вопросы и помнит контекст'],
+          ['kw','from telegram import Bot'],
+          ['fn','def answer(question):'],
+          ['st','    return ai.reply(question)'],
+          ['fn','    bot.send_message(chat_id, answer(text))']],
+   cap:'В уроке разбираем, как сформулировать задачу и проверить каждый шаг.'},
+  {kind:'term', sec:'Агент без человека', app:'Терминал · пример', title:'Проверка до публикации — без сюрпризов', file:'проверка перед запуском',
+   lines:[['$','python проверить_бота.py'],
+          ['>','тексты: 3 · ссылки: 3 · ошибки: 0'],
+          ['>','права в канале: есть'],
+          ['#','готово к публикации']],
+   cap:'Показываем, что проверить до того, как бот сделает что-то за вас.'},
+  {kind:'tg', sec:'Свой телеграм-бот', title:'Результат приходит прямо в Telegram',
+   bot:'ИИ без людей', status:'бот',
+   msgs:[['out','Сделай план поста про новую нейросеть','сейчас'],
+         ['in','Собрал: крючок, три тезиса и вопрос в конце.','сейчас'],
+         ['in','Черновик готов. Можно посмотреть и поправить.','сейчас']],
+   keys:['Открыть черновик','Изменить'],
+   cap:'Сначала видите черновик, потом сами решаете: править или публиковать.'}
 ];
 
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2662,7 +2707,7 @@ function lessonSlide(l, link){
       <div class="wbar"><span class="dot" style="background:#E0A45E"></span>
         <span class="dot" style="background:rgba(140,160,158,.35)"></span>
         <span class="dot" style="background:rgba(140,160,158,.2)"></span>
-        <span class="ttl">агент / бот</span><span class="rt" data-status>изменён</span></div>
+        <span class="ttl">${l.app || 'агент / бот'}</span><span class="rt" data-status>изменён</span></div>
       <div class="wbody code">
         <span class="tab">${l.file}</span>
         ${l.lines.map((x,n)=>`<div class="ln" data-line="${n}">
@@ -2673,7 +2718,7 @@ function lessonSlide(l, link){
       <div class="wbar"><span class="dot" style="background:#12666B"></span>
         <span class="dot" style="background:rgba(140,160,158,.35)"></span>
         <span class="dot" style="background:rgba(140,160,158,.2)"></span>
-        <span class="ttl">${l.file}</span><span class="rt" data-status>·</span></div>
+        <span class="ttl">${l.app || l.file}</span><span class="rt" data-status>·</span></div>
       <div class="wbody code">
         ${l.lines.map((x,n)=>`<div class="ln" data-line="${n}">
           <span class="no">${x[0]}</span><span class="${x[0]==='#'?'cm':(x[0]==='>'?'st':'fn')}" data-text></span></div>`).join('')}
@@ -2808,7 +2853,9 @@ function carousel(trackSel, dotsSel, html, play, viewSel){
 }
 
 carousel('#hi-track', '#hi-dots', TOOLSLIDES.map(chatSlide).join(''), playChat);
-// в учёбе слайд-шоу просто показывает, чем занимаемся, и никуда не уводит
+// На постоянной главной — короткие сцены из самого курса. Это не чужие
+// кабинеты, а наглядные примеры: после них человек понимает, чему научится.
+carousel('#study-track', '#study-dots', LESSONSLIDES.map(lessonSlide).join(''), playLesson, '#v-study');
 
 /* ---------- приветствие ---------- */
 const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
