@@ -12,7 +12,7 @@
   --ease-out:cubic-bezier(.23,1,.32,1);
   --bg:#FBFBF9; --card:#F3F4F0; --line:#E6E7E1; --line2:#D5D7CF;
   --ink:#14201F; --soft:#4E5A58; --faint:#5F6A68;
-  --brand:#0F5E63; --brandS:#E4EFEF; --brand2:#14757A;
+  --brand:#2455C7; --brandS:#EBF0FF; --brand2:#1C44AA;
   --c1:#0F5E63; --c2:#2A7454; --c3:#C97A1E; --c4:#B5452F; --c5:#3E6C8C; --c6:#5C5147;
   --ok:#2A7454; --okS:#E9F2EC; --warn:#B5452F; --warnS:#F7E9E5;
   --sig:#E08A2B; --sigInk:#22160A;
@@ -24,7 +24,7 @@
 :root[data-n="1"]{
   --bg:#101A1A; --card:#172524; --line:#22322F; --line2:#2E403C;
   --ink:#E9F1EF; --soft:#A9B8B5; --faint:#849693;
-  --brand:#4FB3B8; --brandS:#173231; --brand2:#66C6C8;
+  --brand:#9CB9FF; --brandS:#203251; --brand2:#BAD0FF;
   --c1:#4FB3B8; --c2:#57B98A; --c3:#E8A452; --c4:#E0705A; --c5:#6FA0C4; --c6:#A2907F;
   --ok:#57B98A; --okS:#142C24; --warn:#E0705A; --warnS:#2E1D1A;
   --sig:#E8A452; --sigInk:#20150A;
@@ -32,7 +32,7 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
 /* тему переключаем одним общим переходом, а не только на body — иначе карточки прыгают */
 html.theming, html.theming *{transition:background-color .26s var(--ease),border-color .26s var(--ease),color .26s var(--ease) !important}
 @media (prefers-reduced-motion: reduce){
@@ -46,7 +46,7 @@ html.theming, html.theming *{transition:background-color .26s var(--ease),border
 button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 :focus{outline:none}
 :focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:10px}
-.app{max-width:560px;margin:0 auto;padding:12px 14px calc(104px + env(safe-area-inset-bottom))}
+.app{max-width:560px;margin:0 auto;padding:12px 14px calc(32px + env(safe-area-inset-bottom))}
 
 /* ---- шапка ---- */
 .tp{display:flex;align-items:center;gap:10px;padding:8px 2px 14px;position:sticky;top:0;z-index:9;background:var(--bg)}
@@ -112,7 +112,7 @@ a.go2,a.allnews{text-decoration:none}
 
 /* полоса прочитанного — единственная опора в уроке на восемь экранов */
 .rp{position:sticky;top:52px;z-index:8;height:3px;background:var(--line);border-radius:2px;margin:0 0 12px;overflow:hidden}
-.rp i{display:block;height:100%;width:0;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--brand2));transition:width .1s linear}
+.rp i{display:block;height:100%;width:0;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--brand2));transition:none}
 
 /* наверх — появляется, когда уже далеко от начала */
 .up{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));width:46px;height:46px;border-radius:50%;
@@ -247,59 +247,19 @@ body.nodock .app{padding-bottom:26px}
 /* ---- постоянная главная ----
    Первый экран должен объяснять курс за несколько секунд. Сцены ниже не
    скриншоты чужих кабинетов, а собственные примеры того, что делает ученик. */
-.study-hero{position:relative;isolation:isolate;overflow:hidden;border-radius:22px;padding:20px 18px 18px;
-  color:#fff;background:linear-gradient(145deg,#103E42 0%,var(--brand) 58%,var(--brand2) 100%);margin:0 0 20px}
-.study-hero::before{content:"";position:absolute;z-index:-1;width:210px;height:210px;border-radius:50%;
-  right:-86px;top:-92px;background:rgba(255,255,255,.14)}
-.study-hero::after{content:"";position:absolute;z-index:-1;width:180px;height:180px;border-radius:50%;
-  left:-94px;bottom:-122px;background:rgba(224,138,43,.30)}
-.study-kicker{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:9.5px;
-  line-height:1;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.78)}
-.study-kicker::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--sig);box-shadow:0 0 0 4px rgba(224,138,43,.20)}
-.study-hero h2{max-width:15ch;margin:12px 0 7px;font-size:25px;line-height:1.08;font-weight:700;letter-spacing:-.03em}
-.study-hero p{max-width:34ch;margin:0;color:rgba(255,255,255,.84);font-size:14px;line-height:1.48}
-.study-flow{display:flex;align-items:center;gap:6px;margin:17px 0 15px;overflow:hidden}
-.study-flow span{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 10px;border-radius:999px;
-  white-space:nowrap;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.13);font-size:11.5px;font-weight:600}
-.study-flow i{font-style:normal;color:rgba(255,255,255,.66);font-size:14px}
-.study-go{width:100%;min-height:50px;border-radius:13px;background:#fff;color:var(--brand);font-size:15px;font-weight:700}
+/* Colour is concentrated in the welcome and subject icons. */
+.study-hero{padding:25px 24px 22px;border-radius:26px;background:#214CBD;color:#fff;margin-bottom:16px}
+.study-kicker{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:#E5EDFF}
+.study-kicker:before{content:"";width:7px;height:7px;border-radius:50%;background:#C6F19A}
+.study-hero h2{margin:16px 0 10px;max-width:18ch;font-size:34px;line-height:1.08;font-weight:700;letter-spacing:-.045em;text-wrap:balance}
+.study-hero p{margin:0;max-width:40ch;font-size:15px;line-height:1.55;color:#E5EDFF}
+.study-go{width:100%;min-height:52px;margin-top:20px;padding:12px 14px;border-radius:14px;background:#D2F7AA;color:#173720;font-size:15px;font-weight:700;transition:transform .14s var(--ease)}
 .study-go:active{transform:scale(.985)}
-.study-map{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;margin-top:10px;padding:10px 12px;border-radius:13px;background:rgba(7,35,34,.22);border:1px solid rgba(255,255,255,.16);color:#fff;text-align:left}.study-map b{display:block;font-size:12.5px}.study-map span{display:block;margin-top:2px;font:9px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.68)}.study-map i{font-style:normal;font-size:19px;color:rgba(255,255,255,.8)}.study-map:active{transform:scale(.985)}
+.hero-note{display:block;margin:10px 0 0;text-align:center;color:#E5EDFF;font-size:12px}
 .route-intro{margin:0 0 16px;padding:17px;border-radius:18px;background:linear-gradient(135deg,var(--brand),#1F5957);color:#fff}.route-intro .k{display:block;margin-bottom:8px;color:rgba(255,255,255,.68)}.route-intro h2{margin:0;font-size:24px;line-height:1.05;letter-spacing:-.04em}.route-intro p{margin:9px 0 0;font-size:13.5px;line-height:1.45;color:rgba(255,255,255,.82)}.route-list{display:flex;flex-direction:column;gap:9px}.route-row{display:flex;align-items:center;gap:11px;width:100%;padding:12px;border:1px solid var(--line);border-radius:16px;background:var(--card);text-align:left}.route-row:active{transform:scale(.985)}.route-no{flex:none;width:30px;height:30px;border-radius:10px;background:var(--brandS);color:var(--brand);display:grid;place-items:center;font:700 11px var(--mono)}.route-row .route-tx{min-width:0;flex:1}.route-row b{display:block;font-size:14.5px;color:var(--ink)}.route-row span{display:block;margin-top:3px;font-size:12px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.route-row em{font-style:normal;font:9px var(--mono);letter-spacing:.06em;color:var(--faint);white-space:nowrap}.route-start{width:100%;min-height:48px;margin-top:15px;border-radius:13px;background:var(--brand);color:#fff;font-size:14px;font-weight:700}.route-start:active{transform:scale(.985)}
-.study-showcase{margin:0 0 21px}
-.study-showcase .show-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:0 0 9px}
-.study-showcase h3{margin:0;font-size:17px;line-height:1.22;font-weight:700;letter-spacing:-.015em}
-.study-showcase .show-head span{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
-.study-showcase .slides{margin:0 -14px}
-.study-showcase .track{padding-left:14px;padding-right:14px}
-.study-showcase .slide{flex-basis:100%;border-radius:20px;background:#151A1A;border-color:#253130;box-shadow:0 12px 28px -20px rgba(20,32,31,.65)}
-.desktop-home{margin:0 0 18px}.desktop-label{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px;color:var(--soft);font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase}.desktop-label b{color:var(--ink);font-weight:500}.laptop{position:relative;padding:8px 8px 14px;border-radius:24px;background:linear-gradient(145deg,#45504f,#1C2524 68%,#51605E);box-shadow:0 22px 42px -28px rgba(10,20,19,.8),inset 0 1px rgba(255,255,255,.28)}.laptop:after{content:"";position:absolute;left:15%;right:15%;bottom:5px;height:5px;border-radius:999px;background:rgba(0,0,0,.35);box-shadow:0 3px 6px rgba(255,255,255,.15)}.desktop-scene{position:relative;min-height:410px;overflow:hidden;border:1px solid rgba(255,255,255,.22);border-radius:18px;background:radial-gradient(circle at 85% 3%,rgba(77,187,170,.42),transparent 30%),radial-gradient(circle at 12% 84%,rgba(230,148,56,.38),transparent 34%),linear-gradient(145deg,#123738,#0D1C25 62%,#182B34);color:#F4FAF8;isolation:isolate}.desktop-scene:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 58% 45%,transparent 20%,rgba(7,14,18,.17) 100%);pointer-events:none;z-index:-1;transition:transform .42s var(--ease-out)}.desktop-topbar{height:32px;display:flex;align-items:center;gap:6px;padding:0 11px;background:rgba(7,17,20,.36);border-bottom:1px solid rgba(255,255,255,.09);backdrop-filter:blur(13px)}.desktop-topbar i{width:8px;height:8px;border-radius:50%;background:#FA8D78;box-shadow:14px 0 #F5C359,28px 0 #6BCD8D}.desktop-topbar b{margin-left:29px;font-size:11px;font-weight:600;letter-spacing:.02em}.desktop-topbar span{margin-left:auto;font-family:var(--mono);font-size:10px;color:rgba(244,250,248,.72)}.desktop-welcome{padding:22px 18px 8px}.desktop-welcome span{display:inline-flex;padding:4px 7px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(255,255,255,.08);font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase}.desktop-welcome h2{margin:8px 0 3px;font-size:24px;line-height:1.05;letter-spacing:-.04em;color:#fff}.desktop-welcome p{margin:0;max-width:255px;font-size:12px;line-height:1.4;color:rgba(244,250,248,.76)}.desk-icons{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px 15px 15px}.desk-icon{position:relative;display:flex;min-height:92px;align-items:center;justify-content:flex-end;flex-direction:column;gap:5px;padding:8px 5px;border-radius:16px;color:#fff;text-align:center;transition:transform .3s var(--ease-out),background-color .2s,opacity .25s;transform-origin:50% 70%}.desk-icon:before{content:"";position:absolute;inset:0;border:1px solid transparent;border-radius:16px;background:rgba(255,255,255,.025);transition:background .2s,border-color .2s,box-shadow .3s}.desk-icon:hover,.desk-icon:focus-visible,.desk-icon.selected{transform:translateY(-7px) scale(1.1);z-index:3;outline:none}.desk-icon:hover:before,.desk-icon:focus-visible:before,.desk-icon.selected:before{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.22);box-shadow:0 12px 18px -14px #000}.desk-icon:active{transform:translateY(-3px) scale(1.04)}.desk-icon .di{position:relative;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-size:21px;box-shadow:inset 0 1px rgba(255,255,255,.42),0 7px 12px -8px rgba(0,0,0,.7)}.desk-icon .di.start{background:linear-gradient(145deg,#22B9AB,#146E77)}.desk-icon .di.product{background:linear-gradient(145deg,#E89A43,#B7522D)}.desk-icon .di.bot{background:linear-gradient(145deg,#7B8FFF,#4B56BB)}.desk-icon .di.video{background:linear-gradient(145deg,#EA6E8A,#A93861)}.desk-icon .di.agent{background:linear-gradient(145deg,#68C97F,#23734D)}.desk-icon .di.map{background:linear-gradient(145deg,#83A8BE,#426477)}.desk-icon strong{position:relative;display:block;max-width:82px;font-size:10.5px;line-height:1.15;font-weight:600}.desktop-dock{position:absolute;right:14px;bottom:13px;left:14px;display:flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid rgba(255,255,255,.16);border-radius:15px;background:rgba(10,18,22,.41);backdrop-filter:blur(14px)}.desktop-dock b{font-size:10px;line-height:1.2}.desktop-dock span{font-size:9.5px;color:rgba(244,250,248,.68);line-height:1.2}.desktop-dock .desk-go{margin-left:auto;min-height:31px;padding:0 9px;border-radius:9px;background:#F6FAF7;color:#102321;font-size:10.5px;font-weight:700}.desktop-scene.focus:before{transform:scale(1.06)}.desktop-scene.focus .desk-icon:not(.selected){opacity:.62;transform:scale(.96)}.desktop-scene.focus .desk-icon.selected{transform:translateY(-7px) scale(1.1)}.slide-open{display:inline-flex;align-items:center;min-height:32px;margin-top:9px;padding:0 10px;border-radius:9px;background:var(--brandS);color:var(--brand);font-size:11.5px;font-weight:700}.slide-open:active{transform:scale(.96)}
-.home-tabs{display:flex;gap:7px;margin:0 -14px 12px;padding:0 14px;overflow:auto;scrollbar-width:none}.home-tabs::-webkit-scrollbar{display:none}.home-tab{flex:none;min-height:34px;padding:0 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--soft);font-size:12.5px;font-weight:600}.home-tab.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}.home-tab:active{transform:scale(.96)}.home-access{display:flex;align-items:center;gap:9px;margin:0 0 16px;padding:11px 12px;border-radius:15px;background:var(--card);border:1px solid var(--line)}.home-access i{width:25px;height:25px;border-radius:9px;display:grid;place-items:center;flex:none;background:var(--brandS);color:var(--brand);font-style:normal;font-size:12px}.home-access span{min-width:0;flex:1}.home-access b,.home-access small{display:block}.home-access b{font-size:12.5px;color:var(--ink)}.home-access small{margin-top:2px;font-size:11px;line-height:1.25;color:var(--soft)}.home-access button{min-height:32px;padding:0 9px;border-radius:9px;background:var(--brandS);color:var(--brand);font-size:11.5px;font-weight:700}
-.reel{height:310px;padding:14px 14px 12px;display:flex;flex-direction:column;color:#F5FAF8;background:radial-gradient(circle at 88% 10%,rgba(60,130,126,.32),transparent 35%),#151A1A;overflow:hidden}
-.reel-head{display:flex;align-items:center;gap:8px;min-height:28px;color:#B9C9C6}
-.reel-head b{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12.5px;color:#F5FAF8}
-.reel-head b i{font-style:normal;width:17px;height:17px;border-radius:6px;display:grid;place-items:center;background:var(--reel,#1E9780);font-size:10px}
-.reel-head span{margin-left:auto;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:#8FA6A2}
-.reel-stage{position:relative;flex:1;min-height:0;margin-top:12px;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08)}
-.reel-scene{position:absolute;inset:9px 10px 52px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.10);background:#101313}.mini-top{height:27px;padding:0 9px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);font:700 9px var(--mono);color:#E9F1EF}.mini-top i{width:8px;height:8px;border-radius:50%;background:var(--reel,#1E9780);box-shadow:13px 0 0 rgba(255,255,255,.2),26px 0 0 rgba(255,255,255,.1)}.mini-top span{margin-left:auto;color:#839590;font-weight:500}
-.chat-ui{padding:8px 9px;background:linear-gradient(115deg,#111615,#182322)}.chat-ui .chat-ask{margin-left:26px;padding:7px 8px;border-radius:10px 10px 2px 10px;background:#2C3937;color:#F3F8F6;font-size:10px;line-height:1.25}.chat-ui .chat-answer{margin-top:7px;display:grid;grid-template-columns:18px 1fr;gap:6px;color:#C8D7D3;font-size:9px;line-height:1.35}.chat-ui .mark{width:18px;height:18px;border-radius:6px;display:grid;place-items:center;background:#10A37F;color:#fff;font-size:11px}.chat-ui .chat-answer b{display:block;color:#F3F8F6;font-size:10px}.chat-ui .chat-answer span{display:block;margin-top:2px}.chat-ui .typing{position:absolute;left:9px;right:9px;bottom:7px;height:18px;border-radius:7px;border:1px solid rgba(255,255,255,.14);color:#71847F;padding:4px 7px;font:8px var(--mono)}
-.code-ui{background:linear-gradient(140deg,#121516,#1A1411)}.code-ui .term{padding:8px 10px;font:9px/1.48 var(--mono);color:#DCE6E2}.code-ui .term b{color:#F6B15B}.code-ui .term .blue{color:#6FB7FF}.code-ui .term .green{color:#8EE3A7}.code-ui .term-line{display:block}.code-ui .files{position:absolute;left:10px;bottom:7px;right:10px;display:flex;gap:5px}.code-ui .files span{padding:4px 6px;border-radius:5px;background:rgba(255,255,255,.08);font:8px var(--mono);color:#9CAEA9}
-.tg-ui{background:linear-gradient(135deg,#172932,#0D2026)}.tg-ui .tg-date{padding-top:6px;text-align:center;color:#8FA6A2;font:8px var(--mono)}.tg-ui .bot-bubble,.tg-ui .user-bubble{max-width:82%;padding:7px 8px;border-radius:10px;font-size:9px;line-height:1.28}.tg-ui .bot-bubble{margin:6px 8px;background:#263C45;color:#ECF5F5;border-radius:3px 10px 10px}.tg-ui .user-bubble{margin:5px 8px 0 auto;background:#2B7D6D;color:#fff;border-radius:10px 3px 10px 10px}.tg-ui .tg-buttons{display:flex;gap:5px;margin:6px 8px}.tg-ui .tg-buttons span{flex:1;padding:5px 4px;border-radius:6px;background:#274D5B;color:#82C7FF;text-align:center;font-size:8px}.tg-ui .sent{position:absolute;right:8px;bottom:7px;color:#72D1B0;font:8px var(--mono)}
-.reel-result{position:absolute;left:14px;right:14px;bottom:9px;display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:13px;background:#F6FAF8;color:#172221;box-shadow:0 12px 24px rgba(0,0,0,.22)}
-.reel-result i{font-style:normal;width:28px;height:28px;border-radius:9px;background:var(--reel,#1E9780);display:grid;place-items:center;color:#fff;font-size:13px;flex:none}.reel-result b{display:block;font-size:12px;line-height:1.2}.reel-result span{display:block;margin-top:2px;font-size:10.5px;color:#66716F}.reel-result em{margin-left:auto;font-style:normal;color:var(--reel,#1E9780);font-size:17px}
-.reel-foot{display:flex;align-items:center;gap:9px;padding-top:11px;font-size:11.5px;color:#A8BCB8}.reel-foot i{width:6px;height:6px;border-radius:50%;background:var(--reel,#1E9780);box-shadow:0 0 0 4px color-mix(in srgb,var(--reel,#1E9780) 18%,transparent)}.reel-cta{margin-left:auto;min-height:32px;padding:0 10px;border-radius:9px;background:rgba(255,255,255,.10);color:#F5FAF8;font-size:12px;font-weight:700}.reel-cta:active{transform:scale(.96)}
-/* Оригинальные сцены без плашек поверх: подпись и действие живут под кадром. */
-.reel.workflow{height:336px}.reel.workflow .reel-stage{display:block;min-height:0;margin-top:10px;background:#0B1012}.reel-shot{position:relative;width:100%;height:100%;overflow:hidden;background:#0B1012}.reel-shot:after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),inset 0 -28px 30px -24px rgba(0,0,0,.8);pointer-events:none}.reel-shot img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 8s linear}.slide.playing .reel-shot img{transform:scale(1.045)}.reel-shot.chat img{object-position:51% 43%}.reel-shot.code img{object-position:52% 43%}.reel-shot.done img{object-position:51% 44%}.reel.workflow .reel-foot{padding-top:9px}.reel.workflow .reel-foot span{min-width:0;flex:1;line-height:1.25}.reel.workflow .reel-foot b{display:block;color:#F5FAF8;font-size:11.5px}.reel.workflow .reel-foot small{display:block;margin-top:2px;color:#A8BCB8;font-size:10.5px}
-/* В одном кадре сцены появляются по очереди: это объясняет ход работы,
-   а не заставляет пользователя ждать интерфейс. */
-.reel.playing .reel-scene{animation:reelIn .42s var(--ease-out) both}.reel.playing .reel-result{animation:reelIn .42s .42s var(--ease-out) both}.reel.playing .reel-foot{animation:reelIn .34s .65s var(--ease-out) both}
-.reel.playing .chat-ui .chat-ask{animation:reelIn .32s .13s var(--ease-out) both}.reel.playing .chat-ui .chat-answer{animation:reelIn .32s .43s var(--ease-out) both}.reel.playing .chat-ui .typing{animation:reelIn .24s .72s var(--ease-out) both}.reel.playing .code-ui .term-line{animation:reelIn .24s var(--ease-out) both}.reel.playing .code-ui .term-line:nth-child(1){animation-delay:.12s}.reel.playing .code-ui .term-line:nth-child(2){animation-delay:.28s}.reel.playing .code-ui .term-line:nth-child(3){animation-delay:.44s}.reel.playing .code-ui .term-line:nth-child(4){animation-delay:.62s}.reel.playing .code-ui .files{animation:reelIn .25s .78s var(--ease-out) both}.reel.playing .tg-ui .user-bubble{animation:reelIn .28s .14s var(--ease-out) both}.reel.playing .tg-ui .bot-bubble{animation:reelIn .3s .42s var(--ease-out) both}.reel.playing .tg-ui .tg-buttons{animation:reelIn .28s .69s var(--ease-out) both}
-@keyframes reelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.reel.playing .reel-scene,.reel.playing .reel-result,.reel.playing .reel-foot,.reel.playing .chat-ui .chat-ask,.reel.playing .chat-ui .chat-answer,.reel.playing .chat-ui .typing,.reel.playing .code-ui .term-line,.reel.playing .code-ui .files,.reel.playing .tg-ui .user-bubble,.reel.playing .tg-ui .bot-bubble,.reel.playing .tg-ui .tg-buttons{animation:none}}
-
 /* ---- урок ---- */
-.back{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);border-radius:999px;padding:0 17px 0 14px;min-height:44px;font-size:13.5px;color:var(--soft);margin-bottom:13px;transition:transform .1s var(--ease)}
-.back:active{transform:scale(.97)}
+button.back{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);border-radius:999px;padding:0 17px 0 14px;min-height:44px;font-size:13.5px;color:var(--soft);margin-bottom:13px;transition:transform .1s var(--ease)}
+button.back:active{transform:scale(.97)}
 .lhead{border-radius:18px;padding:18px;color:#fff;margin-bottom:15px}
 .lhead .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
 .lhead h3{margin:7px 0 0;font-size:21px;font-weight:700;line-height:1.15;letter-spacing:-.02em}
@@ -423,101 +383,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 .sw i{position:absolute;top:3px;left:21px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s var(--ease)}
 .sw.off{background:var(--line2)}.sw.off i{left:3px}
 
-/* ---- нижняя панель ---- */
-/* Это не нижнее меню из четырёх разделов. Только короткий переключатель:
-   вернуться к обучению или открыть свой кабинет. */
-.dock{position:fixed;left:50%;bottom:14px;z-index:20;transform:translateX(-50%);display:flex;gap:3px;width:max-content;max-width:calc(100% - 32px);padding:5px;border:1px solid var(--line);border-radius:999px;background:color-mix(in srgb,var(--card) 92%,transparent);box-shadow:0 10px 28px rgba(18,25,38,.14);backdrop-filter:blur(14px)}
-.dock a{min-width:0;display:flex;align-items:center;gap:7px;padding:9px 14px;border-radius:999px;font-size:12px;font-weight:700;color:var(--faint);transition:color .2s,background .2s;cursor:pointer;white-space:nowrap}
-.dock a .g{font-size:17px;line-height:1}
-.dock a.on{color:#fff;background:var(--ink)}
 .foot{margin-top:20px;font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.65;text-align:center}
-.slides{position:relative;margin:0 0 6px}
-.track{display:flex;align-items:flex-start;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
-  padding:2px 14px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.track::-webkit-scrollbar{display:none}
-.slide{flex:0 0 84%;scroll-snap-align:center;border:1px solid var(--line2);border-radius:20px;
-  background:var(--card);overflow:hidden}
-.slide .pic{display:block;width:100%;height:auto;background:var(--brandS)}
-.slide .cap{padding:13px 15px 15px;min-height:96px}
-.swin{height:292px;background:#0F1717;position:relative;overflow:hidden;
-  box-shadow:inset 0 -30px 40px -30px rgba(0,0,0,.5)}
-.swin.light{background:#FFFFFF;box-shadow:inset 0 -30px 40px -30px rgba(20,32,31,.09)}
-.wbar{display:flex;align-items:center;gap:6px;padding:10px 12px;background:rgba(255,255,255,.03);
-  border-bottom:1px solid rgba(255,255,255,.06)}
-.swin.light .wbar{background:#F7F8F7;border-bottom-color:#E8ECEA}
-.wbar .dot{width:9px;height:9px;border-radius:50%}
-.wbar .ttl{font-weight:600;font-size:11.5px;line-height:1;font-family:var(--mono);letter-spacing:.02em;color:#8FA8A6;margin-left:6px}
-.swin.light .wbar .ttl{color:#6E7C7A}
-.wbar .rt{margin-left:auto;display:flex;align-items:center;gap:5px;
-  font-weight:600;font-size:10.5px;line-height:1;font-family:var(--mono);color:#7E9997}
-.swin.light .wbar .rt{color:#6E7C7A}
-.wbar .rt .pulse{width:6px;height:6px;border-radius:50%;background:#3FBF7F}
-.wbody{padding:13px 13px 0;height:calc(100% - 39px);overflow:hidden}
-.msg{display:flex;gap:10px;margin:0 0 11px;opacity:0;transform:translateY(7px);
-  transition:opacity .22s var(--ease-out),transform .22s var(--ease-out)}
-.msg.in{opacity:1;transform:none}
-.msg .ava{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
-  font-weight:700;font-size:11px;line-height:1;font-family:var(--sans);color:#fff}
-.msg .txt{font-size:13px;line-height:1.52;color:#E4EFED}
-.swin.light .msg .txt{color:#16211F}
-.msg.user .ava{border-radius:50%;background:#5C6B69}
-.msg.user .txt{color:#A9BDBB}
-.swin.light .msg.user .txt{color:#5E6C6A}
-.acts{display:flex;gap:16px;padding:9px 0 0;margin-top:2px;border-top:1px solid rgba(255,255,255,.07)}
-.swin.light .acts{border-top-color:#EDF0EE}
-.acts span{font-weight:600;font-size:10.5px;line-height:1;font-family:var(--mono);color:#7E9997;letter-spacing:.02em;white-space:nowrap}
-.swin.light .acts span{color:#6E7C7A}
-.tgw{background:#17212B;height:292px;box-shadow:none}
-.tgbar{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#212D3B;
-  border-bottom:1px solid rgba(0,0,0,.25)}
-.tgbar .ava{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
-  font-weight:700;font-size:12px;line-height:1;font-family:var(--sans);color:#fff;background:linear-gradient(145deg,#12666B,#17858B)}
-.tgbar b{font-size:13.5px;color:#fff;display:block;line-height:1.25}
-.tgbar span{font-size:11px;color:#7C93AC;display:block;line-height:1.3}
-.tgb{max-width:82%;padding:7px 10px 5px;border-radius:12px;font-size:12.5px;line-height:1.42;
-  margin:0 0 6px;opacity:0;transform:translateY(6px) scale(.98);
-  transition:opacity .2s var(--ease-out),transform .2s var(--ease-out);box-shadow:0 1px 1px rgba(0,0,0,.18)}
-.tgb.in{opacity:1;transform:none}
-.tgb.out{margin-left:auto;background:#2B5278;color:#fff;border-bottom-right-radius:5px}
-.tgb.inb{background:#182533;color:#E7EFF6;border-bottom-left-radius:5px}
-.tgb .tm{float:right;margin:4px 0 0 8px;font-size:10px;color:rgba(255,255,255,.45)}
-.tgb.out .tm:after{content:' ✓✓';color:#69C7FF}
-.tgkey{display:flex;gap:4px;margin:6px 0 0}
-.tgkey i{flex:1;padding:5px 0;text-align:center;border-radius:7px;background:#242F3D;color:#7FB0DC;
-  font-weight:600;font-size:9px;line-height:1;font-family:var(--sans);font-style:normal}
-.code{font-family:var(--mono);font-size:11.5px;line-height:1.75}
-.code .ln{display:flex;gap:11px;opacity:0;transition:opacity .18s var(--ease-out);
-  white-space:nowrap;overflow:hidden}
-.code .ln.in{opacity:1}
-.code .no{width:14px;text-align:right;color:#3C5453;flex:none;user-select:none}
-.code .kw{color:#7FC8CC}.code .st{color:#E4AB6A}.code .cm{color:#516D6C}.code .fn{color:#EAF2F0}
-.tab{display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border-radius:7px 7px 0 0;
-  background:rgba(255,255,255,.05);font-weight:600;font-size:10.5px;line-height:1;font-family:var(--mono);color:#9FBAB8;margin:0 0 8px}
-.tab:before{content:'';width:7px;height:7px;border-radius:50%;background:#E4AB6A}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px}
-.grid4 div{aspect-ratio:1;border-radius:9px;opacity:0;transform:scale(.94);
-  transition:opacity .3s var(--ease-out),transform .3s var(--ease-out);
-  background:linear-gradient(150deg,#1D2E2E,#16403F)}
-.grid4 div.in{opacity:1;transform:none}
-.src{display:flex;gap:6px;margin-top:9px}
-.src i{flex:1;padding:7px 8px;border-radius:9px;background:rgba(255,255,255,.055);font-style:normal;
-  font-weight:600;font-size:9.5px;line-height:1.3;font-family:var(--mono);color:#8FA8A6;opacity:0;transform:translateY(4px);
-  transition:opacity .25s var(--ease-out),transform .25s var(--ease-out)}
-.src i.in{opacity:1;transform:none}
-.slide{box-shadow:0 6px 20px -12px rgba(20,32,31,.28)}
-/* курсор печати в слайдах; класс .bub здесь не трогаем — он занят экранами
-   переписки в уроках, и прозрачность из старой версии делала их невидимыми */
-.car{display:inline-block;width:2px;height:1em;vertical-align:-2px;margin-left:1px;
-  background:var(--brand);animation:blink 1s steps(2,start) infinite}
-.swin .msg .txt .car{background:currentColor}
-@keyframes blink{to{visibility:hidden}}
-@media (prefers-reduced-motion:reduce){.car{animation:none}}
-.swin .msg[data-say] .txt{min-height:74px}
-.slide .cap b{display:block;font-size:15.5px;margin:0 0 4px;color:var(--ink)}
-.slide .cap span{font-size:13.5px;line-height:1.5;color:var(--soft)}
-.dots{display:flex;gap:6px;justify-content:center;margin:0 0 4px}
-.dots i{width:6px;height:6px;border-radius:50%;background:var(--line2);transition:width .2s,background .2s}
-.dots i.on{width:18px;background:var(--brand)}
 .lmin{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:10.5px;
   letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.75)}
 .toc{margin:0 14px 16px;border:1px solid var(--line2);border-radius:18px;background:var(--card);
@@ -714,16 +580,69 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   background:var(--brand);color:#fff;font-weight:600;font-size:13px;line-height:1;font-family:var(--sans);cursor:pointer}
 .subbar button:active{transform:scale(.97)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* Shared reading and navigation system · September 2026 */
+.ui-icon{width:24px;height:24px;display:block;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.tp{padding:8px 0 14px;gap:8px;min-height:64px;top:var(--tg-content-top,0px)}
+.home-brand{display:flex;align-items:center;gap:9px;min-height:44px;min-width:0;padding:0;margin-right:auto;text-align:left}
+.home-brand b{font-size:15px}.home-brand .mk{background:#214CBD;color:#D2F7AA;font-size:15px;font-weight:700;letter-spacing:-1px}
+.tgl{margin-left:0;border:0;background:var(--card);border-radius:50%}
+.profile-go{display:flex;align-items:center;gap:7px;min-height:44px;padding:0 12px;border-radius:24px;background:var(--card);font-size:12px;font-weight:600}
+.profile-go[aria-current="page"]{background:var(--brandS);color:var(--brand)}
+.profile-go .ui-icon{width:20px;height:20px}
+.quick-links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:29px}
+.quick-links button{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:14px;text-align:left;padding:16px;border:1px solid var(--line);border-radius:20px;background:var(--card);min-width:0}
+.quick-links b{display:block;font-size:14px;line-height:1.3}.quick-links small{display:block;margin-top:4px;font-size:12px;color:var(--soft);line-height:1.35}
+.quick-links i{position:absolute;right:16px;top:16px;font-style:normal;color:var(--soft)}
+.quick-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:12px}.mint{background:#D8F3DC;color:#206142}.peach{background:#FFE2BF;color:#865220}
+.section-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:26px 0 12px}.section-heading h2{margin:0;font-size:22px;line-height:1.2;letter-spacing:-.035em}.section-heading button{font-size:12px;min-height:44px;color:var(--brand);white-space:nowrap;padding:0 4px}
+#secs{gap:0;border-top:1px solid var(--line)}
+#secs .item.sec{padding:18px 0;background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;animation:none;box-shadow:none;gap:12px;transform:none}
+#secs .ic{width:49px;height:56px;border-radius:10px 16px 16px 10px;box-shadow:inset 4px 0 0 rgba(255,255,255,.24);align-self:flex-start}
+#secs .tx b{font-size:17px;line-height:1.25}#secs .tx>span:not(.meta){font-size:13px;margin-top:3px;line-height:1.45}
+#secs .meta{font-family:var(--body);font-size:11px;text-transform:none;letter-spacing:0;flex-wrap:wrap;gap:4px;margin-top:7px}#secs .meta .pg{width:40px}
+#secs .pill{align-self:flex-start;font-family:var(--body);font-size:10px;letter-spacing:0;text-transform:none;margin-top:3px;padding:4px 6px;white-space:nowrap}
+.prompt-lab{margin:30px 0;padding:22px;border-radius:24px;background:#E9EFDD;color:#21362A}
+.lab-top{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;color:#4B624C}.lab-stamp{border:1px solid #849C78;border-radius:6px;padding:3px 7px}
+.prompt-lab h2{font-size:29px;line-height:1.1;letter-spacing:-.04em;margin:18px 0 10px}.prompt-lab>p{margin:0;font-size:14px;line-height:1.55;color:#415742}
+.lab-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0 12px}.lab-tabs button{min-height:44px;padding:0 11px;border:1px solid #BBCBB1;border-radius:24px;font-size:12px;color:#294530}
+.lab-tabs button[aria-pressed="true"]{background:#284B35;color:#fff;border-color:#284B35}
+.lab-paper{padding:16px;border-radius:14px;background:#fff;border:1px solid #D2DBC9;box-shadow:0 3px 0 #D2DBC9}
+.lab-caption{font-size:11px;color:#5C6A58}.lab-paper p{margin:9px 0 0;font-size:14px;line-height:1.6;color:#203229}
+.lab-result{display:flex;gap:9px;margin:16px 0;color:#33563A}.lab-result p{font-size:12px;margin:0;line-height:1.5}.lab-result .ui-icon{width:18px;height:18px}
+.lab-copy{width:100%;justify-content:center;background:#284B35;color:#fff;border-color:#284B35;font-family:var(--body);font-size:14px;text-transform:none;letter-spacing:0;font-weight:600}
+.lab-copy.done{background:#fff;color:#284B35}.lab-note{display:block;margin-top:9px;font-size:11px;line-height:1.45;color:#50624C}
+[data-n="1"] .prompt-lab{background:#253B2F;color:#EDF7E8}[data-n="1"] .prompt-lab>p,[data-n="1"] .lab-top,[data-n="1"] .lab-note,[data-n="1"] .lab-result{color:#CADCC4}[data-n="1"] .lab-tabs button{color:#E4F2DF}[data-n="1"] .lab-tabs button[aria-pressed="true"]{background:#D2F7AA;color:#203629}
+.lhead{padding:24px;border-radius:22px}.lhead h3{font-size:28px;line-height:1.15;letter-spacing:-.035em}.lhead .k,.lmin{font-family:var(--body);font-size:12px;letter-spacing:0;text-transform:none;opacity:1;color:rgba(255,255,255,.9)}
+.prose{gap:18px;padding:6px 2px}.prose p,.prose ul{font-size:16px;line-height:1.7}.prose h4{font-size:22px;line-height:1.25;margin:23px 0 0;letter-spacing:-.025em;scroll-margin-top:82px}.prose h5{font-size:17px}
+.prose pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.65}.cw{padding-top:44px;background:#12151F;border-radius:14px}.cw .cb{top:6px;right:7px;min-height:34px}
+.pbox{border-color:var(--line2);background:var(--brandS);border-radius:16px}.pbox .ph{border-color:var(--line2);flex-wrap:wrap}.pbox .ph span{font-family:var(--body);font-size:12px;text-transform:none;letter-spacing:0}
+.cb{font-family:var(--body);font-size:12px;letter-spacing:0;text-transform:none}.toc>button{min-height:52px;font-size:14px}.nx{min-height:64px}.foot{font-family:var(--body);font-size:12px;letter-spacing:0}
+.item,.tcard,.nx,.fx{animation:none}.route-row{flex-wrap:wrap}.route-row em{font-family:var(--body);font-size:11px;letter-spacing:0}.route-row .route-tx{min-width:150px}.route-row span{white-space:normal}
+.sh{font-family:var(--body);font-size:15px;letter-spacing:0;text-transform:none;font-weight:600}.big{font-size:28px}.allnews{min-height:44px}.row .tx b{font-size:15px}.row .tx>span{font-size:13px;line-height:1.45}
+#copy-fallback{max-width:500px;width:calc(100% - 32px);padding:24px;border:1px solid var(--line);border-radius:22px;background:var(--bg);color:var(--ink)}
+#copy-fallback::backdrop{background:rgba(0,0,0,.45)}#copy-fallback h2{font-size:21px;line-height:1.2}#copy-fallback p{font-size:14px}#copy-value{width:100%;height:230px;background:var(--card);color:var(--ink);border:1px solid var(--line2);padding:12px;border-radius:12px;font-family:var(--body);font-size:15px}#copy-fallback button{margin-top:14px;min-height:44px;padding:0 22px;border-radius:12px;background:var(--brand);color:var(--bg)}
+@media(hover:hover) and (pointer:fine){.quick-links button:hover{border-color:var(--brand)}#secs .item.sec:hover .tx b{color:var(--brand)}button.back:hover{background:var(--card)}}
+@media(max-width:380px){.profile-go span{display:none}.profile-go{padding:0 12px}.study-hero{padding:22px 20px}.study-hero h2{font-size:31px}#secs .pill{font-size:9px}.section-heading h2{font-size:20px}.prompt-lab{padding:18px}.quick-links button{padding:13px}}
+
+.figure-note{font-size:12px!important;line-height:1.5!important;color:var(--faint);margin:12px 0 0!important}
+/* Legible labels and consistent icon contrast in both themes. */
+.ic.i3{color:#201609}[data-n="1"] .ic{color:#101A1A}
+.lab-caption,.lab-note,#secs .meta{font-size:12px}.route-row em{font-size:12px}
+#secs .pill{font-size:11px}.cw .cb{min-height:44px}.cw{padding-top:54px}
+.sw:disabled{opacity:.5;cursor:wait}
 </style>
 </head>
 <body>
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs><symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4h6c2 0 2 1 2 2v14c0-2-2-3-4-3H4zM20 4h-6c-2 0-2 1-2 2v14c0-2 2-3 4-3h4z"/></symbol><symbol id="i-message" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 3V6a2 2 0 0 1 1-2Z"/><path d="M8 9h9M8 13h6"/></symbol><symbol id="i-code" viewBox="0 0 24 24"><path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 3l-4 18"/></symbol><symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="14" rx="4"/><path d="M12 2v4M8 11v2m8-2v2m-8 3h8M1 11v4m22-4v4"/></symbol><symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="m10 8 6 4-6 4Z"/></symbol><symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol><symbol id="i-tools" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><path d="M14 17h7m-3.5-3.5v7"/></symbol><symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14A9 9 0 0 1 10 3a9 9 0 1 0 10 11Z"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0v5l3 3H3l3-3ZM9 21h6"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4Z"/></symbol><symbol id="i-document" viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5Zm9 0v5h5M8 12h8m-8 4h6"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></symbol></defs></svg>
 <div class="app">
-  <div class="tp">
-    <span class="mk"><i></i></span><b id="hi">ИИ без людей</b>
-    <button class="tgl" id="sr-open" title="Поиск" aria-label="Поиск">⌕</button>
-    <button class="tgl" id="tgl" title="Тема">◐</button>
+  <header class="tp">
+    <button class="home-brand" data-go="study" aria-label="ИИ без людей — главная"><span class="mk" aria-hidden="true">ии</span><b id="hi">ИИ без людей</b></button>
+    <button class="tgl" id="sr-open" title="Поиск" aria-label="Поиск"><svg class="ui-icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+    <button class="profile-go" data-go="me" aria-label="Профиль"><svg class="ui-icon" aria-hidden="true"><use href="#i-person"/></svg><span>Профиль</span></button>
+    <button id="tgl" hidden aria-label="Сменить тему">◐</button>
     <span class="uav" id="uav" hidden></span>
-  </div>
+  </header>
 
   <div class="subbar" id="subbar" hidden>
     <span class="tx"><b>Вы не подписаны на канал</b><span id="subbar-d">Закрытые уроки открываются подписчикам «ИИ без людей»</span></span>
@@ -766,26 +685,38 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
 
   <div class="view" id="v-study">
     <section class="study-hero" aria-label="Начало обучения">
-      <span class="study-kicker">практический курс</span>
-      <h2>Не читайте про ИИ. Соберите результат.</h2>
-      <p>В каждом уроке есть короткая задача, готовые слова для нейросети и проверка в конце.</p>
-      <div class="study-flow" aria-label="Как устроен урок">
-        <span>Задача</span><i>→</i><span>Нейросеть</span><i>→</i><span>Результат</span>
-      </div>
+      <span class="study-kicker">Можно начать бесплатно</span>
+      <h2>Сделайте ИИ своим рабочим инструментом</h2>
+      <p>От первого запроса до своего бота. Объясняем по шагам, даём примеры и помогаем проверить результат.</p>
       <button class="study-go" id="hero-go" data-sec="0">Открыть первый урок</button>
-      <button class="study-map" data-go="route"><span><b>Карта обучения</b><span>6 разделов · 16 уроков</span></span><i>›</i></button>
+      <span class="hero-note">Два раздела и пробный урок уже открыты</span>
     </section>
-
-    <div class="home-access"><i>✓</i><span><b>Первые разделы открыты</b><small>Сначала посмотрите уроки, потом решайте про полный доступ.</small></span><button data-go="route">Программа</button></div>
-
-    <div class="sh">Программа · два раздела открыты</div>
+    <div class="quick-links">
+      <button data-go="prompts"><span class="quick-icon mint"><svg class="ui-icon" aria-hidden="true"><use href="#i-message"/></svg></span><span><b>Готовые запросы</b><small>Скопируйте и попробуйте</small></span><i aria-hidden="true">↗</i></button>
+      <button data-go="tools"><span class="quick-icon peach"><svg class="ui-icon" aria-hidden="true"><use href="#i-tools"/></svg></span><span><b>Выбрать нейросеть</b><small>Под вашу задачу</small></span><i aria-hidden="true">↗</i></button>
+    </div>
+    <div class="section-heading"><h2>Чему научимся</h2><button data-go="route">Вся программа <span aria-hidden="true">→</span></button></div>
     <div class="stack" id="secs"></div>
 
-    <div class="sh">Что нового</div>
+    <section class="prompt-lab" aria-labelledby="lab-title">
+      <div class="lab-top"><span class="lab-stamp">Практика</span><span>Попробуйте сейчас</span></div>
+      <h2 id="lab-title">Одна задача.<br>Точный запрос.</h2>
+      <p>Выберите ситуацию — получите текст, который можно отправить нейросети.</p>
+      <div class="lab-tabs" role="group" aria-label="Задача для промпта">
+        <button data-lab="0" aria-pressed="true">Ответ клиенту</button>
+        <button data-lab="1" aria-pressed="false">План дня</button>
+        <button data-lab="2" aria-pressed="false">Идея поста</button>
+      </div>
+      <div class="lab-paper"><span class="lab-caption">Что написать нейросети</span><p id="lab-prompt"></p></div>
+      <div class="lab-result"><svg class="ui-icon" aria-hidden="true"><use href="#i-check"/></svg><p id="lab-result"></p></div>
+      <button class="cb lab-copy" id="lab-copy">Скопировать запрос</button>
+      <small class="lab-note">Это шаблон запроса. Ответ появится в выбранной вами нейросети.</small>
+    </section>
+    <div class="section-heading"><h2>Обновления курса</h2></div>
     <div class="news" id="news-home"></div>
     <button class="allnews" data-go="news">Все обновления →</button>
 
-    <p class="foot">Открытые разделы не закроются никогда.<br>Их можно проходить сколько угодно раз.</p>
+    <p class="foot">Открытые разделы доступны бесплатно.<br>Их можно проходить сколько угодно раз.</p>
   </div>
 
   <!-- ===== КАРТА ОБУЧЕНИЯ ===== -->
@@ -901,7 +832,7 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   <div class="view" id="v-tools">
     <h2 class="big">Нейросети</h2>
     <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Что чем делать. Зелёная метка — работает из России без VPN.
-      Цены и условия сверяю руками: под каждой карточкой дата последней сверки.</p>
+      Цены и доступность меняются: смотрите дату под карточкой и актуальные условия на сайте сервиса.</p>
     <div class="sh">Что нужно сделать?</div>
     <div class="tasks" id="tk-list"></div>
     <div id="tk-out"></div>
@@ -919,6 +850,9 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
       <span class="ch">›</span></button>
     <div class="sh">Обучение</div>
     <div class="grp">
+      <button class="row" data-go="prompts"><span class="ic i2 sm"><svg class="ui-icon" aria-hidden="true"><use href="#i-message"/></svg></span><span class="tx"><b>Готовые запросы</b><span>для писем, планов и других задач</span></span><span class="ch">›</span></button>
+      <button class="row" data-go="ach"><span class="ic i3 sm"><svg class="ui-icon" aria-hidden="true"><use href="#i-check"/></svg></span><span class="tx"><b>Мой прогресс</b><span id="p-ach">уроки и достижения</span></span><span class="ch">›</span></button>
+      <button class="row" data-go="log"><span class="ic i5 sm"><svg class="ui-icon" aria-hidden="true"><use href="#i-book"/></svg></span><span class="tx"><b>Канал и разборы</b><span>свежие публикации</span></span><span class="ch">›</span></button>
       <button class="row" data-recent="1"><span class="ic i5 sm">◔</span>
         <span class="tx"><b>Недавно открытое</b><span id="p-rec">пока пусто</span></span><span class="ch">›</span></button>
       <button class="row" data-go="tools"><span class="ic i1 sm">◐</span>
@@ -936,11 +870,11 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
     <div class="sh">Настройки</div>
     <div class="grp">
       <div class="row"><span class="ic i3 sm">◑</span>
-        <span class="tx"><b>Ночная тема</b><span>переключается и в шапке</span></span>
-        <button class="sw off" id="sw2"><i></i></button></div>
+        <span class="tx"><b>Ночная тема</b><span>светлый или тёмный фон</span></span>
+        <button class="sw off" id="sw2" aria-label="Ночная тема" role="switch" aria-checked="false"><i></i></button></div>
       <div class="row"><span class="ic i4 sm">◈</span>
         <span class="tx"><b>Новые материалы</b><span id="sw1-note">сообщать, когда выходит урок</span></span>
-        <button class="sw" id="sw1"><i></i></button></div>
+        <button class="sw off" id="sw1" aria-label="Новые материалы" role="switch" aria-checked="false"><i></i></button></div>
     </div>
     <p class="foot" id="sw-note" hidden></p>
     <p class="foot" id="acc-foot">Полный доступ — 500 ₽ в месяц или 4 900 ₽ за год.<br>
@@ -1015,22 +949,19 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
   </div>
 </div>
 
-<div class="dock">
-  <a class="on" data-go="study"><span class="g">◱</span>Главная</a>
-  <a data-go="me"><span class="g">◍</span>Профиль</a>
-</div>
+
 
 <script>
 const SECS = [
  {t:'Первые шаги', d:'Claude, ChatGPT, Perplexity', ic:'◐', c:'i1', g:'linear-gradient(150deg,#0F5E63,#14757A)', free:true, ls:[
    {t:'Как разговаривать с нейросетью', free:true, min:14, b:[
-     ['p','<b>После этого урока вы будете получать от нейросети ответ по делу с первой попытки, а не с пятой.</b> Это не про «волшебные промпты» — это про четыре вещи, которых почти никто не пишет, и из-за которых нейросеть отвечает шаблоном.'],
+     ['p','<b>В этом уроке вы составите запрос под свою задачу.</b> Укажете цель, материал и ограничения, а затем проверите ответ. Это помогает уменьшить число правок, хотя удачный результат с первой попытки не гарантирован.'],
      ['h','Почему получается шаблон'],
      ['p','Нейросеть не читает мысли. Она видит ровно тот текст, который вы прислали, и достраивает всё недостающее сама — самым усреднённым способом. Чем меньше вы дали, тем усреднённее выйдет.'],
      ['p','Вот как это выглядит на самом частом примере.'],
      ['shot',{title:'Так пишут почти все',rows:[['me','Напиши текст для сайта'],['ai','Конечно! Вот текст для вашего сайта: «Мы — команда профессионалов, которая ценит каждого клиента и стремится к качеству…»']],mark:'Что произошло|Вы не сказали ни про продукт, ни про клиента, ни про задачу страницы. Нейросеть заполнила все три пробела средним по больнице — и выдала текст, который подойдёт кому угодно, а значит никому.'}],
      ['h','Почему она не говорит «я не знаю»'],
-     ['p','У нейросети нет ощущения незнания. Она не хранит факты списком, она предсказывает следующее слово — и делает это одинаково уверенно и когда знает, и когда достраивает. Поэтому пропуск в вашем запросе не вызывает у неё вопроса: он просто заполняется самым вероятным вариантом.'],
+     ['p','Уверенный тон ответа не доказывает его точность. Нейросеть может задать уточняющий вопрос, признать нехватку данных или заполнить пробел предположением. Поэтому полезно заранее попросить её отмечать неизвестное и отделять факты от догадок.'],
      ['p','Отсюда правило, которое экономит больше всего времени: <b>пробел в запросе — это не пустое место, это место, куда нейросеть впишет что-то за вас.</b> Хотите решать сами — заполните его.'],
      ['fig',{k:'compare',t:'Что видит нейросеть',a:['Без материала',['Продукт — усреднённый, из тысяч чужих сайтов','Клиент — абстрактный «каждый»','Цифры — правдоподобные, выдуманные','Тон — бодрый рекламный']],b:['С материалом',['Продукт — ровно ваш, с вашими условиями','Клиент — занятый родитель 30–40 лет','Цифры — ваши, из вашего файла','Тон — такой, как вы задали']]}],
      ['h','Четыре вещи, которые надо дать'],
@@ -1045,10 +976,10 @@ const SECS = [
      ['p','Длина, тон, чего делать нельзя. Последнее важнее всего: «не используй слова „инновационный“ и „команда профессионалов“» экономит два круга правок.'],
      ['sub','Материал — ваши тексты и цифры'],
      ['p','Ваши тексты, документы, цифры. Это главное отличие хорошего запроса от плохого.'],
-     ['p','<b>Не давайте нейросети вспоминать.</b> Когда она вспоминает — она сочиняет правдоподобное. Когда перед ней лежит ваш документ — сочинять нечего, и точность вырастает в разы.'],
+     ['p','<b>Дайте исходный материал.</b> Попросите опираться на него и указывать страницу или фрагмент для каждого важного вывода. Файл помогает привязать ответ к вашей задаче, но модель всё ещё может пропустить деталь или ошибиться. Сверьте результат с оригиналом.'],
      ['shot',{title:'Так работает',rows:[['me','Ты редактор главной страницы сайта. Продукт: доставка продуктов за час по Казани. Клиент: занятые родители 30–40 лет. Задача страницы: нажать «оформить первый заказ». Тон спокойный, без восклицаний. Не пиши «команда профессионалов» и «инновационный». Не пиши пока текст — задай мне 5 вопросов, без ответов на которые получится шаблон.'],['ai','Понял. Первый вопрос: чем вы отличаетесь от конкурентов, кроме скорости? Дальше спрошу про наличие товара, минимальную сумму, зону доставки и что происходит при опоздании.']],mark:'Что изменилось|Появились роль, задача, рамки и запрет на штампы. И главное — просьба задать вопросы вместо готового ответа.'}],
      ['h','Приём, который экономит часы'],
-     ['p','Самая дорогая ошибка — просить результат сразу. Нейросеть не переспрашивает: она видит пробел, заполняет его допущением и уверенно строит на нём всё остальное. Вы узнаёте об этом, когда переделывать надо целиком.'],
+     ['p','Если задача сложная или исходных данных мало, сначала попросите уточняющие вопросы. Так легче заметить неподтверждённые предположения до того, как появится большой черновик.'],
      ['p','Лечится одной фразой. Просите не результат, а вопросы.'],
      ['h','В каком порядке это собирать'],
      ['p','Порядок не случайный. Роль задаёт, как думать; задача — что считать успехом; рамки отсекают лишнее; материал не даёт сочинять. Если пропустить материал, всё предыдущее работает вхолостую: нейросеть аккуратно и в нужном тоне напишет неправду.'],
@@ -1072,7 +1003,7 @@ const SECS = [
      ['fix','Отвечает водой: «важно отметить», «в современном мире», «команда профессионалов».|Запретите штампы прямым списком и потребуйте конкретики: «на каждое утверждение — пример или цифра, иначе не пиши это утверждение».||Каждый раз приходится заново объяснять, кто я и что за продукт.|Заполните постоянные указания в настройках нейросети — они применяются ко всем новым диалогам. Где нет такой настройки, держите бриф в заметках и вставляйте первым сообщением.||Ответ длинный, а нужно коротко. Просьба «покороче» не помогает.|«Коротко» — не рамка. Давайте число: «не больше 700 знаков», «ровно 5 пунктов», «три предложения». Числу она подчиняется, пожеланию нет.||В длинном разговоре забыла, о чём договорились в начале.|У любой модели окно памяти ограничено. Начните новый чат и вставьте первым сообщением краткий итог: что решили, что уже готово, что делаем дальше. Это надёжнее, чем надеяться, что она вспомнит.||Соглашается со мной, даже когда я не прав. Спрашиваю «точно?» — меняет верный ответ на неверный.|Никогда не спрашивайте «ты уверен». Это давление, и модель уступает. Спрашивайте: «что сделало бы этот вывод неверным» и «на чём он основан». Тогда она проверяет, а не угадывает ваше настроение.'],
      ['h','Чек-лист перед отправкой'],
      ['ul','Я назвал роль|Я сказал, что считается успехом|Я задал длину, тон и запреты|Я приложил свой материал, а не пересказал его|Я попросил вопросы, если задача сложнее одного абзаца'],
-     ['tip','Сохраните этот чек-лист. Он сокращает число попыток примерно втрое — и это единственная метрика, которая тут имеет значение.'],
+     ['tip','Сохраните этот чек-лист. Перед отправкой запроса проверьте: есть ли задача, исходные данные, формат ответа и ограничения.'],
      ['vid','Плохой запрос против хорошего|57 сек|ask.mp4'],
      ['test',[
        {k:'build',q:'Соберите запрос к нейросети: отметьте всё, что в нём должно быть.',o:[
@@ -1369,7 +1300,7 @@ const SECS = [
      ]]
    ]}
  ]},
- {t:'Вайбкодинг', d:'Продукт без разработчика', ic:'◇', c:'i3', g:'linear-gradient(150deg,#C97A1E,#B5642A)', ls:[
+ {t:'Вайбкодинг', d:'Продукт без разработчика', ic:'◇', c:'i3', g:'linear-gradient(150deg,#985412,#824116)', ls:[
    {t:'Что вообще можно собрать самому', min:12, key:'vk-sobrat', d:'Двенадцать вещей, которые непрограммист собирает за вечер — и три, за которые лучше не браться'},
    {t:'Шесть строк описания продукта', min:11, key:'vk-opisanie', d:'Формат задания, после которого нейросеть перестаёт додумывать за вас и переделывать не приходится'},
    {t:'Когда нейросеть врёт про свой код', min:12, key:'vk-vret', d:'Как за минуту проверить, что программа делает то, что обещали, — не читая ни строчки кода'}
@@ -1509,11 +1440,11 @@ const TL = {
   ['h','Как начать за пять минут'],
   ['ul','Открыть claude.ai и завести аккаунт по почте|Бесплатного уровня хватает попробовать: несколько десятков сообщений в день|Подписка снимает ограничения и открывает более сильную модель|Оплата российской картой не проходит — смотрите раздел «Оплата из России»'],
   ['h','Приём первый: работайте по источнику'],
-  ['p','Главное правило всего курса, и здесь оно даёт максимум выгоды. Не пересказывайте документ — приложите его файлом. Точность меняется не на проценты, а в разы.'],
+  ['p','Если документ разрешено загружать в выбранный сервис, приложите файл и попросите ссылки на конкретные фрагменты. После ответа сверьте цитаты, суммы и выводы с оригиналом.'],
   ['shot',{title:'Разбор договора',rows:[['me','Прикреплён договор аренды. Не пересказывай его. Выпиши только пункты, которые создают обязанности для арендатора. По каждому: чем грозит нарушение и что можно попробовать изменить. Цитируй номера пунктов.'],['ai','Пункт 4.2 — арендатор обязан согласовывать любые изменения помещения письменно. Нарушение: штраф 50 000 ₽ и возможное расторжение. Что менять: добавить исключение для обратимых изменений…']],mark:'Почему так лучше|Вы задали фильтр («только обязанности арендатора») и потребовали ссылки на пункты. Без фильтра получите пересказ всего документа, который вы и так можете прочитать.'}],
   ['prompt','Вот документ. Не пересказывай его целиком.\n\n1. Выпиши только те пункты, которые создают обязанности для меня.\n2. По каждому: чем грозит нарушение и что я могу попробовать изменить.\n3. Отдельным списком — чего в документе НЕТ, а для такого типа договора обычно есть.\n\nЦитируй номерами пунктов. Не пиши по памяти: если чего-то в тексте нет, так и скажи.','Найти в договоре обязанности и риски'],
   ['h','Приём второй: заставьте себя проверять'],
-  ['p','Любая модель звучит одинаково уверенно и когда права, и когда выдумывает. Отличить на слух нельзя — но можно заставить её саму разделить эти два случая.'],
+  ['p','По тону ответа нельзя надёжно оценить его точность. Попросите разделить подтверждённые данные и предположения, затем самостоятельно проверьте важные утверждения.'],
   ['prompt','Раздели свой предыдущий ответ на две части:\n\n1. Что взято прямо из моего материала — с цитатой.\n2. Что ты добавил от себя: вывод, допущение или общее знание.\n\nПо второй части отдельно скажи, что сделало бы каждый пункт неверным.','Отделить факты от придуманного'],
   ['p','Этот приём работает и с любой другой моделью. Он не превращает её в непогрешимую, но переводит проверку из «перечитать всё» в «перечитать вторую часть».'],
   ['h','Приём третий: длинная работа в несколько заходов'],
@@ -2196,7 +2127,7 @@ const TL = {
   ['h','Как просить текст'],
   ['p','Текст в кавычках и отдельной строкой. Чем короче надпись, тем выше шанс, что она выйдет без ошибок.'],
   ['prompt','Постер для обучающего курса.\nНадпись крупно: "МАШИНА ЗА РУЛЁМ"\nПод ней мелко: "курс про агентов"\n\nСтиль: минимализм, много воздуха, две краски.\nБез лишних элементов вокруг текста.','Сделать картинку с читаемой надписью'],
-  ['fig',{k:'scale',t:'Шанс получить надпись без ошибок',items:[['1–2 слова',90,'var(--c2)','почти всегда'],['Короткая фраза',65,'var(--c3)','через раз'],['Предложение',25,'var(--c4)','редко'],['Абзац',5,'var(--c4)','нет']]}],
+  ['fig',{k:'scale',t:'Надписи на изображениях: что проверять',items:[['1–2 слова',90,'var(--c2)','почти всегда'],['Короткая фраза',65,'var(--c3)','через раз'],['Предложение',25,'var(--c4)','редко'],['Абзац',5,'var(--c4)','нет']]}],
   ['shot',{title:'Надпись отдельной строкой',rows:[['me','Постер курса с названием ИИ без людей и подписью про агентов'],['ai','Текст на картинке вышел набором похожих на буквы знаков.'],['me','Надпись крупно: "МАШИНА ЗА РУЛЁМ". Под ней мелко: "курс про агентов". Стиль минимализм, много воздуха, две краски.']],mark:'Почему кавычки решают|Пока текст растворён в описании, модель считает его частью сцены. В кавычках и отдельной строкой — воспринимает как надпись, которую надо набрать.'}],
   ['h','Как получить читаемую надпись'],
   ['p','Правило первое: <b>текст пишите в кавычках и коротко.</b> Два-три слова выходят почти всегда, длинную фразу модель начинает искажать.'],
@@ -2490,6 +2421,47 @@ const $ = s => document.querySelector(s);
 const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const enc = t => encodeURIComponent(t);
 let cur = 0;
+let navEpoch = 0, lessonRequest = 0;
+
+
+const icon = name => `<svg class="ui-icon" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+function decorateIcons(root){
+  root.querySelectorAll('.ic').forEach(el=>{
+    if(el.querySelector('svg') || /^\d+$/.test(el.textContent.trim())) return;
+    const n = ['i1','i2','i3','i4','i5','i6'].findIndex(c=>el.classList.contains(c));
+    const button=el.closest('button'), glyph=el.textContent.trim();
+    const destination=button?.dataset.go;
+    const names={tools:'tools',favs:'bookmark',docs:'document','pay-all':'lock'};
+    const glyphs={'◑':'moon','◈':'bell','◔':'clock','✉':'message','⚒':'tools','◱':'book','▤':'document'};
+    el.innerHTML = icon(names[destination] || glyphs[glyph] || ['book','message','code','bot','video','tools'][Math.max(0,n)]);
+  });
+}
+const LAB = [
+ {text:'Помоги ответить клиенту на задержку. Сначала спроси, что обещали, что произошло и какой срок подтверждён. Затем напиши спокойный ответ до 80 слов: признай задержку, объясни известную причину и предложи следующий шаг. Не придумывай сроки, скидки и обещания.', result:'На выходе: короткий ответ с подтверждённым сроком и понятным следующим шагом.'},
+ {text:'Помоги составить выполнимый план дня. Сначала попроси список задач, доступное время и обязательные встречи. Выдели три приоритета, оцени длительность как предположение и оставь время на перерывы. Покажи таблицу: задача, время, результат. Если всё не помещается — предложи, что перенести.', result:'На выходе: план по времени с тремя приоритетами и запасом на непредвиденное.'},
+ {text:'Помоги придумать полезный пост. Сначала уточни тему, аудиторию и одну проблему читателя. Предложи три разных идеи. Для каждой дай заголовок, конкретный пример и действие, которое читатель сможет повторить. Не выдумывай статистику, клиентов и личный опыт автора.', result:'На выходе: три идеи с примером и действием для читателя. Выберите одну и попросите черновик.'}
+];
+function paintLab(i=0){
+  const item=LAB[i]; if(!item) return;
+  document.querySelectorAll('[data-lab]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.lab===i)));
+  $('#lab-prompt').textContent=item.text;
+  $('#lab-result').textContent=item.result;
+  $('#lab-copy').dataset.copy=enc(item.text);
+}
+async function copyText(button){
+  const original=button.textContent;
+  let text; try{ text=decodeURIComponent(button.dataset.copy); }catch(e){ return; }
+  try{
+    if(!navigator.clipboard) throw new Error('clipboard unavailable');
+    await navigator.clipboard.writeText(text);
+    button.classList.add('done'); button.textContent='Скопировано';
+    setTimeout(()=>{ if(button.isConnected){button.classList.remove('done');button.textContent=original;} },1800);
+  }catch(e){
+    // A selectable copy sheet is an honest fallback in restricted webviews.
+    const box=$('#copy-fallback'); $('#copy-value').value=text;
+    if(!box.open) box.showModal(); $('#copy-value').focus(); $('#copy-value').select();
+  }
+}
 
 function blk(b){
   const [k,v] = b;
@@ -2537,7 +2509,7 @@ function blk(b){
       ${v.t?`<figcaption>${v.t}</figcaption>`:''}
       ${v.items.map(it=>`<div class="bar"><span class="lb">${it[0]}</span>
         <span class="tr"><i style="width:${it[1]}%;background:${it[2]||'var(--brand)'}"></i></span>
-        <span class="vl">${it[3]}</span></div>`).join('')}</figure>`;
+        <span class="vl">${it[3]}</span></div>`).join('')}<p class="figure-note">Условная учебная схема, не результаты измерений. Возможности зависят от модели, тарифа и задачи.</p></figure>`;
     return '';
   }
   if(k==='shot'){
@@ -2555,26 +2527,18 @@ $('#secs').innerHTML = SECS.map((s,i)=>{
   const n = (s.ls||[]).length, ready = (s.ls||[]).filter(l=>l.b).length;
   return `
   <button class="item sec" data-sec="${i}" data-home-section="${homeSectionCat(i)}" style="animation-delay:${i*45}ms">
-    <span class="glow" style="background:${s.g}"></span>
-    <span class="ic ${s.c}">${s.ic}</span>
+
+    <span class="ic ${s.c}">${icon(["book","message","code","bot","video","tools"][i])}</span>
     <span class="tx"><b>${s.t}</b><span>${s.d}</span>
       <span class="meta">${n} ${n===1?'урок':(n<5?'урока':'уроков')}${s.free?' · '+ready+' открыто':''}</span></span>
-    ${s.free?'<span class="pill free">открыт</span>':'<span class="pill lock">🔒</span>'}
+    ${s.free?'<span class="pill free">бесплатно</span>':(ready?'<span class="pill free">есть пробный</span>':'<span class="pill lock">по подписке</span>')}
   </button>`;}).join('');
-
-function setHomeCategory(cat){
-  document.querySelectorAll('[data-home-cat]').forEach(b=>b.classList.toggle('on',b.dataset.homeCat===cat));
-  document.querySelectorAll('#secs [data-home-section]').forEach(row=>row.hidden=cat!=='all' && row.dataset.homeSection!==cat);
-}
-document.querySelectorAll('[data-home-cat]').forEach(b=>b.addEventListener('click',()=>setHomeCategory(b.dataset.homeCat)));
 
 /* ---------- что нового: пополняется вместе с приложением ---------- */
 const NEWS = [
- ['11 сентября','нов','Проверка в конце каждого урока','Сто пятьдесят шесть вопросов: пять в уроках разделов, четыре в разборах нейросетей, пять в платных. Вопросы идут по одному, после ответа сразу разбор, в конце счёт. Пройденная проверка засчитывает урок прочитанным.'],
- ['11 сентября','нов','Достижения и серия дней','На «Учёбе» видно, сколько дней подряд вы читаете, и точки последней недели. В профиле — восемь отметок: первый урок, три за вечер, раздел закрыт, неделя подряд и другие. Всё считается на вашем устройстве и никуда не отправляется.'],
- ['11 сентября','нов','«Разборы» показывают канал','Экран перестал быть списком, набитым руками: свежие посты канала попадают туда сами, каждый открывается по нажатию. Ниже остались разборы того, что ломалось по дороге.'],
- ['11 сентября','прав','Дата сверки в каталоге','Цены нейросетей меняются каждый месяц. Теперь под каждой карточкой видно, когда я их последний раз сверяла, — и если данные устарели, карточка скажет об этом сама.'],
- ['10 сентября','нов','Курс открыт заново','Приложение переписано под новую концепцию: приветственный экран рассказывает, что внутри и что даёт полный доступ. Дальше здесь будут только записи про сам курс — новые уроки, разделы и разборы.'],
+ ['15 сентября','нов','Запрос под вашу задачу','На главной появился конструктор: выберите ответ клиенту, план дня или идею поста и скопируйте готовый запрос. Ответ нейросеть создаёт в своём чате.'],
+ ['15 сентября','прав','Уроки стало удобнее читать','Убраны лишние переходы между главами и панель поверх текста. Оглавление, закладки и проверка остались на своих местах.'],
+ ['15 сентября','прав','Нажатия после возврата исправлены','Стиль кнопки «Назад» больше не применяется ко всей странице. Готовые запросы, прогресс и канал доступны из профиля.'],
 ];
 
 /* ---------- прогресс на экранах ---------- */
@@ -2599,7 +2563,7 @@ function paintProgress(){
     // человек читал это как ошибку. Теперь честно: сколько всего, сколько
     // открыто бесплатно и отдельно — сколько из открытых пройдено.
     const открыто = p.total, пройдено = p.done;
-    if(!открыто){ m.innerHTML = `${n} ${word} · по подписке`; return; }
+    if(!открыто){ m.innerHTML = `${n} ${word}`; return; }
     const полоска = `<span class="pg"><i style="width:${p.pct}%"></i></span>`;
     m.innerHTML = открыто === n
       ? `${n} ${word} · ${полоска} пройдено ${пройдено} из ${n}`
@@ -2642,276 +2606,7 @@ const ROAD = [
   ['⬡','Второй агент и третий','Как из одного собранного агента делать следующих, не начиная заново']
 ].map(([i,t,d])=>`<div><i>${i}</i><div><b>${t}</b><span>${d}</span></div></div>`).join('');
 
-/* ---------- слайд-шоу на приветствии ----------
-   Не видео и не картинки: живые сценки. В карточке нейросети печатается
-   настоящий ответ, в карточке урока — команда в терминале. Печать идёт только
-   у слайда, который человек сейчас видит; при выключенных анимациях текст
-   показывается сразу целиком. */
-const TOOLSLIDES = [
-  {k:'chatgpt', n:'ChatGPT', c:'#10A37F', light:true, app:'chatgpt.com',
-   ask:'Перепиши письмо клиенту: коротко, без канцелярита',
-   say:'Готово. Убрал канцелярит и три причастных оборота — четыре строки вместо одиннадцати. Просьба и срок на месте.',
-   acts:['Копировать','Ещё вариант','Поделиться'], cap:'Универсал на каждый день: письма, тексты, разбор таблиц и файлов.'},
-  {k:'claude', n:'Claude', c:'#C8724A', light:false, app:'claude.ai',
-   ask:'Договор на 14 страниц. Что здесь опасного лично для меня?',
-   say:'Три пункта создают обязанности для вас: 4.2 — штраф без предупреждения, 6.1 — автопродление, 9.3 — суд в чужом городе.',
-   acts:['Копировать','Проверить цитаты','В документ'], cap:'Длинные документы и код. Держит контекст и не теряет нить на середине.'},
-  {k:'perplexity', n:'Perplexity', c:'#20808D', light:false, app:'perplexity.ai',
-   ask:'Что изменилось в законе о рекламе в этом месяце?',
-   say:'Три изменения, каждое с датой и ссылкой. Одно ещё не вступило в силу.',
-   acts:['Источники','Уточнить','Экспорт'], cap:'Когда нужны источники, а не пересказ по памяти. Каждый факт со ссылкой.', sources:['pravo.gov.ru','fas.gov.ru','consultant.ru']},
-  {k:'midjourney', n:'Midjourney', c:'#4A4AC8', light:false, app:'midjourney.com',
-   ask:'Обложка поста: приборная панель, спокойные цвета, без людей',
-   say:'Четыре варианта готовы. Второй ближе к вашей палитре — могу поднять контраст.',
-   acts:['Варианты','Увеличить','Ещё'], cap:'Картинки, на которые приятно смотреть. Стиль держится от кадра к кадру.', grid:true},
-  {k:'whisper', n:'Whisper', c:'#5A6ACF', light:false, app:'локально на компьютере',
-   ask:'Расшифруй часовую встречу и выдели, кто что пообещал',
-   say:'8 200 слов, четыре голоса. Обещания — списком с таймкодами: 14:20 смета, 31:05 макет.',
-   acts:['Текст','Таймкоды','Субтитры'], cap:'Звук в текст: встречи, интервью, голосовые. Русский держит уверенно.'}
-];
-
-const LESSONSLIDES = [
-  {kind:'code', sec:'Вайбкодинг', app:'Claude Code · пример', title:'Объясняете задачу — код собирается', file:'bot.py',
-   lines:[['cm','# бот отвечает на вопросы и помнит контекст'],
-          ['kw','from telegram import Bot'],
-          ['fn','def answer(question):'],
-          ['st','    return ai.reply(question)'],
-          ['fn','    bot.send_message(chat_id, answer(text))']],
-   cap:'В уроке разбираем, как сформулировать задачу и проверить каждый шаг.'},
-  {kind:'term', sec:'Агент без человека', app:'Терминал · пример', title:'Проверка до публикации — без сюрпризов', file:'проверка перед запуском',
-   lines:[['$','python проверить_бота.py'],
-          ['>','тексты: 3 · ссылки: 3 · ошибки: 0'],
-          ['>','права в канале: есть'],
-          ['#','готово к публикации']],
-   cap:'Показываем, что проверить до того, как бот сделает что-то за вас.'},
-  {kind:'tg', sec:'Свой телеграм-бот', title:'Результат приходит прямо в Telegram',
-   bot:'ИИ без людей', status:'бот',
-   msgs:[['out','Сделай план поста про новую нейросеть','сейчас'],
-         ['in','Собрал: крючок, три тезиса и вопрос в конце.','сейчас'],
-         ['in','Черновик готов. Можно посмотреть и поправить.','сейчас']],
-   keys:['Открыть черновик','Изменить'],
-   cap:'Сначала видите черновик, потом сами решаете: править или публиковать.'}
-];
-
-/* Оригинальные визуальные сцены показывают путь: задача, сборка, результат.
-   Это не личные переписки и не копии чужих кабинетов. */
-const REELSLIDES = [
-  {k:'chat', sec:0, app:'Постановка задачи', icon:'01', color:'#10A37F', media:'v/workflow-chat.png',
-   out:'Формулируем, что должно получиться', cap:'Задача, критерий готовности и первый шаг — в одном месте.'},
-  {k:'code', sec:2, app:'Сборка проекта', icon:'02', color:'#D9784B', media:'v/workflow-code.png',
-   out:'Собираем и проверяем результат', cap:'Идея превращается в файлы, действия и понятную проверку.'},
-  {k:'done', sec:3, app:'Готовый бот', icon:'03', color:'#2789D9', media:'v/workflow-bot.png',
-   out:'Передаём готовое в бот', cap:'Результат становится доступным и остаётся точкой управления.'}
-];
-
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-function chatSlide(t){
-  return `<div class="slide" data-kind="chat" data-key="${t.k}">
-    <div class="swin ${t.light?'light':''}">
-      <div class="wbar">
-        <span class="dot" style="background:${t.c}"></span>
-        <span class="dot" style="background:rgba(140,160,158,.35)"></span>
-        <span class="dot" style="background:rgba(140,160,158,.2)"></span>
-        <span class="ttl">${t.app}</span>
-        <span class="rt"><i class="pulse"></i><span data-status>онлайн</span></span>
-      </div>
-      <div class="wbody">
-        <div class="msg user" data-ask>
-          <span class="ava" style="background:#6B7877">Я</span>
-          <span class="txt">${t.ask}</span></div>
-        <div class="msg" data-say>
-          <span class="ava" style="background:${t.c}">${t.n[0]}</span>
-          <span class="txt"><span data-text></span><span class="car"></span></span></div>
-        ${t.grid?`<div class="grid4">${[0,1,2,3].map(n=>`<div data-cell="${n}"></div>`).join('')}</div>`:''}
-        ${t.sources?`<div class="src">${t.sources.map((x,n)=>`<i data-src="${n}">${x}</i>`).join('')}</div>`:''}
-        <div class="acts">${t.acts.map(a=>`<span>${a}</span>`).join('')}</div>
-      </div>
-    </div>
-    <div class="cap"><b>${t.n}</b><span>${t.cap}</span><button class="slide-open" data-tool-go="${t.k}">Открыть →</button></div>
-  </div>`;
-}
-
-function lessonSlide(l, link){
-  let inner = '';
-  if(l.kind==='tg'){
-    inner = `<div class="swin tgw">
-      <div class="tgbar"><span class="ava">И</span>
-        <span><b>${l.bot}</b><span data-status>${l.status}</span></span></div>
-      <div class="wbody">
-        ${l.msgs.map((m,n)=>`<div class="tgb ${m[0]==='out'?'out':'inb'}" data-line="${n}">
-          <span data-text></span><span class="tm">${m[2]}</span></div>`).join('')}
-        <div class="tgkey">${l.keys.map(k=>`<i>${k}</i>`).join('')}</div>
-      </div></div>`;
-  } else if(l.kind==='code'){
-    inner = `<div class="swin">
-      <div class="wbar"><span class="dot" style="background:#E0A45E"></span>
-        <span class="dot" style="background:rgba(140,160,158,.35)"></span>
-        <span class="dot" style="background:rgba(140,160,158,.2)"></span>
-        <span class="ttl">${l.app || 'агент / бот'}</span><span class="rt" data-status>изменён</span></div>
-      <div class="wbody code">
-        <span class="tab">${l.file}</span>
-        ${l.lines.map((x,n)=>`<div class="ln" data-line="${n}">
-          <span class="no">${n+1}</span><span class="${x[0]}" data-text></span></div>`).join('')}
-      </div></div>`;
-  } else {
-    inner = `<div class="swin">
-      <div class="wbar"><span class="dot" style="background:#12666B"></span>
-        <span class="dot" style="background:rgba(140,160,158,.35)"></span>
-        <span class="dot" style="background:rgba(140,160,158,.2)"></span>
-        <span class="ttl">${l.app || l.file}</span><span class="rt" data-status>·</span></div>
-      <div class="wbody code">
-        ${l.lines.map((x,n)=>`<div class="ln" data-line="${n}">
-          <span class="no">${x[0]}</span><span class="${x[0]==='#'?'cm':(x[0]==='>'?'st':'fn')}" data-text></span></div>`).join('')}
-      </div></div>`;
-  }
-  return `<div class="slide" data-kind="lesson">${inner}
-    <div class="cap"><b>${l.title}</b><span>${l.cap}</span>${link?`<button class="slide-open" data-sec-name="${l.sec}">Открыть →</button>`:''}</div></div>`;
-}
-
-function reelSlide(r,n){
-  const klass = r.k;
-  return `<div class="slide" data-kind="reel" data-reel="${r.k}" style="--reel:${r.color}">
-    <div class="reel workflow">
-      <div class="reel-head"><b><i>${r.icon}</i>${r.app}</b><span>СЦЕНА · ${n+1}/3</span></div>
-      <div class="reel-stage">
-        <div class="reel-shot ${klass}"><img src="${r.media}" alt="${r.app}: рабочий экран"></div>
-      </div>
-      <div class="reel-foot"><i></i><span><b>${r.out}</b><small>${r.cap}</small></span><button class="reel-cta" data-sec="${r.sec}">Открыть →</button></div>
-    </div>
-  </div>`;
-}
-
-/** Печатает текст в узел. Возвращает функцию отмены. */
-function typeInto(node, text, speed, done){
-  if(REDUCE){ node.textContent = text; done && done(); return ()=>{}; }
-  let i = 0, stop = false;
-  const step = () => {
-    if(stop) return;
-    node.textContent = text.slice(0, ++i);
-    if(i < text.length) setTimeout(step, speed);
-    else done && done();
-  };
-  setTimeout(step, speed);
-  return ()=>{ stop = true; };
-}
-
-/** Показывает слайд в готовом виде — без анимации. Нужно соседним слайдам:
-    они видны краем, и пустые окна выглядят поломкой. */
-function fillChat(slide){
-  const t = TOOLSLIDES.find(x=>x.k===slide.dataset.key);
-  slide.querySelectorAll('[data-ask],[data-say]').forEach(x=>x.classList.add('in'));
-  slide.querySelector('[data-text]').textContent = t.say;
-  slide.querySelector('[data-status]').textContent = 'ответил';
-  slide.querySelectorAll('[data-cell],[data-src]').forEach(x=>x.classList.add('in'));
-}
-function fillLesson(slide){
-  const l = LESSONSLIDES.find(x=>x.sec===slide.dataset.sec);
-  slide.querySelectorAll('[data-line]').forEach((r,n)=>{
-    r.classList.add('in');
-    r.querySelector('[data-text]').textContent = l.kind==='tg' ? l.msgs[n][1] : l.lines[n][1];
-  });
-  const st = slide.querySelector('[data-status]');
-  if(st && l.kind==='tg') st.textContent = 'бот';
-}
-function fillReel(slide){ slide.classList.remove('playing'); }
-
-function playChat(slide){
-  const t = TOOLSLIDES.find(x=>x.k===slide.dataset.key);
-  const ask = slide.querySelector('[data-ask]'), say = slide.querySelector('[data-say]');
-  const out = slide.querySelector('[data-text]'), st = slide.querySelector('[data-status]');
-  const cells = [...slide.querySelectorAll('[data-cell]')], srcs = [...slide.querySelectorAll('[data-src]')];
-  out.textContent = '';
-  [ask, say].forEach(x=>x.classList.remove('in'));
-  cells.concat(srcs).forEach(x=>x.classList.remove('in'));
-  const timers = [];
-  timers.push(setTimeout(()=>ask.classList.add('in'), 120));
-  timers.push(setTimeout(()=>{
-    say.classList.add('in'); st.textContent = 'печатает…';
-    timers.push({cancel: typeInto(out, t.say, 16, ()=>{
-      st.textContent = 'ответил';
-      cells.forEach((c,n)=>timers.push(setTimeout(()=>c.classList.add('in'), 90*n)));
-      srcs.forEach((c,n)=>timers.push(setTimeout(()=>c.classList.add('in'), 90*n)));
-    })});
-  }, 620));
-  return ()=>timers.forEach(x => x && (x.cancel ? x.cancel() : clearTimeout(x)));
-}
-
-function playLesson(slide){
-  const l = LESSONSLIDES.find(x=>x.sec===slide.dataset.sec);
-  const rows = [...slide.querySelectorAll('[data-line]')];
-  const st = slide.querySelector('[data-status]');
-  rows.forEach(r=>{ r.classList.remove('in'); r.querySelector('[data-text]').textContent=''; });
-  const timers = [];
-  let delay = 180;
-  rows.forEach((r,n)=>{
-    const text = l.kind==='tg' ? l.msgs[n][1] : (l.kind==='code' ? l.lines[n][1] : l.lines[n][1]);
-    const speed = l.kind==='tg' ? 16 : 13;
-    timers.push(setTimeout(()=>{
-      r.classList.add('in');
-      if(st && l.kind==='tg') st.textContent = n < rows.length-1 ? 'печатает…' : 'бот';
-      timers.push({cancel: typeInto(r.querySelector('[data-text]'), text, speed)});
-    }, delay));
-    delay += 520 + text.length * speed;
-  });
-  return ()=>timers.forEach(x => x && (x.cancel ? x.cancel() : clearTimeout(x)));
-}
-function playReel(slide){
-  slide.classList.remove('playing');
-  // Перезапуск даёт одинаковое вступление после ручного перелистывания и автосмены.
-  requestAnimationFrame(()=>slide.classList.add('playing'));
-  return ()=>slide.classList.remove('playing');
-}
-
-function carousel(trackSel, dotsSel, html, play, viewSel){
-  const track = $(trackSel), dots = $(dotsSel);
-  if(!track) return;
-  track.innerHTML = html;
-  dots.innerHTML = [...track.children].map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('');
-  const slides = [...track.children];
-  let idx = 0, timer = null, pause = 0, stopPlay = null;
-
-  // все слайды сразу в готовом виде: соседние видны краем экрана
-  const fill = play === playChat ? fillChat : play === playReel ? fillReel : fillLesson;
-  slides.forEach(fill);
-
-  const paint = () => [...dots.children].forEach((d,i)=>d.classList.toggle('on', i===idx));
-  const run = () => {
-    stopPlay && stopPlay();
-    const sl = slides[idx];
-    // печатаем каждый слайд один раз; дальше он просто остаётся заполненным
-    if(sl.dataset.played){ stopPlay = null; fill(sl); return; }
-    sl.dataset.played = '1';
-    stopPlay = play(sl);
-  };
-  const goto = i => {
-    idx = (i + slides.length) % slides.length;
-    const to = slides[idx].offsetLeft - track.offsetLeft - 8;
-    track.scrollTo({left: to, behavior: REDUCE ? 'auto' : 'smooth'});
-    // плавную прокрутку выполняют не везде — если не доехало, двигаем жёстко
-    setTimeout(()=>{ if(Math.abs(track.scrollLeft - to) > 24) track.scrollLeft = to; }, 500);
-    paint(); run();
-  };
-  const tickSlide = () => { if(Date.now() >= pause) goto(idx+1); };
-  const start = () => { if(!timer){ timer = setInterval(tickSlide, 8000); run(); } };
-  const stop  = () => {
-    clearInterval(timer); timer = null;
-    if(stopPlay){ stopPlay(); stopPlay = null; fill(slides[idx]); }
-  };
-
-  // человек листает сам — замолкаем на двенадцать секунд, потом продолжаем
-  ['pointerdown','touchstart'].forEach(e =>
-    track.addEventListener(e, ()=>{ pause = Date.now() + 12000; }, {passive:true}));
-  track.addEventListener('scroll', ()=>{
-    const near = slides.findIndex(sl => Math.abs(sl.offsetLeft - track.offsetLeft - track.scrollLeft) < sl.offsetWidth/2);
-    if(near>-1 && near!==idx){ idx = near; paint(); run(); }
-  }, {passive:true});
-
-  const tick = () => ($(viewSel || '#v-hello').classList.contains('on') && !document.hidden) ? start() : stop();
-  document.addEventListener('visibilitychange', tick);
-  setInterval(tick, 1500);
-  tick();
-}
 
 /* ---------- приветствие ---------- */
 const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
@@ -3118,7 +2813,7 @@ function openSec(i){
         <span class="meta">◷ ${l.min} мин</span></span>
       ${l.b ? (doneList().includes(cur+'-'+j) ? '<span class="pill done">прочитан</span>'
                                                 : '<span class="pill free">читать</span>')
-            : '<span class="pill lock">🔒</span>'}
+            : '<span class="pill lock">по подписке</span>'}
     </button>`).join('');
   // «Что входит в доступ» в каждом разделе примелькалось и стало навязчивым:
   // рассказ про доступ живёт на приветственном экране, здесь — только состав.
@@ -3191,7 +2886,8 @@ swNote('');
 if('serviceWorker' in navigator){
   addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js', {scope: './'})
-      .then(() => swNote('Работает без сети: уроки открываются<br>даже в метро.'))
+      .then(() => navigator.serviceWorker.ready)
+      .then(() => swNote('Открытые уроки доступны без сети.<br>Для платных материалов и видео нужен интернет.'))
       .catch(() => swNote(''));
   });
 }
@@ -3512,10 +3208,11 @@ function srPaint(q){
     out.innerHTML = ''; return;
   }
   const слова = srClean(q).split(/\s+/).filter(w => w.length > 1);
+  const варианты = [...new Set(слова)].sort((a,b)=>b.length-a.length).map(w=>Array.from(w).map(c=>'\\^$.*+?()[]{}|'.includes(c)?'\\'+c:c).join(''));
   const подсветить = t => {
-    let r = esc(t);
-    слова.forEach(w => { r = r.replace(new RegExp('(' + w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi'), '<mark>$1</mark>'); });
-    return r;
+    if(!варианты.length) return esc(t);
+    const re = new RegExp('(' + варианты.join('|') + ')', 'gi');
+    return String(t).split(re).map((part,i)=>i%2 ? '<mark>'+esc(part)+'</mark>' : esc(part)).join('');
   };
   hint.textContent = найдено.length + (найдено.length === 1 ? ' совпадение' : ' совпадений');
   out.innerHTML = найдено.map((x, i) => `<button class="sr-item" data-sr="${i}">
@@ -3557,8 +3254,10 @@ function posRestore(){
   if(!favCur) return;
   const y = (S.get('pos', {}))[favKey(favCur.kind, favCur.key)];
   if(!y) return;
-  // ждём отрисовки, иначе прокручивать ещё некуда
+  const key = favKey(favCur.kind, favCur.key);
+  // Отложенная прокрутка относится только к этому уроку.
   setTimeout(() => {
+    if(!favCur || favKey(favCur.kind, favCur.key)!==key || !$('#v-lesson').classList.contains('on')) return;
     if(document.documentElement.scrollHeight > y + innerHeight * 0.5) scrollTo({top:y, behavior:'auto'});
   }, 260);
 }
@@ -3580,57 +3279,23 @@ function buildToc(bodyId, tocId){
     return Math.max(1, Math.round(n / 1100));
   });
 
-  box.innerHTML = `<button type="button"><i>›</i><span>Оглавление</span>
+  box.innerHTML = `<button type="button" aria-expanded="false"><i>›</i><span>Оглавление</span>
       <span class="grow">${hs.length} частей</span></button>
     <ol>${hs.map((h,i)=>`<li><a href="#${h.id}" data-i="${i}">
       <span class="n"><span>${i+1}</span></span>
       <span class="tt">${h.textContent}</span>
       <span class="mn">${mins[i] > 1 ? mins[i] + ' мин' : ''}</span></a></li>`).join('')}</ol>`;
 
-  box.querySelector('button').onclick = ()=> box.classList.toggle('open');
+  box.querySelector('button').onclick = e=> { const open = box.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', String(open)); };
   box.querySelectorAll('a').forEach(a=>{
     a.onclick = e=>{
       e.preventDefault();
       const t = document.getElementById(a.getAttribute('href').slice(1));
-      if(t) scrollTo({top: t.getBoundingClientRect().top + scrollY - 62, behavior:'smooth'});
+      if(t) scrollTo({top: t.getBoundingClientRect().top + scrollY - 82, behavior:REDUCE?'auto':'smooth'});
     };
   });
   tocSpy({box, hs});
-  chapterNav(bodyId);
-}
 
-/** В конце каждой главы — переход к следующей. Человек дочитал часть и сразу
-    выбирает, куда дальше, а не ищет, как вернуться к оглавлению. */
-function chapterNav(bodyId){
-  const body = $(bodyId || '#l-body');
-  const hs = [...body.querySelectorAll('h4')];
-  if(hs.length < 3) return;
-  hs.forEach((h, i) => {
-    const next = hs[i+1];
-    const nav = document.createElement(next ? 'button' : 'div');
-    if(next){
-      nav.className = 'chapnav';
-      nav.type = 'button';
-      nav.dataset.to = next.id;
-      nav.innerHTML = `<span class="n">${i+2}</span>
-        <span class="tx"><span>Следующая часть</span><b>${next.textContent}</b></span>
-        <span class="ch">↓</span>`;
-      nav.onclick = ()=> scrollTo({top: next.getBoundingClientRect().top + scrollY - 62,
-                                   behavior: CALM.matches ? 'auto' : 'smooth'});
-      body.insertBefore(nav, next);
-    } else {
-      nav.className = 'chapend';
-      nav.innerHTML = `<button type="button" data-toc>К оглавлению</button>
-                       <button type="button" data-top>В начало урока</button>`;
-      nav.querySelector('[data-toc]').onclick = ()=>{
-        const box = $('#l-toc');
-        if(box && !box.hidden){ box.classList.add('open');
-          scrollTo({top: box.getBoundingClientRect().top + scrollY - 62, behavior:'smooth'}); }
-      };
-      nav.querySelector('[data-top]').onclick = ()=> scrollTo({top:0, behavior:'smooth'});
-      body.appendChild(nav);
-    }
-  });
 }
 
 /** Подсветка части, которую человек читает сейчас, и кнопка возврата к карте. */
@@ -3645,6 +3310,7 @@ function paintSpy(){
   const {box, hs} = spy;
   const links = [...box.querySelectorAll('a')];
   let cur = 0;
+
   hs.forEach((h,i)=>{ if(h.getBoundingClientRect().top < 120) cur = i; });
   links.forEach((a,i)=>{
     a.classList.toggle('here', i === cur);
@@ -3680,12 +3346,15 @@ function paintNext(nx){
 let payLes = 0;
 async function openLes(j){
   payLes = j;
-  const s = SECS[cur], l = s.ls[j];
+  const request = ++lessonRequest, epoch = navEpoch, section = cur;
+  const s = SECS[section], l = s?.ls[j];
+  if(!l) return;
   if(!l.b){
     // Тело платного урока лежит на сервере: всё, что попадает в браузер,
     // становится общедоступным. Есть доступ — сервер отдаст, нет — платный экран.
     if(API && l.key){
       const b = await fetchLesson(l.key);
+      if(request !== lessonRequest || epoch !== navEpoch) return;
       if(Array.isArray(b)){ l.b = b; }
       else if(b && b.ошибка !== 'не оплачен'){ showTrouble(s, l); return; }
       else { showPay(s, l); return; }
@@ -3746,10 +3415,12 @@ function show(v, back){
   if(v === 'route') routePaint();
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('on','back'));
   el.classList.add('on');
-  if(back) el.classList.add('back');
-  const homeViews = new Set(['study','route','sec','lesson','pay','pay-all','news','tools','prompts']);
-  document.querySelectorAll('.dock a').forEach(a=>a.classList.toggle('on',
-    a.dataset.go===v || (a.dataset.go==='study' && homeViews.has(v))));
+
+  document.querySelector('.profile-go').setAttribute('aria-current', v==='me' ? 'page' : 'false');
+  decorateIcons(el);
+  navEpoch++;
+  if(v!=='lesson'){ readId=null; clearTimeout(readTimer); clearTimeout(shortTimer); }
+  try{ if(вТелеграме() && TG.isVersionAtLeast?.('6.1') && TG.BackButton){ ['study','hello'].includes(v) ? TG.BackButton.hide() : TG.BackButton.show(); } }catch(e){}
   window.scrollTo({top:0});
   onScroll();
   if(v==='study' || v==='me') paintProgress();
@@ -3853,6 +3524,7 @@ function paintMe(){
   const sw1 = document.getElementById('sw1');
   if(sw1 && typeof ME.notify === 'boolean'){
     sw1.classList.toggle('off', !ME.notify);
+    sw1.setAttribute('aria-checked', String(ME.notify));
     const п = document.getElementById('sw1-note');
     if(п) п.textContent = ME.notify ? 'сообщу в боте, когда выйдет урок' : 'сообщать, когда выходит урок';
   }
@@ -3982,7 +3654,7 @@ function popAch(a, сколько){
   $('#pop-t').textContent = a.t;
   $('#pop-d').textContent = 'Достижение · ' + (сколько > 1 ? a.d + ' и ещё ' + (сколько - 1) : a.d);
   el.classList.add('on');
-  if(TG && TG.HapticFeedback) try{ TG.HapticFeedback.notificationOccurred('success'); }catch(e){}
+  if(вТелеграме() && TG.isVersionAtLeast?.('6.1') && TG.HapticFeedback) try{ TG.HapticFeedback.notificationOccurred('success'); }catch(e){}
   clearTimeout(popT);
   popT = setTimeout(()=>el.classList.remove('on'), 4200);
 }
@@ -4175,7 +3847,8 @@ function setNight(on, animate){
   root.setAttribute('data-n', on?'1':'0');
   $('#tgl').textContent = on ? '◑' : '◐';
   $('#sw2').classList.toggle('off', !on);
-  if(TG && TG.setBackgroundColor){              // красим и рамку Telegram, иначе шапка спорит с темой
+  $('#sw2').setAttribute('aria-checked', String(on));
+  if(вТелеграме() && TG.isVersionAtLeast?.('6.1') && TG.setBackgroundColor){              // красим и рамку Telegram, иначе шапка спорит с темой
     try{ TG.setBackgroundColor(on ? '#101A1A' : '#FBFBF9');
          TG.setHeaderColor(on ? '#101A1A' : '#FBFBF9'); }catch(e){}
   }
@@ -4257,16 +3930,21 @@ document.addEventListener('click', e=>{
   if(e.target.closest('#tgl') || e.target.closest('#sw2')){ night=!night; setNight(night, true); return; }
   const sw1 = e.target.closest('#sw1');
   if(sw1){
+    if(sw1.disabled) return;
     const включаем = sw1.classList.contains('off');
-    sw1.classList.toggle('off', !включаем);
-    S.set('notify', включаем);
-    // без сервера обещание было бы пустым: он запоминает, кому писать
+    const подпись = $('#sw1-note');
+    sw1.disabled=true;
     post('/api/notify', {on: включаем}).then(r => {
-      const подпись = $('#sw1-note');
-      if(!подпись) return;
-      if(!r) подпись.textContent = 'не получилось сохранить — попробуйте позже';
-      else подпись.textContent = r.on ? 'сообщу в боте, когда выйдет урок' : 'сообщать не буду';
-    });
+      if(!r || typeof r.on !== 'boolean'){
+        подпись.textContent = вТелеграме() ? 'Не сохранилось. Попробуйте ещё раз.' : 'Откройте приложение в Telegram, чтобы настроить уведомления.';
+        return;
+      }
+      sw1.classList.toggle('off', !r.on);
+      sw1.setAttribute('aria-checked', String(r.on));
+      S.set('notify', r.on);
+      if(ME) ME.notify=r.on;
+      подпись.textContent = r.on ? 'Сообщу в боте, когда выйдет урок' : 'Сообщать не буду';
+    }).finally(()=>{sw1.disabled=false;});
     return;
   }
 
@@ -4278,14 +3956,9 @@ document.addEventListener('click', e=>{
     v.addEventListener('pause', ()=>{ if(v.currentTime>=v.duration-0.2) pw.classList.remove('on'); });
     return;
   }
+  const lab = e.target.closest('[data-lab]'); if(lab){ paintLab(+lab.dataset.lab); return; }
   const cb = e.target.closest('.cb');
-  if(cb){
-    const t = decodeURIComponent(cb.dataset.copy);
-    const fin=()=>{cb.classList.add('done');cb.textContent='скопировано';
-      setTimeout(()=>{cb.classList.remove('done');cb.textContent='копировать';},1700);};
-    if(navigator.clipboard) navigator.clipboard.writeText(t).then(fin,fin); else fin();
-    return;
-  }
+  if(cb){ copyText(cb); return; }
   const tl = e.target.closest('button[data-tl]'); if(tl){ openToolLesson(tl.dataset.tl); return; }
   // кнопки со слайдов приветствия
   const tg = e.target.closest('button[data-tool-go]');
@@ -4324,7 +3997,7 @@ document.addEventListener('click', e=>{
   const pro = e.target.closest('[data-pr-open]'); if(pro){ prToggle(pro); return; }
   const pr = e.target.closest('[data-pr]');
   if(pr && PRLIST){ PRLIST[+pr.dataset.pr].открыть(); return; }
-  const to = e.target.closest('[data-to]'); if(to){ testAnswer(to); return; }
+  const to = e.target.closest('.tst button[data-to]'); if(to){ testAnswer(to); return; }
   const tc = e.target.closest('[data-tcheck]'); if(tc){ testCheck(tc); return; }
   const tn = e.target.closest('[data-tn]'); if(tn){ testNext(tn); return; }
   const tr = e.target.closest('[data-tr]'); if(tr){ testAgain(tr); return; }
@@ -4369,19 +4042,29 @@ document.addEventListener('click', e=>{
 });
 $('#l-back').addEventListener('click', ()=>show(window.__lback||'sec', true));
 paintRecent();
+paintLab();
 </script>
 <script>
 try{
   const tg = window.Telegram && window.Telegram.WebApp;
-  if(tg){ tg.ready(); tg.expand();
+  if(tg && (tg.initData || (tg.platform && tg.platform!=='unknown'))){ tg.ready(); tg.expand();
+    if(tg.isVersionAtLeast?.('7.7')) tg.disableVerticalSwipes?.();
+    const safe = ()=> document.documentElement.style.setProperty('--tg-content-top', (tg.contentSafeAreaInset?.top||0)+'px');
+    safe(); tg.onEvent?.('contentSafeAreaChanged',safe);
+    if(tg.isVersionAtLeast?.('6.1')) tg.BackButton?.onClick(()=>{
+      const view=document.querySelector('.view.on');
+      const back=view?.querySelector('button[data-back],#l-back');
+      if(back) back.click(); else show('study',true);
+    });
     const paint = () => { const n = document.documentElement.getAttribute('data-n')==='1';
-      if(tg.setHeaderColor) tg.setHeaderColor(n?'#161A2B':'#FFFFFF');
-      if(tg.setBackgroundColor) tg.setBackgroundColor(n?'#161A2B':'#FFFFFF'); };
+      if(tg.isVersionAtLeast?.('6.1') && tg.setHeaderColor) tg.setHeaderColor(n?'#101A1A':'#FBFBF9');
+      if(tg.isVersionAtLeast?.('6.1') && tg.setBackgroundColor) tg.setBackgroundColor(n?'#101A1A':'#FBFBF9'); };
     paint();
     new MutationObserver(paint).observe(document.documentElement,{attributes:true,attributeFilter:['data-n']});
   }
 }catch(e){}
 </script>
+<dialog id="copy-fallback"><h2>Скопируйте текст вручную</h2><p>Браузер не разрешил автоматическое копирование. Текст уже выделен.</p><textarea id="copy-value" aria-label="Текст запроса" readonly></textarea><form method="dialog"><button>Готово</button></form></dialog>
 <div class="pop" id="pop" aria-live="polite">
   <i id="pop-i">✦</i>
   <span class="pt"><b id="pop-t"></b><span id="pop-d"></span></span>

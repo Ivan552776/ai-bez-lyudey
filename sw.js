@@ -4,7 +4,7 @@
    версию, когда сеть есть, и приложение всё равно открывается в метро.
    Обратный порядок (кеш первым) заперал бы людей на старой версии — при том,
    что приложение мы правим почти каждый день. */
-const КЕШ = 'mzr-v1';
+const КЕШ = 'mzr-v2';
 // Только сама страница. Раньше в списке был и './' — если хоть один адрес
 // не загрузится, установка падает целиком, а вместе с ней и весь офлайн.
 const СВОЁ = ['./index.html'];
@@ -15,7 +15,7 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys()
-    .then(имена => Promise.all(имена.filter(n => n !== КЕШ).map(n => caches.delete(n))))
+    .then(имена => Promise.all(имена.filter(n => /^mzr-v\d+$/.test(n) && n !== КЕШ).map(n => caches.delete(n))))
     .then(() => self.clients.claim()));
 });
 
@@ -31,9 +31,18 @@ self.addEventListener('fetch', e => {
     fetch(req).then(ответ => {
       if(ответ && ответ.status === 200){
         const копия = ответ.clone();
-        caches.open(КЕШ).then(c => c.put(req, копия));
+        e.waitUntil(caches.open(КЕШ).then(c => c.put(req, копия)).catch(() => {}));
       }
       return ответ;
-    }).catch(() => caches.match(req).then(c => c || caches.match('./index.html')))
+    }).catch(async () => {
+      const cached = await caches.match(req);
+      if(cached) return cached;
+      if(req.mode === 'navigate') {
+        const page = await caches.match('./index.html');
+        if(page) return page;
+      }
+      // Missing media must never receive an HTML page as its response.
+      return new Response('Нет сети', {status: 503, headers: {'Content-Type': 'text/plain; charset=utf-8'}});
+    })
   );
 });
