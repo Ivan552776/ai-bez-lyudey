@@ -278,11 +278,11 @@ body.nodock .app{padding-bottom:26px}
 .reel-stage{position:relative;flex:1;min-height:0;margin-top:12px;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08)}
 .reel-prompt{position:absolute;left:14px;right:14px;top:16px;padding:11px 12px;border-radius:12px;background:rgba(255,255,255,.10);font-size:15px;line-height:1.28;letter-spacing:-.015em}
 .reel-prompt small{display:block;margin-top:4px;color:#A9C0BC;font-family:var(--mono);font-size:9.5px;letter-spacing:.03em}
-.reel-code{position:absolute;left:14px;right:14px;top:88px;border-radius:12px;padding:9px 10px;background:#0F1313;border:1px solid rgba(255,255,255,.08);font-family:var(--mono);font-size:10px;line-height:1.66;color:#D9E6E3}
+.reel-code{position:absolute;left:14px;right:14px;top:82px;border-radius:12px;padding:7px 10px;background:#0F1313;border:1px solid rgba(255,255,255,.08);font-family:var(--mono);font-size:9.5px;line-height:1.43;color:#D9E6E3}
 .reel-code span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.reel-code .cm{color:#78928D}.reel-code .ok{color:#78D49B}.reel-code .bl{color:#6FB7FF}
-.reel-result{position:absolute;left:18px;right:18px;bottom:14px;display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:13px;background:#F6FAF8;color:#172221;box-shadow:0 12px 24px rgba(0,0,0,.22)}
+.reel-result{position:absolute;left:18px;right:18px;bottom:10px;display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:13px;background:#F6FAF8;color:#172221;box-shadow:0 12px 24px rgba(0,0,0,.22)}
 .reel-result i{font-style:normal;width:28px;height:28px;border-radius:9px;background:var(--reel,#1E9780);display:grid;place-items:center;color:#fff;font-size:13px;flex:none}.reel-result b{display:block;font-size:12px;line-height:1.2}.reel-result span{display:block;margin-top:2px;font-size:10.5px;color:#66716F}.reel-result em{margin-left:auto;font-style:normal;color:var(--reel,#1E9780);font-size:17px}
-.reel-foot{display:flex;align-items:center;gap:9px;padding-top:11px;font-size:11.5px;color:#A8BCB8}.reel-foot i{width:6px;height:6px;border-radius:50%;background:var(--reel,#1E9780);box-shadow:0 0 0 4px color-mix(in srgb,var(--reel,#1E9780) 18%,transparent)}.reel-foot b{margin-left:auto;font-size:12px;color:#F5FAF8}
+.reel-foot{display:flex;align-items:center;gap:9px;padding-top:11px;font-size:11.5px;color:#A8BCB8}.reel-foot i{width:6px;height:6px;border-radius:50%;background:var(--reel,#1E9780);box-shadow:0 0 0 4px color-mix(in srgb,var(--reel,#1E9780) 18%,transparent)}.reel-cta{margin-left:auto;min-height:32px;padding:0 10px;border-radius:9px;background:rgba(255,255,255,.10);color:#F5FAF8;font-size:12px;font-weight:700}.reel-cta:active{transform:scale(.96)}
 /* В одном кадре сцены появляются по очереди: это объясняет ход работы,
    а не заставляет пользователя ждать интерфейс. */
 .reel.playing .reel-prompt{animation:reelIn .42s var(--ease-out) both}.reel.playing .reel-code{animation:reelIn .42s .28s var(--ease-out) both}.reel.playing .reel-result{animation:reelIn .42s .62s var(--ease-out) both}.reel.playing .reel-foot{animation:reelIn .34s .82s var(--ease-out) both}
@@ -2682,15 +2682,15 @@ const LESSONSLIDES = [
 /* Главный ролик — не запись чужого кабинета и не обещание «одной кнопки». Это
    три честных кадра будущей работы: поставить задачу, проверить, получить итог. */
 const REELSLIDES = [
-  {k:'chat', app:'ChatGPT', icon:'✦', color:'#10A37F',
+  {k:'chat', sec:0, app:'ChatGPT', icon:'✦', color:'#10A37F',
    ask:'Собери план запуска Telegram-бота для моего канала', hint:'контекст, задача и критерий готовности',
    lines:[['cm','# сначала уточняет недостающие детали'],['bl','1. сценарий и кнопки'],['bl','2. черновик текста'],['ok','✓ план готов за одну итерацию']],
    out:'План собран', cap:'Из размытой идеи — в понятный план действий.'},
-  {k:'code', app:'Claude Code', icon:'✦', color:'#D9784B',
+  {k:'code', sec:2, app:'Claude Code', icon:'✦', color:'#D9784B',
    ask:'Теперь собери бота и проверь, что он не выдаст ошибку', hint:'код собирается после согласования сценария',
    lines:[['cm','# создаю обработчик сообщения'],['bl','bot.on("message", answer)'],['bl','tests.run()'],['ok','✓ 12 проверок пройдены']],
    out:'Бот проверен', cap:'Нейросеть пишет код, а вы знаете, что проверить до запуска.'},
-  {k:'done', app:'Результат в Telegram', icon:'✓', color:'#2789D9',
+  {k:'done', sec:3, app:'Результат в Telegram', icon:'✓', color:'#2789D9',
    ask:'Покажи черновик поста и не публикуй без моего «да»', hint:'последнее слово всегда остаётся за вами',
    lines:[['cm','# черновик — только в личные сообщения'],['bl','пост: крючок + 3 тезиса'],['bl','кнопки: изменить / опубликовать'],['ok','✓ ждёт вашего решения']],
    out:'Черновик готов', cap:'Результат приходит в Telegram — остаётся посмотреть и решить.'}
@@ -2770,7 +2770,7 @@ function reelSlide(r,n){
         <div class="reel-code">${r.lines.map(x=>`<span class="${x[0]}">${x[1]}</span>`).join('')}</div>
         <div class="reel-result"><i>✓</i><div><b>${r.out}</b><span>можно открыть и поправить</span></div><em>›</em></div>
       </div>
-      <div class="reel-foot"><i></i><span>${r.cap}</span><b>Смотреть →</b></div>
+      <div class="reel-foot"><i></i><span>${r.cap}</span><button class="reel-cta" data-sec="${r.sec}">Смотреть →</button></div>
     </div>
   </div>`;
 }
