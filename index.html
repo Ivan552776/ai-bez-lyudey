@@ -276,18 +276,18 @@ body.nodock .app{padding-bottom:26px}
 .reel-head b i{font-style:normal;width:17px;height:17px;border-radius:6px;display:grid;place-items:center;background:var(--reel,#1E9780);font-size:10px}
 .reel-head span{margin-left:auto;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:#8FA6A2}
 .reel-stage{position:relative;flex:1;min-height:0;margin-top:12px;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08)}
-.reel-prompt{position:absolute;left:14px;right:14px;top:16px;padding:11px 12px;border-radius:12px;background:rgba(255,255,255,.10);font-size:15px;line-height:1.28;letter-spacing:-.015em}
-.reel-prompt small{display:block;margin-top:4px;color:#A9C0BC;font-family:var(--mono);font-size:9.5px;letter-spacing:.03em}
-.reel-code{position:absolute;left:14px;right:14px;top:82px;border-radius:12px;padding:7px 10px;background:#0F1313;border:1px solid rgba(255,255,255,.08);font-family:var(--mono);font-size:9.5px;line-height:1.43;color:#D9E6E3}
-.reel-code span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.reel-code .cm{color:#78928D}.reel-code .ok{color:#78D49B}.reel-code .bl{color:#6FB7FF}
-.reel-result{position:absolute;left:18px;right:18px;bottom:10px;display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:13px;background:#F6FAF8;color:#172221;box-shadow:0 12px 24px rgba(0,0,0,.22)}
+.reel-scene{position:absolute;inset:9px 10px 52px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.10);background:#101313}.mini-top{height:27px;padding:0 9px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);font:700 9px var(--mono);color:#E9F1EF}.mini-top i{width:8px;height:8px;border-radius:50%;background:var(--reel,#1E9780);box-shadow:13px 0 0 rgba(255,255,255,.2),26px 0 0 rgba(255,255,255,.1)}.mini-top span{margin-left:auto;color:#839590;font-weight:500}
+.chat-ui{padding:8px 9px;background:linear-gradient(115deg,#111615,#182322)}.chat-ui .chat-ask{margin-left:26px;padding:7px 8px;border-radius:10px 10px 2px 10px;background:#2C3937;color:#F3F8F6;font-size:10px;line-height:1.25}.chat-ui .chat-answer{margin-top:7px;display:grid;grid-template-columns:18px 1fr;gap:6px;color:#C8D7D3;font-size:9px;line-height:1.35}.chat-ui .mark{width:18px;height:18px;border-radius:6px;display:grid;place-items:center;background:#10A37F;color:#fff;font-size:11px}.chat-ui .chat-answer b{display:block;color:#F3F8F6;font-size:10px}.chat-ui .chat-answer span{display:block;margin-top:2px}.chat-ui .typing{position:absolute;left:9px;right:9px;bottom:7px;height:18px;border-radius:7px;border:1px solid rgba(255,255,255,.14);color:#71847F;padding:4px 7px;font:8px var(--mono)}
+.code-ui{background:linear-gradient(140deg,#121516,#1A1411)}.code-ui .term{padding:8px 10px;font:9px/1.48 var(--mono);color:#DCE6E2}.code-ui .term b{color:#F6B15B}.code-ui .term .blue{color:#6FB7FF}.code-ui .term .green{color:#8EE3A7}.code-ui .files{position:absolute;left:10px;bottom:7px;right:10px;display:flex;gap:5px}.code-ui .files span{padding:4px 6px;border-radius:5px;background:rgba(255,255,255,.08);font:8px var(--mono);color:#9CAEA9}
+.tg-ui{background:linear-gradient(135deg,#172932,#0D2026)}.tg-ui .tg-date{padding-top:6px;text-align:center;color:#8FA6A2;font:8px var(--mono)}.tg-ui .bot-bubble,.tg-ui .user-bubble{max-width:82%;padding:7px 8px;border-radius:10px;font-size:9px;line-height:1.28}.tg-ui .bot-bubble{margin:6px 8px;background:#263C45;color:#ECF5F5;border-radius:3px 10px 10px}.tg-ui .user-bubble{margin:5px 8px 0 auto;background:#2B7D6D;color:#fff;border-radius:10px 3px 10px 10px}.tg-ui .tg-buttons{display:flex;gap:5px;margin:6px 8px}.tg-ui .tg-buttons span{flex:1;padding:5px 4px;border-radius:6px;background:#274D5B;color:#82C7FF;text-align:center;font-size:8px}.tg-ui .sent{position:absolute;right:8px;bottom:7px;color:#72D1B0;font:8px var(--mono)}
+.reel-result{position:absolute;left:14px;right:14px;bottom:9px;display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:13px;background:#F6FAF8;color:#172221;box-shadow:0 12px 24px rgba(0,0,0,.22)}
 .reel-result i{font-style:normal;width:28px;height:28px;border-radius:9px;background:var(--reel,#1E9780);display:grid;place-items:center;color:#fff;font-size:13px;flex:none}.reel-result b{display:block;font-size:12px;line-height:1.2}.reel-result span{display:block;margin-top:2px;font-size:10.5px;color:#66716F}.reel-result em{margin-left:auto;font-style:normal;color:var(--reel,#1E9780);font-size:17px}
 .reel-foot{display:flex;align-items:center;gap:9px;padding-top:11px;font-size:11.5px;color:#A8BCB8}.reel-foot i{width:6px;height:6px;border-radius:50%;background:var(--reel,#1E9780);box-shadow:0 0 0 4px color-mix(in srgb,var(--reel,#1E9780) 18%,transparent)}.reel-cta{margin-left:auto;min-height:32px;padding:0 10px;border-radius:9px;background:rgba(255,255,255,.10);color:#F5FAF8;font-size:12px;font-weight:700}.reel-cta:active{transform:scale(.96)}
 /* В одном кадре сцены появляются по очереди: это объясняет ход работы,
    а не заставляет пользователя ждать интерфейс. */
-.reel.playing .reel-prompt{animation:reelIn .42s var(--ease-out) both}.reel.playing .reel-code{animation:reelIn .42s .28s var(--ease-out) both}.reel.playing .reel-result{animation:reelIn .42s .62s var(--ease-out) both}.reel.playing .reel-foot{animation:reelIn .34s .82s var(--ease-out) both}
+.reel.playing .reel-scene{animation:reelIn .42s var(--ease-out) both}.reel.playing .reel-result{animation:reelIn .42s .42s var(--ease-out) both}.reel.playing .reel-foot{animation:reelIn .34s .65s var(--ease-out) both}
 @keyframes reelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.reel.playing .reel-prompt,.reel.playing .reel-code,.reel.playing .reel-result,.reel.playing .reel-foot{animation:none}}
+@media (prefers-reduced-motion:reduce){.reel.playing .reel-scene,.reel.playing .reel-result,.reel.playing .reel-foot{animation:none}}
 
 /* ---- урок ---- */
 .back{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);border-radius:999px;padding:0 17px 0 14px;min-height:44px;font-size:13.5px;color:var(--soft);margin-bottom:13px;transition:transform .1s var(--ease)}
@@ -2762,12 +2762,24 @@ function lessonSlide(l, link){
 }
 
 function reelSlide(r,n){
+  const scene = r.k==='chat' ? `
+    <div class="reel-scene chat-ui"><div class="mini-top"><i></i>Новый чат<span>GPT-5</span></div>
+      <div class="chat-ask">${r.ask}</div>
+      <div class="chat-answer"><div class="mark">✦</div><div><b>Понял задачу.</b><span>Соберу сценарий, кнопки и первый текст. Сначала покажу черновик.</span></div></div>
+      <div class="typing">Написать сообщение…</div></div>`
+    : r.k==='code' ? `
+    <div class="reel-scene code-ui"><div class="mini-top"><i></i>claude — ~/telegram-bot<span>main</span></div>
+      <div class="term"><b>$</b> ${r.ask}<br><span class="blue">▸</span> handlers/message.ts<br><span class="blue">▸</span> tests/bot.spec.ts<br><span class="green">✓ 12 проверок пройдены</span></div>
+      <div class="files"><span>message.ts</span><span>bot.spec.ts</span><span>✓ ready</span></div></div>`
+    : `
+    <div class="reel-scene tg-ui"><div class="mini-top"><i></i>Тестовый бот<span>бот</span></div>
+      <div class="tg-date">сегодня</div><div class="user-bubble">${r.ask}</div><div class="bot-bubble">Черновик готов. Ничего не публикую без вашего подтверждения.</div>
+      <div class="tg-buttons"><span>Изменить</span><span>Опубликовать</span></div><div class="sent">✓✓</div></div>`;
   return `<div class="slide" data-kind="reel" data-reel="${r.k}" style="--reel:${r.color}">
     <div class="reel">
-      <div class="reel-head"><b><i>${r.icon}</i>${r.app}</b><span>ДЕМО · ${n+1}/3</span></div>
+      <div class="reel-head"><b><i>${r.icon}</i>${r.app}</b><span>СЦЕНА · ${n+1}/3</span></div>
       <div class="reel-stage">
-        <div class="reel-prompt">${r.ask}<small>${r.hint}</small></div>
-        <div class="reel-code">${r.lines.map(x=>`<span class="${x[0]}">${x[1]}</span>`).join('')}</div>
+        ${scene}
         <div class="reel-result"><i>✓</i><div><b>${r.out}</b><span>можно открыть и поправить</span></div><em>›</em></div>
       </div>
       <div class="reel-foot"><i></i><span>${r.cap}</span><button class="reel-cta" data-sec="${r.sec}">Смотреть →</button></div>
