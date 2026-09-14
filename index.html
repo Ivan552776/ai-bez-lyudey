@@ -31,6 +31,7 @@
   --shadow:0 10px 30px rgba(0,0,0,.38);
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
 /* тему переключаем одним общим переходом, а не только на body — иначе карточки прыгают */
 html.theming, html.theming *{transition:background-color .26s var(--ease),border-color .26s var(--ease),color .26s var(--ease) !important}
@@ -272,6 +273,7 @@ body.nodock .app{padding-bottom:26px}
 .study-showcase .slides{margin:0 -14px}
 .study-showcase .track{padding-left:14px;padding-right:14px}
 .study-showcase .slide{flex-basis:100%;border-radius:20px;background:#151A1A;border-color:#253130;box-shadow:0 12px 28px -20px rgba(20,32,31,.65)}
+.home-tabs{display:flex;gap:7px;margin:0 -14px 12px;padding:0 14px;overflow:auto;scrollbar-width:none}.home-tabs::-webkit-scrollbar{display:none}.home-tab{flex:none;min-height:34px;padding:0 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--soft);font-size:12.5px;font-weight:600}.home-tab.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}.home-tab:active{transform:scale(.96)}.home-access{display:flex;align-items:center;gap:9px;margin:0 0 16px;padding:11px 12px;border-radius:15px;background:var(--card);border:1px solid var(--line)}.home-access i{width:25px;height:25px;border-radius:9px;display:grid;place-items:center;flex:none;background:var(--brandS);color:var(--brand);font-style:normal;font-size:12px}.home-access span{min-width:0;flex:1}.home-access b,.home-access small{display:block}.home-access b{font-size:12.5px;color:var(--ink)}.home-access small{margin-top:2px;font-size:11px;line-height:1.25;color:var(--soft)}.home-access button{min-height:32px;padding:0 9px;border-radius:9px;background:var(--brandS);color:var(--brand);font-size:11.5px;font-weight:700}
 .reel{height:310px;padding:14px 14px 12px;display:flex;flex-direction:column;color:#F5FAF8;background:radial-gradient(circle at 88% 10%,rgba(60,130,126,.32),transparent 35%),#151A1A;overflow:hidden}
 .reel-head{display:flex;align-items:center;gap:8px;min-height:28px;color:#B9C9C6}
 .reel-head b{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12.5px;color:#F5FAF8}
@@ -781,6 +783,12 @@ pre{margin:0;background:#12151F;color:#DDE3EE;border-radius:12px;padding:14px;ov
         <div class="dots" id="study-dots"></div>
       </div>
     </section>
+
+    <div class="home-tabs" aria-label="Фильтр разделов">
+      <button class="home-tab on" data-home-cat="all">Все</button><button class="home-tab" data-home-cat="start">Старт</button>
+      <button class="home-tab" data-home-cat="product">Продукт</button><button class="home-tab" data-home-cat="bot">Боты</button><button class="home-tab" data-home-cat="video">Видео</button>
+    </div>
+    <div class="home-access"><i>✓</i><span><b>Первые разделы открыты</b><small>Сначала посмотрите уроки, потом решайте про полный доступ.</small></span><button data-go="route">Программа</button></div>
 
     <div class="strk" id="strk" hidden>
       <button class="skl" data-go="ach">
@@ -2566,16 +2574,23 @@ function blk(b){
   return '';
 }
 
+const homeSectionCat = i => i===0 || i===1 ? 'start' : i===2 ? 'product' : i===3 || i===5 ? 'bot' : 'video';
 $('#secs').innerHTML = SECS.map((s,i)=>{
   const n = (s.ls||[]).length, ready = (s.ls||[]).filter(l=>l.b).length;
   return `
-  <button class="item sec" data-sec="${i}" style="animation-delay:${i*45}ms">
+  <button class="item sec" data-sec="${i}" data-home-section="${homeSectionCat(i)}" style="animation-delay:${i*45}ms">
     <span class="glow" style="background:${s.g}"></span>
     <span class="ic ${s.c}">${s.ic}</span>
     <span class="tx"><b>${s.t}</b><span>${s.d}</span>
       <span class="meta">${n} ${n===1?'урок':(n<5?'урока':'уроков')}${s.free?' · '+ready+' открыто':''}</span></span>
     ${s.free?'<span class="pill free">открыт</span>':'<span class="pill lock">🔒</span>'}
   </button>`;}).join('');
+
+function setHomeCategory(cat){
+  document.querySelectorAll('[data-home-cat]').forEach(b=>b.classList.toggle('on',b.dataset.homeCat===cat));
+  document.querySelectorAll('#secs [data-home-section]').forEach(row=>row.hidden=cat!=='all' && row.dataset.homeSection!==cat);
+}
+document.querySelectorAll('[data-home-cat]').forEach(b=>b.addEventListener('click',()=>setHomeCategory(b.dataset.homeCat)));
 
 /* ---------- что нового: пополняется вместе с приложением ---------- */
 const NEWS = [
