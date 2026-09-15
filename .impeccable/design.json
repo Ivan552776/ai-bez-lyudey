@@ -1,0 +1,569 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-15T13:06:22.412842+00:00",
+  "title": "Design System: ИИ без людей",
+  "extensions": {
+    "colorMeta": {
+      "bg": {
+        "role": "neutral",
+        "displayName": "Белая бумага",
+        "tonalRamp": [
+          "oklch(15.000% 0.00000 0.000)",
+          "oklch(26.429% 0.00000 0.000)",
+          "oklch(37.857% 0.00000 0.000)",
+          "oklch(49.286% 0.00000 0.000)",
+          "oklch(60.714% 0.00000 0.000)",
+          "oklch(72.143% 0.00000 0.000)",
+          "oklch(83.571% 0.00000 0.000)",
+          "oklch(95.000% 0.00000 0.000)"
+        ]
+      },
+      "card": {
+        "role": "neutral",
+        "displayName": "Тёплый нейтральный слой",
+        "tonalRamp": [
+          "oklch(15.000% 0.00265 106.449)",
+          "oklch(26.429% 0.00265 106.449)",
+          "oklch(37.857% 0.00265 106.449)",
+          "oklch(49.286% 0.00265 106.449)",
+          "oklch(60.714% 0.00265 106.449)",
+          "oklch(72.143% 0.00265 106.449)",
+          "oklch(83.571% 0.00265 106.449)",
+          "oklch(95.000% 0.00265 106.449)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Основные тёмные чернила",
+        "tonalRamp": [
+          "oklch(15.000% 0.00805 153.330)",
+          "oklch(26.429% 0.00805 153.330)",
+          "oklch(37.857% 0.00805 153.330)",
+          "oklch(49.286% 0.00805 153.330)",
+          "oklch(60.714% 0.00805 153.330)",
+          "oklch(72.143% 0.00805 153.330)",
+          "oklch(83.571% 0.00805 153.330)",
+          "oklch(95.000% 0.00805 153.330)"
+        ]
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Вторичный текст",
+        "tonalRamp": [
+          "oklch(15.000% 0.01318 141.227)",
+          "oklch(26.429% 0.01318 141.227)",
+          "oklch(37.857% 0.01318 141.227)",
+          "oklch(49.286% 0.01318 141.227)",
+          "oklch(60.714% 0.01318 141.227)",
+          "oklch(72.143% 0.01318 141.227)",
+          "oklch(83.571% 0.01318 141.227)",
+          "oklch(95.000% 0.01318 141.227)"
+        ]
+      },
+      "faint": {
+        "role": "neutral",
+        "displayName": "Служебный текст",
+        "tonalRamp": [
+          "oklch(15.000% 0.01619 138.723)",
+          "oklch(26.429% 0.01619 138.723)",
+          "oklch(37.857% 0.01619 138.723)",
+          "oklch(49.286% 0.01619 138.723)",
+          "oklch(60.714% 0.01619 138.723)",
+          "oklch(72.143% 0.01619 138.723)",
+          "oklch(83.571% 0.01619 138.723)",
+          "oklch(95.000% 0.01619 138.723)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Тихий разделитель",
+        "tonalRamp": [
+          "oklch(15.000% 0.00699 124.452)",
+          "oklch(26.429% 0.00699 124.452)",
+          "oklch(37.857% 0.00699 124.452)",
+          "oklch(49.286% 0.00699 124.452)",
+          "oklch(60.714% 0.00699 124.452)",
+          "oklch(72.143% 0.00699 124.452)",
+          "oklch(83.571% 0.00699 124.452)",
+          "oklch(95.000% 0.00699 124.452)"
+        ]
+      },
+      "line2": {
+        "role": "neutral",
+        "displayName": "Граница элемента управления",
+        "tonalRamp": [
+          "oklch(15.000% 0.00996 125.692)",
+          "oklch(26.429% 0.00996 125.692)",
+          "oklch(37.857% 0.00996 125.692)",
+          "oklch(49.286% 0.00996 125.692)",
+          "oklch(60.714% 0.00996 125.692)",
+          "oklch(72.143% 0.00996 125.692)",
+          "oklch(83.571% 0.00996 125.692)",
+          "oklch(95.000% 0.00996 125.692)"
+        ]
+      },
+      "brand": {
+        "role": "primary",
+        "displayName": "Библиотечный синий",
+        "tonalRamp": [
+          "oklch(15.000% 0.18493 266.610)",
+          "oklch(26.429% 0.18493 266.610)",
+          "oklch(37.857% 0.18493 266.610)",
+          "oklch(49.286% 0.18493 266.610)",
+          "oklch(60.714% 0.18493 266.610)",
+          "oklch(72.143% 0.18493 266.610)",
+          "oklch(83.571% 0.18493 266.610)",
+          "oklch(95.000% 0.18493 266.610)"
+        ]
+      },
+      "brand2": {
+        "role": "primary",
+        "displayName": "Глубокий синий",
+        "tonalRamp": [
+          "oklch(15.000% 0.17307 266.244)",
+          "oklch(26.429% 0.17307 266.244)",
+          "oklch(37.857% 0.17307 266.244)",
+          "oklch(49.286% 0.17307 266.244)",
+          "oklch(60.714% 0.17307 266.244)",
+          "oklch(72.143% 0.17307 266.244)",
+          "oklch(83.571% 0.17307 266.244)",
+          "oklch(95.000% 0.17307 266.244)"
+        ]
+      },
+      "brandS": {
+        "role": "primary",
+        "displayName": "Светлый синий слой",
+        "tonalRamp": [
+          "oklch(15.000% 0.01925 273.238)",
+          "oklch(26.429% 0.01925 273.238)",
+          "oklch(37.857% 0.01925 273.238)",
+          "oklch(49.286% 0.01925 273.238)",
+          "oklch(60.714% 0.01925 273.238)",
+          "oklch(72.143% 0.01925 273.238)",
+          "oklch(83.571% 0.01925 273.238)",
+          "oklch(95.000% 0.01925 273.238)"
+        ]
+      },
+      "ok": {
+        "role": "tertiary",
+        "displayName": "Зелёный доступ и успех",
+        "tonalRamp": [
+          "oklch(15.000% 0.08987 161.733)",
+          "oklch(26.429% 0.08987 161.733)",
+          "oklch(37.857% 0.08987 161.733)",
+          "oklch(49.286% 0.08987 161.733)",
+          "oklch(60.714% 0.08987 161.733)",
+          "oklch(72.143% 0.08987 161.733)",
+          "oklch(83.571% 0.08987 161.733)",
+          "oklch(95.000% 0.08987 161.733)"
+        ]
+      },
+      "okS": {
+        "role": "tertiary",
+        "displayName": "Фон доступного состояния",
+        "tonalRamp": [
+          "oklch(15.000% 0.01241 156.998)",
+          "oklch(26.429% 0.01241 156.998)",
+          "oklch(37.857% 0.01241 156.998)",
+          "oklch(49.286% 0.01241 156.998)",
+          "oklch(60.714% 0.01241 156.998)",
+          "oklch(72.143% 0.01241 156.998)",
+          "oklch(83.571% 0.01241 156.998)",
+          "oklch(95.000% 0.01241 156.998)"
+        ]
+      },
+      "warn": {
+        "role": "tertiary",
+        "displayName": "Терракотовое предупреждение",
+        "tonalRamp": [
+          "oklch(15.000% 0.15024 33.015)",
+          "oklch(26.429% 0.15024 33.015)",
+          "oklch(37.857% 0.15024 33.015)",
+          "oklch(49.286% 0.15024 33.015)",
+          "oklch(60.714% 0.15024 33.015)",
+          "oklch(72.143% 0.15024 33.015)",
+          "oklch(83.571% 0.15024 33.015)",
+          "oklch(95.000% 0.15024 33.015)"
+        ]
+      },
+      "warnS": {
+        "role": "tertiary",
+        "displayName": "Фон предупреждения",
+        "tonalRamp": [
+          "oklch(15.000% 0.01622 36.528)",
+          "oklch(26.429% 0.01622 36.528)",
+          "oklch(37.857% 0.01622 36.528)",
+          "oklch(49.286% 0.01622 36.528)",
+          "oklch(60.714% 0.01622 36.528)",
+          "oklch(72.143% 0.01622 36.528)",
+          "oklch(83.571% 0.01622 36.528)",
+          "oklch(95.000% 0.01622 36.528)"
+        ]
+      },
+      "sig": {
+        "role": "tertiary",
+        "displayName": "Янтарная отметка прогресса",
+        "tonalRamp": [
+          "oklch(15.000% 0.14642 62.997)",
+          "oklch(26.429% 0.14642 62.997)",
+          "oklch(37.857% 0.14642 62.997)",
+          "oklch(49.286% 0.14642 62.997)",
+          "oklch(60.714% 0.14642 62.997)",
+          "oklch(72.143% 0.14642 62.997)",
+          "oklch(83.571% 0.14642 62.997)",
+          "oklch(95.000% 0.14642 62.997)"
+        ]
+      },
+      "sigInk": {
+        "role": "tertiary",
+        "displayName": "Чернила янтарной отметки",
+        "tonalRamp": [
+          "oklch(15.000% 0.02884 65.195)",
+          "oklch(26.429% 0.02884 65.195)",
+          "oklch(37.857% 0.02884 65.195)",
+          "oklch(49.286% 0.02884 65.195)",
+          "oklch(60.714% 0.02884 65.195)",
+          "oklch(72.143% 0.02884 65.195)",
+          "oklch(83.571% 0.02884 65.195)",
+          "oklch(95.000% 0.02884 65.195)"
+        ]
+      },
+      "cover-01": {
+        "role": "secondary",
+        "displayName": "Голубая обложка",
+        "tonalRamp": [
+          "oklch(15.000% 0.02543 268.846)",
+          "oklch(26.429% 0.02543 268.846)",
+          "oklch(37.857% 0.02543 268.846)",
+          "oklch(49.286% 0.02543 268.846)",
+          "oklch(60.714% 0.02543 268.846)",
+          "oklch(72.143% 0.02543 268.846)",
+          "oklch(83.571% 0.02543 268.846)",
+          "oklch(95.000% 0.02543 268.846)"
+        ]
+      },
+      "cover-ink-01": {
+        "role": "secondary",
+        "displayName": "Чернила: Начать с ИИ",
+        "tonalRamp": [
+          "oklch(15.000% 0.16411 264.475)",
+          "oklch(26.429% 0.16411 264.475)",
+          "oklch(37.857% 0.16411 264.475)",
+          "oklch(49.286% 0.16411 264.475)",
+          "oklch(60.714% 0.16411 264.475)",
+          "oklch(72.143% 0.16411 264.475)",
+          "oklch(83.571% 0.16411 264.475)",
+          "oklch(95.000% 0.16411 264.475)"
+        ]
+      },
+      "cover-02": {
+        "role": "secondary",
+        "displayName": "Песочная обложка",
+        "tonalRamp": [
+          "oklch(15.000% 0.03135 84.592)",
+          "oklch(26.429% 0.03135 84.592)",
+          "oklch(37.857% 0.03135 84.592)",
+          "oklch(49.286% 0.03135 84.592)",
+          "oklch(60.714% 0.03135 84.592)",
+          "oklch(72.143% 0.03135 84.592)",
+          "oklch(83.571% 0.03135 84.592)",
+          "oklch(95.000% 0.03135 84.592)"
+        ]
+      },
+      "cover-ink-02": {
+        "role": "secondary",
+        "displayName": "Чернила: Подписки и доступ",
+        "tonalRamp": [
+          "oklch(15.000% 0.09802 68.599)",
+          "oklch(26.429% 0.09802 68.599)",
+          "oklch(37.857% 0.09802 68.599)",
+          "oklch(49.286% 0.09802 68.599)",
+          "oklch(60.714% 0.09802 68.599)",
+          "oklch(72.143% 0.09802 68.599)",
+          "oklch(83.571% 0.09802 68.599)",
+          "oklch(95.000% 0.09802 68.599)"
+        ]
+      },
+      "cover-03": {
+        "role": "secondary",
+        "displayName": "Лавандовая обложка",
+        "tonalRamp": [
+          "oklch(15.000% 0.03177 299.651)",
+          "oklch(26.429% 0.03177 299.651)",
+          "oklch(37.857% 0.03177 299.651)",
+          "oklch(49.286% 0.03177 299.651)",
+          "oklch(60.714% 0.03177 299.651)",
+          "oklch(72.143% 0.03177 299.651)",
+          "oklch(83.571% 0.03177 299.651)",
+          "oklch(95.000% 0.03177 299.651)"
+        ]
+      },
+      "cover-ink-03": {
+        "role": "secondary",
+        "displayName": "Чернила: Свой продукт",
+        "tonalRamp": [
+          "oklch(15.000% 0.13087 297.910)",
+          "oklch(26.429% 0.13087 297.910)",
+          "oklch(37.857% 0.13087 297.910)",
+          "oklch(49.286% 0.13087 297.910)",
+          "oklch(60.714% 0.13087 297.910)",
+          "oklch(72.143% 0.13087 297.910)",
+          "oklch(83.571% 0.13087 297.910)",
+          "oklch(95.000% 0.13087 297.910)"
+        ]
+      },
+      "cover-04": {
+        "role": "secondary",
+        "displayName": "Мятная обложка",
+        "tonalRamp": [
+          "oklch(15.000% 0.02253 175.946)",
+          "oklch(26.429% 0.02253 175.946)",
+          "oklch(37.857% 0.02253 175.946)",
+          "oklch(49.286% 0.02253 175.946)",
+          "oklch(60.714% 0.02253 175.946)",
+          "oklch(72.143% 0.02253 175.946)",
+          "oklch(83.571% 0.02253 175.946)",
+          "oklch(95.000% 0.02253 175.946)"
+        ]
+      },
+      "cover-ink-04": {
+        "role": "secondary",
+        "displayName": "Чернила: Telegram-бот",
+        "tonalRamp": [
+          "oklch(15.000% 0.07832 171.218)",
+          "oklch(26.429% 0.07832 171.218)",
+          "oklch(37.857% 0.07832 171.218)",
+          "oklch(49.286% 0.07832 171.218)",
+          "oklch(60.714% 0.07832 171.218)",
+          "oklch(72.143% 0.07832 171.218)",
+          "oklch(83.571% 0.07832 171.218)",
+          "oklch(95.000% 0.07832 171.218)"
+        ]
+      },
+      "cover-05": {
+        "role": "secondary",
+        "displayName": "Персиковая обложка",
+        "tonalRamp": [
+          "oklch(15.000% 0.02554 42.099)",
+          "oklch(26.429% 0.02554 42.099)",
+          "oklch(37.857% 0.02554 42.099)",
+          "oklch(49.286% 0.02554 42.099)",
+          "oklch(60.714% 0.02554 42.099)",
+          "oklch(72.143% 0.02554 42.099)",
+          "oklch(83.571% 0.02554 42.099)",
+          "oklch(95.000% 0.02554 42.099)"
+        ]
+      },
+      "cover-ink-05": {
+        "role": "secondary",
+        "displayName": "Чернила: Голос и видео",
+        "tonalRamp": [
+          "oklch(15.000% 0.11404 39.662)",
+          "oklch(26.429% 0.11404 39.662)",
+          "oklch(37.857% 0.11404 39.662)",
+          "oklch(49.286% 0.11404 39.662)",
+          "oklch(60.714% 0.11404 39.662)",
+          "oklch(72.143% 0.11404 39.662)",
+          "oklch(83.571% 0.11404 39.662)",
+          "oklch(95.000% 0.11404 39.662)"
+        ]
+      },
+      "cover-06": {
+        "role": "secondary",
+        "displayName": "Серо-голубая обложка",
+        "tonalRamp": [
+          "oklch(15.000% 0.01265 228.929)",
+          "oklch(26.429% 0.01265 228.929)",
+          "oklch(37.857% 0.01265 228.929)",
+          "oklch(49.286% 0.01265 228.929)",
+          "oklch(60.714% 0.01265 228.929)",
+          "oklch(72.143% 0.01265 228.929)",
+          "oklch(83.571% 0.01265 228.929)",
+          "oklch(95.000% 0.01265 228.929)"
+        ]
+      },
+      "cover-ink-06": {
+        "role": "secondary",
+        "displayName": "Чернила: Агенты в работе",
+        "tonalRamp": [
+          "oklch(15.000% 0.06616 234.498)",
+          "oklch(26.429% 0.06616 234.498)",
+          "oklch(37.857% 0.06616 234.498)",
+          "oklch(49.286% 0.06616 234.498)",
+          "oklch(60.714% 0.06616 234.498)",
+          "oklch(72.143% 0.06616 234.498)",
+          "oklch(83.571% 0.06616 234.498)",
+          "oklch(95.000% 0.06616 234.498)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "display",
+        "purpose": "Главный заголовок"
+      },
+      "headline": {
+        "displayName": "headline",
+        "purpose": "Заголовок синей карточки"
+      },
+      "title": {
+        "displayName": "title",
+        "purpose": "Заголовок урока или раздела"
+      },
+      "section": {
+        "displayName": "section",
+        "purpose": "Заголовки групп"
+      },
+      "reading-heading": {
+        "displayName": "reading-heading",
+        "purpose": "Заголовки внутри урока"
+      },
+      "body": {
+        "displayName": "body",
+        "purpose": "Текст оболочки"
+      },
+      "reading": {
+        "displayName": "reading",
+        "purpose": "Основной текст урока"
+      },
+      "prompt": {
+        "displayName": "prompt",
+        "purpose": "Обычный запрос"
+      },
+      "label": {
+        "displayName": "label",
+        "purpose": "Повторяющийся размер служебных подписей"
+      },
+      "cover": {
+        "displayName": "cover",
+        "purpose": "Крупные слова обложки"
+      }
+    },
+    "shadows": [
+      {
+        "name": "transient-notification",
+        "value": "0 10px 30px rgba(0,0,0,.22)",
+        "purpose": "Существующее временное уведомление; не тень карточек библиотеки."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.22,.9,.28,1)",
+        "purpose": "Существующая --ease для локальных состояний и смены темы."
+      },
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(.23,1,.32,1)",
+        "purpose": "Существующая --ease-out для раскрытия оглавления."
+      },
+      {
+        "name": "theme-transition",
+        "value": ".26s",
+        "purpose": "Переход цветов при смене темы, если не включён reduced motion."
+      },
+      {
+        "name": "button-feedback",
+        "value": ".14s",
+        "purpose": "Сжатие главной кнопки и строк; не переход всей страницы."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tool-grid",
+        "value": "334px"
+      },
+      {
+        "name": "figure-columns",
+        "value": "360px"
+      },
+      {
+        "name": "compact-library",
+        "value": "380px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Белая кнопка первого урока",
+      "kind": "button",
+      "refersTo": "study-go",
+      "description": "Публичное действие синей карточки; без обработчика перехода.",
+      "html": "<button class=\"ds-study-go\" type=\"button\">Открыть первый урок</button>",
+      "css": ".ds-study-go{font-family:var(--body,\"Golos Text\",system-ui,-apple-system,sans-serif);cursor:pointer;border:0;background:none;touch-action:manipulation;margin-top:0;background:#FFF;color:#243E99;min-height:48px;width:100%;padding:13px 14px;border-radius:12px;line-height:1.3;font-size:14px;font-weight:600;box-shadow:none;white-space:normal;position:relative;transition:transform .14s var(--ease,cubic-bezier(.22,.9,.28,1))}.ds-study-go:active{transform:scale(.985)}.ds-study-go:focus-visible{outline:2px solid var(--brand,#3154C8);outline-offset:3px;}@media(hover:hover) and (pointer:fine){.ds-study-go:hover{background:#EEF2FF}}@media(prefers-reduced-motion:reduce){.ds-study-go{animation:none!important;transition:none!important;scroll-behavior:auto!important}}"
+    },
+    {
+      "name": "Поле поиска",
+      "kind": "input",
+      "refersTo": "search-field",
+      "description": "Начальное состояние с доступным именем и примером запроса. Кнопка очистки скрыта до ввода; фокус обозначен цветом рамки.",
+      "html": "<div class=\"ds-search\"><input class=\"ds-search-input\" type=\"search\" aria-label=\"Поиск по урокам и запросам\" placeholder=\"Что ищете? Например: ударения\" autocomplete=\"off\" enterkeyhint=\"search\"></div>",
+      "css": ".ds-search{position:relative;margin:0 0 15px}.ds-search-input{font-family:var(--body,\"Golos Text\",system-ui,-apple-system,sans-serif);width:100%;min-height:48px;padding:0 44px 0 14px;border-radius:14px;border:1px solid var(--line2,#DADDD6);background:var(--card,#F5F5F3);color:var(--ink,#202421);font-weight:400;font-size:16px;line-height:1;-webkit-appearance:none}.ds-search-input:focus,.ds-search-input:focus-visible{outline:none;border-color:var(--brand,#3154C8)}"
+    },
+    {
+      "name": "Верхняя навигация",
+      "kind": "nav",
+      "refersTo": "top-navigation",
+      "description": "Настоящие SVG-пути; маркировка, поиск и профиль из текущей шапки.",
+      "html": "<header class=\"ds-top\"><button class=\"ds-home\" type=\"button\" aria-label=\"ИИ без людей — главная\"><span class=\"ds-mark\" aria-hidden=\"true\">ии</span><b>ИИ без людей</b></button><button class=\"ds-search-open\" type=\"button\" aria-label=\"Поиск\"><svg class=\"ds-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"10\" cy=\"10\" r=\"7\"/><path d=\"m15 15 6 6\"/></svg></button><button class=\"ds-profile\" type=\"button\" aria-label=\"Профиль\"><svg class=\"ds-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21v-2a8 8 0 0 1 16 0v2\"/></svg></button></header>",
+      "css": ".ds-top{font-family:var(--body,\"Golos Text\",system-ui,-apple-system,sans-serif);color:var(--ink,#202421);display:flex;align-items:center;position:sticky;top:var(--tg-content-top,0px);z-index:9;background:var(--bg,#FFF);padding:9px 0 13px;gap:8px;min-height:64px;border-bottom:1px solid var(--line,#E8EAE5);margin-bottom:20px}.ds-home,.ds-search-open,.ds-profile{font-family:var(--body,\"Golos Text\",system-ui,-apple-system,sans-serif);cursor:pointer;border:0;background:none;touch-action:manipulation;color:inherit}.ds-home{display:flex;align-items:center;gap:9px;min-height:44px;min-width:0;padding:0;margin-right:auto;text-align:left}.ds-home b{font-size:15px;font-weight:700;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ds-mark{display:grid;place-items:center;width:32px;height:32px;flex:none;border-radius:50%;background:#214CBD;color:#D2F7AA;font-size:15px;font-weight:700;letter-spacing:-1px}.ds-search-open{width:44px;height:44px;margin-left:0;border-radius:50%;display:grid;place-items:center;background:var(--card,#F5F5F3);color:var(--soft,#60665F);transition:transform .1s var(--ease,cubic-bezier(.22,.9,.28,1))}.ds-search-open:active{transform:scale(.94)}.ds-profile{display:flex;align-items:center;gap:7px;min-height:44px;padding:0 12px;border-radius:24px;background:var(--card,#F5F5F3);font-size:12px;font-weight:600}.ds-profile .ds-icon{width:20px;height:20px}.ds-profile[aria-current=\"page\"]{background:var(--brandS,#EDF1FF);color:var(--brand,#3154C8)}.ds-home:focus-visible,.ds-search-open:focus-visible,.ds-profile:focus-visible{outline:2px solid var(--brand,#3154C8);outline-offset:3px;}.ds-home:active,.ds-profile:active{transform:none}.ds-icon{width:24px;height:24px;display:block;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}@media(prefers-reduced-motion:reduce){.ds-top button{animation:none!important;transition:none!important;scroll-behavior:auto!important}}.ds-home:focus-visible{border-radius:10px}"
+    },
+    {
+      "name": "Карточка направления",
+      "kind": "card",
+      "refersTo": "course-card",
+      "description": "Первое публичное направление; сохранены фактические 18px и линия из более специфичного правила. Микроподпись и глиф опущены.",
+      "html": "<button class=\"ds-course\" type=\"button\" style=\"--cover:#E6EDFF;--cover-ink:#274EB1\"><span class=\"ds-cover\" aria-hidden=\"true\"><span class=\"ds-cover-top\"><span>01</span><svg class=\"ds-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 4h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 3V6a2 2 0 0 1 1-2Z\"/><path d=\"M8 9h9M8 13h6\"/></svg></span><strong>Слова, которые<br>работают.</strong></span><span class=\"ds-course-text\"><b>Начать с ИИ</b><span>Запросы, выбор инструмента и первые рабочие задачи.</span><span class=\"ds-course-meta\">3 урока</span></span><span class=\"ds-course-access\">Бесплатно</span></button>",
+      "css": ".ds-course{font-family:var(--body,\"Golos Text\",system-ui,-apple-system,sans-serif);cursor:pointer;border:0;background:none;touch-action:manipulation;color:var(--ink,#202421);width:100%;text-align:left;display:flex;flex-direction:column;align-items:stretch;position:relative;padding:18px 0;gap:12px;border:0;border-bottom:1px solid var(--line,#E8EAE5);border-radius:0;min-width:0;overflow:visible;box-shadow:none;transform:none;animation:none;transition:transform .14s var(--ease,cubic-bezier(.22,.9,.28,1)),border-color .2s}.ds-course:focus-visible{outline:2px solid var(--brand,#3154C8);outline-offset:3px;}.ds-course:active{transform:none}.ds-cover{display:flex;flex-direction:column;min-height:206px;padding:16px;background:var(--cover,#E6EDFF);color:var(--cover-ink,#274EB1);border-radius:14px;overflow:hidden;transition:background-color .18s ease}.ds-cover-top{display:flex;align-items:center;justify-content:space-between;font-family:var(--mono,\"JetBrains Mono\",ui-monospace,monospace);font-size:11px}.ds-cover-top .ds-icon{width:22px;height:22px}.ds-cover strong{display:block;margin:30px 0 23px;font-size:clamp(21px,5.5vw,29px);font-weight:600;line-height:1.05;letter-spacing:-.035em}.ds-course-text{display:flex;flex-direction:column;padding:12px 1px 0;gap:7px;flex:1;min-width:0;position:relative}.ds-course-text b{font-size:17px;font-weight:600;line-height:1.2;letter-spacing:-.02em}.ds-course-text>span{font-size:12px;line-height:1.5;color:var(--soft,#60665F);margin-top:3px}.ds-course-text .ds-course-meta{display:block;margin:3px 0 0;font-size:11px;line-height:1.5;min-height:17px;white-space:normal;color:var(--faint,#697067)}.ds-course-access{display:flex;justify-content:space-between;align-items:center;margin-top:11px;padding:9px 0 0;border-top:1px solid var(--line,#E8EAE5);font-size:11px;line-height:1.4;color:var(--soft,#60665F)}.ds-icon{width:24px;height:24px;display:block;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}@media(hover:hover) and (pointer:fine){.ds-course:hover .ds-cover{filter:brightness(.97)}.ds-course:hover .ds-course-text b{color:var(--brand,#3154C8)}}@media(max-width:380px){.ds-cover{min-height:183px;padding:13px}.ds-cover strong{font-size:23px}.ds-course-text b{font-size:16px}}@media(prefers-reduced-motion:reduce){.ds-course,.ds-cover{animation:none!important;transition:none!important;scroll-behavior:auto!important}}"
+    },
+    {
+      "name": "Строка урока с доступом",
+      "kind": "custom",
+      "refersTo": "lesson-row",
+      "description": "Публичное название без тела урока. Моноширинные uppercase-метаданные — остаточный каскад, не новая норма.",
+      "html": "<button class=\"ds-lesson\" type=\"button\"><span class=\"ds-lesson-number\">1</span><span class=\"ds-lesson-text\"><b>Как разговаривать с нейросетью</b><span class=\"ds-lesson-meta\"><span>8 мин</span><span class=\"ds-access ds-access-free\">открыт</span></span></span></button>",
+      "css": ".ds-lesson{font-family:var(--body,\"Golos Text\",system-ui,-apple-system,sans-serif);cursor:pointer;border:0;background:none;touch-action:manipulation;color:var(--ink,#202421);width:100%;text-align:left;display:grid;grid-template-columns:30px minmax(0,1fr);align-items:flex-start;gap:12px;padding:18px 0;background:var(--bg,#FFF);border:0;border-bottom:1px solid var(--line,#E8EAE5);border-radius:0;box-shadow:none;animation:none;transition:transform .14s var(--ease,cubic-bezier(.22,.9,.28,1)),border-color .2s}.ds-lesson:hover{border-color:var(--line2,#DADDD6)}.ds-lesson:active{transform:scale(.985)}.ds-lesson:focus-visible{outline:2px solid var(--brand,#3154C8);outline-offset:3px;}.ds-lesson-number{display:grid;place-items:center;width:30px;height:30px;min-width:30px;border-radius:50%;font-size:12px;margin-top:1px;background:var(--card,#F5F5F3);color:var(--soft,#60665F)}.ds-lesson-text{display:flex;flex-direction:column;gap:2px;min-width:0}.ds-lesson-text b{font-size:17px;font-weight:600;line-height:1.35;letter-spacing:-.01em}.ds-lesson-locked b{color:var(--soft,#60665F)}.ds-lesson-meta{display:flex;flex-wrap:wrap;align-items:center;gap:5px 8px;font-family:var(--mono,\"JetBrains Mono\",ui-monospace,monospace);font-size:12px;letter-spacing:.07em;text-transform:uppercase;margin-top:8px;white-space:normal;color:var(--faint,#697067)}.ds-access{position:static;flex:none;margin-left:auto;margin-top:3px;border-radius:6px;padding:5px 7px;max-width:85px;font-family:var(--mono,\"JetBrains Mono\",ui-monospace,monospace);font-size:10px;line-height:1.3;letter-spacing:.09em;text-transform:uppercase;white-space:normal}.ds-access-free{background:var(--okS,#E9F2EC);color:var(--ok,#2A7454)}.ds-access-done{background:var(--brandS,#EDF1FF);color:var(--brand,#3154C8)}.ds-access-lock{background:transparent;border:1px solid var(--line2,#DADDD6);letter-spacing:0;color:var(--faint,#697067)}@media(max-width:380px){.ds-access{margin-left:0}}@media(prefers-reduced-motion:reduce){.ds-lesson{animation:none!important;transition:none!important;scroll-behavior:auto!important}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Небольшая цветная библиотека практических задач",
+    "overview": "Библиотека узнаётся по плоским пастельным обложкам, синему действию и ясному русскому набору Golos Text. Светлая бумага, тёмный текст и тонкие разделители удерживают плотность небольшого приложения; цвет помогает различать направления, а не заменяет учебный материал. Это спокойные, понятные элементы с заметными зонами нажатия.\n\nДокумент описывает текущую публичную реализацию index.html: поздние объявления, специфичность селекторов, наследование и разметка имеют приоритет перед намерениями. PRODUCT.md задаёт устойчивые ограничения; композиция первой страницы и последовательность экранов остаются в .impeccable/surfaces/mini-app.md. Здесь нет текстов закрытых уроков, закрытых проверочных заданий или материалов частной тестовой копии.",
+    "keyCharacteristics": [
+      "Одна центрированная колонка, рассчитанная на чтение и нажатия в Telegram WebView.",
+      "Шесть пар пастельной обложки и цветных чернил; синий выделяет основные действия.",
+      "Крупный Golos Text для заголовков и спокойный основной текст; моноширинный шрифт остаётся вспомогательным.",
+      "Плоские поверхности, мягкие углы и тонкие линии; движение привязано к локальному состоянию."
+    ],
+    "rules": [
+      {
+        "name": "The Cover Pair Rule",
+        "body": "Пастель обложки и её цветные чернила образуют пару конкретного направления; не подменяйте их старыми цветами значков c1–c6.",
+        "section": "colors"
+      },
+      {
+        "name": "The Reading Rhythm Rule",
+        "body": "Основной текст урока использует reading, заголовки внутри урока — reading-heading; длинный обычный запрос остаётся в Golos Text.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Library Rule",
+        "body": "Обложки, карточка следующего урока, подсказки и основные учебные контейнеры не получают внешнюю тень; разделение создают цвет, поля и линии.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do сохранять имена действующих CSS-переменных и проверять обе темы по итоговому каскаду.",
+      "Do сохранять пары обложки и чернил и настоящие SVG-пути из встроенного набора.",
+      "Do сохранять двухколоночную строку урока: номер отдельно, название и доступ в общей текстовой колонке.",
+      "Do оставлять кнопку возврата к началу урока в его нижней части, в обычном потоке документа.",
+      "Do сохранять читаемый текст, явные состояния доступа и локальную обратную связь с учётом reduced motion."
+    ],
+    "donts": [
+      "Don't возвращать декоративные вводные надписи над заголовками главной или цветную полосу слева у подсказки.",
+      "Don't переносить старые глифы-значки, мелкие прописные подписи и оставшиеся кикеры в новые компоненты как фирменный приём.",
+      "Don't масштабировать или сдвигать весь экран при навигации; правила кнопки возврата относятся к кнопке.",
+      "Don't превращать слайд-шоу, чужой кабинет или метафору ноутбука в визуальный язык библиотеки.",
+      "Don't считать отсутствие concept-seed или QUALITY BAR выполнением процесса, а документацию — подтверждением визуального аудита."
+    ]
+  }
+}
