@@ -831,16 +831,179 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
 
 :root:not([data-n="1"]) .shelf{mix-blend-mode:multiply}
 
+/* PREMIUM LIBRARY: canonical visual layer, 2026-09-15 */
+:root,:root[data-n="1"]{
+ --bg:#fff;--card:#f5f6f8;--ink:#20232b;--soft:#656b78;--faint:#69707c;
+ --brand:#315ee7;--line:#e9ebef;--line2:#d9dfe8;--sans:'Golos Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+ --hub-mint:#e6f4ed;--hub-mint-ink:#1b5142;--hub-lilac:#eeebfa;--hub-lilac-ink:#4c3980;
+ --hub-peach:#fff0e0;--hub-peach-ink:#79441e;--hub-blue:#eaf0ff;--hub-blue-ink:#244988;
+ --pk-radius:22px;--pk-action:#315ee7;--pk-shadow:0 8px 28px #233d6510;
+ --scroll-thumb:#bbc3d1;--scroll-hover:#8291a9;--scroll-active:#5b6c89;
+ color-scheme:light;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.app{max-width:580px;padding:10px 22px calc(36px + env(safe-area-inset-bottom));background:var(--bg)}
+button,input,select,textarea{font-family:var(--sans)}
+button,a,input,select,summary{ -webkit-tap-highlight-color:transparent}
+button:active,.item:active,.row:active,.book-course:active{transform:none!important}
+.view.on,.view.on.back{animation:none!important;transform:none!important;filter:none;opacity:1!important}
+.tp{padding:8px 0 15px;gap:10px;border-color:var(--line)}
+.home-brand b{font-weight:600;letter-spacing:-.3px;font-size:15px}
+.home-brand .mk{background:#315ee7;color:white;border-radius:13px;box-shadow:none;width:36px;height:36px}
+.section-nav{gap:5px;padding:14px 0 13px;margin-right:-2px}
+.section-nav button{min-height:44px;padding:0 12px;font-size:13px;border-radius:12px;color:var(--soft);white-space:nowrap}
+.section-nav button[aria-current="page"]{background:var(--ink);color:#fff}
+.back{min-height:44px;color:var(--soft);font-size:13px;margin:6px 0;padding:10px 0}
+.pk-eyebrow{display:block;font-size:10px!important;font-weight:650;letter-spacing:1.1px;line-height:1.6;color:inherit}
+.home-intro{padding:27px 0 24px}.home-intro .pk-eyebrow{color:var(--brand);margin-bottom:12px}
+.home-intro h1{font-size:37px;line-height:1.13;letter-spacing:-1.4px;font-weight:650;margin:0}
+.home-intro h1 em{font-style:normal;color:var(--brand)}.home-intro p{font-size:14px;line-height:1.5;margin:13px 0 0;color:var(--soft)}
+.pk-library{display:flex;flex-direction:column;position:relative;isolation:isolate;overflow:hidden;width:100%;background:#eaf0ff;color:#23396d;border:1px solid #dde5fa;border-radius:25px;text-align:left;padding:23px 22px 0;min-height:338px}
+.pk-card-copy{position:relative;z-index:1}.pk-card-copy .pk-eyebrow{font-size:9px!important;color:#496398;letter-spacing:.85px}
+.pk-card-copy strong{display:block;font-weight:650;font-size:29px;line-height:1.13;letter-spacing:-.9px;margin:10px 0 9px}
+.pk-card-copy small{display:block;font-size:12px;line-height:1.55;color:#496087}
+.pk-library>img{position:relative;pointer-events:none;align-self:flex-end;width:72%;height:166px;margin:-7px -4px -8px 0;object-fit:contain;z-index:0}
+.pk-card-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:1;background:#eaf0ff;border-top:1px solid #d5dff5;margin:0 -22px;padding:14px 17px;font-size:11px;line-height:1.5;color:#405887}
+.pk-card-bottom b{font-size:12px;display:flex;align-items:center;gap:12px;font-weight:600;color:#274eb4}.pk-card-bottom b span{font-size:21px}
+.pk-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:14px}
+.pk-action{border-radius:22px;overflow:hidden;display:flex;flex-direction:column;text-align:left;padding:10px 17px 20px;min-width:0;border:1px solid #00000003}
+.pk-prompts{background:var(--hub-lilac);color:var(--hub-lilac-ink)}.pk-practice{background:var(--hub-peach);color:var(--hub-peach-ink)}
+.pk-action>img{display:block;width:118px;height:108px;object-fit:contain;margin:0 auto 5px;pointer-events:none}
+.pk-action strong{display:flex;justify-content:space-between;align-items:center;gap:6px;font-weight:650;font-size:21px;letter-spacing:-.5px;line-height:1.3}
+.pk-action strong span{font-weight:400;font-size:21px}.pk-action small{font-size:12px;line-height:1.55;margin-top:6px;opacity:.88}
+.hub-tools{margin:29px 0 0}.hub-tools h2{color:var(--ink);font-size:18px;font-weight:600;letter-spacing:-.3px;margin:0 0 6px}
+.utility-row{min-height:84px;gap:13px;padding:14px 0}.utility-row>span:first-child{width:43px;height:43px;border-radius:13px;background:var(--hub-blue);color:var(--hub-blue-ink)}
+.utility-row:nth-of-type(2)>span:first-child{background:var(--hub-mint);color:var(--hub-mint-ink)}
+.utility-row b{font-size:15px}.utility-row small{font-size:12px;line-height:1.5;margin-top:3px}.utility-row i{font-size:21px;color:#70798a}
+.pk-membership{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:21px 18px;margin-top:25px;border-radius:18px;background:#252e48;color:white}
+.pk-membership>span{flex:1}.pk-membership small{display:block;font-size:9px;font-weight:500;letter-spacing:.9px;color:#b4c3eb;margin-bottom:7px}.pk-membership b{display:block;font-size:16px;line-height:1.4;font-weight:550}.pk-membership span span{display:block;font-size:12px;color:#c5cce0;margin-top:7px}.pk-membership i{font-style:normal;font-size:24px}
+.home-footer{margin-top:12px}.home-footer button{font-size:12px;color:var(--soft);min-height:48px}.home-footer button span{padding-left:4px}
+.resume-row{background:#f5f7fc;border:1px solid #e7ebf4;border-radius:14px;padding:13px;margin:0 0 17px;color:var(--ink)}.resume-row small{font-size:10px}.resume-row b{font-size:13px;line-height:1.45}.resume-row>span:first-child{color:var(--brand)}
+/* Section openers share illustration, typography and generous reading space. */
+.pk-section{display:grid;grid-template-columns:minmax(0,1fr) 112px;align-items:center;gap:3px;padding:22px 18px!important;margin:9px 0 23px;border-radius:22px;min-height:164px}
+.pk-section>div{min-width:0}.pk-section .pk-eyebrow{font-size:9px!important;letter-spacing:.85px}
+.pk-section h1{font-size:32px;line-height:1.12;letter-spacing:-1px;margin:8px 0 11px;font-weight:650}
+.pk-section p{font-size:13px;line-height:1.6;color:inherit;opacity:.85;margin:0;max-width:30ch}
+.pk-section>img{display:block;width:125px;max-width:none;height:125px;object-fit:contain;pointer-events:none}
+.pk-books{background:var(--hub-blue);color:var(--hub-blue-ink)}.pk-connection{background:var(--hub-mint);color:var(--hub-mint-ink)}
+.pk-small-title{margin:23px 0 22px}.pk-small-title .pk-eyebrow{color:var(--brand);font-size:9px!important}.pk-small-title h1{font-size:32px;line-height:1.15;letter-spacing:-1px;margin:10px 0}.pk-small-title p{font-size:14px;line-height:1.6;color:var(--soft)}
+.big{font-size:30px!important;line-height:1.16;letter-spacing:-.9px;font-weight:650;margin:20px 0 15px}
+.sh{font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:0;color:var(--ink);text-transform:none;margin:25px 0 12px}
+/* Library and course programmes. */
+#secs{gap:28px 15px;margin-top:18px}.book-art{border-radius:20px;box-shadow:0 3px 10px #263b6410;border:1px solid #e9ebef}
+.book-copy{gap:7px;padding:14px 2px 0}.book-copy strong{font-size:21px;line-height:1.17;letter-spacing:-.65px;font-weight:650;overflow-wrap:normal}
+.book-copy>span:not(.book-open){font-size:12px;line-height:1.55;min-height:4.7em;color:var(--soft)}.book-copy small{font-size:10px;line-height:1.5;color:#697184;margin-top:5px}
+.book-open{border-radius:11px;min-height:44px;background:#f1f4fb!important;color:#36578b!important;font-size:12px;font-weight:600;padding:10px 12px;margin-top:6px}
+.filter-status{font-size:12px!important;color:var(--soft)}.library-note{line-height:1.7;margin-top:27px;font-size:12px}
+#sec-head{border-radius:21px 21px 0 0;padding:22px 22px 6px!important;background:var(--lesson-tint)!important;color:var(--lesson-accent);margin:10px 0 0}
+#sec-head .k{color:var(--lesson-accent);font-size:9px!important;font-family:var(--sans);letter-spacing:1px}
+#sec-head h1{font-size:32px!important;font-weight:650;margin:9px 0 12px;line-height:1.12;letter-spacing:-1px}
+#sec-overview{padding:0}.pk-course-summary{display:grid;grid-template-columns:126px minmax(0,1fr);gap:15px;align-items:center;padding:6px 18px 22px;background:var(--lesson-tint);color:var(--lesson-accent);border-radius:0 0 21px 21px}
+.course-detail-book{float:none!important;width:126px;height:126px;margin:0!important;border-radius:17px;object-fit:cover;box-shadow:0 6px 18px #19324b13}
+.pk-course-summary p{font-size:14px;line-height:1.5;margin:0 0 12px!important}.pk-course-count{display:inline-block;background:#ffffffb8;border-radius:6px;padding:4px 7px;font-size:10px;font-weight:550;margin:0 4px 5px 0;color:#374757}
+.pk-outcomes{margin:9px 0 0!important}.pk-outcomes summary{font-size:14px;padding:15px 2px;min-height:52px}
+.pk-setup-row{display:flex;align-items:center;gap:12px;padding:14px;width:100%;text-align:left;border-radius:14px;background:var(--card);margin:10px 0 21px;color:var(--ink)}
+.pk-setup-row>span:first-child{width:35px;color:var(--brand)}.pk-setup-row>span:nth-child(2){flex:1}.pk-setup-row b{display:block;font-size:13px;font-weight:600}.pk-setup-row small{display:block;font-size:11px;color:var(--soft);margin-top:4px}.pk-setup-row i{font-style:normal;font-size:21px;color:var(--soft)}
+.module-title{font-size:16px;margin:29px 0 12px;letter-spacing:-.2px;display:flex;align-items:center;gap:10px}.module-title:before{content:'';width:5px;height:17px;border-radius:2px;background:var(--lesson-accent);opacity:.7}
+#sec-list .les{background:var(--bg)!important;border:1px solid var(--line);border-radius:16px;grid-template-columns:34px minmax(0,1fr) 20px;gap:12px;padding:18px 13px;margin-bottom:10px;box-shadow:0 2px 5px #222f4910}
+.lesson-number{background:var(--lesson-tint)!important;border:0;color:var(--lesson-accent)!important;width:34px;height:38px;border-radius:11px;font-weight:600;font-size:15px}
+#sec-list .tx b{font-size:15px;font-weight:600;line-height:1.45}.item.les .meta{font-family:var(--sans);font-size:11px;margin-top:7px;line-height:1.5;color:var(--soft)}
+.lesson-arrow{color:var(--soft);font-size:18px}.lesson-arrow .ui-icon{width:16px;height:16px}.les.shut{opacity:1}
+/* A lesson is a readable workbook, with visual diagrams and a deliberate next action. */
+#l-head{background:var(--lesson-tint)!important;color:var(--lesson-accent);padding:23px 22px!important;border-radius:22px;margin:10px 0 0}
+#l-head h1{font-size:29px!important;line-height:1.2;letter-spacing:-.9px;font-weight:650;color:inherit;margin:12px 0 14px}
+#l-head .k{font-family:var(--sans);font-size:10px!important;letter-spacing:.6px;color:inherit}#l-head .lmin{font-family:var(--sans);font-size:11px;text-transform:none;letter-spacing:0;color:inherit;opacity:.85;margin:0 0 4px}
+#l-head .fav{border-radius:11px;width:44px;height:44px;min-height:44px;background:#ffffffb5;color:var(--lesson-accent);margin:14px 6px 0 0;display:inline-grid;place-items:center;border:1px solid #ffffff80;font-size:23px}
+#l-head .fav[aria-pressed=true]{background:var(--lesson-accent);color:white}.fav .ui-icon{width:20px;height:20px}
+.lesson-result{padding:23px 3px 22px}.lesson-result>span{font-size:10px;font-weight:650;letter-spacing:.75px;text-transform:uppercase;color:var(--lesson-accent)}.lesson-result>p{font-size:16px;line-height:1.65;margin:8px 0 0;color:var(--ink)}
+.toc{margin:0 0 24px;background:#f7f8fa;border:1px solid var(--line);border-radius:14px}.toc summary{padding:16px;min-height:52px;font-size:14px;font-weight:600}.toc a{min-height:44px;line-height:1.5;font-size:13px;color:var(--soft)}
+.prose{display:flex;flex-direction:column;gap:18px;padding:0;color:var(--ink);font-size:16px;line-height:1.75}
+.prose>p{margin:0!important;font-size:16px;line-height:1.75;color:#424957}.prose>ul,.prose>ol{margin:0;padding-left:23px}.prose li{font-size:15px;line-height:1.75;margin:7px 0;color:#424957}
+.prose h4{margin:20px 0 0;font-size:23px;font-weight:650;line-height:1.3;letter-spacing:-.55px;scroll-margin-top:26px;color:var(--ink)}.prose h5{font-size:17px;line-height:1.45;letter-spacing:-.25px}
+.prose a{color:var(--brand);overflow-wrap:anywhere;text-underline-offset:4px}.prose strong,.prose b{font-weight:600;color:var(--ink)}
+.fig.steps{border-radius:20px;padding:22px 20px;background:var(--lesson-tint);color:var(--lesson-accent);margin:10px 0;border:1px solid #00000004}
+.fig.steps figcaption{font-size:18px;line-height:1.4;font-weight:650;letter-spacing:-.35px;color:var(--lesson-accent);margin-bottom:18px;text-transform:none;font-family:var(--sans)}
+.fig.steps .fl{display:flex;flex-direction:column;gap:0}.fig.steps .st{position:relative;display:flex;flex-direction:row;gap:13px;padding:0 0 20px;margin:0;border:0;background:none;align-items:flex-start}
+.fig.steps .st:not(:last-child):before{content:'';position:absolute;left:15px;top:32px;bottom:0;width:1px;background:currentColor;opacity:.17}.fig.steps .st:last-child{padding-bottom:0}
+.fig.steps .st i{display:grid;place-items:center;font-style:normal;font-size:12px;font-family:var(--sans);width:31px;height:31px;background:#ffffffbf;color:var(--lesson-accent);border-radius:10px;flex:none;box-shadow:0 2px 4px #152c3210}
+.fig.steps .st b{display:block;font-size:15px;line-height:1.4;color:var(--lesson-accent);font-weight:600;margin:4px 0 5px}.fig.steps .st span{font-size:13px;line-height:1.6;display:block;color:var(--lesson-accent);opacity:.92}.fig.steps .st:after{display:none}
+.fig.compare,.fig.scale{border-radius:18px;padding:20px;background:var(--card);color:var(--ink)}
+.tip{font-size:14px;line-height:1.7;padding:18px 19px;border:1px solid #e7eaf2;border-left:3px solid #6a84bf;background:#f4f6fb;color:#43516c;border-radius:0 14px 14px 0;margin:5px 0}
+.pbox{background:#f7f5ff;border:1px solid #e4dff6;border-radius:18px;margin:7px 0;box-shadow:none}.pbox .ph{padding:12px 15px;background:#ece6fb;align-items:center;gap:12px;border-bottom:1px solid #e0d8f4}.pbox .ph>span{color:#56477b;font-family:var(--sans);font-size:11px;line-height:1.55;text-transform:none;letter-spacing:0}
+.pbox pre,.prc pre{font-family:var(--sans);font-size:14px;line-height:1.8;background:#f7f5ff;color:#413951;padding:20px;white-space:pre-wrap;overflow-wrap:anywhere;margin:0}
+.pbox .cb{background:white;color:#534080;border:1px solid #ded5f1;font-size:11px;padding:10px 12px;min-height:44px;border-radius:9px;font-weight:550;text-transform:none}.cb.main{background:var(--brand);color:white;border-radius:10px;min-height:44px;padding:10px 15px}
+.worked-result{background:#edf5ff;border:1px solid #e0eafb;color:#264365;padding:21px;border-radius:18px;margin:7px 0;gap:13px}.worked-result>span{width:26px;height:26px;display:grid;place-items:center;border-radius:8px;background:#daeaff}.worked-result .ui-icon{width:17px;height:17px}.worked-result h5{color:#264365;font-size:16px;font-weight:650;margin:0 0 9px}.worked-result p{font-size:14px;line-height:1.8;color:#42546b!important}
+.practice-invite{background:var(--hub-peach);color:var(--hub-peach-ink);padding:23px;border:1px solid #f4e2cb;margin:13px 0;border-radius:20px}.practice-invite h4{color:var(--hub-peach-ink);font-size:25px;font-weight:650;margin:10px 0}.practice-invite p{font-size:14px;color:var(--hub-peach-ink);line-height:1.65;margin:0 0 18px}.practice-invite .study-go{background:#774a28;color:#fff}
+.lesson-practice{background:var(--hub-mint);color:var(--hub-mint-ink);border:1px solid #cfe7db;border-radius:19px;padding:22px;margin:9px 0}.lesson-practice h4{font-size:22px;margin:0 0 12px;color:var(--hub-mint-ink)}.lesson-practice p{color:var(--hub-mint-ink)!important;font-size:14px;line-height:1.75}
+.lesson-practice label{padding:13px 0;min-height:48px;gap:11px;font-size:14px;line-height:1.65;border-top:1px solid #bfdccc}.lesson-practice input{accent-color:#277258;width:20px;height:20px;margin-top:3px}.lesson-practice label:has(input:checked) span{color:#547768}.lesson-practice small{color:#4b6e5f;font-size:11px;line-height:1.7}
+.study-go,.buy2{background:var(--pk-action);color:#fff;border:0;border-radius:12px;min-height:49px;padding:13px 18px;font-size:14px;line-height:1.45;font-weight:600;box-shadow:none;transform:none!important}.buy2{display:flex;justify-content:center;align-items:center;gap:15px;width:100%}
+.quiet{font-size:13px;color:var(--brand);min-height:44px}.load-more{border:1px solid var(--line2);background:var(--bg);color:var(--ink);min-height:48px;border-radius:13px;font-size:13px;padding:13px 16px;margin:19px 0}
+.foot{font-family:var(--sans);font-size:11px;line-height:1.7;color:var(--soft);margin:24px 0 0}
+.tst{border:1px solid #dce5f6;border-radius:20px;overflow:hidden;background:#f7f9fe;margin:6px 0}.tst .th{background:#eaf0ff;color:#355282;border:0;padding:15px 18px}.tst .tb{padding:20px}.tst .tb button{min-height:46px;font-family:var(--sans);border-radius:11px;line-height:1.55}.tst .tb .sel{background:#e3eaff!important;color:#24428b!important;border-color:#6989d5!important}
+.tst .tb p,.tst .tb h4{line-height:1.6;color:var(--ink)}.tst .th b{font-size:12px}.tst .tb button:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.course-finish{background:var(--hub-mint);color:var(--hub-mint-ink);border-radius:20px;padding:23px;margin:25px 0}.course-finish h3{font-size:23px;line-height:1.3}.course-finish p{font-size:14px;line-height:1.7}
+/* Prompts and practice have separate catalogues and a shared control language. */
+.prompt-select{margin:20px 0 13px;color:var(--soft);font-size:12px}.prompt-select select{min-height:50px;border-radius:13px;background:#fff;border:1px solid #dce1eb;color:var(--ink);padding:12px 14px;font-size:15px;margin-top:7px}
+.prompt-query{background:#f7f8fb;border:1px solid #e0e5ee;min-height:49px;font-size:15px;border-radius:13px}.prompt-search label{font-size:12px}.list-status{font-size:11px;margin:13px 0 18px;line-height:1.6;color:var(--soft)}
+.prompt-group .sh{font-size:17px;line-height:1.5;font-weight:600;letter-spacing:-.3px;margin:27px 0 13px}
+.prc{border:1px solid #e4e5ed;border-radius:15px;overflow:hidden;margin-bottom:10px;box-shadow:0 2px 4px #1f263804;background:#fff}.prc .hd{padding:17px 13px;gap:12px;min-height:84px;align-items:flex-start}
+.prc .k{width:33px;height:37px;flex:none;border-radius:10px;background:var(--hub-lilac);color:var(--hub-lilac-ink)}.prc .tt b{font-size:14px;line-height:1.5;font-weight:550}.prc .tt>span{font-size:10px;line-height:1.5;color:var(--soft);margin-top:5px}.prc .ch{font-size:20px;color:var(--soft);padding-top:3px}.prc .hd[aria-expanded=true]{background:#f2eefc}.prc .hd[aria-expanded=true] .ch{transform:rotate(90deg)}
+.prc .body{border-top:1px solid #e5dff2;padding:0}.prc pre{padding:20px 17px;font-size:14px}.prc .acts{padding:14px 16px;background:#fff;border-top:1px solid #e7e2f2}.prc .acts button{font-size:12px}.prc .acts .quiet{color:var(--brand);padding:10px}
+.exercise-card{border:1px solid var(--line);border-radius:17px;padding:18px 40px 18px 17px;margin:0 0 12px;background:#fff;box-shadow:0 2px 5px #14253907}.exercise-top{margin-bottom:11px}.exercise-top>span{font-size:10px;font-weight:550;border-radius:6px;padding:4px 8px}.exercise-top small{font-size:10px}.exercise-card strong{font-size:17px;line-height:1.4;letter-spacing:-.25px}.exercise-card>span:not(.exercise-top){font-size:12px;line-height:1.65;margin-top:7px}.exercise-card>i{right:14px;top:46%;font-style:normal}
+.exercise-heading{background:var(--hub-peach);color:var(--hub-peach-ink);padding:24px 22px;border-radius:22px;margin:10px 0 25px}.exercise-heading>span{font-size:10px;line-height:1.5}.exercise-heading h1{font-size:28px;line-height:1.22;letter-spacing:-.8px;margin-top:12px}
+.exercise-steps{gap:6px}.exercise-steps span{font-size:10px;border:1px solid var(--line);background:#fff;padding:8px 9px;border-radius:8px;color:var(--soft)}
+.practice-prompt{border:1px solid #e1daef;border-radius:16px;background:#f5f1fc;margin:5px 0}.practice-prompt summary{font-size:14px;line-height:1.6;min-height:58px;padding:17px;color:#4e387c}.practice-prompt .pbox{border:0}.practice-prompt .pbox pre{padding:18px;font-size:14px}.detail-actions{display:grid;grid-template-columns:1fr;gap:9px;margin:24px 0}.detail-actions button{border:1px solid var(--line2);border-radius:12px;background:#fff;font-size:13px;text-align:center}
+.practice-lock{padding:24px;background:#f4f6fc;border:1px solid #e3e8f4;border-radius:18px}.practice-lock h2{font-size:22px;line-height:1.3}.practice-lock p{font-size:14px;line-height:1.7;color:var(--soft)}
+/* Connection and registration are their own handbooks. */
+.utility-hero{display:grid;grid-template-columns:minmax(0,1fr) 105px;gap:0 10px;align-items:center;padding:24px 20px;overflow:visible;margin:12px 0 26px;min-height:184px}
+.pk-access-art{grid-column:2;grid-row:1 / 4;width:115px;height:135px;object-fit:contain;pointer-events:none}.utility-hero>span{grid-column:1;font-size:9px!important;letter-spacing:.8px}.utility-hero h1{grid-column:1;font-size:29px;line-height:1.15;letter-spacing:-.85px;max-width:none;margin:11px 0 12px;font-weight:650}.utility-hero p{grid-column:1;font-size:12px;line-height:1.65;margin:0}
+.utility-note{border:0;border-radius:16px;padding:19px;background:#f5f7fb;margin:23px 0}.utility-note b{font-size:14px;font-weight:600}.utility-note p{font-size:13px;line-height:1.75;margin:8px 0 0;color:#616978}
+.device-tabs{margin:22px 0 25px;border-radius:14px;background:#f2f4f8;padding:5px;border:1px solid #e4e8f0;gap:4px}.device-tabs button{min-height:44px;font-size:12px;border-radius:10px;color:var(--soft)}.device-tabs button[aria-pressed=true]{background:#fff;color:#244b9d;box-shadow:0 2px 6px #1d3b6c12;font-weight:600}
+.subhead{font-size:23px;line-height:1.3;letter-spacing:-.5px;margin:25px 0 21px}
+.numbered-guide>li{padding:0 0 28px 44px}.numbered-guide>li:before{width:30px;height:32px;border:0;border-radius:10px;background:var(--hub-blue);color:var(--hub-blue-ink);font-size:12px;font-weight:600}.numbered-guide b{font-size:15px;line-height:1.5}.numbered-guide p{font-size:14px;line-height:1.75;color:#606978;margin:8px 0}.numbered-guide a{font-size:13px;line-height:1.55}
+.connection-map{padding:20px 15px;border-radius:16px;background:#eef4fc;border:1px solid #e0e8f5}.connection-map b{font-size:14px;color:#334e78}.connection-map small{font-size:11px;margin-top:5px;color:#61718b}
+.source-fold{margin:10px 0;border-top:1px solid var(--line);padding:0}.source-fold summary{padding:17px 3px;font-size:14px;line-height:1.6;min-height:54px;color:var(--ink)}.source-fold p,.source-fold li{font-size:14px;line-height:1.75;color:var(--soft)}.source-fold[open]{padding-bottom:12px}.source-fold a{font-size:13px;min-height:44px;line-height:1.65;padding:9px 0;color:var(--brand)}
+.provider-card{border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--pk-shadow);gap:14px}.provider-mark{background:var(--hub-lilac);color:var(--hub-lilac-ink);width:48px;height:48px;border-radius:13px;font-size:11px}.provider-card h2{font-size:23px;letter-spacing:-.5px}.provider-card p{font-size:12px;line-height:1.6}.provider-card .study-go{margin-top:9px}
+.setup-steps>ol{padding-left:23px}.setup-steps li{font-size:15px;line-height:1.75;padding-bottom:17px}.setup-steps h4{margin-top:16px}.setup-links{gap:8px}.setup-links button{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:13px 16px;font-size:13px}.signup-guide{border:1px solid var(--line2);border-radius:15px;background:#fff}.signup-guide summary{font-size:15px}
+/* Profile, subscription, saved material and secondary screens. */
+.pcard{padding:21px 19px;margin:0 0 13px;background:#f0f4fc;border:1px solid #e3e9f5;border-radius:20px;display:flex;gap:15px;align-items:center;min-height:93px}
+.pcard .av{width:49px;height:49px;border-radius:16px;background:#d8e4ff;color:#355494;display:grid;place-items:center}.pcard b{font-size:20px;line-height:1.3;letter-spacing:-.4px;color:var(--ink)}.pcard span span{font-size:11px;line-height:1.6;margin-top:5px;color:var(--soft)}
+.row.status{width:100%;margin:0;padding:17px 16px;border:1px solid #dce6de;background:#edf5ee;border-radius:17px;gap:12px;min-height:76px}.row.status .tx b{font-size:15px;color:#335f43}.row.status .tx span{font-size:11px;color:#5b7362}
+.grp{border:1px solid var(--line);border-radius:18px;background:#f8f9fb;box-shadow:none}.grp .row{padding:17px 15px;min-height:78px;gap:13px}.row .tx{min-width:0;flex:1}.row .tx b{font-size:14px;line-height:1.45;font-weight:550;letter-spacing:-.1px}.row .tx>span{font-size:11px;line-height:1.6;margin-top:4px;color:var(--soft)}.row .ch{font-size:21px;color:#8a92a0}.ic.sm{border-radius:11px;width:36px;height:38px;font-size:17px;box-shadow:none}.ic .ui-icon{width:19px;height:19px}
+.sw{width:48px;height:44px;min-height:44px;border-radius:0;background:transparent!important;position:relative;padding:0}.sw:before{content:'';position:absolute;width:44px;height:26px;top:9px;left:2px;border-radius:20px;background:var(--brand)}.sw.off:before{background:#cbd2df}.sw i{top:12px;left:23px;width:20px;height:20px;background:#fff;box-shadow:0 1px 3px #24334e20}.sw.off i{left:5px}
+.pk-pay-hero{position:relative;border-radius:23px;padding:25px 23px 0;background:#eaf0ff;color:#243968;overflow:hidden;margin:10px 0 25px}.pk-pay-hero .pk-eyebrow{font-size:9px!important;color:#526b9b}.pk-pay-hero h1{font-size:33px;font-weight:650;line-height:1.13;letter-spacing:-1px;margin:12px 0}.pk-pay-hero p{font-size:14px;line-height:1.65;margin:0;color:#526489}.pk-pay-hero img{display:block;width:90%;height:190px;object-fit:contain;margin:6px auto 0;pointer-events:none}
+.acc2{padding:23px 21px;border-radius:19px;border:1px solid #dbe3f5;background:#f6f8ff;margin:20px 0;box-shadow:none;color:var(--ink)}.pline{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 13px}.pline .pnum{font-size:36px;font-weight:650;letter-spacing:-1.3px;line-height:1.2;color:var(--ink)}.pline>span:not(.pnum){font-size:12px;color:var(--soft)}.acc2 .buy2{margin:17px 0 14px}.acc2 ul{padding-left:20px;font-size:14px;line-height:1.7}
+.access-benefits{padding:0!important;list-style:none;margin:0}.access-benefits li{padding:14px 0 14px 39px;position:relative;margin:0;border-bottom:1px solid var(--line)}.access-benefits li:before{content:'✓';position:absolute;left:0;top:17px;width:25px;height:25px;display:grid;place-items:center;border-radius:8px;background:#e4f2e9;color:#276746;font-size:13px;font-weight:600}.access-benefits li b{display:block;font-size:15px;font-weight:600}.access-benefits li span{display:block;font-size:12px;line-height:1.6;color:var(--soft);margin-top:5px}
+.promise{background:#f6f7f9;border:1px solid var(--line);padding:20px;border-radius:17px}.promise>b{display:block;font-size:15px;font-weight:600;color:var(--ink)}.promise>p{font-size:13px;line-height:1.8;margin:8px 0 20px;color:var(--soft)}.promise>p:last-child{margin-bottom:0}
+.nums{grid-template-columns:repeat(2,1fr);gap:10px;margin:17px 0}.nums>div{background:#f2f5fc;border:1px solid #e8edf7;border-radius:15px;padding:18px}.nums b{font-size:28px;color:#365188;letter-spacing:-.6px}.nums span{font-size:11px;line-height:1.6;color:var(--soft)}
+.route-row{border:1px solid var(--line);background:#fff;border-radius:15px;min-height:94px;padding:18px;margin:9px 0;gap:13px}.route-tx b{font-size:18px;letter-spacing:-.3px}.route-tx>span{font-size:12px;color:var(--soft);line-height:1.6;margin-top:6px}.allnews{min-height:48px;font-size:14px;color:var(--brand)}
+.achs{gap:12px}.ach{background:#f8f9fb;border:1px solid var(--line);border-radius:17px;padding:19px}.ach.on{background:#edf5ed;border-color:#dae8db}.ach b{font-size:15px;line-height:1.45}.ach p{font-size:12px;line-height:1.7}.strk{background:#f3f5fa;border:1px solid #e6eaf2;border-radius:15px;padding:18px;color:var(--ink)}
+.nw{border:1px solid var(--line);background:#fff;border-radius:18px;padding:21px;margin-bottom:14px}.nw h3{font-size:20px;line-height:1.35;letter-spacing:-.4px}.nw p{font-size:14px;line-height:1.7;color:var(--soft)}.nw .tag{background:var(--hub-blue);color:var(--hub-blue-ink);border-radius:6px;font-size:10px}
+#fav-out>.item,#recent>.item,#docs>.item{background:#f7f8fb;border:1px solid var(--line);border-radius:15px;margin:10px 0;padding:18px;min-height:78px}.stack>.item .tx b{font-size:15px;line-height:1.45}.stack>.item .tx>span{font-size:12px;line-height:1.6;color:var(--soft)}
+#fav-out>p,#recent>p,#sr-hint{border-radius:17px;background:#f5f7fc;border:1px solid #e7ebf5;padding:22px;font-size:14px;line-height:1.7;color:var(--soft);margin:20px 0}
+.sr-field{border:1px solid var(--line2);background:#f7f8fb;border-radius:14px;min-height:52px;padding:0 13px}.sr-field input{font-size:15px;min-height:52px;color:var(--ink)}#sr-clear{min-width:44px;min-height:44px}.sr-item{border-bottom:1px solid var(--line);padding:18px 0;min-height:72px;font-size:14px}
+.copy-fallback{background:#fff;color:var(--ink);border:1px solid var(--line2);border-radius:19px;box-shadow:0 20px 70px #15264430}.copy-fallback button{min-height:44px}.copy-fallback textarea{font-size:15px;line-height:1.7}
+#app-notice{background:#252e48;color:#fff;border:1px solid #43516d;border-radius:13px;box-shadow:0 8px 25px #17294420;font-size:13px;line-height:1.5}
+.rp{position:fixed;top:0;left:0;right:0;width:100%;height:3px;margin:0;z-index:40;pointer-events:none;background:#edf0f6}.rp i{background:var(--brand)}.up{min-height:46px;border-radius:12px;font-size:12px;background:#f2f5fa;color:var(--soft);box-shadow:none}
+.fig figcaption:before{display:none}.item.les .meta{letter-spacing:0;text-transform:none}.nx .k{font-family:var(--sans);font-size:10px;letter-spacing:0;text-transform:none;color:var(--soft)}.nx b{font-size:15px;line-height:1.4}.nx{margin-top:22px;border-radius:16px;padding:18px;background:#f5f7fb;border:1px solid var(--line)}
+.pk-pay-hero img{height:145px;margin-top:0}.pk-pay-hero{margin-bottom:15px}.pk-pay-hero h1{font-size:31px}.pk-pay-hero p{font-size:13px}.pk-pay-hero+.acc2{margin-top:15px}.ic.i1{background:#e1eafb;color:#315793}.ic.i2{background:#e8e1f8;color:#64488b}.ic.i3{background:#fff0d7;color:#845b21}.ic.i4{background:#e1f1e8;color:#326c54}.ic.i5{background:#e3eff8;color:#396b90}.ic.i6{background:#e9e6f7;color:#62518f}.pcard .av .ui-icon{width:24px;height:24px}
+.prose .cw{background:#f6f7fa;border:1px solid #e1e5ee;border-radius:17px;padding-top:54px;overflow:hidden}.prose .cw:before{content:'УЧЕБНЫЙ ПРИМЕР';position:absolute;top:22px;left:18px;font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing:.7px;color:#677086}.prose .cw pre{background:transparent;color:#424b5c;border:0;padding:17px 18px 22px;margin:0;font-family:var(--sans);font-size:14px;line-height:1.85}.prose .cw .cb{top:8px;right:9px;background:#fff;color:#495c82;border:1px solid #e0e4ed;border-radius:9px;font-size:11px;padding:9px 11px;min-height:44px}
+#v-doc .prose{gap:16px}#v-doc .prose h4{font-size:21px}#v-doc .prose p{font-size:15px;line-height:1.8}#req .row{min-height:65px}#news-all .nw b{font-size:18px;line-height:1.4}#news-all .nw .d{font-size:13px;line-height:1.75;margin-top:8px}#news-all .nw .dt{font-size:10px;color:var(--soft)}
+@media(hover:hover) and (pointer:fine){.pk-library:hover,.pk-action:hover{filter:brightness(.985)}.book-course:hover .book-art img{transform:scale(1.025)}.study-go:hover,.buy2:hover{background:#244fd1;color:white}.practice-invite .study-go:hover{background:#61391c}.grp button.row:hover,.exercise-card:hover{background:#f3f5fa}.section-nav button:hover{background:#f2f4f8}.section-nav button[aria-current=page]:hover{background:var(--ink)}}
+@media(min-width:480px){.pk-library{min-height:308px}.pk-library>img{width:64%;height:175px}.pk-card-bottom{margin-top:0}.pk-section{grid-template-columns:minmax(0,1fr) 150px}.pk-section>img{width:150px;height:150px}.pk-action>img{height:135px;width:150px}.pk-action strong{font-size:24px}.pk-action small{font-size:13px}.pk-course-summary{grid-template-columns:155px 1fr;gap:23px}.course-detail-book{width:155px;height:155px}.pk-course-summary p{font-size:16px}.utility-hero{grid-template-columns:1fr 145px}.pk-access-art{width:145px;height:155px}}
+@media(max-width:380px){.app{padding-left:17px;padding-right:17px}.home-intro h1{font-size:33px;letter-spacing:-1.2px}.pk-library{padding-left:20px;padding-right:20px}.pk-card-copy strong{font-size:27px}.pk-card-bottom{margin-left:-20px;margin-right:-20px;padding-left:15px;padding-right:15px;font-size:10px}.pk-card-bottom b{font-size:11px}.pk-actions{gap:11px}.pk-action{padding:9px 14px 18px}.pk-action strong{font-size:19px}.pk-action>img{width:110px;height:103px}.pk-action small{font-size:11px}.pk-section{grid-template-columns:minmax(0,1fr) 93px;padding:20px 16px!important}.pk-section>img{width:104px;height:113px}.pk-section h1{font-size:29px}.pk-section p{font-size:12px}.book-copy strong{font-size:19px}.book-copy>span:not(.book-open){font-size:12px;min-height:6em}.book-open{font-size:11px;padding:10px}.pk-course-summary{grid-template-columns:108px 1fr;gap:13px;padding:8px 16px 19px}.course-detail-book{width:108px;height:112px}.pk-course-summary p{font-size:13px}.pk-course-count{font-size:9px;padding:4px 5px}.utility-hero{grid-template-columns:minmax(0,1fr) 87px;padding:22px 17px}.pk-access-art{width:98px;height:122px}.utility-hero h1{font-size:26px}#l-head h1{font-size:27px!important}.prose p{font-size:16px}.fig.steps{padding:20px 17px}.pk-pay-hero h1{font-size:30px}.section-nav button{font-size:12px;padding:0 10px}.pcard b{font-size:19px}.grp .row{padding:16px 13px;gap:11px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}.book-course:hover .book-art img{transform:none}}
+@media(forced-colors:active){.pk-library,.pk-action,.pk-section,.pk-membership,.pk-pay-hero,.book-course,.lesson-number,.study-go,.buy2,.sw:before,.sw i{border:1px solid CanvasText}.fig.steps .st:before{background:CanvasText}.pk-membership{background:Canvas;color:CanvasText}}
+
 </style>
 </head>
 <body>
-<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs><symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4h6c2 0 2 1 2 2v14c0-2-2-3-4-3H4zM20 4h-6c-2 0-2 1-2 2v14c0-2 2-3 4-3h4z"/></symbol><symbol id="i-message" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 3V6a2 2 0 0 1 1-2Z"/><path d="M8 9h9M8 13h6"/></symbol><symbol id="i-code" viewBox="0 0 24 24"><path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 3l-4 18"/></symbol><symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="14" rx="4"/><path d="M12 2v4M8 11v2m8-2v2m-8 3h8M1 11v4m22-4v4"/></symbol><symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="m10 8 6 4-6 4Z"/></symbol><symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol><symbol id="i-tools" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><path d="M14 17h7m-3.5-3.5v7"/></symbol><symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14A9 9 0 0 1 10 3a9 9 0 1 0 10 11Z"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0v5l3 3H3l3-3ZM9 21h6"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4Z"/></symbol><symbol id="i-document" viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5Zm9 0v5h5M8 12h8m-8 4h6"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></symbol></defs></svg>
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs><symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4h6c2 0 2 1 2 2v14c0-2-2-3-4-3H4zM20 4h-6c-2 0-2 1-2 2v14c0-2 2-3 4-3h4z"/></symbol><symbol id="i-message" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 3V6a2 2 0 0 1 1-2Z"/><path d="M8 9h9M8 13h6"/></symbol><symbol id="i-code" viewBox="0 0 24 24"><path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 3l-4 18"/></symbol><symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="14" rx="4"/><path d="M12 2v4M8 11v2m8-2v2m-8 3h8M1 11v4m22-4v4"/></symbol><symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="m10 8 6 4-6 4Z"/></symbol><symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol><symbol id="i-tools" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><path d="M14 17h7m-3.5-3.5v7"/></symbol><symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14A9 9 0 0 1 10 3a9 9 0 1 0 10 11Z"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0v5l3 3H3l3-3ZM9 21h6"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4Z"/></symbol><symbol id="i-document" viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5Zm9 0v5h5M8 12h8m-8 4h6"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></symbol><symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol></defs></svg>
 <div class="app">
   <header class="tp">
     <button class="home-brand" data-go="study" aria-label="ИИ без людей — главная"><span class="mk" aria-hidden="true">ии</span><b id="hi">ИИ без людей</b></button>
     <button class="tgl" id="sr-open" title="Поиск" aria-label="Поиск"><svg class="ui-icon" aria-hidden="true"><use href="#i-search"/></svg></button>
     <button class="profile-go" data-go="me" aria-label="Профиль"><svg class="ui-icon" aria-hidden="true"><use href="#i-person"/></svg><span>Профиль</span></button>
-    <button id="tgl" hidden aria-label="Сменить тему">◐</button>
     <span class="uav" id="uav" hidden></span>
   </header><nav class="section-nav" id="section-nav" aria-label="Разделы" hidden><button data-go="route">Уроки</button><button data-go="prompts">Промпты</button><button data-go="practice">Практика</button><button data-go="vpn">VPN</button><button data-go="numbers">Номера</button></nav>
 
@@ -882,17 +1045,18 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
   </div>
 
   <div class="view" id="v-study">
-    <div class="home-intro"><h1>ИИ для ваших задач.</h1><p>Разобраться. Попробовать. Пользоваться.</p></div>
+    <div class="home-intro"><span class="pk-eyebrow">ВАША БИБЛИОТЕКА ИИ</span><h1>Полезные навыки.<br><em>На каждый день.</em></h1><p>От первого запроса до своих решений.</p></div>
     <div id="home-resume" hidden></div>
-    <button class="hub-card hub-books" data-go="route"><span class="hub-kicker">ВАША БИБЛИОТЕКА</span><strong>Уроки</strong><small>Шесть нейросетей.<br>Понятно, с самого начала.</small><span class="hub-arrow" aria-hidden="true">↗</span><span class="shelf" aria-hidden="true"><img src="assets/claude-book.webp" alt="" width="150" height="150"><img src="assets/chatgpt-book.webp" alt="" width="150" height="150"><img src="assets/notebook-book.webp" alt="" width="150" height="150"></span><span class="shelf-label">18 уроков<br>бесплатно</span></button>
-    <div class="hub-pair"><button class="hub-card hub-prompts" data-go="prompts"><span class="section-symbol" aria-hidden="true"><svg class="ui-icon"><use href="#i-message"/></svg></span><strong>Промпты</strong><small>Готовые запросы<br>под вашу задачу</small><span class="hub-arrow" aria-hidden="true">↗</span></button><button class="hub-card hub-practice" data-go="practice"><span class="section-symbol" aria-hidden="true"><svg class="ui-icon"><use href="#i-check"/></svg></span><strong>Практика</strong><small>Попробуйте ИИ<br>на понятных примерах</small><span class="hub-arrow" aria-hidden="true">↗</span></button></div>
-    <section class="hub-tools"><h2>Всё для начала</h2><button class="utility-row" data-go="vpn"><span aria-hidden="true"><svg class="ui-icon"><use href="#i-lock"/></svg></span><span><b>VPN</b><small>Телефон и компьютер</small></span><i aria-hidden="true">→</i></button><button class="utility-row" data-go="numbers"><span aria-hidden="true"><svg class="ui-icon"><use href="#i-message"/></svg></span><span><b>Иностранный номер</b><small>Получить код для регистрации</small></span><i aria-hidden="true">→</i></button></section>
-    <div class="home-footer"><button data-go="news">Что нового →</button><button data-go="pay-all">Полный доступ · 500 ₽/мес.</button></div>
+    <button class="pk-library" data-go="route"><span class="pk-card-copy"><span class="pk-eyebrow">6 КУРСОВ · С САМОГО НАЧАЛА</span><strong>Разберитесь<br>в нейросетях</strong><small>ChatGPT, Claude, Perplexity<br>и ещё три инструмента</small></span><img src="assets/premium-library.webp" alt="" width="960" height="640" fetchpriority="high"><span class="pk-card-bottom"><span>18 уроков бесплатно</span><b>Выбрать курс <span aria-hidden="true">↗</span></b></span></button>
+    <div class="pk-actions"><button class="pk-action pk-prompts" data-go="prompts"><img src="assets/premium-prompts.webp" alt="" width="640" height="640"><strong>Промпты <span aria-hidden="true">↗</span></strong><small>Найдите запрос<br>под свою задачу</small></button><button class="pk-action pk-practice" data-go="practice"><img src="assets/premium-practice.webp" alt="" width="640" height="640"><strong>Практика <span aria-hidden="true">↗</span></strong><small>Попробуйте.<br>Получите результат.</small></button></div>
+    <section class="hub-tools"><h2>Подготовиться к работе</h2><button class="utility-row" data-go="prep"><span aria-hidden="true"><svg class="ui-icon"><use href="#i-person"/></svg></span><span><b>Создать аккаунт</b><small>Вход и первые настройки</small></span><i aria-hidden="true">↗</i></button><button class="utility-row" data-go="vpn"><span aria-hidden="true"><svg class="ui-icon"><use href="#i-lock"/></svg></span><span><b>VPN</b><small>Подключить на своём устройстве</small></span><i aria-hidden="true">↗</i></button><button class="utility-row" data-go="numbers"><span aria-hidden="true"><svg class="ui-icon"><use href="#i-message"/></svg></span><span><b>Иностранный номер</b><small>Если для регистрации нужен SMS-код</small></span><i aria-hidden="true">↗</i></button></section>
+    <button class="pk-membership" data-go="pay-all"><span><small>ВСЯ БИБЛИОТЕКА</small><b>Больше возможностей с подпиской</b><span>500 ₽ / месяц · без автосписаний</span></span><i aria-hidden="true">↗</i></button>
+    <div class="home-footer"><button data-go="news">Что нового <span aria-hidden="true">↗</span></button><button data-go="log">Читать канал <span aria-hidden="true">↗</span></button></div>
   </div>
 
 <div class="view" id="v-practice">
  <button class="back" data-back data-go="study">← На главную</button>
- <div class="section-title"><span>ПРАКТИКА</span><h1>Сделайте.<br>И получится.</h1><p>Короткие задания с готовыми примерами. Затем повторите со своей задачей.</p></div>
+ <div class="section-title pk-section pk-practice"><div><span class="pk-eyebrow">УЧИМСЯ НА ДЕЛЕ</span><h1>Практика</h1><p>Задания, примеры и проверка результата. Попробуйте на своей задаче.</p></div><img src="assets/premium-practice.webp" alt="" width="640" height="640"></div>
  <label class="prompt-select">Нейросеть<select id="practice-course"></select></label><p class="list-status" id="practice-count" aria-live="polite"></p>
  <div id="practice-list"></div><button class="load-more" id="practice-more">Показать ещё задания</button>
 </div>
@@ -904,7 +1068,7 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
 </div>
 <div class="view" id="v-prep">
  <button class="back" data-back data-go="route">← Курсы</button>
- <div class="section-title"><span>ПОДГОТОВКА</span><h1>Войти и начать.</h1><p>Сначала создайте аккаунт. После этого можно переходить к урокам.</p></div>
+ <div class="section-title pk-section pk-connection"><div><span class="pk-eyebrow">ПЕРВЫЙ ШАГ</span><h1>Создать аккаунт</h1><p>Выберите нейросеть — покажем, где зарегистрироваться и с чего начать.</p></div><img src="assets/premium-connection.webp" alt="" width="640" height="640"></div>
  <label class="prompt-select">Нейросеть<select id="prep-course"></select></label>
  <div class="prose setup-steps" id="prep-content"></div>
  <details class="source-fold"><summary>Как создать почту с телефона</summary><p>Удобный вариант — Gmail. Откройте приложение Gmail → фото профиля → «Добавить аккаунт» → Google → «Создать аккаунт». Заполните данные и пройдите проверки Google.</p><p>Используйте почту с постоянным доступом и добавьте способ восстановления. Адрес @gmail.com подходит, но обязательного требования именно к окончанию .com нет. Если в браузере регистрация не получается, попробуйте приложение на телефоне.</p><a href="https://support.google.com/accounts/answer/27441" target="_blank" rel="noopener">Инструкция Google ↗</a></details>
@@ -913,7 +1077,7 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
 </div>
 <div class="view" id="v-vpn">
  <button class="back" data-back data-go="study">← На главную</button>
- <div class="utility-hero vpn-hero"><span class="utility-art" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M50 10 80 23v23c0 20-12 34-30 44C32 80 20 66 20 46V23Z"/><path d="m35 49 10 10 21-24"/></svg></span><span>ПОДКЛЮЧЕНИЕ</span><h1>VPN.<br>Один раз настроить.</h1><p>Дед Proxy на телефоне и компьютере.<br>Выберите своё устройство.</p></div>
+ <div class="utility-hero vpn-hero"><img class="pk-access-art" src="assets/premium-connection.webp" alt="" width="640" height="640"><span>ПОДКЛЮЧЕНИЕ</span><h1>Настроить VPN</h1><p>Дед Proxy на телефоне и компьютере.<br>Выберите своё устройство.</p></div>
  <div class="utility-note"><b>Если вы пользуетесь ИИ из России</b><p>Для сервисов с ограниченным доступом может понадобиться VPN. Включайте его до открытия сайта. Не всем нейросетям он нужен: если сервис доступен напрямую, этот шаг можно пропустить.</p></div>
  <div class="device-tabs" role="group" aria-label="Устройство для VPN"><button data-device="android" aria-pressed="true">Android</button><button data-device="ios" aria-pressed="false">iPhone</button><button data-device="macos" aria-pressed="false">Mac</button><button data-device="windows" aria-pressed="false">Windows</button></div>
  <div id="vpn-device"></div>
@@ -923,7 +1087,7 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
 </div>
 <div class="view" id="v-numbers">
  <button class="back" data-back data-go="study">← На главную</button>
- <div class="utility-hero phone-hero"><span class="utility-art" aria-hidden="true"><svg viewBox="0 0 100 100"><rect x="28" y="10" width="44" height="80" rx="10"/><path d="M42 20h16M46 79h8"/><path d="m38 48 8 8 17-19"/></svg></span><span>РЕГИСТРАЦИЯ</span><h1>Номер.<br>Когда нужен код.</h1><p>Как выбрать иностранный номер<br>для подтверждения аккаунта.</p></div>
+ <div class="utility-hero phone-hero"><img class="pk-access-art" src="assets/premium-connection.webp" alt="" width="640" height="640"><span>РЕГИСТРАЦИЯ</span><h1>Иностранный номер</h1><p>Как выбрать иностранный номер<br>для подтверждения аккаунта.</p></div>
  <section class="provider-card"><span class="provider-mark">SMS</span><div><h2>SMSFAST</h2><p>Проверенный сервис — автор пользовался им лично.</p></div><a class="study-go" href="https://smsfast.io" target="_blank" rel="noopener">Открыть SMSFAST ↗</a></section>
  <div class="utility-note"><b>Сначала проверьте, нужен ли номер</b><p>Для обычного ChatGPT телефон не требуется. Claude запрашивает подходящий мобильный номер: VoIP и некоторые виртуальные номера не принимает. Подбирайте тип номера под требования конкретной нейросети.</p></div>
  <h2 class="subhead">От выбора до кода</h2>
@@ -934,7 +1098,7 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
 </div>
 
   <!-- ===== КАРТА ОБУЧЕНИЯ ===== -->
-  <div class="view" id="v-route"><button class="back" data-back data-go="study">← На главную</button><div class="section-title"><span>БИБЛИОТЕКА</span><h1>Разберитесь<br>в своей нейросети.</h1><p>Выберите нейросеть. Каждый курс начинается с основ и приводит к полезному результату.</p></div>    <div class="library-filters" role="group" aria-label="Выбрать курс по задаче"><button data-library-filter="all" aria-pressed="true">Все курсы</button><button data-library-filter="text" aria-pressed="false">Тексты</button><button data-library-filter="docs" aria-pressed="false">Документы</button><button data-library-filter="search" aria-pressed="false">Поиск</button><button data-library-filter="study" aria-pressed="false">Учёба</button><button data-library-filter="work" aria-pressed="false">Рабочие задачи</button></div><p class="filter-status" id="library-status" aria-live="polite">6 курсов · первые 3 урока каждого бесплатно</p><div class="stack" id="secs"></div><p class="library-note">У каждого курса своя программа.<br>Можно начать с любого — опыт не нужен.</p>
+  <div class="view" id="v-route"><button class="back" data-back data-go="study">← На главную</button><div class="section-title pk-section pk-books"><div><span class="pk-eyebrow">ПО ШАГАМ</span><h1>Уроки</h1><p>Шесть нейросетей. Шесть понятных программ. Начните с той, которая нужна сейчас.</p></div><img src="assets/premium-library.webp" alt="" width="640" height="640"></div>    <div class="library-filters" role="group" aria-label="Выбрать курс по задаче"><button data-library-filter="all" aria-pressed="true">Все курсы</button><button data-library-filter="text" aria-pressed="false">Тексты</button><button data-library-filter="docs" aria-pressed="false">Документы</button><button data-library-filter="search" aria-pressed="false">Поиск</button><button data-library-filter="study" aria-pressed="false">Учёба</button><button data-library-filter="work" aria-pressed="false">Рабочие задачи</button></div><p class="filter-status" id="library-status" aria-live="polite">6 курсов · первые 3 урока каждого бесплатно</p><div class="stack" id="secs"></div><p class="library-note">У каждого курса своя программа.<br>Можно начать с любого — опыт не нужен.</p>
 <button class="load-more" data-go="prep">Ещё нет аккаунта? Подготовиться →</button></div>
 
   <!-- ===== СПИСОК УРОКОВ РАЗДЕЛА ===== -->
@@ -951,7 +1115,7 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
     <button class="back" id="l-back">← Назад</button>
     <div class="lhead" id="l-head"><span class="k" id="l-k"></span><h1 id="l-t"></h1>
       <span class="lmin" id="l-min"></span>
-      <button class="fav" id="l-fav" type="button" aria-label="В закладки">☆</button>
+      <button class="fav" id="l-fav" type="button" aria-label="В закладки"><svg class="ui-icon" aria-hidden="true"><use href="#i-bookmark"/></svg></button>
       <button class="fav shr" id="l-share" type="button" aria-label="Поделиться">↗</button></div>
     <div class="lesson-result" id="lesson-result"></div>
     <nav class="toc" id="l-toc" hidden></nav>
@@ -979,9 +1143,7 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
   <div class="view" id="v-news">
     <button class="back" data-back data-go="study">← Назад</button>
     <h2 class="big">Что нового</h2>
-    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Приложение дописывается почти каждый день:
-      выходят новые нейросети, появляются продукты, устаревают прошлые способы. Всё это попадает сюда
-      без доплаты.</p>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Новые уроки, полезные дополнения и изменения в библиотеке — в одном месте.</p>
     <div class="sh">Записи</div>
     <div class="news" id="news-all"></div>
   </div>
@@ -989,24 +1151,22 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
   <!-- ===== ЧТО ВХОДИТ В ДОСТУП ===== -->
   <div class="view" id="v-pay-all">
     <button class="back" data-back data-go="study">← Назад</button>
-    <div class="lhead" style="background:linear-gradient(150deg,#0F5E63,#14757A)">
-      <span class="k">полный доступ</span>
-      <h3>Вся библиотека.<br>Ваши новые навыки.</h3>
-    </div>
+    <div class="pk-pay-hero"><span class="pk-eyebrow">ПОЛНЫЙ ДОСТУП</span><h1>Вся библиотека.<br>В вашем темпе.</h1><p>Уроки, промпты и практика<br>для повседневных задач.</p><img src="assets/premium-library.webp" alt="" width="960" height="640"></div>
 
     <!-- Цена и кнопка стоят до программы намеренно: раньше человек пролистывал
          три экрана описаний, прежде чем узнавал, сколько это стоит. -->
-    <div class="sh">Что открывается</div>
-    <div class="hsteps" id="pa-what"></div>
 
     <div class="acc2">
       <div class="pline"><span class="pnum">500 ₽</span><span id="pa-line">в месяц</span></div>
       <p style="margin:0 0 10px;font-size:13.5px;color:var(--soft);line-height:1.5">
          Год — 4 900 ₽ вместо 6 000 ₽: экономия 1 100 ₽, два месяца в подарок.</p>
-      <button class="buy2" data-write="pay">Открыть полный доступ</button>
+      <button class="buy2" data-write="pay">Оформить в Telegram <span aria-hidden="true">↗</span></button>
       <p style="margin:0;font-size:13px;color:var(--faint)">Семь дней на возврат без объяснения причин.
          Первые три урока каждого курса бесплатны — попробуйте перед оплатой.</p>
     </div>
+
+    <div class="sh">Что открывается</div>
+    <div class="hsteps" id="pa-what"></div>
 
     <div class="sh">Условия</div>
     <div class="promise">
@@ -1029,7 +1189,7 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
   <!-- ===== РАЗБОРЫ ===== -->
   <div class="view" id="v-log">
     <button class="back" data-back data-go="me">← Профиль</button>
-    <h2 class="big">Разборы</h2>
+    <h2 class="big">Канал и разборы</h2>
     <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Свежее из канала и разборы того,
       что при этом ломалось. Здесь — примеры применения нейросетей и новые материалы.</p>
     <div class="sh" id="chan-sh">Из канала</div>
@@ -1051,7 +1211,8 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
 
   <!-- ===== ПРОФИЛЬ ===== -->
   <div class="view" id="v-me">
-    <div class="pcard"><span class="av" id="p-av"></span>
+    <div class="pk-small-title"><span class="pk-eyebrow">ЛИЧНОЕ ПРОСТРАНСТВО</span><h1>Мой профиль</h1></div>
+    <div class="pcard"><span class="av" id="p-av"><svg class="ui-icon" aria-hidden="true"><use href="#i-person"/></svg></span>
       <span style="display:flex;flex-direction:column;min-width:0">
         <b id="p-name">Гость</b><span id="p-sub">откройте приложение из бота</span></span></div>
     <button class="row status" id="p-status" data-go="pay-all">
@@ -1079,9 +1240,7 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
     </div>
     <div class="sh">Настройки</div>
     <div class="grp">
-      <div class="row"><span class="ic i3 sm">◑</span>
-        <span class="tx"><b>Ночная тема</b><span>светлый или тёмный фон</span></span>
-        <button class="sw off" id="sw2" aria-label="Ночная тема" role="switch" aria-checked="false"><i></i></button></div>
+
       <div class="row"><span class="ic i4 sm">◈</span>
         <span class="tx"><b>Новые материалы</b><span id="sw1-note">сообщать, когда выходит урок</span></span>
         <button class="sw off" id="sw1" aria-label="Новые материалы" role="switch" aria-checked="false"><i></i></button></div>
@@ -1094,7 +1253,7 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
   <!-- ===== ДОСТИЖЕНИЯ ===== -->
   <div class="view" id="v-ach">
     <button class="back" data-back data-go="me">← Профиль</button>
-    <h2 class="big">Достижения</h2>
+    <h2 class="big">Ваш прогресс</h2>
     <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Отметки о том, что уже сделано.
       Ни на что не влияют и никуда не отправляются — просто видно, сколько пройдено.</p>
     <div class="strk" id="strk2" style="margin:16px 0 0"></div>
@@ -1108,24 +1267,25 @@ button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:
     <button class="back" data-back data-go="me">← Профиль</button>
     <h2 class="big">Закладки</h2>
     <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">То, к чему вы захотели вернуться.
-      Кнопка со звездой в заголовке урока добавляет и убирает закладку.</p>
+      Нажмите на закладку в заголовке урока, чтобы сохранить его здесь.</p>
     <div class="stack" id="fav-out"></div>
   </div>
 
   <div class="view" id="v-prompts">
-    <button class="back" data-back data-go="study">← На главную</button><div class="section-title"><span>ПРОМПТЫ</span><h1>Нужные слова.<br>Готовый результат.</h1><p>Найдите задачу, скопируйте запрос и отправьте нейросети.</p></div><button class="quiet" id="prompt-return" hidden>← Вернуться к практике</button>
+    <button class="back" data-back data-go="study">← На главную</button><div class="section-title pk-section pk-prompts"><div><span class="pk-eyebrow">ГОТОВЫЕ ЗАПРОСЫ</span><h1>Промпты</h1><p>Выберите задачу. Добавьте свои данные. Отправьте нейросети.</p></div><img src="assets/premium-prompts.webp" alt="" width="640" height="640"></div><button class="quiet" id="prompt-return" hidden>← Вернуться к практике</button>
     <label class="prompt-select">Инструмент<select id="prompt-course"><option value="all">Все инструменты</option></select></label><div class="prompt-search"><label for="prompt-query">Задача</label><input class="prompt-query" id="prompt-query" type="search" placeholder="Письмо, документ, настройки…" autocomplete="off"><button id="prompt-clear" hidden>Очистить поиск</button></div><p class="list-status" id="prompt-count" role="status"></p><div id="pr-out"></div><button class="load-more" id="prompt-more">Показать ещё промпты</button>
   </div>
 
   <div class="view" id="v-search">
     <button class="back" data-back data-go="study">← Назад</button>
+    <div class="pk-small-title"><span class="pk-eyebrow">ПО ВСЕЙ БИБЛИОТЕКЕ</span><h1>Что найти?</h1><p>Урок, нейросеть или готовый запрос.</p></div>
     <div class="sr-field">
       <input id="sr-input" type="search" aria-label="Поиск по урокам и запросам" placeholder="Что ищете? Например: настройки"
              autocomplete="off" enterkeyhint="search">
       <button id="sr-clear" hidden aria-label="Очистить">✕</button>
     </div>
     <div id="sr-hint" class="sr-hint"></div>
-    <div id="sr-out"></div>
+    <div id="sr-out" aria-live="polite"></div>
   </div>
 
   <div class="view" id="v-recent">
@@ -2205,7 +2365,181 @@ const $ = s => document.querySelector(s);
 const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const enc = t => encodeURIComponent(t);
 let cur = 0;
+/* premium-behavior:v1:helpers */
 let navEpoch = 0, lessonRequest = 0;
+
+// Состояние отделено от шаблонов: перерисовка дизайна не меняет правила доступа.
+let chanPending = null;
+let accessPending = null, accessCheckedAt = 0, accessReturnPending = false, accessOriginalFoot = null;
+let promptLessonFilter = null;
+
+function assignHeadingIds(root){
+  if(!root || !root.id) return;
+  root.querySelectorAll('h4').forEach((h,i)=>{ h.id=root.id+'-h'+(i+1); });
+}
+
+function bindQuizLesson(root, key, title){
+  if(!root) return;
+  root.querySelectorAll('.tst').forEach(el=>{
+    el.dataset.lessonKey=key; el.dataset.lessonTitle=title;
+  });
+}
+
+function prepareQuizA11y(el){
+  el.querySelectorAll('.opt').forEach(b=>{
+    b.setAttribute('aria-pressed','false'); b.removeAttribute('aria-disabled');
+  });
+  const why=el.querySelector('.why');
+  if(why){ why.setAttribute('role','status'); why.setAttribute('aria-live','polite'); why.setAttribute('aria-atomic','true'); }
+}
+
+function focusQuiz(el){
+  const heading=el.querySelector('.tq, .tres');
+  if(heading){ heading.tabIndex=-1; heading.focus({preventScroll:true}); }
+}
+
+function quizFeedback(el, text){
+  const why=el.querySelector('.why'), index=el.__i;
+  if(!why) return;
+  why.hidden=false;
+  // Сначала открываем пустую область: скрытый live-region могут не объявить.
+  requestAnimationFrame(()=>{
+    if(!why.isConnected || el.__i!==index || el.querySelector('.why')!==why) return;
+    why.innerHTML=text;
+    if(el.__q[index]?.k==='build'){
+      why.tabIndex=-1; why.focus({preventScroll:true});
+    }
+  });
+}
+
+function claimQuizCredit(el){
+  const q=el.__q[el.__i], lesson=el.dataset.lessonKey;
+  if(!q || !lesson) return false;
+  // Порядок ответов случайный; ключ зависит от содержания, а не порядка.
+  const key=JSON.stringify([lesson,q.q,q.k||'one',q.o.map(o=>JSON.stringify(o)).sort()]);
+  const stored=S.get('quiz-credit-v1',{});
+  const credits=stored && typeof stored==='object' && !Array.isArray(stored) ? stored : {};
+  if(Object.prototype.hasOwnProperty.call(credits,key)) return false;
+  credits[key]=true; S.set('quiz-credit-v1',credits);
+  return true;
+}
+
+function promptSearchText(x){
+  const section=SECS[x.si], lesson=section?.ls[x.li];
+  return [section?.t,lesson?.t,lesson?.d,lesson?.promptTitles?.[x.pi]]
+    .filter(Boolean).join(' ').toLocaleLowerCase('ru');
+}
+
+function promptAccess(lesson){
+  return {icon:lesson.free || ME?.paid ? 'copy' : 'lock',
+    label:lesson.free ? 'Бесплатно' : ME?.paid ? 'Доступ открыт' : 'По подписке'};
+}
+
+function paintPromptAccess(){
+  if(!PRLIST) return;
+  document.querySelectorAll('#pr-out .prc').forEach(card=>{
+    const button=card.querySelector('[data-pr-open]'); if(!button) return;
+    const item=PRLIST[Number(button.dataset.prOpen)], lesson=SECS[item?.si]?.ls[item?.li];
+    if(!lesson) return;
+    const access=promptAccess(lesson), glyph=button.querySelector('.k'), meta=button.querySelector('.tt > span');
+    if(glyph) glyph.innerHTML=icon(access.icon);
+    // Меняем только доступ: подпись типа запроса и название принадлежат шаблону.
+    if(meta) meta.textContent=meta.textContent.replace(/Бесплатно|Доступ открыт|По подписке/g,access.label);
+  });
+}
+
+function currentStreak(){
+  const saved=S.get('days',{last:'',streak:0,best:0});
+  const gap=saved.last ? разница(saved.last,сегодня()) : NaN;
+  return {...saved,streak:gap===0 || gap===1 ? saved.streak||0 : 0};
+}
+
+function channelStatus(message, retry=false){
+  const list=$('#chan'); if(!list) return;
+  let panel=$('#chan-status');
+  if(!panel){ panel=document.createElement('div'); panel.id='chan-status'; panel.className='foot'; list.before(panel); }
+  panel.replaceChildren(); panel.hidden=!message;
+  if(!message) return;
+  const text=document.createElement('span'); text.setAttribute('role','status'); text.textContent=message; panel.append(text);
+  if(retry){
+    const button=document.createElement('button'); button.type='button'; button.className='load-more';
+    button.textContent='Повторить загрузку'; button.onclick=()=>chanPaint(true); panel.append(button);
+  }
+}
+
+function accessStatus(message, retry=false){
+  const host=$('#p-status'); if(!host) return;
+  let panel=$('#access-refresh-status');
+  if(!panel){ panel=document.createElement('div'); panel.id='access-refresh-status'; panel.className='foot'; host.after(panel); }
+  panel.replaceChildren(); panel.hidden=!message;
+  if(!message) return;
+  const text=document.createElement('span'); text.setAttribute('role','status'); text.textContent=message; panel.append(text);
+  if(retry){
+    const button=document.createElement('button'); button.type='button'; button.className='load-more';
+    button.textContent=TG?.initData ? 'Проверить доступ ещё раз' : 'Открыть в Telegram';
+    button.onclick=()=>TG?.initData ? refreshAccess(true) : перейти(SHARE_URL); panel.append(button);
+  }
+}
+
+function closeUnavailablePrompts(){
+  if(!PRLIST) return;
+  document.querySelectorAll('#pr-out .prc').forEach(card=>{
+    const button=card.querySelector('[data-pr-open]'); if(!button) return;
+    const x=PRLIST[Number(button.dataset.prOpen)];
+    if(!x || !SECS[x.si]?.ls[x.li]?.key || SECS[x.si].ls[x.li].free) return;
+    const body=card.querySelector('.body');
+    card.dataset.ticket=String((Number(card.dataset.ticket)||0)+1);
+    card.classList.remove('open'); button.setAttribute('aria-expanded','false');
+    if(body){ body.hidden=true; body.replaceChildren(); }
+  });
+}
+
+async function refreshAccess(force=false){
+  if(accessPending) return accessPending;
+  const foot=$('#acc-foot');
+  if(foot && accessOriginalFoot===null) accessOriginalFoot=foot.innerHTML;
+  if(!TG?.initData){ accessStatus('Откройте из Telegram, чтобы видеть подписку.',true); return null; }
+  if(!force && accessCheckedAt && Date.now()-accessCheckedAt<10000) return ME;
+  accessCheckedAt=Date.now();
+  accessStatus('Проверяем доступ…');
+  if(!ME?.ok){
+    if($('#p-st-t')) $('#p-st-t').textContent='Проверяем доступ';
+    if($('#p-st-d')) $('#p-st-d').textContent='Пожалуйста, подождите';
+  }
+  accessPending=(async()=>{
+    try{
+      const response=await post('/api/me');
+      if(!response?.ok){
+        accessStatus('Не удалось проверить доступ. Последние сведения могут быть неактуальны.',true);
+        if(!ME?.ok){
+          if($('#p-st-t')) $('#p-st-t').textContent='Доступ не проверен';
+          if($('#p-st-d')) $('#p-st-d').textContent='Повторите проверку ниже';
+        }
+        return null;
+      }
+      ME=response;
+      if(!ME.paid && foot && accessOriginalFoot!==null) foot.innerHTML=accessOriginalFoot;
+      paintMe(); paintProgress(); paintPromptAccess();
+      if(!ME.paid) closeUnavailablePrompts();
+      if($('#v-practice')?.classList.contains('on')) practicePaint();
+      accessStatus('');
+      return ME;
+    }finally{ accessPending=null; }
+  })();
+  return accessPending;
+}
+
+function refreshAfterReturn(){
+  if(document.visibilityState!=='visible') return;
+  const force=accessReturnPending; accessReturnPending=false;
+  // Ответ, начатый до оплаты, не заменяет проверку после возвращения из бота.
+  if(force && accessPending){ accessPending.then(()=>refreshAccess(true)); return; }
+  refreshAccess(force);
+}
+addEventListener('focus',refreshAfterReturn);
+addEventListener('pageshow',refreshAfterReturn);
+document.addEventListener('visibilitychange',refreshAfterReturn);
+
 
 
 const icon = name => `<svg class="ui-icon" aria-hidden="true"><use href="#i-${name}"/></svg>`;
@@ -2365,16 +2699,21 @@ async function exerciseOpen(si,li){
   }
   const parts=lessonParts(blocks);blk.n=0;
   $('#exercise-content').innerHTML=`<p class="practice-lead">${esc(l.need)}</p><div class="exercise-steps"><span>1. Изучите пример</span><span>2. Отправьте промпт</span><span>3. Проверьте ответ</span></div>`+parts.practice.map(b=>b[0]==='prompt'?`<details class="practice-prompt"><summary>${esc(b[2]||'Готовый промпт')}</summary>${blk(b)}</details>`:blk(b)).join('')+`<a class="open-tool" href="${s.url}" target="_blank" rel="noopener">Открыть ${esc(s.t)} ↗</a>`;
-  $('#exercise-content .tst').dataset.lessonKey=si+'-'+li;
-  $('#exercise-content .tst').dataset.lessonTitle=l.t;
+/* premium-behavior:v1:exercise-identity */
+  assignHeadingIds($('#exercise-content'));
+  bindQuizLesson($('#exercise-content'),si+'-'+li,l.t);
   testInit();restorePractice();
 }
-function promptsFor(si,li){show('prompts');$('#prompt-course').value=String(si);$('#prompt-query').value='';filterPrompts(li);$('#prompt-return').hidden=false;$('#prompt-return').dataset.exercBack=si+'-'+li;}
+function promptsFor(si,li){show('prompts');$('#prompt-course').value=String(si);/* premium-behavior:v1:prompt-lesson-reset */
+$('#prompt-query').value='';$('#prompt-clear').hidden=true;promptLimit=12;filterPrompts(li);$('#prompt-return').hidden=false;$('#prompt-return').dataset.exercBack=si+'-'+li;}
 let promptLimit=12;
-function filterPrompts(onlyLesson=null){
+/* premium-behavior:v1:prompt-scope */
+function filterPrompts(onlyLesson=promptLessonFilter){
+  promptLessonFilter=onlyLesson;
   const selected=$('#prompt-course').value,q=$('#prompt-query').value.trim().toLocaleLowerCase('ru');
   const cards=[...document.querySelectorAll('#pr-out .prc')];let total=0,visible=0;
-  cards.forEach(card=>{const x=PRLIST[+card.querySelector('[data-pr-open]').dataset.prOpen];const match=(selected==='all'||String(x.si)===selected) && (onlyLesson===null||x.li===onlyLesson) && (!q||card.textContent.toLocaleLowerCase('ru').includes(q));if(match)total++;card.hidden=!match||visible>=promptLimit;if(match&&!card.hidden)visible++;});
+  cards.forEach(card=>{const x=PRLIST[+card.querySelector('[data-pr-open]').dataset.prOpen];const match=(selected==='all'||String(x.si)===selected) && (onlyLesson===null||x.li===onlyLesson) && (!q||/* premium-behavior:v1:prompt-metadata */
+promptSearchText(x).includes(q));if(match)total++;card.hidden=!match||visible>=promptLimit;if(match&&!card.hidden)visible++;});
   document.querySelectorAll('.prompt-group').forEach(g=>g.hidden=![...g.querySelectorAll('.prc')].some(c=>!c.hidden));
   $('#prompt-count').textContent=total?`${total} ${скл(total,'промпт','промпта','промптов')} · показано ${visible}`:'Ничего не найдено. Попробуйте другое слово или нейросеть.';
   $('#prompt-more').hidden=visible>=total;
@@ -2445,9 +2784,9 @@ const newsHTML = (n) => NEWS.slice(0, n).map(([d,t,ti,de])=>`
   const numsHTML=`<div><b>6</b><span>отдельных курсов</span></div><div><b>48</b><span>практических уроков</span></div><div><b>96</b><span>запросов и шаблонов</span></div><div><b>18</b><span>уроков бесплатно</span></div>`;
   $('#pa-nums').innerHTML=numsHTML; $('#hi-nums').innerHTML=numsHTML;
   $('#pa-secs').innerHTML=activeCourses().map(({s,i})=>`<button class="route-row" data-sec-go="${i}"><span class="route-tx"><b>${s.t}</b><span>${s.d}</span></span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>`).join('');
-  $('#pa-what').innerHTML='<ul class="access-benefits"><li>Все 48 уроков по шести инструментам: настройки, тексты, документы, поиск, проекты и личные помощники.</li><li>96 запросов и шаблонов, разобранные результаты и задания со своими примерами.</li><li>Обновления и новые материалы в течение оплаченного периода.</li></ul>';
+  $('#pa-what').innerHTML='<ul class="access-benefits"><li><b>48 уроков</b><span>Шесть нейросетей — от основ до своих задач</span></li><li><b>96 промптов</b><span>Готовые запросы с примерами и практикой</span></li><li><b>Обновления включены</b><span>Все новые материалы, пока действует подписка</span></li></ul>';
   $('#pa-road').innerHTML=ROAD;
-  $('#pa-line').textContent='в месяц · год — 4 900 ₽';
+  $('#pa-line').textContent='в месяц';
 })();
 
 /* ---------- когда я последний раз сверяла цены и условия ----------
@@ -2557,22 +2896,30 @@ function chanDraw(список, свежее){
     `<a class="allnews" href="${ссылкаПоста('')}" rel="noopener"
         data-tg="${ссылкаПоста('')}" style="display:block;text-align:center">Весь канал →</a>`;
 }
-async function chanPaint(){
-  const запас = S.get('chan', null);
-  if(запас) chanDraw(запас.posts || [], false);
-  if(chanGot) return;
-  if(!API){ if(!запас) chanDraw([], false); return; }
-  try{
-    const r = await fetch(API + '/api/posts', {cache:'no-store'});
-    const j = await r.json();
-    if(j && j.ok){
-      chanGot = true;
-      S.set('chan', {posts: j.posts, channel: j.channel, at: Date.now()});
-      chanDraw(j.posts || [], true);
-    } else if(!запас) chanDraw([], false);
-  }catch(e){
-    if(!запас) chanDraw([], false);
-  }
+/* premium-behavior:v1:channel-recovery */
+async function chanPaint(force=false){
+  const cached=S.get('chan',null);
+  const posts=Array.isArray(cached?.posts) ? cached.posts : null;
+  if(posts) chanDraw(posts,false);
+  if(chanPending) return chanPending;
+  if(chanGot && !force) return;
+  if(!API){ if(!posts) chanDraw([],false); channelStatus('Публикации сейчас недоступны.',true); return; }
+  channelStatus(posts ? 'Обновляем публикации…' : 'Загружаем публикации…');
+  const controller=new AbortController(), deadline=setTimeout(()=>controller.abort(),15000);
+  chanPending=(async()=>{
+    try{
+      const response=await fetch(API+'/api/posts',{cache:'no-store',signal:controller.signal});
+      if(!response.ok) throw new Error('posts unavailable');
+      const data=await response.json();
+      if(!data?.ok || !Array.isArray(data.posts)) throw new Error('posts invalid');
+      S.set('chan',{posts:data.posts,channel:data.channel,at:Date.now()});
+      chanGot=true; chanDraw(data.posts,true); channelStatus('');
+    }catch(error){
+      if(!posts) chanDraw([],false);
+      channelStatus(posts ? 'Не удалось обновить ленту. Показаны сохранённые публикации.' : 'Не удалось загрузить публикации. Попробуйте ещё раз.',true);
+    }finally{ clearTimeout(deadline); chanPending=null; }
+  })();
+  return chanPending;
 }
 const имяКанала = () => (S.get('chan', {}) || {}).channel || 'ai_bez_lyudey';
 const ссылкаПоста = id => 'https://t.me/' + имяКанала() + (id ? '/' + id : '');
@@ -2590,9 +2937,9 @@ function openSec(i){
   document.body.style.setProperty('--lesson-tint',s.g);
   document.body.style.setProperty('--lesson-accent',s.accent||'#2356ad');
   $('#sec-head').style.background=s.g;
-  $('#sec-k').textContent=s.archived?'Материал прежней программы':'';
+  $('#sec-k').textContent=s.archived?'Материал прежней программы':'ПРАКТИЧЕСКИЙ КУРС';
   $('#sec-t').textContent=s.t;
-  $('#sec-overview').innerHTML=s.archived ? '<p>Этот материал сохранён по старой ссылке. Новые курсы — в библиотеке.</p>' : `<img class="course-detail-book" src="assets/${s.slug}-book.webp" alt="" width="112" height="112"><p>${s.d}</p><p class="course-detail-note">8 уроков · первые 3 бесплатно</p><details class="source-fold"><summary>Чему научитесь</summary><ul>${s.outcomes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details><button class="quiet" data-prep="${i}">Вход и регистрация →</button>`;
+  $('#sec-overview').innerHTML=s.archived ? '<p>Этот материал сохранён по старой ссылке. Новые курсы — в библиотеке.</p>' : `<div class="pk-course-summary"><img class="course-detail-book" src="assets/${s.slug}-book.webp" alt="" width="160" height="160"><div><p>${s.d}</p><span class="pk-course-count">8 уроков</span><span class="pk-course-count">3 бесплатно</span></div></div><details class="source-fold pk-outcomes"><summary>Чему научитесь</summary><ul>${s.outcomes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details><button class="pk-setup-row" data-prep="${i}"><span>${icon('person')}</span><span><b>Ещё нет аккаунта?</b><small>Регистрация и первый вход</small></span><i aria-hidden="true">↗</i></button>`;
   $('#sec-list').innerHTML=s.ls.map((l,j)=>`${!s.archived && [0,3,7].includes(j)?`<h4 class="module-title">${j===0?'Освоиться':j===3?'Применять в работе':'Собрать свой результат'}</h4>`:''}<button class="item les${l.free||s.free||ME?.paid?'':' shut'}" data-les="${j}"><span class="lesson-number">${j+1}</span><span class="tx"><b>${esc(l.t)}</b><span class="tz">${esc(l.d||'')}</span><span class="meta">${l.min} мин · ${doneList().includes(i+'-'+j)?'прочитан':l.free||s.free?'бесплатно':ME?.paid?'доступ открыт':'по подписке'}</span></span><span class="lesson-arrow" aria-hidden="true">${l.free||s.free||ME?.paid?'↗':icon('lock')}</span></button>`).join('');
   $('#sec-foot').innerHTML=s.archived?'':'<p class="foot">Один урок — один результат. Проходите в своём темпе.</p>';
   show('sec');
@@ -2656,6 +3003,8 @@ function tkPaint(){
 function swNote(текст){
   const n = document.getElementById('sw-note');
   if(!n) return;
+/* premium-behavior:v1:guest-offline-note */
+  if(!window.Telegram?.WebApp?.initData){ n.hidden=true; n.textContent=''; return; }
   if(!текст){ n.hidden = true; return; }
   n.hidden = false;
   n.innerHTML = текст;
@@ -2703,7 +3052,8 @@ function testPaint(el){
         <b>${верно} из ${всего}</b><span>${слово}</span>
         <button class="nxt" type="button" data-tr="1">Пройти заново</button>
       </div>`;
-    testDots(el);
+    /* premium-behavior:v1:quiz-a11y */
+testDots(el); prepareQuizA11y(el);
     const key=el.dataset.lessonKey||readId;
     if(el.__pass === 0) учесть('test', key || '', верно, el.dataset.lessonTitle||(favCur && favCur.title)||'');
     if(key) { markDone(key); paintProgress(); }
@@ -2720,16 +3070,19 @@ function testPaint(el){
       ? '<div class="tnav"><button class="nxt" type="button" data-tcheck="1" disabled>Проверить</button></div>' : ''}
     <div class="tnav" hidden><button class="nxt" type="button" data-tn="1">${
       el.__i + 1 < el.__q.length ? 'Дальше →' : 'Показать итог'}</button></div>`;
-  testDots(el);
+  /* premium-behavior:v1:quiz-a11y */
+testDots(el); prepareQuizA11y(el);
 }
 function testDone(el, верно, текст){
   el.__res[el.__i] = верно;
   if(верно){
     el.__ok++;
-    if(el.__pass === 0){ S.set('qzok', S.get('qzok', 0) + 1); checkAch(); }
+    /* premium-behavior:v1:quiz-credit */
+if(claimQuizCredit(el)){ S.set('qzok', S.get('qzok', 0) + 1); checkAch(); }
   }
-  const w = el.querySelector('.why');
-  w.hidden = false; w.innerHTML = текст;
+/* premium-behavior:v1:quiz-feedback */
+  quizFeedback(el,текст);
+  el.querySelectorAll('.opt').forEach(b=>b.setAttribute('aria-disabled','true'));
   el.querySelector('[data-tn]').closest('.tnav').hidden = false;
   el.querySelector('.tb').classList.add('done');
   testDots(el);
@@ -2745,11 +3098,15 @@ function testAnswer(кнопка){
     // Раньше проверка срабатывала сама, как только человек попадал во все
     // верные куски: это и подсказка, и неожиданность. Теперь отмечаем молча,
     // а вердикт — по кнопке «Проверить», и до неё ответ можно менять.
+/* premium-behavior:v1:quiz-multiple-pressed */
     кнопка.classList.toggle('sel');
+    кнопка.setAttribute('aria-pressed',String(кнопка.classList.contains('sel')));
     const проверить = box.querySelector('[data-tcheck]');
     if(проверить) проверить.disabled = !box.querySelector('.opt.sel');
     return;
   }
+/* premium-behavior:v1:quiz-single-pressed */
+  кнопка.setAttribute('aria-pressed','true');
   кнопка.classList.add(верный ? 'ok' : 'no');
   if(!верный){
     const п = в.o.findIndex(o => o[1] === true);
@@ -2781,14 +3138,16 @@ function testCheck(кнопка){
 
 function testNext(кнопка){
   const el = кнопка.closest('.tst');
-  el.__i++; testPaint(el);
+  /* premium-behavior:v1:quiz-next-focus */
+el.__i++; testPaint(el); focusQuiz(el);
   const r = el.getBoundingClientRect();
   if(r.top < 60) scrollTo({top: r.top + scrollY - 70, behavior: REDUCE ? 'auto' : 'smooth'});
 }
 function testAgain(кнопка){
   const el = кнопка.closest('.tst');
   el.__i = 0; el.__ok = 0; el.__res = []; el.__pass++;
-  testPaint(el);
+/* premium-behavior:v1:quiz-retry-focus */
+  testPaint(el); focusQuiz(el);
 }
 
 
@@ -2826,7 +3185,7 @@ function favPaintButton(){
   b.hidden = false;
   const есть = favList().some(x => x.k === favKey(favCur.kind, favCur.key));
   b.classList.toggle('on', есть);
-  b.textContent = есть ? '★' : '☆';
+  b.innerHTML=icon('bookmark'); b.setAttribute('aria-pressed',String(есть));
   b.setAttribute('aria-label', есть ? 'Убрать из закладок' : 'В закладки');
 }
 function favPaintList(){
@@ -2872,8 +3231,11 @@ function prPaint(){
   out.innerHTML=activeCourses().map(({s, i:si})=>{
     const cards=s.ls.flatMap((l,li)=>l.promptTitles.map((name,pi)=>{
       const n=PRLIST.length;
-      PRLIST.push({si,li,pi,урок:l.t,открыть:()=>{openSec(si);openLes(li);}});
-      return `<div class="prc" id="pr${n}"><button class="hd" data-pr-open="${n}" aria-expanded="false" aria-controls="pr-body-${n}"><span class="k" aria-hidden="true">${l.free?icon('copy'):icon('lock')}</span><span class="tt"><b>${esc(name)}</b><span>${l.free?'Бесплатно':'По подписке'} · урок ${li+1}</span></span><span class="ch" aria-hidden="true">›</span></button><div class="body" id="pr-body-${n}" hidden></div></div>`;
+      PRLIST.push({si,li,pi,урок:l.t,/* premium-behavior:v1:nav-prompts */
+открыть:()=>{cur=si;openLes(li,'prompts');}});
+      return `<div class="prc" id="pr${n}"><button class="hd" data-pr-open="${n}" aria-expanded="false" aria-controls="pr-body-${n}"><span class="k" aria-hidden="true">${/* premium-behavior:v1:prompt-access-icon */
+icon(promptAccess(l).icon)}</span><span class="tt"><b>${esc(name.replace(/ — (полный запрос|уточнение в том же чате)$/,""))}</b><span>${pi===0?"Основной запрос":"Уточнение"} · ${/* premium-behavior:v1:prompt-access-label */
+promptAccess(l).label} · урок ${li+1}</span></span><span class="ch" aria-hidden="true">›</span></button><div class="body" id="pr-body-${n}" hidden></div></div>`;
     })).join('');
     return `<section class="prompt-group" data-prompt-course="${si}"><h3 class="sh">${s.t} · 16 запросов и шаблонов</h3>${cards}</section>`;
   }).join('');
@@ -2927,7 +3289,8 @@ function srBuild(){
   SECS.forEach((s, si) => (s.archived ? [] : s.ls || []).forEach((l, li) => {
     const тело = (l.b || []).map(текст).join(' ');
     idx.push({вид:'урок', знак:'◱', имя:l.t, где:s.t, текст:тело,
-              открыть:()=>{ openSec(si); openLes(li); }});
+              /* premium-behavior:v1:nav-search */
+открыть:()=>{ cur=si; openLes(li,'search'); }});
     const prompts=(l.b||[]).filter(b=>b[0]==='prompt');
     const titles=l.promptTitles||prompts.map(b=>b[2]||l.t);
     titles.forEach((title,pi)=>idx.push({вид:'промпт',знак:'⌘',имя:title,где:s.t,
@@ -3027,6 +3390,8 @@ function posRestore(){
 
 function buildToc(bodyId, tocId){
   const box = $(tocId || '#l-toc'), body = $(bodyId || '#l-body');
+/* premium-behavior:v1:toc-ids */
+  assignHeadingIds(body);
   const hs = [...body.querySelectorAll('h4')];
   if(hs.length < 3){ box.hidden = true; box.innerHTML = ''; tocSpy(null); return; }
   box.hidden = false;
@@ -3052,7 +3417,8 @@ function buildToc(bodyId, tocId){
   box.querySelectorAll('a').forEach(a=>{
     a.onclick = e=>{
       e.preventDefault();
-      const t = document.getElementById(a.getAttribute('href').slice(1));
+      /* premium-behavior:v1:toc-target */
+const t = hs[Number(a.dataset.i)];
       if(t) scrollTo({top: t.getBoundingClientRect().top + scrollY - 82, behavior:REDUCE?'auto':'smooth'});
     };
   });
@@ -3091,12 +3457,17 @@ function paintNext(nx){
   $('#l-next').innerHTML=nx ? `<button class="nx" data-nx="${nx.si}-${nx.li}"><span><span class="k">${nx.k}</span><b>${esc(nx.t)}</b></span><span aria-hidden="true">→</span></button>` : '<div class="course-finish"><h3>Итог курса</h3><p>Вернитесь к практике со своей задачей. Промпты и закладки помогут повторить нужный приём.</p><button class="buy2" data-go="route">Выбрать курс</button></div>';
 }
 let payLes = 0;
-async function openLes(j){
+/* premium-behavior:v1:nav-signature */
+async function openLes(j, returnView='sec'){
   payLes = j;
   const request = ++lessonRequest, section = cur;
   let epoch = navEpoch;
   const s = SECS[section], l = s?.ls[j];
+/* premium-behavior:v1:nav-origin */
   if(!l) return;
+  window.__lback=returnView;
+  const payBack=$('#v-pay [data-back]');
+  if(payBack) payBack.dataset.go=returnView;
   document.body.style.setProperty('--lesson-tint',s.g);
   document.body.style.setProperty('--lesson-accent',s.accent||'#2356ad');
   if(!l.b || l.key){
@@ -3107,7 +3478,8 @@ async function openLes(j){
       $('#l-head').style.background=s.g; $('#l-k').textContent=s.t; $('#l-t').textContent=l.t;
       $('#l-min').textContent=l.min+' минут'; $('#lesson-result').innerHTML='';
       $('#l-body').innerHTML='<p role="status">Загружаем урок…</p>'; $('#l-toc').hidden=true;
-      $('#l-next').innerHTML=''; $('#l-foot').textContent=''; window.__lback='sec';
+      $('#l-next').innerHTML=''; $('#l-foot').textContent=''; /* premium-behavior:v1:nav-loading */
+window.__lback=returnView;
       show('lesson'); epoch=navEpoch;
       const b = await fetchLesson(l.key);
       if(request !== lessonRequest || epoch !== navEpoch) return;
@@ -3123,14 +3495,18 @@ async function openLes(j){
   blk.n = 0; blk.q = 0;            // нумерация якорей и заданий своя у каждого урока
   $('#l-body').innerHTML = s.archived ? l.b.map(blk).join('') : readLesson(l.b,section,j);
   buildToc();
+/* premium-behavior:v1:lesson-identity */
+  bindQuizLesson($('#l-body'),section+'-'+j,l.t);
   testInit(); restorePractice();
-  if($('#pr-out')) delete $('#pr-out').dataset.ready; SRIDX=null;
+/* premium-behavior:v1:lesson-prompt-cache */
+  SRIDX=null;
   $('#l-foot').textContent = '◷ ' + l.min + ' мин';
   $('#l-min').textContent = '◷ ' + l.min + ' мин вместе с практикой';
   paintNext(nextAfter(cur, j));
   touchDay();
   учесть('lesson', cur + '-' + j, 0, l.t);
-  window.__lback = 'sec';
+  /* premium-behavior:v1:nav-loaded */
+window.__lback = returnView;
   favCur = {kind:'lesson', key:cur+'-'+j, title:l.t, sub:s.t};
   favPaintButton();
   remember('lesson', cur+'-'+j, l.t);
@@ -3186,7 +3562,9 @@ function show(v, back){
   try{ if(вТелеграме() && TG.isVersionAtLeast?.('6.1') && TG.BackButton){ ['study','hello'].includes(v) ? TG.BackButton.hide() : TG.BackButton.show(); } }catch(e){}
   window.scrollTo({top:0,behavior:'instant'});
   onScroll();
+/* premium-behavior:v1:access-profile */
   if(v==='study' || v==='me') paintProgress();
+  if(v==='me') refreshAccess();
 }
 
 /* ---------- кто открыл приложение ---------- */
@@ -3312,7 +3690,8 @@ function paintMe(){
   }
 }
 document.getElementById('subbar-go').addEventListener('click', openChannel);
-(async function(){ ME = await post('/api/me'); paintMe(); paintProgress(); учесть('open'); })();
+/* premium-behavior:v1:access-startup */
+(async function(){ await refreshAccess(); учесть('open'); })();
 const S = {
   k: n => 'mzr:' + UID + ':' + n,
   get(n, def){ try{ const v = localStorage.getItem(S.k(n)); return v===null ? def : JSON.parse(v); }catch(e){ return def; } },
@@ -3397,7 +3776,8 @@ function заДень(плюс){
 }
 
 function achState(){
-  const дни = S.get('days', {streak:0, best:0}), tp = toolProgress();
+  /* premium-behavior:v1:achievement-streak */
+const дни = currentStreak(), tp = toolProgress();
   let разделов = 0, открытых = 0, прочитано = 0;
   SECS.forEach((sec, i)=>{ if(sec.archived) return; const p = secProgress(i);
     открытых += p.total; прочитано += p.done;
@@ -3436,7 +3816,8 @@ function неделя(){
   return out.join('');
 }
 function paintStreak(){
-  const дни = S.get('days', {last:'', streak:0, best:0});
+  /* premium-behavior:v1:display-streak */
+const дни = currentStreak();
   const собрано = Object.keys(S.get('ach', {})).length;
   const полоса = $('#strk');
   if(полоса){
@@ -3547,8 +3928,11 @@ function openToolLesson(k){
   blk.n = 0; blk.q = 0;            // нумерация якорей и заданий своя у каждого урока
   $('#l-body').innerHTML = l.b.map(blk).join('');
   buildToc();
+/* premium-behavior:v1:tool-identity */
+  bindQuizLesson($('#l-body'),'t-'+k,l.t);
   testInit(); restorePractice();
-  if($('#pr-out')) delete $('#pr-out').dataset.ready; SRIDX=null;
+/* premium-behavior:v1:tool-prompt-cache */
+  SRIDX=null;
   $('#l-foot').innerHTML = '◷ ' + l.min + ' мин' + (СВЕРЕНО_УРОК[k]
     ? ' · цены сверены ' + датаКоротко(СВЕРЕНО_УРОК[k]) : '');
   $('#l-min').textContent = '◷ ' + l.min + ' мин вместе с практикой';
@@ -3605,26 +3989,12 @@ function showPay(sec, les){
 
 /* тема */
 const CALM = matchMedia('(prefers-reduced-motion: reduce)');
-function setNight(on, animate){
-  const root = document.documentElement;
-  if(animate && !CALM.matches){                 // переход включаем только на время смены
-    root.classList.add('theming');
-    clearTimeout(setNight._t);
-    setNight._t = setTimeout(()=>root.classList.remove('theming'), 320);
-  }
-  root.setAttribute('data-n', on?'1':'0');
-  $('#tgl').textContent = on ? '◑' : '◐';
-  $('#sw2').classList.toggle('off', !on);
-  $('#sw2').setAttribute('aria-checked', String(on));
-  if(вТелеграме() && TG.isVersionAtLeast?.('6.1') && TG.setBackgroundColor){              // красим и рамку Telegram, иначе шапка спорит с темой
-    try{ TG.setBackgroundColor(on ? '#101A1A' : '#FBFBF9');
-         TG.setHeaderColor(on ? '#101A1A' : '#FBFBF9'); }catch(e){}
-  }
-  try{ localStorage.setItem('mzr-night', on?'1':'0'); }catch(e){}
+// The application intentionally uses one light theme, including Telegram chrome.
+document.documentElement.setAttribute('data-n','0');
+try{localStorage.setItem('mzr-night','0');}catch(e){}
+if(вТелеграме() && TG.isVersionAtLeast?.('6.1')){
+  try{TG.setBackgroundColor?.('#ffffff');TG.setHeaderColor?.('#ffffff');}catch(e){}
 }
-let night = false;
-try{ const saved=localStorage.getItem('mzr-night');night=saved===null?(TG?.colorScheme==='dark'||(!вТелеграме()&&matchMedia('(prefers-color-scheme:dark)').matches)):saved==='1'; }catch(e){}
-setNight(night, false);
 
 /* ---------- первый запуск: сначала приветствие ---------- */
 let seenHello;
@@ -3651,8 +4021,13 @@ $('#hi-skip').addEventListener('click', ()=>closeHello(false));
   try{ экран = new URLSearchParams(location.search).get('ekran'); }catch(e){}
   if(!экран){ show('study'); return; }
   if(экран === 'urok'){ S.set('hello2', true); openSec(6); openLes(0); return; }
-  if(document.querySelector('#v-' + экран)){ S.set('hello2', true); show(экран); return; }
+/* premium-behavior:v1:safe-initial-routes */
+  const safe=['hello','study','practice','prep','vpn','numbers','route','news','pay-all','log','tools','me','ach','favs','prompts','search','recent','docs'];
+  if(safe.includes(экран)){ S.set('hello2',true); show(экран); return; }
   show('study');
+  const pendingDetail=new URLSearchParams(location.search);
+  if(!pendingDetail.get('urok') && !pendingDetail.get('zapros') && !pendingDetail.get('tgWebAppStartParam') && !TG?.initDataUnsafe?.start_param)
+    setTimeout(()=>appNotice('Материал не найден. Открыта главная библиотеки.'),0);
 })();
 
 /* Telegram передаёт ?startapp=lesson_1_0 через start_param / tgWebAppStartParam.
@@ -3700,11 +4075,15 @@ document.addEventListener('touchstart', ()=>{}, {passive:true});
 
 
 
-$('#prompt-course').addEventListener('change',()=>{promptLimit=12;$('#prompt-return').hidden=true;filterPrompts();});
-$('#prompt-query').addEventListener('input',()=>{if($('#prompt-query').dataset.composing)return;promptLimit=12;$('#prompt-clear').hidden=!$('#prompt-query').value;filterPrompts();});
+/* premium-behavior:v1:prompt-course-reset */
+$('#prompt-course').addEventListener('change',()=>{promptLessonFilter=null;promptLimit=12;$('#prompt-return').hidden=true;filterPrompts();});
+$('#prompt-query').addEventListener('input',()=>{/* premium-behavior:v1:prompt-query-reset */
+if($('#prompt-query').dataset.composing)return;promptLessonFilter=null;$('#prompt-return').hidden=true;promptLimit=12;$('#prompt-clear').hidden=!$('#prompt-query').value;filterPrompts();});
 $('#prompt-query').addEventListener('compositionstart',()=>$('#prompt-query').dataset.composing='1');
-$('#prompt-query').addEventListener('compositionend',()=>{delete $('#prompt-query').dataset.composing;promptLimit=12;filterPrompts();});
-$('#prompt-clear').addEventListener('click',()=>{$('#prompt-query').value='';$('#prompt-clear').hidden=true;promptLimit=12;filterPrompts();$('#prompt-query').focus();});
+$('#prompt-query').addEventListener('compositionend',()=>{/* premium-behavior:v1:prompt-composition-reset */
+delete $('#prompt-query').dataset.composing;promptLessonFilter=null;$('#prompt-return').hidden=true;$('#prompt-clear').hidden=!$('#prompt-query').value;promptLimit=12;filterPrompts();});
+/* premium-behavior:v1:prompt-clear-reset */
+$('#prompt-clear').addEventListener('click',()=>{promptLessonFilter=null;$('#prompt-return').hidden=true;$('#prompt-query').value='';$('#prompt-clear').hidden=true;promptLimit=12;filterPrompts();$('#prompt-query').focus();});
 $('#prompt-more').addEventListener('click',()=>{promptLimit+=12;filterPrompts();});
 $('#practice-course').addEventListener('change',()=>practicePaint(true));
 $('#practice-more').addEventListener('click',()=>{practiceLimit+=12;practicePaint();});
@@ -3735,7 +4114,7 @@ document.addEventListener('click', e=>{
   const prep=e.target.closest('button[data-prep]');if(prep){show('prep');prepPaint(Number(prep.dataset.prep));return;}
   const device=e.target.closest('button[data-device]');if(device){vpnPaint(device.dataset.device);return;}
 
-  if(e.target.closest('#tgl') || e.target.closest('#sw2')){ night=!night; setNight(night, true); return; }
+
   const sw1 = e.target.closest('#sw1');
   if(sw1){
     if(sw1.disabled) return;
@@ -3780,7 +4159,8 @@ document.addEventListener('click', e=>{
   if(e.target.closest('[data-recent]')){ paintRecent(); show('recent'); return; }
   if(e.target.closest('[data-hello]')){ show('hello'); return; }
   const rt = e.target.closest('[data-retry]');
-  if(rt){ openLes(payLes); return; }
+  /* premium-behavior:v1:nav-retry */
+if(rt){ openLes(payLes,window.__lback||'sec'); return; }
   if(e.target.closest('#pop')){ $('#pop').classList.remove('on'); show('ach'); return; }
   const тг = e.target.closest('[data-tg]');
   if(тг){
@@ -3818,8 +4198,9 @@ document.addEventListener('click', e=>{
     // что писать. Кнопка доступа и кнопка «написать мне» ведут в разные ответы.
     const метка = wr.dataset.write === 'pay' ? 'pay' : 'help';
     const ссылка = 'https://t.me/ai_bez_lyudey_bot?start=' + метка;
-    if(TG && TG.openTelegramLink) TG.openTelegramLink(ссылка);
-    else location.href = ссылка;
+/* premium-behavior:v1:write-fallback */
+    if(метка==='pay') accessReturnPending=true;
+    перейти(ссылка);
     return;
   }
   const ro = e.target.closest('[data-rec-open]');
@@ -3830,7 +4211,14 @@ document.addEventListener('click', e=>{
     return;
   }
   const nx = e.target.closest('[data-nx]');
-  if(nx){ const [si,li] = nx.dataset.nx.split('-').map(Number); openSec(si); openLes(li); return; }
+  /* premium-behavior:v1:nav-exercise */
+if(nx){
+    const [si,li]=nx.dataset.nx.split('-').map(Number);
+    if(nx.id==='exercise-return' && $('#v-exercise').classList.contains('on') && practiceCurrent?.si===si && practiceCurrent?.li===li){
+      cur=si; openLes(li,'exercise');
+    }else{ openSec(si); openLes(li); }
+    return;
+  }
   const go = e.target.closest('button[data-go],a[data-go]');
   if(go && go.dataset.go){ show(go.dataset.go, 'back' in go.dataset); return; }
   const sg = e.target.closest('[data-sec-go]'); if(sg){ openSec(+sg.dataset.secGo); return; }
@@ -3865,8 +4253,8 @@ try{
       if(back) back.click(); else show('study',true);
     });
     const paint = () => { const n = document.documentElement.getAttribute('data-n')==='1';
-      if(tg.isVersionAtLeast?.('6.1') && tg.setHeaderColor) tg.setHeaderColor(n?'#101A1A':'#FBFBF9');
-      if(tg.isVersionAtLeast?.('6.1') && tg.setBackgroundColor) tg.setBackgroundColor(n?'#101A1A':'#FBFBF9'); };
+      if(tg.isVersionAtLeast?.('6.1') && tg.setHeaderColor) tg.setHeaderColor('#ffffff');
+      if(tg.isVersionAtLeast?.('6.1') && tg.setBackgroundColor) tg.setBackgroundColor('#ffffff'); };
     paint();
     new MutationObserver(paint).observe(document.documentElement,{attributes:true,attributeFilter:['data-n']});
   }

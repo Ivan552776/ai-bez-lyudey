@@ -16,7 +16,7 @@
 
 ## Visual contract
 
-DESIGN.md records the palette, surfaces and composition. Runtime owner is the final CSS cascade in index.html, generated from the section migration sources in the private project. No build-time token export. Light/dark themes share semantic section pairs. Check computed colors and 360/390/430 px after changing the cascade. The earlier library CSS remains for archived views; the new section CSS owns current surfaces.
+DESIGN.md records the palette, surfaces and composition. Runtime owner is the final CSS cascade in index.html, generated from curriculum/2026-09-15-premium/premium.css and visual_patch.py in the private project. No build-time token export. Only the light theme is supported by explicit user decision on 2026-09-15. Ignore old dark-mode preferences and Telegram/system theme; remove the switch. Check computed colors and 360/390/430 px after changing the cascade. The earlier library CSS remains for archived views; the new section CSS owns current surfaces.
 
 ## Canonical UI Map
 
@@ -30,9 +30,9 @@ DESIGN.md records the palette, surfaces and composition. Runtime owner is the fi
 
 ## Navigation and responsive behavior
 
-Home has five destinations: lessons, prompts, practice, VPN, foreign number. The library displays six illustrated books. Registration is separate preparation reached from the library or course. The header owns home/search/profile; secondary routes use five horizontal section buttons. There is no bottom dock, slideshow, laptop scene or page-scale transition.
+Home has five destinations: lessons, prompts, practice, VPN, foreign number. The library displays six illustrated books. Registration is separate preparation reached from home, the library or a course. The header owns home/search/profile; secondary routes use five horizontal section buttons. There is no bottom dock, slideshow, laptop scene or page-scale transition.
 
-`show` is the only view owner. It validates the destination, hides inactive views, updates the Telegram BackButton and document title, focuses a visible heading and resets document scroll. `posRestore` restores a lesson synchronously after rendering: no delayed jump under the next click. Lesson/exercise back buttons are explicit. The native Telegram back delegates to those buttons. Filters and expanded prompts stay in memory during the visit; progress and practice checks use per-user storage. Missing deep links show the home with a notice. No history or credential query parameters are added by this change.
+`show` is the only view owner. It validates the destination, hides inactive views, updates the Telegram BackButton and document title, focuses a visible heading and resets document scroll. `posRestore` restores a lesson synchronously after rendering: no delayed jump under the next click. Lesson/exercise back buttons are explicit. A lesson opened from prompts, search or an exercise returns to that origin, including after a failed load and retry. The native Telegram back delegates to those buttons. Filters and expanded prompts stay in memory during the visit; progress and practice checks use per-user storage. Missing deep links show the home with a notice. No history or credential query parameters are added by this change.
 
 ## Content ownership
 
@@ -58,4 +58,4 @@ Home has five destinations: lessons, prompts, practice, VPN, foreign number. The
 
 ## Verification
 
-Run the premium strict static audit and project `deploy/proverka.sh`. The static auditor cannot infer delegated `data-*` click handlers: review such findings against the canonical event dispatcher and browser flows, not by adding duplicate inline handlers. Browser checks cover every lesson/exercise pair on a local fixture, production lock behavior, loading/error/stale responses, prompt search/copy, registration, four VPN devices, light/dark 360/390/430. Real payment and real regional/network changes are not test actions.
+Run the premium strict static audit and project `deploy/proverka.sh`. The static auditor cannot infer delegated `data-*` click handlers: review such findings against the canonical event dispatcher and browser flows, not by adding duplicate inline handlers. Browser checks cover every lesson/exercise pair on a local fixture, production lock behavior, loading/error/stale responses, prompt search/copy, registration, four VPN devices, light-only 320/360/390/430/1180 and legacy dark-preference migration. Real payment and real regional/network changes are not test actions.
