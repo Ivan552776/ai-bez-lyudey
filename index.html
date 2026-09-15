@@ -3534,7 +3534,9 @@ $('#hi-skip').addEventListener('click', ()=>closeHello(false));
   show('study');
 })();
 
-/* Ссылка на конкретный материал: ?urok=1-0 открывает первый урок второго
+/* Telegram передаёт ?startapp=lesson_1_0 через start_param / tgWebAppStartParam.
+   Это только адрес материала: доступ по-прежнему проверяет сервер.
+   Ссылка на конкретный материал: ?urok=1-0 открывает первый урок второго
    раздела, ?urok=t-claude — разбор нейросети, ?zapros=3 — готовый запрос.
    Нужно каналу: пост ведёт прямо в то, о чём он, а не на общий экран. */
 (function(){
@@ -3542,6 +3544,9 @@ $('#hi-skip').addEventListener('click', ()=>closeHello(false));
   try{
     const п = new URLSearchParams(location.search);
     урок = п.get('urok'); запрос = п.get('zapros');
+    const старт = TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam');
+    const адрес = typeof старт === 'string' && /^lesson_(\d+)_(\d+)$/.exec(старт);
+    if(адрес){ урок = адрес[1] + '-' + адрес[2]; запрос = null; }
   }catch(e){}
   const потерялось = что => {
     show('study');
@@ -3554,6 +3559,7 @@ $('#hi-skip').addEventListener('click', ()=>closeHello(false));
       if(TL[ключ]) openToolLesson(ключ); else потерялось(урок);
       return;
     }
+    if(!/^\d+-\d+$/.test(урок)){ потерялось(урок); return; }
     const [i, j] = урок.split('-').map(Number);
     if(SECS[i] && SECS[i].ls && SECS[i].ls[j]){ openSec(i); openLes(j); } else потерялось(урок);
     return;
