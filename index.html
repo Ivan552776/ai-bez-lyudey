@@ -1404,6 +1404,17 @@ body.x-night-on .app{background:var(--x-night)}
 /* круг 7 */
 #sec-overview span{font-size:15px;line-height:1.35}
 #sec-overview .x-pay-pill{min-height:40px;padding:0 16px;font-size:15px}
+
+/* доступность из России */
+.x-ru{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;margin:4px 0 2px}
+.x-ru::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.x-ru.ok{color:#18804f}.x-ru.no{color:#b3261e}
+.night .x-ru.ok{color:#5fd49a}.night .x-ru.no{color:#ff8a80}
+.x-course .x-ru{display:flex}
+.x-ru-note{font-size:15px;line-height:1.5;color:#7a2b22;background:#fdeceb;border-radius:16px;padding:12px 14px;margin:10px 0 0}
+.x-ru-lesson{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;background:#fdeceb;color:#5c1f18;border-radius:18px;padding:14px 16px;margin:0 0 20px;font-size:15.5px;line-height:1.5}
+.x-ru-lesson p{margin:0!important}.x-ru-lesson .x-ic{color:#b3261e;margin-top:2px}
+.x-course b{color:var(--x-ink)!important}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -3923,6 +3934,18 @@ const xi=(n,c='')=>`<svg class="x-ic ${c}" aria-hidden="true"><use href="#i-${n}
 const feedAttr=v=>String(v??'').replace(/[&"<>]/g,c=>({'&':'&amp;','"':'&quot;','<':'&lt;','>':'&gt;'}[c]));
 const X_BOOKS=['chatgpt','claude','perplexity','gemini','notebook','deepseek'];
 const xBook=slug=>`assets/${slug}-book.webp`;
+/* Доступность из России, сверено 19.09.2026 по официальным спискам стран
+   (help.openai.com, anthropic.com/supported-countries, Google) и сообщениям о работе
+   сервисов. Об обходе блокировок не пишем — только честный статус. */
+const X_RU={
+  chatgpt:[false,'Из России недоступен','OpenAI не поддерживает Россию'],
+  claude:[false,'Из России недоступен','Anthropic не поддерживает Россию'],
+  gemini:[false,'Из России недоступен','Google не открывает Gemini в России'],
+  notebook:[false,'Из России недоступен','работает на Gemini, доступ тот же'],
+  perplexity:[true,'Работает из России','Pro оплачивается только зарубежной картой'],
+  deepseek:[true,'Обычно открывается из России','у некоторых провайдеров бывают сбои']
+};
+const xRu=slug=>{const r=X_RU[slug];return r?`<span class="x-ru ${r[0]?'ok':'no'}">${r[1]}</span>`:'';};
 
 /* ---------- обложки гайдов: геометрия, без картинок ---------- */
 const X_ART={
@@ -4215,7 +4238,7 @@ function xRenderSec(i){
   const curJ=firstOpen<0?-1:firstOpen;
   $('#sec-head').innerHTML=s.archived
     ?`<div><h2>${esc(s.t)}</h2><p>Материал прежней программы. Сохранён по старой ссылке.</p></div>`
-    :`<img src="${xBook(s.slug)}" alt="" width="86" height="86"><div><h2>${esc(s.t)}</h2><p>${esc(s.d||'')}</p></div>`;
+    :`<img src="${xBook(s.slug)}" alt="" width="86" height="86"><div><h2>${esc(s.t)}</h2><p>${esc(s.d||'')}</p>${xRu(s.slug)}</div>`;
   const free=s.ls.filter(l=>!l.key).length;
   $('#sec-overview').innerHTML=`<span>${s.archived?'':'3 модуля · '}${s.ls.length} ${скл(s.ls.length,'урок','урока','уроков')} · ${free===s.ls.length?'все открыты':free+' '+скл(free,'открыт','открыто','открыто')}</span>${!paid&&free<s.ls.length?`<button class="x-pay-pill x-press" data-go="pay-all">Оформить доступ</button>`:''}`;
   const mods=s.archived?[[0,s.ls.length,'Уроки']]:[[0,3,'Освоиться'],[3,7,'Применять в работе'],[7,8,'Собрать свой результат']];
@@ -4240,7 +4263,11 @@ const _openLes=openLes;
 openLes=function(j,returnView='sec'){
   S.set('xlast',[cur,j]);xReading=null;
   const r=$('#lesson-result');if(r){r.style.cssText='';$('#l-head').after(r);}
-  return _openLes(j,returnView);
+  return Promise.resolve(_openLes(j,returnView)).then(()=>{
+    const s=SECS[cur],r=s&&X_RU[s.slug],body=$('#l-body');
+    if(r&&!r[0]&&body&&$('#v-lesson').classList.contains('on')&&!body.querySelector('.x-ru-lesson'))
+      body.insertAdjacentHTML('afterbegin',`<aside class="x-ru-lesson">${xi('shield')}<p><b>${esc(s.t)} из России напрямую недоступен.</b> Текстовые запросы из урока можно попробовать в DeepSeek, Алисе AI или GigaChat. Специальные функции ${esc(s.t)} там устроены иначе.</p></aside>`);
+  });
 };
 
 /* ---------- экран закрытого урока ---------- */
@@ -4271,6 +4298,7 @@ routePaint=function(){
    <h1>Нейросети для работы и жизни</h1>
    <p class="lead">Шесть курсов по инструментам, которыми пользуются каждый день. В каждом уроке готовый запрос, учебный пример и проверка результата.</p>
    <p class="meta">${courses.length} курсов · ${total} уроков · 96 промптов · проверка после каждого урока</p>
+   <p class="x-ru-note">ChatGPT, Claude, Gemini и Gemini Notebook из России напрямую недоступны. Текстовые запросы из этих курсов можно попробовать в DeepSeek, Алисе AI или GigaChat.</p>
    <h2>Кому это нужно</h2>
    <ul class="x-who">
     <li>${xi('check')}<div><b>Тем, кто только начинает</b><span>Не нужно ничего знать заранее. Первый урок каждого курса начинается с регистрации и первого запроса.</span></div></li>
@@ -4280,7 +4308,7 @@ routePaint=function(){
    <h2>Что получается</h2>
    <div class="x-gallery">${gal}</div>
    <h2>Что внутри</h2>
-   <div class="x-courses">${courses.map((s,k)=>`<button class="x-course x-press" data-sec-go="${k+6}"><img src="${xBook(s.slug)}" alt="" width="52" height="52" loading="lazy"><span><b>${esc(s.t)}</b><span>${esc(s.d)}</span><span>${s.ls.length} уроков · ${s.ls.filter(l=>!l.key).length} бесплатно</span></span>${xi('chev')}</button>`).join('')}</div>
+   <div class="x-courses">${courses.map((s,k)=>`<button class="x-course x-press" data-sec-go="${k+6}"><img src="${xBook(s.slug)}" alt="" width="52" height="52" loading="lazy"><span><b>${esc(s.t)}</b>${xRu(s.slug)}<span>${esc(s.d)}</span><span>${s.ls.length} уроков · ${s.ls.filter(l=>!l.key).length} бесплатно</span></span>${xi('chev')}</button>`).join('')}</div>
    <h2>Сколько открыто сразу</h2>
    <div class="x-facts"><div class="big">${total} ${скл(total,'урок','урока','уроков')}</div><span>во всех шести курсах</span>
     <div class="bar"><i style="flex:${free};background:#2f5bea"></i><i style="flex:${total-free};background:#b9ccff"></i></div>
@@ -4314,7 +4342,7 @@ function xCheckout(){
     <button class="x-plan" role="radio" data-x-plan="month" aria-checked="true"><span><span class="ttl">Месяц</span><strong>500 ₽<small>в месяц</small></strong></span><span class="rd"></span></button>
     <button class="x-plan" role="radio" data-x-plan="year" aria-checked="false"><span><span class="ttl">Год <em>−1 100 ₽</em></span><strong>4 900 ₽<small>за год</small></strong></span><span class="rd"></span></button>
    </div>`}
-   <p class="x-honest">Онлайн-оплата подключается. Пока доступ оформляется в боте: нажми кнопку, бот пришлёт реквизиты и откроет уроки сразу после оплаты. <button class="x-inline" data-doc="oferta">Публичная оферта</button></p>
+   <p class="x-honest">ChatGPT, Claude, Gemini и Gemini Notebook из России напрямую недоступны: 4 из 6 курсов про них. DeepSeek и Perplexity работают. Онлайн-оплата подключается. Пока доступ оформляется в боте: нажми кнопку, бот пришлёт реквизиты и откроет уроки сразу после оплаты. <button class="x-inline" data-doc="oferta">Публичная оферта</button></p>
    <div class="x-sticky night"><div><button class="x-btn white x-press" id="x-buy" data-write="pay">${paid?'Продлить в боте':'Оформить месяц за 500 ₽'}</button></div></div>`;
   if(!paid)xPlan(xPlanSel);
 }
