@@ -1023,8 +1023,8 @@ body{font-family:var(--x-font);background:var(--x-bg);color:var(--x-ink);font-fe
 ::selection{background:#cfdcff;color:var(--x-ink)}
 .app{max-width:600px;margin:0 auto;padding:calc(10px + var(--tg-content-top,0px)) 20px calc(112px + var(--x-bottom))}
 .tp,.section-nav,#subbar{display:none!important}
-.view.on{animation:x-in .42s var(--x-ease) both}
-@keyframes x-in{from{opacity:.001;transform:translateY(8px)}to{opacity:1;transform:none}}
+.view.on{animation:x-in .42s var(--x-ease)}
+@keyframes x-in{from{transform:translateY(8px)}}
 button,a{-webkit-tap-highlight-color:transparent}
 button:focus-visible,a:focus-visible,[tabindex]:focus-visible,summary:focus-visible{outline:2.5px solid var(--x-blue);outline-offset:3px;border-radius:12px}
 .x-press{transition:transform .18s var(--x-ease),background-color .2s,filter .2s}
@@ -1134,11 +1134,12 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible,summary:focus-visi
 .x-card[data-type="tool"] .cat{background:var(--c-ai)}
 /* раскрытый промпт */
 .x-prompt-btn[aria-expanded="true"]{background:var(--x-ink);color:#fff}
-.x-fold{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--x-ease)}
-.x-fold.open{grid-template-rows:1fr}
-.x-fold>div{overflow:hidden;min-height:0}
-.x-prompt{margin-top:12px;border-radius:22px;background:var(--x-panel);padding:16px 16px 18px;transform-origin:top left;transition:transform .5s var(--x-spring),opacity .3s}
-.x-fold:not(.open) .x-prompt{transform:scale(.97);opacity:0}
+.x-fold{display:none}
+.x-fold.open{display:block}
+/* видимость не зависит от анимации: без fill-mode, конечное состояние — обычное */
+.x-fold.open .x-prompt{animation:x-pop .5s var(--x-spring)}
+@keyframes x-pop{from{transform:translateY(-8px) scale(.97)}}
+.x-prompt{margin-top:12px;border-radius:22px;background:var(--x-panel);padding:16px 16px 18px;transform-origin:top left}
 .x-prompt header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 .x-prompt header b{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:600}
 .x-prompt header b i{width:28px;height:28px;border-radius:50%;background:linear-gradient(180deg,#4f86ff,#2f5bea);display:grid;place-items:center;color:#fff}
@@ -1368,7 +1369,8 @@ body.x-night-on .app{background:var(--x-night)}
 }
 @media(prefers-reduced-motion:reduce){
  .view.on{animation:none}
- .x-fold,.x-prompt,.x-fan img,.x-dots i,.x-filters button::after,.x-press{transition:none}
+ .x-fold.open .x-prompt{animation:none}
+ .x-fan img,.x-dots i,.x-filters button::after,.x-press{transition:none}
 }
 
 .x-inline{all:unset;color:#fff;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
@@ -1398,6 +1400,10 @@ body.x-night-on .app{background:var(--x-night)}
 .x-course-hero img{border-radius:20px;background:#fff;filter:none;box-shadow:0 14px 24px -10px #000}
 .x-lesson-chip header b img{border-radius:8px}
 .x-orbs span{background-size:cover}
+
+/* круг 7 */
+#sec-overview span{font-size:15px;line-height:1.35}
+#sec-overview .x-pay-pill{min-height:40px;padding:0 16px;font-size:15px}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -4004,7 +4010,7 @@ function feedToggle(id){
   const open=!FEED_STATE.opened.has(id);
   if(open)FEED_STATE.opened.add(id);else FEED_STATE.opened.delete(id);
   button.setAttribute('aria-expanded',String(open));
-  if(open){box.innerHTML=xPromptBody(id);if(!FEED_STATE.bodies.has(id))feedLoadPrompt(id);requestAnimationFrame(()=>fold.classList.add('open'));учесть('card',id,0,'prompt');}
+  if(open){box.innerHTML=xPromptBody(id);if(!FEED_STATE.bodies.has(id))feedLoadPrompt(id);fold.classList.add('open');учесть('card',id,0,'prompt');}
   else fold.classList.remove('open');
 }
 function feedMembership(){
@@ -4201,7 +4207,7 @@ function xHome(){
 })();
 
 /* ---------- программа курса: тёмная, по модулям ---------- */
-openSec=function(i){
+function xRenderSec(i){
   const s=SECS[i];if(!s)return;cur=i;
   document.body.style.setProperty('--lesson-tint',s.g);document.body.style.setProperty('--lesson-accent',s.accent||'#2356ad');
   const done=doneList(),paid=!!ME?.paid;
@@ -4221,7 +4227,14 @@ openSec=function(i){
   }).join('');
   $('#sec-foot').innerHTML=s.archived?'':'<p class="x-foot-note">Один урок — один результат: запрос, пример и проверка. Проходи в своём темпе.</p>';
   $('#sec-t').textContent=s.t;
-  show('sec');
+}
+openSec=function(i){if(!SECS[i])return;xRenderSec(i);show('sec');};
+/* ответ сервера о доступе приходит позже экрана: перерисовываем то, что от него зависит */
+const _paintMe=paintMe;
+paintMe=function(){
+  _paintMe();
+  if($('#v-pay-all')?.classList.contains('on'))xCheckout();
+  if($('#v-sec')?.classList.contains('on'))xRenderSec(cur);
 };
 const _openLes=openLes;
 openLes=function(j,returnView='sec'){
