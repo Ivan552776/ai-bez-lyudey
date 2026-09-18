@@ -30,7 +30,7 @@ DESIGN.md records the palette, surfaces and composition. Runtime owner is the fi
 
 ## Navigation and responsive behavior
 
-Home has five destinations: lessons, prompts, practice, VPN, foreign number. The library displays six illustrated books. Registration is separate preparation reached from home, the library or a course. The header owns home/search/profile; secondary routes use five horizontal section buttons. There is no bottom dock, slideshow, laptop scene or page-scale transition.
+Home is the subscriber feed: greeting, product shelf (courses, first lesson), sticky filters, access plaque, cards (prompt expands in place with {fields}; guide opens the reader with a pinned «Скопировать для нейронки»; tool card links to the service). Bottom dock: Главная · Профиль. Program, locked lesson and checkout are dark showcases.
 
 `show` is the only view owner. It validates the destination, hides inactive views, updates the Telegram BackButton and document title, focuses a visible heading and resets document scroll. `posRestore` restores a lesson synchronously after rendering: no delayed jump under the next click. Lesson/exercise back buttons are explicit. A lesson opened from prompts, search or an exercise returns to that origin, including after a failed load and retry. The native Telegram back delegates to those buttons. Filters and expanded prompts stay in memory during the visit; progress and practice checks use per-user storage. Missing deep links show the home with a notice. No history or credential query parameters are added by this change.
 
@@ -39,9 +39,7 @@ Home has five destinations: lessons, prompts, practice, VPN, foreign number. The
 - Lessons: explanation, steps, colored diagram, collapsed sources, entry to practice.
 - Practice: sample data, complete prompt, worked result, follow-up prompt, personal exercise and three questions. Questions refer to the sample and belong here.
 - Prompts: independent searchable catalogue; two prompts per lesson. Show 12, with explicit load-more.
-- Preparation: service-specific account steps and email help. VPN and phone purchases remain separate.
-- VPN: Ded Proxy on dedfast.com, device-specific installation. INCY is a separate client for an existing compatible subscription, not a compulsory activation step.
-- Numbers: SMSFAST with personal-use endorsement from the user; explain requirements without guaranteeing every virtual number is accepted.
+- Preparation: service-specific account steps and email help. VPN and foreign-number instructions were removed on 18.09.2026 (legal risk) and must not return.
 
 `lessonParts` is the canonical projection of existing lesson blocks. `blk` remains the canonical renderer, `copyText` the clipboard owner, `testInit` the quiz owner. No paid body is embedded in the public site. `fetchLesson` always performs the existing server check before paid content is shown.
 
@@ -59,3 +57,5 @@ Home has five destinations: lessons, prompts, practice, VPN, foreign number. The
 ## Verification
 
 Run the premium strict static audit and project `deploy/proverka.sh`. The static auditor cannot infer delegated `data-*` click handlers: review such findings against the canonical event dispatcher and browser flows, not by adding duplicate inline handlers. Browser checks cover every lesson/exercise pair on a local fixture, production lock behavior, loading/error/stale responses, prompt search/copy, registration, four VPN devices, light-only 320/360/390/430/1180 and legacy dark-preference migration. Real payment and real regional/network changes are not test actions.
+
+Visibility never depends on animation: keyframes animate transform only, without fill-mode, so a frozen Telegram webview still shows content.
