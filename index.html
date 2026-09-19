@@ -1619,6 +1619,7 @@ html,body{overflow-x:clip}
 @media(prefers-reduced-motion:reduce){#copy-fallback[open],#copy-fallback::backdrop{animation:none}}
 /* пометка «Новое» перед рубрикой: янтарная плашка, как штамп выпускающего */
 .x-new{display:inline-block;margin:0 8px 0 0;padding:2px 6px 1px;background:var(--x-amber);color:var(--x-ink);font-weight:700;font-size:10.5px;letter-spacing:.1em;vertical-align:1px}
+.x-sub .x-h,.x-ad .x-h,.x-locked .x-h{text-wrap:balance}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -4614,7 +4615,7 @@ paintMe=function(){
   const st=$('#p-st-t'),sd=$('#p-st-d');
   if(st&&sd&&ME?.ok){const free=SECS.slice(6).reduce((a,s)=>a+s.ls.filter(l=>!l.key).length,0);
     st.textContent='Полное собрание курсов';
-    sd.textContent=ME.paid?(ME.until?'оформлено до '+ME.until.split('-').reverse().join('.'):'оформлено'):free+' '+скл(free,'урок открыт','урока открыты','уроков открыты')+' бесплатно · подписной купон';}
+    sd.textContent=ME.paid?(ME.until?'оформлено до '+ME.until.split('-').reverse().join('.'):'оформлено'):free+' '+скл(free,'урок','урока','уроков')+' бесплатно · подписной купон';}
   // подписчику текст «Промпта номера» подгружаем сразу: иначе при первом «Вырезать»
   // купон вырастал бы под пальцем, когда приходит совет редакции
   if(ME?.ok&&(ME.subscribed||ME.paid)){const id=xLeadId();if(!FEED_STATE.bodies.has(id)&&!FEED_STATE.tickets.has(id))feedLoadPrompt(id);}
@@ -4677,8 +4678,8 @@ function xPlan(p){
 function xSubCoupon(short){
   const paid=!!ME?.paid,until=ME?.until?ME.until.split('-').reverse().join('.'):'';
   return `<div class="x-sub"><span class="cap">Подписной купон</span>
-    <span class="x-h">Полное собрание курсов «ИИ без людей»</span>
-    <p>Все шесть курсов и всё, что выйдет потом. Без автосписаний: продление только когда решишь сам. Возврат в течение 7 дней.</p>
+    <span class="x-h">Полное собрание курсов «ИИ&nbsp;без&nbsp;людей»</span>
+    <p>Все шесть курсов и всё, что выйдет потом. Без автосписаний: продление только когда решишь сам. Возврат в&nbsp;течение 7&nbsp;дней.</p>
     ${paid?`<div class="x-plan" aria-checked="true"><span class="box"></span><span><b>Подписка оформлена</b><small>${until?'действует до '+until:'без срока'}</small></span><strong>✓</strong></div>`:`
     <div role="radiogroup" aria-label="Срок подписки">
      <button class="x-plan" role="radio" data-x-plan="month" aria-checked="${xPlanSel==='month'}"><span class="box"></span><span><b>На месяц</b><small>можно начать с одного месяца</small></span><strong>500 ₽</strong></button>
