@@ -1167,7 +1167,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 #v-lesson .lesson-result span{font:700 11.5px/1 var(--x-font);letter-spacing:.1em;text-transform:uppercase;color:var(--x-amberInk)}
 #v-lesson .lesson-result p{font-family:var(--x-head);font-style:italic;font-size:19px;line-height:1.4;margin:6px 0 0}
 #v-lesson .prose{font-size:17.5px;line-height:1.64;color:var(--x-ink2)}
-#v-lesson .prose>p:first-of-type::first-letter{font-family:var(--x-head);font-weight:700;float:left;font-size:3.1em;line-height:.9;padding:4px 6px 0 0;color:var(--x-ink)}
+#v-lesson .prose>p:not(.x-note):not([role=status]):first-of-type::first-letter{font-family:var(--x-head);font-weight:700;float:left;font-size:3.1em;line-height:.9;padding:4px 6px 0 0;color:var(--x-ink)}
 #v-lesson .prose p{margin:0 0 15px}
 #v-lesson .prose h4{font-family:var(--x-head);font-size:25px;line-height:1.15;font-weight:700;margin:32px 0 10px;color:var(--x-ink)}
 #v-lesson .prose h5{font-size:17px;font-weight:700;margin:20px 0 6px}
@@ -1583,6 +1583,18 @@ html,body{overflow-x:clip}
 .x-rec b{font-size:19px!important}
 #v-recent .sh{display:none}
 .x-empty-note,#v-favs .foot{margin:14px 0 0!important;padding:16px 0!important;border:0!important;border-top:1px solid var(--x-rule)!important;border-bottom:1px solid var(--x-hair)!important;background:none!important;font-family:var(--x-head)!important;font-style:italic;font-size:17px!important;line-height:1.45!important;color:var(--x-muted)!important;text-align:left}
+
+/* пока материал грузится — строки-заготовки вместо слов «Загружаем…»: видно, что
+   сейчас появится текст. Слова остаются для диктора. Мерцание не уходит в ноль —
+   видимость от анимации не зависит. */
+#l-body>p[role=status]:only-child,#exercise-content>p[role=status]:only-child{position:relative;min-height:212px;margin:6px 0 0!important;color:transparent!important;overflow:hidden;
+  background:linear-gradient(var(--x-paper2),var(--x-paper2)) 0 4px/100% 13px no-repeat,linear-gradient(var(--x-paper2),var(--x-paper2)) 0 32px/93% 13px no-repeat,linear-gradient(var(--x-paper2),var(--x-paper2)) 0 60px/97% 13px no-repeat,linear-gradient(var(--x-paper2),var(--x-paper2)) 0 88px/58% 13px no-repeat,
+  linear-gradient(var(--x-paper2),var(--x-paper2)) 0 132px/90% 13px no-repeat,linear-gradient(var(--x-paper2),var(--x-paper2)) 0 160px/96% 13px no-repeat,linear-gradient(var(--x-paper2),var(--x-paper2)) 0 188px/42% 13px no-repeat;
+  animation:x-wait 1.5s ease-in-out infinite}
+@keyframes x-wait{50%{opacity:.5}}
+@media(prefers-reduced-motion:reduce){#l-body>p[role=status]:only-child,#exercise-content>p[role=status]:only-child{animation:none}}
+/* ошибка или закрытый доступ в читалке — спокойная заметка, а не буквица */
+#l-body>.x-note:not([role=status]){margin:4px 0 12px!important;padding:14px 0 0;border-top:1px solid var(--x-rule);font-family:var(--x-head);font-style:italic;font-size:19px!important;line-height:1.45!important;color:var(--x-ink2)!important}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -4508,7 +4520,7 @@ function xHome(){
   $('#x-lead').innerHTML=`<div><span class="x-rub">Промпт номера · ${X_TAG[lead.tags.find(t=>X_TAG[t])]||'на каждый день'}</span>
       <h2 class="x-h" id="feed-title-${lead.id}">${esc(lead.title)}</h2>
       <p class="x-dek">${esc(lead.summary)}</p>
-      <p class="x-by">Редакция: нейросеть · ${(lead.fields||[]).length} ${скл((lead.fields||[]).length,'поле','поля','полей')} · бесплатно подписчикам</p></div>
+      <p class="x-by">Редакция: нейросеть&nbsp;· ${(lead.fields||[]).length}&nbsp;${скл((lead.fields||[]).length,'поле','поля','полей')}&nbsp;· бесплатно подписчикам</p></div>
     ${xCoupon(lead)}`;
   xGrowAll($('#x-lead'));
   const courses=SECS.slice(6),total=courses.reduce((a,s)=>a+s.ls.length,0),free=courses.reduce((a,s)=>a+s.ls.filter(l=>!l.key).length,0);
