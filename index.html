@@ -1305,7 +1305,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 @media(max-width:380px){
  .app{padding-left:14px;padding-right:14px}
  .x-rubrics{margin:0 -14px;padding:0 14px;gap:14px}
- .x-mast .top{font-size:10px;letter-spacing:.06em}
+ .x-mast .top{font-size:11px;letter-spacing:.02em}
 }
 @media(min-width:900px){
  .app{max-width:980px;padding-left:32px;padding-right:32px}
@@ -1469,7 +1469,7 @@ html,body{overflow-x:clip}
 .x-rubrics button[aria-pressed="true"]{transition:color .2s}
 .x-fold:not([hidden]),.x-full-body:not([hidden]){display:flow-root}
 /* переключатель: галочка встаёт сразу при нажатии, пока сервер подтверждает */
-.x-toggle .sw i{transition:opacity .18s ease-out,scale .34s cubic-bezier(.34,1.56,.64,1)}
+.x-toggle .sw i{transition:opacity .18s ease-out,scale .3s cubic-bezier(.22,1,.36,1)}  /* без отскока: отскок — только после броска пальцем */
 .x-toggle .sw.off i{scale:.6}
 .x-toggle .sw.x-flip.off i{opacity:1;scale:1}
 .x-toggle .sw.x-flip:not(.off) i{opacity:0;scale:.6}
@@ -4878,7 +4878,7 @@ const _appNotice=appNotice;
 appNotice=function(text){
   const n=$('#app-notice');if(!n||xCalm())return _appNotice(text);
   const was=n.hidden;n.textContent=text;n.hidden=false;clearTimeout(appNotice.timer);n._out?.cancel();
-  if(was)n.animate([{opacity:0,translate:'0 14px',scale:.96},{opacity:1,translate:'0 0',scale:1}],{duration:420,easing:'cubic-bezier(.3,1.25,.5,1)'});
+  if(was)n.animate([{opacity:0,translate:'0 14px',scale:.96},{opacity:1,translate:'0 0',scale:1}],{duration:420,easing:'cubic-bezier(.22,1,.36,1)'});
   appNotice.timer=setTimeout(()=>{const a=n.animate([{opacity:1},{opacity:0,translate:'0 10px'}],{duration:240,easing:'ease-in'});n._out=a;
     const hide=()=>{if(n._out===a){n.hidden=true;n._out=null;}};a.finished.then(hide,()=>{});setTimeout(hide,700);},5000);
 };
