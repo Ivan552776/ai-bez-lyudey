@@ -1424,6 +1424,10 @@ button,a{-webkit-tap-highlight-color:transparent}
 .x-rubrics-wrap.end::after{opacity:0}
 @media(max-width:380px){.x-rubrics-wrap{margin:0 -14px}}
 @media(min-width:900px){.x-rubrics-wrap{margin:0 -32px}}
+/* переключатель «Присылать свежий номер»: квадрат 24 px, а нажимать удобно по 44 px — расширяем зону,
+   фон прежнего облика (.sw:before) гасим, иначе проступит серый квадрат */
+.x-toggle .sw::before{content:"";position:absolute;inset:-10px;background:none!important;border:0!important;border-radius:0!important;width:auto!important;height:auto!important;transform:none!important;box-shadow:none!important;pointer-events:auto!important;display:block!important}
+.x-toggle>span{cursor:pointer}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2942,7 +2946,7 @@ function decorateIcons(root){
 const LAB = [
  {text:'Помоги ответить клиенту на задержку. Сначала спроси, что обещали, что произошло и какой срок подтверждён. Затем напиши спокойный ответ до 80 слов: признай задержку, объясни известную причину и предложи следующий шаг. Не придумывай сроки, скидки и обещания.', result:'На выходе: короткий ответ с подтверждённым сроком и понятным следующим шагом.'},
  {text:'Помоги составить выполнимый план дня. Сначала попроси список задач, доступное время и обязательные встречи. Выдели три приоритета, оцени длительность как предположение и оставь время на перерывы. Покажи таблицу: задача, время, результат. Если всё не помещается — предложи, что перенести.', result:'На выходе: план по времени с тремя приоритетами и запасом на непредвиденное.'},
- {text:'Помоги придумать полезный пост. Сначала уточни тему, аудиторию и одну проблему читателя. Предложи три разных идеи. Для каждой дай заголовок, конкретный пример и действие, которое читатель сможет повторить. Не выдумывай статистику, клиентов и личный опыт автора.', result:'На выходе: три идеи с примером и действием для читателя. Выберите одну и попросите черновик.'}
+ {text:'Помоги придумать полезный пост. Сначала уточни тему, аудиторию и одну проблему читателя. Предложи три разных идеи. Для каждой дай заголовок, конкретный пример и действие, которое читатель сможет повторить. Не выдумывай статистику, клиентов и личный опыт автора.', result:'На выходе: три идеи с примером и действием для читателя. Выбери одну и попроси черновик.'}
 ];
 function paintLab(i=0){
   const item=LAB[i]; if(!item) return;
@@ -3079,7 +3083,7 @@ async function exerciseOpen(si,li){
   if(ticket!==practiceTicket||epoch!==navEpoch)return;
   if(!Array.isArray(blocks)){
     const locked=!blocks||blocks.ошибка==='не оплачен';
-    $('#exercise-content').innerHTML=locked?'<div class="practice-lock"><h2>Практика по подписке</h2><p>Она входит в полный курс. Первые три задания каждой нейросети доступны бесплатно.</p><button class="study-go" data-go="pay-all">Что входит в подписку</button><button class="quiet" data-exercise="'+si+'-0">Попробовать бесплатное задание</button></div>':'<p role="alert">Не удалось загрузить практику. Проверьте соединение и попробуйте ещё раз.</p><button class="study-go" data-exercise="'+si+'-'+li+'">Повторить загрузку</button>';
+    $('#exercise-content').innerHTML=locked?'<div class="practice-lock"><h2>Практика по подписке</h2><p>Она входит в полный курс. Первые три задания каждой нейросети доступны бесплатно.</p><button class="study-go" data-go="pay-all">Что входит в подписку</button><button class="quiet" data-exercise="'+si+'-0">Попробовать бесплатное задание</button></div>':'<p role="alert">Не удалось загрузить практику. Проверь соединение и попробуй ещё раз.</p><button class="study-go" data-exercise="'+si+'-'+li+'">Повторить загрузку</button>';
     return;
   }
   const parts=lessonParts(blocks);blk.n=0;
@@ -3100,7 +3104,7 @@ function filterPrompts(onlyLesson=promptLessonFilter){
   cards.forEach(card=>{const x=PRLIST[+card.querySelector('[data-pr-open]').dataset.prOpen];const match=(selected==='all'||String(x.si)===selected) && (onlyLesson===null||x.li===onlyLesson) && (!q||/* premium-behavior:v1:prompt-metadata */
 promptSearchText(x).includes(q));if(match)total++;card.hidden=!match||visible>=promptLimit;if(match&&!card.hidden)visible++;});
   document.querySelectorAll('.prompt-group').forEach(g=>g.hidden=![...g.querySelectorAll('.prc')].some(c=>!c.hidden));
-  $('#prompt-count').textContent=total?`${total} ${скл(total,'промпт','промпта','промптов')} · показано ${visible}`:'Ничего не найдено. Попробуйте другое слово или нейросеть.';
+  $('#prompt-count').textContent=total?`${total} ${скл(total,'промпт','промпта','промптов')} · показано ${visible}`:'Ничего не найдено. Попробуй другое слово или нейросеть.';
   $('#prompt-more').hidden=visible>=total;
 }
 function paintProgress(){
@@ -3295,7 +3299,7 @@ async function chanPaint(force=false){
       chanGot=true; chanDraw(data.posts,true); channelStatus('');
     }catch(error){
       if(!posts) chanDraw([],false);
-      channelStatus(posts ? 'Не удалось обновить ленту. Показаны сохранённые публикации.' : 'Не удалось загрузить публикации. Попробуйте ещё раз.',true);
+      channelStatus(posts ? 'Не удалось обновить ленту. Показаны сохранённые публикации.' : 'Не удалось загрузить публикации. Попробуй ещё раз.',true);
     }finally{ clearTimeout(deadline); chanPending=null; }
   })();
   return chanPending;
@@ -4394,6 +4398,8 @@ show=function(v,back){
   new ResizeObserver(upd).observe(f);upd();
   // ширина кнопок меняется, когда догружается шрифт, — пересчитать и тогда
   document.fonts?.ready.then(upd);addEventListener('load',upd);})();
+/* подпись переключателя тоже нажимается — как у обычной галочки */
+document.addEventListener('click',e=>{if(e.target.closest('.x-toggle>span'))$('#sw1')?.click();});
 /* ВИТРИНА JS END */
 function show(v, back){
   // Проверяем экран до того, как спрячем текущий. Ошибка в названии перехода
@@ -4698,8 +4704,8 @@ const дни = currentStreak();
       <i class="fl">✦</i>
       <span class="sn"><b>${дни.streak ? строкаСерии(дни.streak) : 'Серии пока нет'}</b>
         <span>${дни.best > 1 ? 'Лучшая серия — ' + дни.best + ' ' + склон(дни.best, ['день','дня','дней'])
-                : дни.streak ? 'Вернитесь завтра — счёт пойдёт дальше'
-                             : 'Откройте урок — и цепочка пойдёт'}</span></span>
+                : дни.streak ? 'Вернись завтра — счёт пойдёт дальше'
+                             : 'Открой урок — и цепочка пойдёт'}</span></span>
       <span class="week">${неделя()}</span></div>`;
   const строка = $('#p-ach');
   if(строка) строка.textContent = собрано ? 'Достижения: ' + собрано + ' из ' + ACH.length : 'Достижения пока не получены';
@@ -4991,7 +4997,7 @@ document.addEventListener('click', e=>{
     sw1.disabled=true;
     post('/api/notify', {on: включаем}).then(r => {
       if(!r || typeof r.on !== 'boolean'){
-        подпись.textContent = вТелеграме() ? 'Не сохранилось. Попробуйте ещё раз.' : 'Откройте приложение в Telegram, чтобы настроить уведомления.';
+        подпись.textContent = вТелеграме() ? 'Не сохранилось. Попробуй ещё раз.' : 'Открой газету в Telegram, чтобы настроить уведомления.';
         return;
       }
       sw1.classList.toggle('off', !r.on);
@@ -5132,7 +5138,7 @@ try{
 </script>
 <div id="app-notice" role="status" aria-live="polite" hidden></div><dialog id="copy-fallback"><h2>Скопируйте текст вручную</h2><p>Браузер не разрешил автоматическое копирование. Текст уже выделен.</p><textarea style="resize:none" id="copy-value" aria-label="Текст запроса" readonly></textarea><form method="dialog" novalidate><button>Готово</button></form></dialog>
 <div class="pop" id="pop" aria-live="polite">
-  <i id="pop-i">✦</i>
+  <i id="pop-i" aria-hidden="true">✦</i>
   <span class="pt"><b id="pop-t"></b><span id="pop-d"></span></span>
 </div>
 </body>
