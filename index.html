@@ -1002,7 +1002,7 @@ button:active,.item:active,.row:active,.book-course:active{transform:none!import
 /* «Газета ИИ без людей» · 19.09.2026. Последний слой стилей: всё новое и перекраска
    сохранённых экранов. Бумага, краска, линейки. Префикс x- занят только этим слоем. */
 :root,:root[data-n="0"]{
- --x-paper:#EFEEE9;--x-paper2:#E6E4DC;--x-sheet:#F7F6F2;--x-ink:#131313;--x-ink2:#2B2B2B;--x-muted:#56554F;--x-faint:#7A7870;
+ --x-paper:#EFEEE9;--x-paper2:#E6E4DC;--x-sheet:#F7F6F2;--x-ink:#131313;--x-ink2:#2B2B2B;--x-muted:#56554F;--x-faint:#66645D;
  --x-rule:#131313;--x-hair:#C9C6BB;--x-amber:#E08A2B;--x-amberInk:#8F4E07;--x-amberS:#F6DDBA;
  --x-ok:#1E6B45;--x-no:#9B2A1F;
  --x-head:"Old Standard TT",Georgia,"Times New Roman",serif;
@@ -1061,7 +1061,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 /* ── строка доступа ─────────────────────────────────────────── */
 .x-access{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:14.5px;line-height:1.4;color:var(--x-ink2);border-bottom:1px solid var(--x-hair)}
 .x-access i{width:9px;height:9px;border-radius:50%;background:var(--x-amber);flex:none;box-shadow:0 0 0 3px var(--x-amberS)}
-.x-access a{color:inherit;text-underline-offset:3px}
+.x-access a:not(.x-btn){color:inherit;text-underline-offset:3px}
 .x-access.gate{display:block;padding:14px 0 16px}
 .x-access.gate b{display:block;font-family:var(--x-head);font-size:22px;line-height:1.15;color:var(--x-ink);margin:0 0 4px}
 .x-access.gate .row{display:flex;gap:18px;flex-wrap:wrap;margin-top:8px;align-items:center}
@@ -1107,7 +1107,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 .x-item .acts{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:8px}
 .x-item .meta{font-size:13px;color:var(--x-faint)}
 .x-fig{display:block;width:100%;margin:12px 0 0;padding:0;border:0;background:none;cursor:pointer;text-align:left}
-.x-fig svg{display:block;width:100%;height:auto;aspect-ratio:16/10;filter:saturate(.8) contrast(1.05);mix-blend-mode:multiply}
+.x-fig svg{display:block;width:100%;height:auto;aspect-ratio:16/10;filter:grayscale(1) sepia(.12) contrast(1.08);mix-blend-mode:multiply}
 .x-fig span{display:block;font:italic 13px/1.4 var(--x-head);color:var(--x-muted);margin-top:5px}
 /* справочник нейросети */
 .x-ref{margin:12px 0 0;padding:0}
@@ -1156,7 +1156,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 #v-lesson .lhead h1{font-family:var(--x-head);font-size:clamp(30px,8.6vw,42px);line-height:1.06;font-weight:700;letter-spacing:-.01em;margin:0;color:var(--x-ink);text-wrap:balance}
 #v-lesson .lmin{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:14px;color:var(--x-muted)}
 .x-read-cover{margin:0 0 16px}
-.x-read-cover svg{display:block;width:100%;height:auto;aspect-ratio:16/9;filter:saturate(.8) contrast(1.05);mix-blend-mode:multiply}
+.x-read-cover svg{display:block;width:100%;height:auto;aspect-ratio:16/9;filter:grayscale(1) sepia(.12) contrast(1.08);mix-blend-mode:multiply}
 #v-lesson .lesson-result{background:none;border:0;padding:0 0 14px;margin:0 0 16px;border-bottom:1px solid var(--x-hair);border-radius:0}
 #v-lesson .lesson-result span{font:700 11.5px/1 var(--x-font);letter-spacing:.1em;text-transform:uppercase;color:var(--x-amberInk)}
 #v-lesson .lesson-result p{font-family:var(--x-head);font-style:italic;font-size:19px;line-height:1.4;margin:6px 0 0}
@@ -1460,7 +1460,7 @@ button,a{-webkit-tap-highlight-color:transparent}
     <ul id="pay-in"></ul>
   </div>
   <div class="pline" hidden></div>
-  <button class="x-btn x-press buy2" data-go="pay-all">Подписной купон</button>
+  <button class="x-btn x-press buy2" data-go="pay-all">Открыть все уроки</button>
   <p class="x-foot-note">Первые три урока каждого курса открыты без оплаты.</p>
 </div>
 <!-- ВИТРИНА:pay END -->
@@ -3881,7 +3881,7 @@ function xFilled(text,id){const v=xFills()[id]||{};return text.replace(/\{([^{}]
 function xFilledHTML(text,id){const v=xFills()[id]||{};return esc(text).replace(/\{([^{}]{1,80})\}/g,(m,h)=>{const raw=h.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"');return v[raw]?`<span class="x-slot filled">${esc(v[raw])}</span>`:`<span class="x-slot">{${h}}</span>`;});}
 function xCoupon(x){
   const v=xFills()[x.id]||{},body=FEED_STATE.bodies.get(x.id);
-  return `<div class="x-coupon" data-coupon="${x.id}"><span class="cap">${xi('scissors')}Купон · заполните и вырежьте</span>
+  return `<div class="x-coupon" data-coupon="${x.id}"><span class="cap">${xi('scissors')}Купон · заполни и вырежи</span>
     <div class="x-fields">${(x.fields||[]).map(([label,hint])=>`<label class="x-field"><input data-fill="${x.id}" data-hint="${feedAttr(hint)}" value="${feedAttr(v[hint]||'')}" placeholder="${feedAttr(hint)}" autocomplete="off" enterkeyhint="next"><small>${esc(label)}</small></label>`).join('')}</div>
     <details class="x-full"${body?'':' data-lazy="1"'}><summary>${xi('paper')}Текст промпта целиком</summary><pre id="x-pre-${x.id}">${body?xFilledHTML(body.prompt,x.id):'Загружаем…'}</pre></details>
     <button class="x-btn x-cut x-press" data-x-cut="${x.id}"><svg class="x-ic sc" aria-hidden="true"><use href="#i-scissors"/></svg><span>Вырезать промпт</span></button>
@@ -3955,13 +3955,20 @@ function feedToggle(id){
 }
 function feedMembership(){
   const host=$('#feed-membership');if(!host)return;
-  if(ME?.ok&&ME.subscribed===false){
+  if(ME?.ok&&ME.subscribed===false&&!ME.paid){
     host.className='x-access gate';
     host.innerHTML=`<b>Номер открыт подписчикам канала</b>Промпты, гайды и справочник нейросетей бесплатны, пока ты подписан на «ИИ без людей».<div class="row"><a class="x-btn" style="width:auto" href="${CHANNEL_LINK}" data-tg="${CHANNEL_LINK}">Подписаться на канал</a><button class="x-link" data-feed-check="">Я подписался</button></div>`;
     FEED_STATE.bodies.clear();
   }else{
+    // «ты подписан» — только когда Telegram это подтвердил. Пока проверка идёт,
+    // вне Telegram и при сбое проверки (сервер тогда пускает без неё) — нейтрально.
+    const канал=`<a href="${CHANNEL_LINK}" data-tg="${CHANNEL_LINK}">канал</a>`;
+    const строка=ME?.ok&&ME.paid?'Номер открыт целиком: у тебя полное собрание.'
+      :ME?.ok&&ME.subscribed&&ME.membership_check!=='unavailable'?`Номер открыт целиком: ты подписан на ${канал}.`
+      :ME?.ok&&ME.subscribed?'Номер открыт целиком.'
+      :`Номер бесплатный для подписчиков ${канал.replace('>канал<','>канала<')}.`;
     host.className='x-access';
-    host.innerHTML=`<i aria-hidden="true"></i><span>Номер открыт целиком: ты подписан на <a href="${CHANNEL_LINK}" data-tg="${CHANNEL_LINK}">канал</a>.</span>`;
+    host.innerHTML=`<i aria-hidden="true"></i><span>${строка}</span>`;
   }
 }
 function feedNav(v){
@@ -4163,7 +4170,7 @@ function xRenderSec(i){
     ?`<span></span><div><h2>${esc(s.t)}</h2><p>Материал прежней программы. Сохранён по старой ссылке.</p></div>`
     :`<img src="${xBook(s.slug)}" alt="" width="72" height="72"><div><h2>${esc(s.t)}</h2><p>${esc(s.d||'')}</p>${xRu(s.slug)}</div>`;
   const free=s.ls.filter(l=>!l.key).length;
-  $('#sec-overview').innerHTML=`<span>${s.ls.length} ${скл(s.ls.length,'урок','урока','уроков')} · ${free===s.ls.length?'все открыты':free+' открыто'}</span>${!paid&&free<s.ls.length?`<button class="x-link" data-go="pay-all">Подписной купон</button>`:''}`;
+  $('#sec-overview').innerHTML=`<span>${s.ls.length} ${скл(s.ls.length,'урок','урока','уроков')} · ${free===s.ls.length?'все открыты':free+' открыто'}</span>${!paid&&free<s.ls.length?`<button class="x-link" data-go="pay-all">Открыть все уроки</button>`:''}`;
   const parts=s.archived?[[0,s.ls.length,'Уроки']]:[[0,3,X_PART[0]],[3,7,X_PART[1]],[7,8,X_PART[2]]];
   $('#sec-list').innerHTML=parts.map(([a,b,name])=>`<p class="x-part">${name}</p>`+s.ls.slice(a,b).map((l,k)=>{
       const j=a+k,isDone=done.includes(i+'-'+j),locked=!!l.key&&!paid,isCur=j===curJ;
@@ -4196,7 +4203,7 @@ showPay=function(sec,les){
   $('#pay-k').textContent=sec.t;$('#pay-t').textContent=les.t;
   $('#pay-lead').textContent=`${sec.t}, урок ${payLes+1}. Этот урок — в полном собрании курсов.`;
   $('#pay-in').innerHTML=(les.in||[les.d||'Разбор по шагам на учебном примере','Готовые промпты с кнопкой копирования','Схема и разобранный результат','Практика и три вопроса для проверки']).map(t=>`<li>${xi('check')}<span>${esc(t)}</span></li>`).join('');
-  const b=$('#v-pay .buy2');if(b){b.textContent='Подписной купон';b.dataset.go='pay-all';delete b.dataset.retry;}
+  const b=$('#v-pay .buy2');if(b){b.textContent='Открыть все уроки';b.dataset.go='pay-all';delete b.dataset.retry;}
   $('#v-pay [data-back]').dataset.go=window.__lback||'sec';
   show('pay');
 };
@@ -4252,7 +4259,7 @@ function xCheckout(){$('#x-checkout').innerHTML=xSubCoupon(false);}
 function xProfile(){
   const u=TG?.initDataUnsafe?.user;
   $('#p-name').textContent=u?.first_name?(u.first_name+(u.last_name?' '+u.last_name:'')):'Гость';
-  $('#p-sub').textContent=u?.id?'Билет № '+String(u.id).slice(-6):'Откройте газету в Telegram';
+  $('#p-sub').textContent=u?.id?'Билет № '+String(u.id).slice(-6):'Открой газету в Telegram';
   const ph=$('#p-av');if(ph&&u?.photo_url){ph.style.backgroundImage=`url(${u.photo_url})`;ph.innerHTML='';}
   const done=doneList().length,rec=recentList().length;
   $('#x-ticket-dl').innerHTML=`<div><dt>Канал</dt><dd>${!ME?.ok?'проверяем':ME.subscribed?'подписчик':'не подписан'}</dd></div><div><dt>Полное собрание</dt><dd>${ME?.paid?(ME.until?'до '+ME.until.split('-').reverse().join('.'):'оформлено'):'не оформлено'}</dd></div><div><dt>Прочитано уроков</dt><dd>${done}</dd></div>`;
