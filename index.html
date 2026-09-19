@@ -1603,6 +1603,20 @@ html,body{overflow-x:clip}
 /* в «Итогах» свой знак — галочка; тире списков здесь не нужно */
 #v-lesson .prose .x-learned li{padding-left:0}
 #v-lesson .prose .x-learned li::before{content:none!important;display:none!important}
+/* ── окно «Скопируй вручную» — лист бумаги, выезжает снизу, как шторка в iOS ── */
+#copy-fallback{position:fixed;inset:auto 0 0 0;margin:0 auto;width:100%;max-width:560px;max-height:88vh;box-sizing:border-box;padding:22px 18px calc(18px + var(--x-bottom));border:0;border-top:1px solid var(--x-rule);border-radius:0;background:var(--x-sheet);color:var(--x-ink);box-shadow:0 -20px 44px -22px rgba(19,19,19,.4)}
+#copy-fallback[open]{animation:x-sheet-in .46s cubic-bezier(.32,.72,0,1)}
+@keyframes x-sheet-in{from{translate:0 100%}}
+#copy-fallback::backdrop{background:rgba(19,19,19,.3);animation:x-fade-in .3s ease-out}
+@keyframes x-fade-in{from{opacity:0}}
+#copy-fallback h2{font-family:var(--x-head);font-weight:700;font-size:26px;line-height:1.1;margin:0 0 6px;color:var(--x-ink)}
+#copy-fallback p{font-size:15px;line-height:1.45;color:var(--x-ink2);margin:0 0 14px}
+#copy-fallback textarea{display:block;width:100%;box-sizing:border-box;min-height:150px;max-height:42vh;margin:0;border:1px solid var(--x-hair);border-radius:0;background:var(--x-paper);padding:12px;font-family:var(--x-font);font-size:15px;line-height:1.55;color:var(--x-ink);outline:none}
+#copy-fallback textarea:focus{border-color:var(--x-ink)}
+#copy-fallback form{margin:0}
+#copy-fallback button{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;margin:14px 0 0;padding:0 20px;border:0;border-radius:2px;background:var(--x-ink);color:var(--x-paper);font-family:var(--x-font);font-weight:600;font-size:16px;transition:scale .3s var(--x-ease)}
+#copy-fallback button:active{scale:.97;transition-duration:.08s}
+@media(prefers-reduced-motion:reduce){#copy-fallback[open],#copy-fallback::backdrop{animation:none}}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -4904,6 +4918,18 @@ paintRecent=function(){
   box.innerHTML=r.length?`<div class="x-menu x-rec">${r.map((x,i)=>`<button class="x-press" data-rec-open="${i}"><span><small class="k">${esc(xRecKind(x))} · ${xAgo(x.t)}</small><b>${esc(x.title)}</b></span>${xi('chev')}</button>`).join('')}</div>`
     :'<p class="x-empty-note">Пока пусто. Здесь появится всё, что ты открывал: уроки, гайды, промпты, — чтобы вернуться, не листая номер.</p>';
 };  // первый раз список рисует старый код в конце загрузки — хранилище к тому времени готово
+/* шторка «Скопируй вручную» уезжает вниз тем же путём, каким пришла. Окно стоит в
+   разметке после этого кода — поэтому слушаем на документе, а не на самом окне. */
+(()=>{
+  const shut=(d,e)=>{if(!d?.open||xCalm())return;e?.preventDefault();if(d._closing)return;d._closing=true;
+    const a=d.animate([{translate:'0 0'},{translate:'0 100%'}],{duration:280,easing:'cubic-bezier(.4,0,1,1)'});
+    try{d.animate([{opacity:1},{opacity:0}],{duration:280,pseudoElement:'::backdrop'});}catch(err){}
+    const end=()=>{if(d._closing){d._closing=false;d.close();}};a.finished.then(end,end);setTimeout(end,500);};
+  document.addEventListener('submit',e=>{const d=e.target.closest?.('#copy-fallback');if(d)shut(d,e);},true);
+  document.addEventListener('cancel',e=>{if(e.target.id==='copy-fallback')shut(e.target,e);},true);
+  document.addEventListener('click',e=>{const d=e.target;if(d.id!=='copy-fallback')return;
+    const r=d.getBoundingClientRect();if(e.clientY<r.top)shut(d,e);});  // нажатие на затемнение над шторкой — закрыть
+})();
 /* ВИТРИНА JS END */
 function show(v, back){
   // Проверяем экран до того, как спрячем текущий. Ошибка в названии перехода
@@ -5640,7 +5666,7 @@ try{
   }
 }catch(e){}
 </script>
-<div id="app-notice" role="status" aria-live="polite" hidden></div><dialog id="copy-fallback"><h2>Скопируйте текст вручную</h2><p>Браузер не разрешил автоматическое копирование. Текст уже выделен.</p><textarea style="resize:none" id="copy-value" aria-label="Текст запроса" readonly></textarea><form method="dialog" novalidate><button>Готово</button></form></dialog>
+<div id="app-notice" role="status" aria-live="polite" hidden></div><dialog id="copy-fallback"><h2>Скопируй вручную</h2><p>Telegram не дал скопировать автоматически. Текст уже выделен: нажми на него и выбери «Скопировать».</p><textarea style="resize:none" id="copy-value" aria-label="Текст запроса" readonly></textarea><form method="dialog" novalidate><button>Готово</button></form></dialog>
 <div class="pop" id="pop" aria-live="polite">
   <i id="pop-i" aria-hidden="true">✦</i>
   <span class="pt"><b id="pop-t"></b><span id="pop-d"></span></span>
