@@ -1319,7 +1319,7 @@ button,a{-webkit-tap-highlight-color:transparent}
  .x-press{transition:none}
 }
 
-.x-toggle .sw::before,.x-toggle .sw::after{content:none!important;display:none!important}
+.x-toggle .sw::after{content:none!important;display:none!important}  /* ::before — зона нажатия, см. ниже */
 
 /* ── похвала за прочитанное (19.09) ─────────────────────────────
    Прежний облик — тёмная скруглённая плашка поверх меню. В газете это
@@ -1426,7 +1426,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 @media(min-width:900px){.x-rubrics-wrap{margin:0 -32px}}
 /* переключатель «Присылать свежий номер»: квадрат 24 px, а нажимать удобно по 44 px — расширяем зону,
    фон прежнего облика (.sw:before) гасим, иначе проступит серый квадрат */
-.x-toggle .sw::before{content:"";position:absolute;inset:-10px;background:none!important;border:0!important;border-radius:0!important;width:auto!important;height:auto!important;transform:none!important;box-shadow:none!important;pointer-events:auto!important;display:block!important}
+.x-toggle .sw::before{content:""!important;position:absolute!important;inset:-10px!important;background:none!important;border:0!important;border-radius:0!important;width:auto!important;height:auto!important;transform:none!important;box-shadow:none!important;pointer-events:auto!important;display:block!important}
 .x-toggle>span{cursor:pointer}
 /* ВИТРИНА END */
 </style>
