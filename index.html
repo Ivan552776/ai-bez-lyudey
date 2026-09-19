@@ -1107,7 +1107,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 .x-item .acts{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:8px}
 .x-item .meta{font-size:13px;color:var(--x-faint)}
 .x-fig{display:block;width:100%;margin:12px 0 0;padding:0;border:0;background:none;cursor:pointer;text-align:left}
-.x-fig svg{display:block;width:100%;height:auto;aspect-ratio:16/10;filter:grayscale(1) sepia(.12) contrast(1.08);mix-blend-mode:multiply}
+.x-fig svg{display:block;width:100%;height:auto;aspect-ratio:16/10}  /* гравюры уже в красках газеты — без фильтров */
 .x-fig span{display:block;font:italic 13px/1.4 var(--x-head);color:var(--x-muted);margin-top:5px}
 /* справочник нейросети */
 .x-ref{margin:12px 0 0;padding:0}
@@ -1162,7 +1162,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 #v-lesson .lhead h1{font-family:var(--x-head);font-size:clamp(30px,8.6vw,42px);line-height:1.06;font-weight:700;letter-spacing:-.01em;margin:0;color:var(--x-ink);text-wrap:balance}
 #v-lesson .lmin{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:14px;color:var(--x-muted)}
 .x-read-cover{margin:0 0 16px}
-.x-read-cover svg{display:block;width:100%;height:auto;aspect-ratio:16/9;filter:grayscale(1) sepia(.12) contrast(1.08);mix-blend-mode:multiply}
+.x-read-cover svg{display:block;width:100%;height:auto;aspect-ratio:16/9}
 #v-lesson .lesson-result{background:none;border:0;padding:0 0 14px;margin:0 0 16px;border-bottom:1px solid var(--x-hair);border-radius:0}
 #v-lesson .lesson-result span{font:700 11.5px/1 var(--x-font);letter-spacing:.1em;text-transform:uppercase;color:var(--x-amberInk)}
 #v-lesson .lesson-result p{font-family:var(--x-head);font-style:italic;font-size:19px;line-height:1.4;margin:6px 0 0}
@@ -1562,6 +1562,21 @@ html,body{overflow-x:clip}
 .tst .nxt:active{scale:.97;transition-duration:.08s!important}
 .tst .nxt:disabled{opacity:.35}
 .tst .why{font-size:15.5px!important;line-height:1.5!important;color:var(--x-ink2)!important}
+
+/* строки без «висячих» слов: короткие — выравниваем по длине, абзацы — без одиночки в конце */
+.x-mast p,.x-access>span,.x-access.gate,.x-rub,.x-by,.x-note,.x-foot-note,.x-colophon,.x-toc small,.x-menu small{text-wrap:balance}
+.x-dek,.view .prose>p,.view .prose li,.x-list li,.x-how li,.x-locked p,.x-sub>p,.x-honest,.x-ru-note,.x-ru-lesson p{text-wrap:pretty}
+
+/* том «Полного собрания»: лист в двойной рамке, «ТОМ», римская цифра, янтарная линейка */
+.x-tom{position:relative;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--s)*.05);flex:none;width:calc(var(--s)*.76);height:var(--s);box-sizing:border-box;background:var(--x-sheet);border:1.5px solid var(--x-ink);box-shadow:inset 0 0 0 2.5px var(--x-sheet),inset 0 0 0 3.25px var(--x-ink),3px 3px 0 -1px var(--x-paper2)}
+.x-tom small{font-family:var(--x-font);font-weight:700;font-size:max(8px,calc(var(--s)*.12));line-height:1;letter-spacing:.14em;text-transform:uppercase;color:var(--x-muted)}
+.x-tom b{font-family:var(--x-head);font-weight:700;font-size:calc(var(--s)*.36);line-height:1;color:var(--x-ink)}
+.x-tom i{display:block;width:38%;height:max(2px,calc(var(--s)*.035));background:var(--x-amber)}
+.x-books{gap:8px!important;align-items:flex-end}
+.x-toc button{grid-template-columns:58px 1fr 18px!important}
+.x-toc .x-tom{justify-self:center}
+#sec-head{grid-template-columns:62px 1fr!important;align-items:start!important}
+#sec-head .x-tom{margin-top:4px}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -4054,6 +4069,58 @@ upBtn.addEventListener('click', ()=>scrollTo({top:0, behavior: CALM.matches ? 'a
 
 /* ВИТРИНА JS START */
 const FEED=[{"id":"prompt-client-delay","type":"prompt","title":"Ответ клиенту при задержке заказа","summary":"Обещали отправить заказ вчера, а новой даты ещё нет. Заполни поля: нейросеть признает задержку и назовёт следующий шаг, ничего не выдумав.","tags":["prompts","work"],"category":"Промпты","fields":[["Что спрашивает клиент","сообщение клиента"],["Что мы обещали","прежние условия или срок"],["Что известно сейчас","подтверждённые факты"],["Что мы сделаем дальше и когда","согласованное действие и срок"],["Обращение к клиенту","ты или вы"]]},{"id":"guide-long-document","type":"guide","title":"Длинный документ: вытащи главное","summary":"Прислали десять страниц, а тебе нужно понять, что делать и к какому сроку. Собираем выжимку, где у каждого пункта есть цитата из оригинала.","tags":["guides","work"],"minutes":2,"art":"document","category":"Гайды"},{"id":"tool-alice","type":"tool","title":"Алиса AI","summary":"Нейросеть Яндекса: пишет и правит русские тексты, отвечает на бытовые вопросы, умеет рисовать. С ней можно говорить голосом.","tags":["ai"],"brand":"alice","domain":"alice.yandex.ru","availability":"Работает из России напрямую","checked":"2026-09-18","facts":["Текстовый чат бесплатный","Вход через Яндекс ID","Сайт, Браузер и приложение"],"category":"Нейросети"},{"id":"prompt-service-post","type":"prompt","title":"Пост о своей услуге без рекламных штампов","summary":"«Качественно, быстро, индивидуальный подход» пишут все. Этот промпт строит пост на одном настоящем случае из твоей работы.","tags":["prompts","work"],"category":"Промпты","fields":[["Что я делаю","услуга"],["Для кого","кто обычно обращается"],["Один реальный случай","что было у клиента до и что изменилось после"],["Цена или условия","сколько стоит или как считается"],["Где выйдет пост","Telegram, ВКонтакте, Авито"]]},{"id":"guide-sources-dates","type":"guide","title":"Ответ с источниками и датами","summary":"Нейросеть уверенно называет цифры, но откуда они? Учимся просить ответ, который можно проверить за минуту.","tags":["guides","other"],"minutes":3,"art":"sources","category":"Гайды"},{"id":"tool-deepseek","type":"tool","title":"DeepSeek","summary":"Бесплатная нейросеть, которая рассуждает по шагам. Хороша в задачах с расчётами, логикой и длинными текстами.","tags":["ai"],"brand":"deepseek","domain":"chat.deepseek.com","availability":"Обычно открывается из России напрямую","checked":"2026-09-18","facts":["Чат бесплатный","Вход по почте или номеру","Режим рассуждений и поиск"],"category":"Нейросети"},{"id":"prompt-week-plan","type":"prompt","title":"План на неделю под твоё свободное время","summary":"Список дел длиннее недели. Нейросеть разложит его по дням с учётом того, сколько часов у тебя правда есть, и скажет, что не влезает.","tags":["prompts","other"],"category":"Промпты","fields":[["Список дел","дела, по одному на строку"],["Сколько часов свободно","например: пн 2 ч, вт 1 ч, сб 5 ч"],["Жёсткие сроки","что и к какому дню обязательно"],["Когда я лучше всего соображаю","утро, день или вечер"]]},{"id":"guide-personal-project","type":"guide","title":"Большая идея: первые шаги на эту неделю","summary":"Хочешь запустить свой проект, но непонятно, с чего начать. Разбираем идею на шаги, самый первый из которых занимает полчаса.","tags":["guides","other"],"minutes":3,"art":"steps","category":"Гайды"},{"id":"prompt-talk-manager","type":"prompt","title":"Разговор с руководителем о нагрузке","summary":"Задач стало больше, а часов нет. Промпт поможет прийти к руководителю с фактами и вариантами, а не с жалобой.","tags":["prompts","work"],"category":"Промпты","fields":[["Мои текущие задачи","список и сколько часов в неделю каждая"],["Что добавили недавно","новые задачи"],["Сколько я работаю сейчас","часов в неделю"],["Чего я хочу","снять задачу, сдвинуть срок, получить помощь"],["Какой у руководителя стиль","любит цифры, торопится, спокойный"]]},{"id":"tool-gigachat","type":"tool","title":"GigaChat","summary":"Нейросеть Сбера. Пишет тексты, читает прикреплённые файлы и через встроенный Kandinsky рисует картинки и короткие видео.","tags":["ai"],"brand":"gigachat","domain":"giga.chat","availability":"Работает из России напрямую","checked":"2026-09-18","facts":["Бесплатно","Вход через Сбер ID","Тексты, файлы, картинки"],"category":"Нейросети"},{"id":"prompt-resume","type":"prompt","title":"Резюме без выдуманных достижений","summary":"Нейросеть любит приписать «увеличил продажи на 300%». Этот промпт описывает твой опыт сильно, но только тем, что было на самом деле.","tags":["prompts","work"],"category":"Промпты","fields":[["Должность и срок","кем и сколько работал"],["Что я делал руками","обязанности своими словами"],["Результаты, в которых я уверен","цифры и факты, если есть"],["Вакансия, на которую откликаюсь","название и 3–5 требований из неё"]]},{"id":"guide-flashcards","type":"guide","title":"Конспект в карточки для повторения","summary":"Перечитывать конспект скучно и почти бесполезно. Превращаем его в карточки «вопрос — ответ» и повторяем с нейросетью.","tags":["guides","other"],"minutes":3,"art":"cards","category":"Гайды"},{"id":"prompt-study-topic","type":"prompt","title":"Трудная тема на знакомом примере","summary":"Учебник объясняет «проценты по вкладу» формулами. Нейросеть объяснит то же самое на твоём хобби или работе.","tags":["prompts","other"],"category":"Промпты","fields":[["Объясни мне тему","тема"],["Что я уже понимаю","что знаю про эту тему"],["Чем я занимаюсь","работа или хобби, на примере которых будет понятнее"]]},{"id":"tool-shedevrum","type":"tool","title":"Шедеврум","summary":"Нейросеть Яндекса для картинок и коротких видео по описанию. Пишешь по-русски, через полминуты получаешь несколько вариантов в разных стилях.","tags":["ai"],"brand":"shedevrum","domain":"shedevrum.ai","availability":"Работает из России напрямую","checked":"2026-09-18","facts":["Бесплатно","Вход через Яндекс ID","Сайт и приложение"],"category":"Нейросети"},{"id":"guide-image-for-ad","type":"guide","title":"Картинка к объявлению: как её описать","summary":"«Красивая картинка для кофейни» даст что угодно. Разбираем описание, после которого нейросеть рисует то, что ты себе представлял.","tags":["guides","work"],"minutes":3,"art":"picture","category":"Гайды"},{"id":"prompt-polite-refusal","type":"prompt","title":"Вежливо отказать и сохранить отношения","summary":"Отказать неловко, а согласиться нельзя. Промпт пишет короткий отказ без лишних оправданий и предлагает, что можно сделать взамен.","tags":["prompts","work"],"category":"Промпты","fields":[["Кому пишу","коллега, клиент, знакомый"],["От чего отказываюсь","просьба или предложение"],["Почему","причина или «не хочу объяснять»"],["Что могу предложить взамен","альтернатива или «ничего»"],["Как мы обычно общаемся","на ты, на вы, официально"]]},{"id":"prompt-compare-purchases","type":"prompt","title":"Сравнить покупки по твоим условиям","summary":"Три пылесоса, десять характеристик, и все «лучшие». Нейросеть сравнит их по тому, что важно тебе, и честно скажет, чего не знает.","tags":["prompts","other"],"category":"Промпты","fields":[["Варианты","названия, цены и характеристики, скопированные из магазина"],["Что для меня важно","например: тихий, легко мыть, до 15 000 ₽"],["Как буду пользоваться","ситуация"]]},{"id":"guide-expenses","type":"guide","title":"Куда уходят деньги: разбор расходов","summary":"Выгрузка из банка на сто строк. Нейросеть сгруппирует траты, найдёт повторяющиеся подписки и покажет, где можно сэкономить.","tags":["guides","other"],"minutes":3,"art":"table","category":"Гайды"},{"id":"prompt-packing","type":"prompt","title":"Список вещей в поездку","summary":"Опять забыл зарядку. Промпт собирает список под твою погоду, планы и размер багажа, чтобы ничего лишнего и ничего забытого.","tags":["prompts","other"],"category":"Промпты","fields":[["Куда и насколько","город и число дней"],["Погода","прогноз, если знаешь"],["Планы","работа, море, горы, театр"],["Багаж","рюкзак, ручная кладь, чемодан"],["Что у меня особенного","лекарства, техника, ребёнок, питомец"]]},{"id":"prompt-translate-tone","type":"prompt","title":"Перевод, который звучит по-человечески","summary":"Машинный перевод сохраняет слова, но теряет тон. Этот промпт переводит с учётом того, кому ты пишешь и как.","tags":["prompts","work"],"category":"Промпты","fields":[["Текст","твой текст"],["На какой язык","язык"],["Кому пишу","коллега, клиент, друг, служба поддержки"],["Какой тон нужен","вежливо, дружелюбно, коротко по делу"]]}];
+/* Иллюстрации гайдов в газетном облике (19.09, вечер): чернильный контур, штриховка
+   вместо теней, один янтарный акцент. Прежние — цветные рисунки под серым фильтром —
+   выглядели заглушками. Штриховка — узор #x-hatch из общего <defs> (vitrina.js).
+   Формат: [фон, акцент, содержимое] — как у прежнего X_ART, чтобы xCover не менять. */
+const X_INK='#131313',X_SHEET='#F7F6F2',X_TONE='#E4E2DA',X_AMB='#E08A2B',X_AMBS='#F6DDBA';
+const xs=(d,w=1.6)=>`fill="none" stroke="${X_INK}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" ${d||''}`;
+const xLines=(x,y,ws,gap=14,op=.55)=>ws.map((w,i)=>`<path d="M${x} ${y+i*gap}h${w}" ${xs(`opacity="${op}"`,2.2)}/>`).join('');
+const X_ART_G={
+  document:[X_TONE,X_AMB,`
+    <g transform="rotate(-8 118 108)"><rect x="70" y="44" width="104" height="130" fill="url(#x-hatch)"/><rect x="62" y="36" width="104" height="130" fill="${X_SHEET}" ${xs()}/>${xLines(78,62,[70,58,66,44,62,50],14)}</g>
+    <g transform="rotate(6 206 104)"><rect x="160" y="42" width="112" height="128" fill="url(#x-hatch)"/><rect x="152" y="34" width="112" height="128" fill="${X_SHEET}" ${xs()}/>
+      <text x="168" y="62" font-family="Old Standard TT,Georgia,serif" font-weight="700" font-size="17" fill="${X_INK}">Главное</text>
+      <path d="M168 70h80" ${xs('',1.2)}/>
+      <rect x="166" y="81" width="82" height="12" fill="${X_AMBS}"/>${xLines(168,87,[76],14,.9)}${xLines(168,105,[64,72,52],14)}
+      <text x="168" y="150" font-family="Old Standard TT,Georgia,serif" font-style="italic" font-size="11" fill="${X_INK}" opacity=".8">«…» — стр. 3</text></g>
+    <circle cx="266" cy="160" r="21" fill="${X_INK}"/><text x="266" y="165.5" text-anchor="middle" font-family="Golos Text,system-ui" font-weight="700" font-size="14" fill="${X_SHEET}">3.2</text>`],
+  sources:[X_TONE,X_AMB,`
+    <g>${[[26,40],[18,88],[30,136]].map(([x,y])=>`<rect x="${x+4}" y="${y+4}" width="78" height="30" fill="url(#x-hatch)"/><rect x="${x}" y="${y}" width="78" height="30" fill="${X_SHEET}" ${xs()}/><path d="M${x+10} ${y+11}h40M${x+10} ${y+20}h52" ${xs('opacity=".55"',2)}/>`).join('')}</g>
+    <path d="M104 55c14 0 12 44 22 48M96 103h30M108 151c14 0 12-44 18-48" ${xs('stroke-dasharray="1 6"',2.2)}/>
+    <rect x="134" y="58" width="100" height="92" fill="url(#x-hatch)"/><rect x="128" y="52" width="100" height="92" fill="${X_SHEET}" ${xs('',1.8)}/>
+    <path d="M152 99l14 14 30-32" fill="none" stroke="${X_AMB}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="248" y="54" width="54" height="26" fill="${X_INK}"/><text x="275" y="72" text-anchor="middle" font-family="Golos Text,system-ui" font-weight="700" font-size="13" fill="${X_SHEET}">2026</text>
+    <circle cx="275" cy="128" r="22" fill="${X_SHEET}" ${xs()}/><path d="M275 114v14l9 6" ${xs('',2)}/>`],
+  cards:[X_TONE,X_AMB,`
+    <g transform="rotate(-12 150 110)"><rect x="92" y="56" width="128" height="88" fill="${X_SHEET}" ${xs('opacity=".6"')}/></g>
+    <g transform="rotate(-5 160 110)"><rect x="100" y="52" width="128" height="88" fill="${X_SHEET}" ${xs('opacity=".8"')}/></g>
+    <g transform="rotate(4 170 108)"><rect x="116" y="54" width="132" height="94" fill="url(#x-hatch)"/><rect x="108" y="46" width="132" height="94" fill="${X_SHEET}" ${xs('',1.8)}/>
+      <text x="174" y="112" text-anchor="middle" font-family="Old Standard TT,Georgia,serif" font-weight="700" font-size="54" fill="${X_INK}">?</text>
+      <path d="M120 58h24" ${xs('opacity=".5"',2)}/></g>
+    <circle cx="256" cy="150" r="24" fill="${X_AMB}"/><path d="M245 150l8 8 14-15" fill="none" stroke="${X_SHEET}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M60 60l6 6M66 60l-6 6M52 150l5 5M57 150l-5 5" ${xs('opacity=".6"',1.6)}/>`],
+  steps:[X_TONE,X_AMB,`
+    <path d="M36 184h250" ${xs('',1.6)}/>
+    ${[[44,144,40],[104,116,68],[164,88,96],[224,60,124]].map(([x,y,h],i)=>`<rect x="${x+6}" y="${y+6}" width="56" height="${h-6}" fill="url(#x-hatch)"/><rect x="${x}" y="${y}" width="56" height="${h}" fill="${X_SHEET}" ${xs()}/><text x="${x+28}" y="${y+26}" text-anchor="middle" font-family="Old Standard TT,Georgia,serif" font-weight="700" font-size="20" fill="${X_INK}">${i+1}</text>`).join('')}
+    <path d="M252 60V20" ${xs('',2.4)}/><path d="M254 21h34l-9 9 9 9h-34z" fill="${X_AMB}"/>
+    <path d="M58 132C98 96 150 72 238 48" ${xs('stroke-dasharray="1 7" opacity=".8"',2.4)}/>`],
+  table:[X_TONE,X_AMB,`
+    <rect x="52" y="44" width="192" height="138" fill="url(#x-hatch)"/><rect x="44" y="36" width="192" height="138" fill="${X_SHEET}" ${xs('',1.8)}/>
+    <path d="M44 62h192M44 64h192" ${xs('',1)}/><path d="M112 36v138M176 36v138" ${xs('opacity=".35"',1.2)}/>
+    <text x="56" y="54" font-family="Golos Text,system-ui" font-weight="700" font-size="10" letter-spacing="1" fill="${X_INK}">ТРАТА</text><text x="124" y="54" font-family="Golos Text,system-ui" font-weight="700" font-size="10" letter-spacing="1" fill="${X_INK}">МЕСЯЦ</text><text x="188" y="54" font-family="Golos Text,system-ui" font-weight="700" font-size="10" letter-spacing="1" fill="${X_INK}">ДОЛЯ</text>
+    <rect x="46" y="92" width="188" height="24" fill="${X_AMBS}"/>
+    ${[78,104,130,156].map(y=>`<path d="M56 ${y}h40M124 ${y}h36M188 ${y}h30" ${xs(`opacity="${y===104?.95:.5}"`,2.2)}/><path d="M44 ${y+13}h192" ${xs('opacity=".25"',1)}/>`).join('')}
+    <circle cx="266" cy="148" r="30" fill="${X_INK}"/><circle cx="266" cy="148" r="24" fill="none" stroke="${X_SHEET}" stroke-width="1" opacity=".5"/><text x="266" y="159" text-anchor="middle" font-family="Old Standard TT,Georgia,serif" font-weight="700" font-size="30" fill="${X_SHEET}">₽</text>`],
+  picture:[X_TONE,X_AMB,`
+    <g transform="rotate(-4 160 108)"><rect x="74" y="46" width="184" height="134" fill="url(#x-hatch)"/><rect x="66" y="38" width="184" height="134" fill="${X_SHEET}" ${xs('',1.8)}/>
+      <rect x="78" y="50" width="160" height="110" fill="none" ${xs('opacity=".5"',1.2)}/>
+      <circle cx="202" cy="80" r="13" fill="${X_AMB}"/>
+      <path d="M78 160l46-54 32 36 20-20 62 38z" fill="${X_INK}" opacity=".9"/><path d="M124 106l32 36-18 18z" fill="url(#x-hatch)"/></g>
+    <path d="M272 52c1 8 5 12 13 13-8 1-12 5-13 13-1-8-5-12-13-13 8-1 12-5 13-13Z" fill="${X_AMB}"/>
+    <path d="M40 176l40-40" ${xs('',2.4)}/><path d="M80 136l8-8 6 6-8 8z" fill="${X_INK}"/><path d="M40 176l-4 6 7-3" ${xs('',1.6)}/>`]
+};
+
 /* «Газета ИИ без людей» · 19.09.2026. Главная — номер газеты, чтение, оглавление
    курса, полное собрание, подписной купон, читательский билет. Движок старый:
    show(), blk(), openLes(), fetchLesson(), post(), ME, S — здесь только облик и
@@ -4074,12 +4141,17 @@ const FEED=[{"id":"prompt-client-delay","type":"prompt","title":"Ответ кл
     ['scissors','<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/>'],
     ['paper','<path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2Z"/><path d="M17 9h3v10a2 2 0 0 1-2 2M8 9h5M8 13h5M8 17h3"/>'],
     ['pen','<path d="M4 20h4L19 9l-4-4L4 16Z"/>']
-  ].map(([n,p])=>`<symbol id="i-${n}" viewBox="0 0 24 24">${p}</symbol>`).join(''));
+  ].map(([n,p])=>`<symbol id="i-${n}" viewBox="0 0 24 24">${p}</symbol>`).join('')+
+    // штриховка вместо теней в иллюстрациях гайдов
+    '<pattern id="x-hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="4" height="4" fill="#E4E2DA"/><line x1="0" y1="0" x2="0" y2="4" stroke="#131313" stroke-width="1.1" opacity=".5"/></pattern>');
 })();
 const xi=(n,c='')=>`<svg class="x-ic ${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
 const feedAttr=v=>String(v??'').replace(/[&"<>]/g,c=>({'&':'&amp;','"':'&quot;','<':'&lt;','>':'&gt;'}[c]));
 const X_BOOKS=['chatgpt','claude','perplexity','gemini','notebook','deepseek'];
 const xBook=slug=>`assets/${slug}-book.webp`;
+/* курс — том «Полного собрания»: типографская обложка вместо обесцвеченной 3D-книжки */
+const X_ROMAN=['I','II','III','IV','V','VI','VII','VIII'];
+const xTom=(slug,size)=>{const k=X_BOOKS.indexOf(slug);return k<0?'':`<span class="x-tom" style="--s:${size}px" aria-hidden="true"><small>том</small><b>${X_ROMAN[k]}</b><i></i></span>`;};
 /* Доступность из России, сверено 19.09.2026 по официальным спискам стран
    (help.openai.com, anthropic.com/supported-countries, Google) и сообщениям о работе
    сервисов. Об обходе блокировок не пишем — только честный статус. */
@@ -4100,7 +4172,7 @@ const X_ART={
   picture:['#fde8f0','#e3437d','<g transform="rotate(-5 160 110)"><rect x="66" y="40" width="186" height="136" rx="18" fill="#fff"/><rect x="80" y="54" width="158" height="108" rx="10" fill="#ffd1e1"/><circle cx="198" cy="84" r="15" fill="#ffcc2e"/><path d="M80 162l48-56 34 38 22-22 54 40z" fill="#e3437d"/><path d="M128 106l34 38-22 18z" fill="#b92a5f" opacity=".45"/></g><path d="M268 58c1 8 5 12 13 13-8 1-12 5-13 13-1-8-5-12-13-13 8-1 12-5 13-13Z" fill="#e3437d"/><path d="M52 150c.7 5 3 7.5 8 8-5 .7-7.3 3-8 8-.7-5-3-7.3-8-8 5-.5 7.3-3 8-8Z" fill="#ee8a1f"/>']
 };
 function xCover(art){
-  const [bg,,g]=X_ART[art]||X_ART.document;
+  const [bg,,g]=X_ART_G[art]||X_ART_G.document;  // газетные гравюры; прежний X_ART — цветные, под серым фильтром
   return `<svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true"><rect width="320" height="200" fill="${bg}"/>${g}</svg>`;
 }
 
@@ -4435,7 +4507,7 @@ function xHome(){
   xGrowAll($('#x-lead'));
   const courses=SECS.slice(6),total=courses.reduce((a,s)=>a+s.ls.length,0),free=courses.reduce((a,s)=>a+s.ls.filter(l=>!l.key).length,0);
   $('#x-ad').innerHTML=`<span class="x-rub">Объявление</span><span class="x-h">Полное собрание курсов</span>
-    <span class="x-books" aria-hidden="true">${X_BOOKS.map(b=>`<img src="${xBook(b)}" alt="" width="54" height="54" loading="lazy">`).join('')}</span>
+    <span class="x-books" aria-hidden="true">${X_BOOKS.map(b=>xTom(b,50)).join('')}</span>
     <p>${courses.length} курсов по нейросетям, ${total} уроков с готовыми запросами и проверкой. ${free} уроков открыты без оплаты.</p><span class="go">Открыть оглавление</span>`;
 }
 
@@ -4447,7 +4519,7 @@ function xRenderSec(i){
   const curJ=s.ls.findIndex((l,j)=>!done.includes(i+'-'+j)&&(!l.key||paid));
   $('#sec-head').innerHTML=s.archived
     ?`<span></span><div><h2>${esc(s.t)}</h2><p>Материал прежней программы. Сохранён по старой ссылке.</p></div>`
-    :`<img src="${xBook(s.slug)}" alt="" width="72" height="72"><div><h2>${esc(s.t)}</h2><p>${esc(s.d||'')}</p>${xRu(s.slug)}</div>`;
+    :`${xTom(s.slug,76)}<div><h2>${esc(s.t)}</h2><p>${esc(s.d||'')}</p>${xRu(s.slug)}</div>`;
   const free=s.ls.filter(l=>!l.key).length;
   $('#sec-overview').innerHTML=`<span>${s.ls.length} ${скл(s.ls.length,'урок','урока','уроков')} · ${free===s.ls.length?'все открыты':free+' открыто'}</span>${!paid&&free<s.ls.length?`<button class="x-link" data-go="pay-all">Открыть все уроки</button>`:''}`;
   const parts=s.archived?[[0,s.ls.length,'Уроки']]:[[0,3,X_PART[0]],[3,7,X_PART[1]],[7,8,X_PART[2]]];
@@ -4503,7 +4575,7 @@ routePaint=function(){
    <div class="x-count"><div><b>${courses.length}</b><span>курсов</span></div><div><b>${total}</b><span>уроков</span></div><div><b>${free}</b><span>открыто сразу</span></div></div>
    <p class="x-ru-note"><span class="x-ru ok">${xi('check')}Открывается в России</span> — так отмечены курсы, которые проходятся в самой нейросети без подготовки. Запросы из остальных курсов работают и в DeepSeek, Алисе AI, GigaChat.</p>
    <h2>Оглавление собрания</h2>
-   <div class="x-toc">${courses.map((s,k)=>`<button class="x-press" data-sec-go="${k+6}"><img src="${xBook(s.slug)}" alt="" width="56" height="56" loading="lazy"><span><b>${esc(s.t)}</b>${xRu(s.slug)}<small>${esc(s.d)}</small><small>${s.ls.length} уроков · ${s.ls.filter(l=>!l.key).length} открыто</small></span>${xi('chev')}</button>`).join('')}</div>
+   <div class="x-toc">${courses.map((s,k)=>`<button class="x-press" data-sec-go="${k+6}">${xTom(s.slug,58)}<span><b>${esc(s.t)}</b>${xRu(s.slug)}<small>${esc(s.d)}</small><small>${s.ls.length} уроков · ${s.ls.filter(l=>!l.key).length} открыто</small></span>${xi('chev')}</button>`).join('')}</div>
    <h2>Кому это нужно</h2>
    <ul class="x-list"><li><b>Тем, кто только начинает</b>Ничего не нужно знать заранее: первый урок начинается с регистрации и первого запроса.</li><li><b>Тем, кто работает с текстами и людьми</b>Письма клиентам, отчёты, таблицы, заметки встреч. Каждый урок решает одну рабочую задачу.</li><li><b>Тем, кто уже пробовал, но разочаровался</b>Разбираем, почему ответ выходит общим, и как заставить нейросеть опираться на твои данные.</li></ul>
    <h2>Как устроен урок</h2>
@@ -4636,6 +4708,20 @@ function xMove(s,el,from,to,back){
   Promise.all(anims.map(a=>a.finished)).then(finish,finish);
   setTimeout(finish,X_MOVE.dur+400);  // страховка: если анимации не отыграли — всё равно убрать
 }
+/* открытие приложения: номер проявляется сверху вниз, как свежий оттиск, — один раз
+   за сеанс и меньше чем за полсекунды. Задержки внутри ключевых кадров, без fill:
+   не сыграло — всё просто на месте. */
+let xIntroDone=false;
+function xIntro(el){
+  xIntroDone=true;
+  try{if(sessionStorage.getItem('x-intro'))return;sessionStorage.setItem('x-intro','1');}catch(e){}
+  if(xCalm()||document.hidden||!el)return;
+  ['.x-mast .top','.x-mast h1','.x-mast p','.x-date','.x-access','.x-lead'].forEach((q,i)=>{
+    const n=el.querySelector(q);if(!n)return;const hold=i*55,dur=520+hold;
+    const a=n.animate([{opacity:0,translate:'0 10px'},{opacity:0,translate:'0 10px',offset:hold/dur},{opacity:1,translate:'0 0'}],{duration:dur,easing:'cubic-bezier(.2,.7,.25,1)'});
+    setTimeout(()=>a.finish(),dur+500);
+  });
+}
 const X_SCROLL=new Map();
 const xScrollKey=v=>v==='sec'?'sec'+cur:v;  // у каждого курса своё оглавление — и своё место
 const _show=show;
@@ -4649,6 +4735,7 @@ show=function(v,back){
   if(from&&from!=='study'&&from!==v)X_SCROLL.set(xScrollKey(from),scrollY);
   const r=_show(v,back);
   const el=document.querySelector('.view.on');
+  if(!xReady&&v==='study'&&!xIntroDone)xIntro(el);
   if(v==='study')xInk(true);  // пока номер был скрыт, мерить рубрики было нельзя
   // как в iOS: вернулся назад — экран там же, где его оставил; пришёл вглубь заново — с начала
   const to=el?.id.slice(2),goingBack=back||(X_DEPTH[to]??1)<(X_DEPTH[from]??1)||X_TABS.includes(to);
