@@ -1595,6 +1595,11 @@ html,body{overflow-x:clip}
 @media(prefers-reduced-motion:reduce){#l-body>p[role=status]:only-child,#exercise-content>p[role=status]:only-child{animation:none}}
 /* ошибка или закрытый доступ в читалке — спокойная заметка, а не буквица */
 #l-body>.x-note:not([role=status]){margin:4px 0 12px!important;padding:14px 0 0;border-top:1px solid var(--x-rule);font-family:var(--x-head);font-style:italic;font-size:19px!important;line-height:1.45!important;color:var(--x-ink2)!important}
+
+/* ножницы по пунктиру купона */
+.x-snip{position:absolute;left:0;bottom:-12px;z-index:3;display:grid;place-items:center;width:24px;height:24px;background:linear-gradient(var(--x-sheet) 50%,var(--x-paper) 50%);color:var(--x-ink);pointer-events:none}
+.x-snip .x-ic{width:19px;height:19px;stroke-width:2}
+.x-cut.x-nosc .sc{visibility:hidden!important}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -4278,7 +4283,8 @@ async function feedLoadPrompt(id,fresh=false){
     if(response?.ok){
       if(pre)pre.innerHTML=xFilledHTML(response.material.prompt,id);
       c.querySelector('.x-full')?.removeAttribute('data-lazy');
-      if(response.material.note&&!c.querySelector('.x-note'))c.querySelector('.x-cut').insertAdjacentHTML('afterend',`<p class="x-note"><b>Совет редакции.</b> ${esc(response.material.note)}</p>`);
+      if(response.material.note&&!c.querySelector('.x-note')){c.querySelector('.x-cut').insertAdjacentHTML('afterend',`<p class="x-note"><b>Совет редакции.</b> ${esc(response.material.note)}</p>`);
+        const n=c.querySelector('.x-note');if(n&&c.isConnected&&c.offsetParent)xFold(n,0,true);}  // появляется плавно, а не рывком
       if(err)err.innerHTML='';
     }else{if(pre)pre.textContent='Текст откроется после проверки доступа.';if(err)err.innerHTML=feedAccessError(response,id);}
   });
@@ -4371,8 +4377,23 @@ async function xWrite(text){
   await navigator.clipboard.writeText(text);
   try{TG?.HapticFeedback?.notificationOccurred?.('success');}catch(e){}
 }
+/* подпись купона: ножницы проходят по нижнему пунктиру, щёлкая лезвиями, — как в
+   договорённости по облику («ножницы проходят по пунктиру»). Только transform. */
+function xSnip(c){
+  if(!c||xCalm()||document.hidden)return false;
+  const sc=document.createElement('span');sc.className='x-snip';sc.setAttribute('aria-hidden','true');sc.innerHTML=xi('scissors');c.appendChild(sc);
+  const w=c.clientWidth,snap=[-16,8,-16,8,-16,8,-16,0];
+  const a=sc.animate(snap.map((r,i)=>({rotate:r+'deg',offset:i/(snap.length-1)})),{duration:1000,easing:'linear'});
+  const b=sc.animate([{translate:'-6px 0'},{translate:(w-16)+'px 0'}],{duration:1000,easing:'cubic-bezier(.45,.05,.25,1)'});
+  c.classList.add('x-cutting');
+  const done=()=>{sc.remove();c.classList.remove('x-cutting');};
+  b.finished.then(done,done);setTimeout(done,1600);
+  return true;
+}
 function xCutDone(button,label){
   const span=button.querySelector('span'),was=span.textContent;
+  if(xSnip(button.closest('.x-coupon')))button.classList.add('x-nosc');  // ножницы уже идут по купону — в кнопке не нужны
+  setTimeout(()=>button.classList.remove('x-nosc'),2000);
   button.classList.remove('done');void button.offsetWidth;button.classList.add('done');
   span.textContent=label;
   setTimeout(()=>{if(button.isConnected){button.classList.remove('done');span.textContent=was;}},1900);
@@ -4552,6 +4573,9 @@ openSec=function(i){if(!SECS[i])return;xRenderSec(i);show('sec');};
 const _paintMe=paintMe;
 paintMe=function(){
   _paintMe();
+  // подписчику текст «Промпта номера» подгружаем сразу: иначе при первом «Вырезать»
+  // купон вырастал бы под пальцем, когда приходит совет редакции
+  if(ME?.ok&&(ME.subscribed||ME.paid)){const id=xLeadId();if(!FEED_STATE.bodies.has(id)&&!FEED_STATE.tickets.has(id))feedLoadPrompt(id);}
   if($('#v-pay-all')?.classList.contains('on'))xCheckout();
   if($('#v-sec')?.classList.contains('on'))xRenderSec(cur);
   if($('#v-me')?.classList.contains('on'))xProfile();
