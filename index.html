@@ -1200,8 +1200,9 @@ button,a{-webkit-tap-highlight-color:transparent}
 .x-ru-lesson{display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start;border-top:1px solid var(--x-rule);border-bottom:1px solid var(--x-hair);color:var(--x-ink2);padding:10px 0;margin:0 0 18px;font-size:15px;line-height:1.5}
 .x-ru-lesson p{margin:0!important}.x-ru-lesson .x-ic{color:var(--x-muted);margin-top:3px}
 .x-ru{display:inline-flex;align-items:center;gap:6px;font:700 11px/1.2 var(--x-font);letter-spacing:.07em;text-transform:uppercase;margin:4px 0}
-.x-ru::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
-.x-ru.ok{color:var(--x-ok)}.x-ru.no{color:var(--x-muted)}.x-ru.no::before{background:none;box-shadow:inset 0 0 0 1.5px currentColor}
+.x-ru .x-ic{width:13px;height:13px;flex:none}
+.x-ru.ok{color:var(--x-ok)}
+.x-ru-note .x-ru{margin:0;vertical-align:-1px}
 .x-ru-note{font-size:15px;line-height:1.5;color:var(--x-ink2);border-top:1px solid var(--x-rule);border-bottom:1px solid var(--x-hair);padding:10px 0;margin:14px 0 0}
 
 /* ── полное собрание (страница курсов) ──────────────────────── */
@@ -1315,6 +1316,46 @@ button,a{-webkit-tap-highlight-color:transparent}
 }
 
 .x-toggle .sw::before,.x-toggle .sw::after{content:none!important;display:none!important}
+
+/* ── похвала за прочитанное (19.09) ─────────────────────────────
+   Прежний облик — тёмная скруглённая плашка поверх меню. В газете это
+   заметка на полях: лист, двойная рамка, над нижним меню, не закрывает его. */
+.pop{left:18px;right:18px;max-width:420px;margin:0 auto;transform:translateY(14px);bottom:calc(74px + var(--x-bottom));
+  border-radius:2px;background:var(--x-sheet);color:var(--x-ink);padding:12px 14px;gap:12px;
+  box-shadow:inset 0 0 0 1px var(--x-rule),inset 0 0 0 4px var(--x-sheet),inset 0 0 0 5px var(--x-rule),0 12px 28px -16px rgba(0,0,0,.45)}
+.pop.on{transform:translateY(0)}
+.pop i{width:auto;height:auto;border-radius:0;background:none;color:var(--x-amberInk);font-size:24px;line-height:1;font-family:var(--x-head)}
+.pop .pt b{font-family:var(--x-head);font-size:18px;line-height:1.2;font-weight:700}
+.pop .pt span{font-size:13px;color:var(--x-muted);opacity:1}
+
+/* ── прежние экраны в газетном облике (19.09): промпты, закладки, недавнее, документы ──
+   Они остались от «премиального» облика: сиреневые плашки, скругления, тени.
+   Здесь — те же правила, что у газеты: линейки вместо карточек, краска и бумага. */
+#v-prompts .section-title.pk-section{display:block;background:none;border-radius:0;padding:0 0 14px;margin:0 0 16px;border-bottom:3px double var(--x-rule)}
+#v-prompts .pk-section img{display:none}
+#v-prompts .pk-eyebrow{display:block;font-family:var(--x-font);font-weight:700;font-size:12px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:var(--x-amberInk)}
+#v-prompts .pk-section h1{font-family:var(--x-head);font-weight:700;font-size:40px;line-height:1.05;color:var(--x-ink);margin:6px 0 8px}
+#v-prompts .pk-section p{font-size:16px;line-height:1.45;color:var(--x-ink2);margin:0}
+#v-prompts select,#v-prompts .prompt-query{border:0;border-bottom:1.5px solid var(--x-rule);border-radius:0;background-color:transparent;box-shadow:none;padding-left:0;color:var(--x-ink)}
+#v-prompts select:focus-visible,#v-prompts .prompt-query:focus-visible{outline:none;border-bottom-color:var(--x-amber);box-shadow:0 2px 0 0 var(--x-amber)}
+#v-prompts .prc{background:none;border:0;border-radius:0;box-shadow:none;border-bottom:1px solid var(--x-hair);padding-left:0;padding-right:0}
+#v-prompts .prc .k{background:none;border-radius:0;color:var(--x-amberInk)}
+#v-prompts .load-more{border-radius:2px;background:transparent;box-shadow:inset 0 0 0 1.5px var(--x-ink);color:var(--x-ink)}
+#v-favs .foot,#v-recent .foot{background:none;border-radius:0;border-top:1px solid var(--x-rule);border-bottom:1px solid var(--x-hair);padding:18px 0;font-family:var(--x-head);font-style:italic;font-size:17px;line-height:1.45;color:var(--x-muted);text-align:left}
+#v-docs .grp{background:none;border-radius:0;border-top:1px solid var(--x-rule)}
+#v-docs .item,#v-favs .item,#v-recent .item{background:none;border:0;border-radius:0;box-shadow:none;border-bottom:1px solid var(--x-hair);padding-left:0;padding-right:0}
+#v-docs .ic,#v-favs .ic,#v-recent .ic{background:none;border-radius:0;color:var(--x-amberInk)}
+#v-doc .toc{background:none;border-radius:0;border-top:3px double var(--x-rule);border-bottom:1px solid var(--x-rule);padding-left:0;padding-right:0}
+#v-doc .toc .n{background:none;border-radius:0;color:var(--x-amberInk);font-family:var(--x-head);font-weight:700}
+#v-prompts .section-title.pk-section.pk-prompts{padding:0 0 14px!important;color:var(--x-ink)}
+#v-prompts .section-title.pk-section .pk-eyebrow{display:block!important;font-size:12px!important}
+#v-docs .stack,#v-favs .stack,#v-recent .stack{gap:0}
+#v-docs .item,#v-favs .item,#v-recent .item{margin:0}
+#v-docs .grp{border-left:0;border-right:0;border-bottom:0}
+#v-docs .grp .row{padding-left:0;padding-right:0}
+/* кнопки «в закладки» и «поделиться» в шапке урока — рамка краской, без белой подложки прежнего облика */
+#l-fav,#l-share{background:transparent!important;border-radius:2px!important;box-shadow:inset 0 0 0 1px var(--x-rule)!important;color:var(--x-ink)!important}
+#l-fav[aria-pressed="true"],#l-fav.on{color:var(--x-amberInk)!important;box-shadow:inset 0 0 0 1.5px var(--x-amberInk)!important}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -1545,13 +1586,12 @@ button,a{-webkit-tap-highlight-color:transparent}
   <div class="view" id="v-favs">
     <button class="back" data-back data-go="me">← Профиль</button>
     <h2 class="big">Закладки</h2>
-    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">То, к чему вы захотели вернуться.
-      Нажмите на закладку в заголовке урока, чтобы сохранить его здесь.</p>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">То, к чему ты хочешь вернуться. Нажми на закладку в заголовке урока — и он появится здесь.</p>
     <div class="stack" id="fav-out"></div>
   </div>
 
   <div class="view" id="v-prompts">
-    <button class="back" data-back data-go="study">← На главную</button><div class="section-title pk-section pk-prompts"><div><span class="pk-eyebrow">ГОТОВЫЕ ЗАПРОСЫ</span><h1>Промпты</h1><p>Выберите задачу. Добавьте свои данные. Отправьте нейросети.</p></div><img src="assets/premium-prompts.webp" alt="" width="640" height="640"></div><button class="quiet" id="prompt-return" hidden>← Вернуться к практике</button>
+    <button class="back" data-back data-go="study">← На главную</button><div class="section-title pk-section pk-prompts"><div><span class="pk-eyebrow">ГОТОВЫЕ ЗАПРОСЫ</span><h1>Промпты</h1><p>Выбери задачу, добавь свои данные и отправь нейросети.</p></div><img src="assets/premium-prompts.webp" alt="" width="640" height="640"></div><button class="quiet" id="prompt-return" hidden>← Вернуться к практике</button>
     <label class="prompt-select">Инструмент<select id="prompt-course"><option value="all">Все инструменты</option></select></label><div class="prompt-search"><label for="prompt-query">Задача</label><input class="prompt-query" id="prompt-query" type="search" placeholder="Письмо, документ, настройки…" autocomplete="off"><button id="prompt-clear" hidden>Очистить поиск</button></div><p class="list-status" id="prompt-count" role="status"></p><div id="pr-out"></div><button class="load-more" id="prompt-more">Показать ещё промпты</button>
   </div>
 
@@ -1570,7 +1610,7 @@ button,a{-webkit-tap-highlight-color:transparent}
   <div class="view" id="v-recent">
     <button class="back" data-back data-go="me">← Профиль</button>
     <h2 class="big">Недавно открытое</h2>
-    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Чтобы вернуться туда, где остановились.</p>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Чтобы вернуться туда, где ты остановился.</p>
     <div class="sh">Материалы</div>
     <div class="stack" id="recent"></div>
   </div>
@@ -2575,7 +2615,6 @@ const TL = {
 
 const DOCS = [
  {id:'oferta', t:'Публичная оферта', d:'Условия покупки доступа, оплата и возврат', b:[
-  ['p','<b>Внимание:</b> это черновик. Перед публикацией его должен вычитать юрист, а поля в квадратных скобках — заполнить вашими данными.'],
   ['h','1. Продавец'],
   ['p','[ФИО полностью], ИНН [ИНН], применяет налог на профессиональный доход. Адрес для связи: [почта].'],
   ['h','2. Предмет'],
@@ -3472,7 +3511,7 @@ function favPaintList(){
       <span class="ic i2 sm">${x.kind === 'tool' ? '⚒' : '◱'}</span>
       <span class="tx"><b>${esc(x.t)}</b><span>${esc(x.s || '')}</span></span>
       <span class="ch">›</span></button>`).join('')
-    : '<p class="foot">Здесь появится то, что вы отметите звёздочкой.</p>';
+    : '<p class="foot">Пока пусто. Уроки, отмеченные закладкой, будут ждать здесь.</p>';
   out.querySelectorAll('[data-fav]').forEach(el => {
     el.onclick = () => {
       const x = списк[+el.dataset.fav];
@@ -3840,12 +3879,13 @@ const xBook=slug=>`assets/${slug}-book.webp`;
 /* Доступность из России, сверено 19.09.2026 по официальным спискам стран
    (help.openai.com, anthropic.com/supported-countries, Google) и сообщениям о работе
    сервисов. Об обходе блокировок не пишем — только честный статус. */
+/* 19.09: решение Ivan'а — отрицательных надписей нет. Отметку получают только те,
+   что открываются в России; у остальных метки нет, а в уроке — подсказка, где ещё его пройти. */
 const X_RU={
-  chatgpt:[false,'Из России недоступен'],claude:[false,'Из России недоступен'],
-  gemini:[false,'Из России недоступен'],notebook:[false,'Из России недоступен'],
-  perplexity:[true,'Работает из России'],deepseek:[true,'Обычно открывается из России']
+  chatgpt:[false,''],claude:[false,''],gemini:[false,''],notebook:[false,''],
+  perplexity:[true,'Открывается в России'],deepseek:[true,'Открывается в России']
 };
-const xRu=slug=>{const r=X_RU[slug];return r?`<span class="x-ru ${r[0]?'ok':'no'}">${r[1]}</span>`:'';};
+const xRu=slug=>{const r=X_RU[slug];return r&&r[0]?`<span class="x-ru ok">${xi('check')}${r[1]}</span>`:'';};
 const X_MAKER={alice:'Яндекс',gigachat:'Сбер',deepseek:'DeepSeek, Китай',shedevrum:'Яндекс'};
 const X_ART={
   document:['#ecebff','#6b5cf6','<g transform="rotate(-8 120 110)"><rect x="70" y="42" width="104" height="132" rx="12" fill="#fff"/><rect x="88" y="66" width="68" height="7" rx="3.5" fill="#d9d6ff"/><rect x="88" y="84" width="54" height="7" rx="3.5" fill="#d9d6ff"/><rect x="88" y="102" width="62" height="7" rx="3.5" fill="#d9d6ff"/><rect x="88" y="120" width="44" height="7" rx="3.5" fill="#d9d6ff"/></g><g transform="rotate(7 205 105)"><rect x="150" y="38" width="112" height="128" rx="14" fill="#fff"/><text x="168" y="72" font-size="17" font-weight="700" fill="#1f1b4d" font-family="Golos Text,system-ui">Главное</text><rect x="166" y="88" width="80" height="12" rx="4" fill="#fff0b3"/><rect x="168" y="91" width="70" height="6" rx="3" fill="#6b5cf6"/><rect x="168" y="112" width="58" height="6" rx="3" fill="#cfcbff"/><rect x="168" y="128" width="66" height="6" rx="3" fill="#cfcbff"/></g><circle cx="262" cy="160" r="22" fill="#6b5cf6"/><text x="262" y="166" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="Golos Text,system-ui">3.2</text>'],
@@ -4194,7 +4234,7 @@ openLes=function(j,returnView='sec'){
   return Promise.resolve(_openLes(j,returnView)).then(()=>{
     const s=SECS[cur],ru=s&&X_RU[s.slug],body=$('#l-body');
     if(ru&&!ru[0]&&body&&$('#v-lesson').classList.contains('on')&&!body.querySelector('.x-ru-lesson'))
-      body.insertAdjacentHTML('afterbegin',`<aside class="x-ru-lesson">${xi('shield')}<p><b>${esc(s.t)} из России напрямую недоступен.</b> Текстовые запросы из урока можно попробовать в DeepSeek, Алисе AI или GigaChat. Специальные функции ${esc(s.t)} там устроены иначе.</p></aside>`);
+      body.insertAdjacentHTML('afterbegin',`<aside class="x-ru-lesson">${xi('bot')}<p><b>Урок можно пройти и в другой нейросети.</b> Запросы из него работают в DeepSeek, Алисе AI и GigaChat — особые функции ${esc(s.t)} там устроены иначе.</p></aside>`);
   });
 };
 
@@ -4222,7 +4262,7 @@ routePaint=function(){
    <h1 class="x-h big">Шесть курсов по нейросетям</h1>
    <p class="x-dek">Курс — это одна нейросеть, восемь уроков и одна рабочая задача в каждом: готовый запрос, учебный пример и проверка результата.</p>
    <div class="x-count"><div><b>${courses.length}</b><span>курсов</span></div><div><b>${total}</b><span>уроков</span></div><div><b>${free}</b><span>открыто сразу</span></div></div>
-   <p class="x-ru-note">ChatGPT, Claude, Gemini и Gemini Notebook из России напрямую недоступны. Текстовые запросы из этих курсов можно попробовать в DeepSeek, Алисе AI или GigaChat.</p>
+   <p class="x-ru-note"><span class="x-ru ok">${xi('check')}Открывается в России</span> — так отмечены курсы, которые проходятся в самой нейросети без подготовки. Запросы из остальных курсов работают и в DeepSeek, Алисе AI, GigaChat.</p>
    <h2>Оглавление собрания</h2>
    <div class="x-toc">${courses.map((s,k)=>`<button class="x-press" data-sec-go="${k+6}"><img src="${xBook(s.slug)}" alt="" width="56" height="56" loading="lazy"><span><b>${esc(s.t)}</b>${xRu(s.slug)}<small>${esc(s.d)}</small><small>${s.ls.length} уроков · ${s.ls.filter(l=>!l.key).length} открыто</small></span>${xi('chev')}</button>`).join('')}</div>
    <h2>Кому это нужно</h2>
@@ -4249,8 +4289,8 @@ function xSubCoupon(short){
      <button class="x-plan" role="radio" data-x-plan="month" aria-checked="${xPlanSel==='month'}"><span class="box"></span><span><b>На месяц</b><small>можно начать с одного месяца</small></span><strong>500 ₽</strong></button>
      <button class="x-plan" role="radio" data-x-plan="year" aria-checked="${xPlanSel==='year'}"><span class="box"></span><span><b>На год</b><small>два месяца в подарок</small></span><strong>4 900 ₽</strong></button>
     </div>`}
-    ${short?`<button class="x-btn x-press" data-go="pay-all" style="margin-top:14px">${paid?'Подписка':'Заполнить купон'}</button>`:`<button class="x-btn x-buy x-press" data-write="pay" style="margin-top:14px">${paid?'Продлить в боте':(xPlanSel==='year'?'Оформить год за 4 900 ₽':'Оформить месяц за 500 ₽')}</button>
-    <p class="x-honest">4 из 6 курсов — про ChatGPT, Claude, Gemini и Gemini Notebook, которые из России напрямую недоступны; DeepSeek и Perplexity работают. Онлайн-оплата подключается: пока подписка оформляется в боте, бот пришлёт реквизиты и откроет уроки сразу после оплаты. <button class="x-inline" data-doc="oferta">Публичная оферта</button></p>`}
+    ${short?`<button class="x-btn x-press" data-go="pay-all" style="margin-top:14px">${paid?'Подписка':'Открыть все уроки'}</button>`:`<button class="x-btn x-buy x-press" data-write="pay" style="margin-top:14px">${paid?'Продлить в боте':(xPlanSel==='year'?'Оформить год за 4 900 ₽':'Оформить месяц за 500 ₽')}</button>
+    <p class="x-honest">Курсы по DeepSeek и Perplexity проходятся прямо в них, запросы из остальных работают и в DeepSeek, Алисе AI, GigaChat. Онлайн-оплата подключается: пока подписка оформляется в боте, бот пришлёт реквизиты и откроет уроки сразу после оплаты. <button class="x-inline" data-doc="oferta">Публичная оферта</button></p>`}
   </div>`;
 }
 function xCheckout(){$('#x-checkout').innerHTML=xSubCoupon(false);}
@@ -4301,7 +4341,7 @@ function show(v, back){
 
   document.querySelector('.profile-go').setAttribute('aria-current', v==='me' ? 'page' : 'false');
   decorateIcons(el);
-  document.title=(el.querySelector('h1,h2,h3')?.textContent||'Библиотека')+' · ИИ без людей';
+  document.title=(el.querySelector('h1,h2,h3')?.textContent||'Газета')+' · ИИ без людей';
   navEpoch++;
   if(v!=='lesson'){ readId=null; clearTimeout(readTimer); clearTimeout(shortTimer); }
   try{ if(вТелеграме() && TG.isVersionAtLeast?.('6.1') && TG.BackButton){ ['study','hello'].includes(v) ? TG.BackButton.hide() : TG.BackButton.show(); } }catch(e){}
@@ -4658,7 +4698,7 @@ $('#req').innerHTML = REQ.map(([k,v])=>`
 function openDoc(id){
   const d = DOCS.find(x=>x.id===id);
   $('#doc-t').textContent = d.t;
-  $('#doc-d').textContent = 'редакция 1 · черновик, требует вычитки юристом';
+  $('#doc-d').textContent = 'Редакция 1';  /* 19.09: пометка «черновик, вычитать юристом» была видна читателям — она для Ivan'а */
   blk.n = 0;
   $('#doc-b').innerHTML = d.b.map(blk).join('');
   buildToc('#doc-b', '#doc-toc');
@@ -4768,12 +4808,12 @@ $('#hi-skip').addEventListener('click', ()=>closeHello(false));
   if(!экран){ show('study'); return; }
   if(экран === 'urok'){ S.set('hello2', true); openSec(6); openLes(0); return; }
 /* premium-behavior:v1:safe-initial-routes */
-  const safe=['hello','study','practice','prep','route','news','pay-all','log','tools','me','ach','favs','prompts','search','recent','docs'];
+  const safe=['study','route','pay-all','me','favs','prompts','recent','docs'];
   if(safe.includes(экран)){ S.set('hello2',true); show(экран); return; }
   show('study');
   const pendingDetail=new URLSearchParams(location.search);
   if(!pendingDetail.get('urok') && !pendingDetail.get('zapros') && !pendingDetail.get('tgWebAppStartParam') && !TG?.initDataUnsafe?.start_param)
-    setTimeout(()=>appNotice('Материал не найден. Открыта главная библиотеки.'),0);
+    setTimeout(()=>appNotice('Этого материала больше нет — открыт свежий номер.'),0);
 })();
 
 /* Telegram передаёт ?startapp=lesson_1_0 через start_param / tgWebAppStartParam.
@@ -4794,18 +4834,18 @@ $('#hi-skip').addEventListener('click', ()=>closeHello(false));
   }catch(e){}
   const потерялось = что => {
     show('study');
-    setTimeout(()=> appNotice('Материал не найден. Открыта главная библиотеки.'), 0);
+    setTimeout(()=> appNotice('Этого материала больше нет — открыт свежий номер.'), 0);
   };
   if(урок){
     S.set('hello2', true);
     if(урок.startsWith('t-')){
       const ключ = урок.slice(2);
-      if(TL[ключ]) openToolLesson(ключ); else потерялось(урок);
+      потерялось(урок);
       return;
     }
     if(!/^\d+-\d+$/.test(урок)){ потерялось(урок); return; }
     const [i, j] = урок.split('-').map(Number);
-    if(SECS[i] && SECS[i].ls && SECS[i].ls[j]){ openSec(i); openLes(j); } else потерялось(урок);
+    if(SECS[i] && !SECS[i].archived && SECS[i].ls && SECS[i].ls[j]){ openSec(i); openLes(j); } else потерялось(урок);
     return;
   }
   if(запрос){
@@ -4813,8 +4853,8 @@ $('#hi-skip').addEventListener('click', ()=>closeHello(false));
     const legacy=[];
     SECS.forEach((sec,si)=>{if(sec.archived)sec.ls.forEach((l,li)=>(l.b||[]).forEach(b=>{if(b[0]==='prompt')legacy.push(()=>{openSec(si);openLes(li);});}));});
     Object.entries(TL).forEach(([key,l])=>(l.b||[]).forEach(b=>{if(b[0]==='prompt')legacy.push(()=>openToolLesson(key));}));
-    const open=legacy[Number(запрос)-1];
-    if(open)open();else потерялось('запрос '+запрос);
+    // старые номера запросов вели в архивные разделы — теперь только в свежий номер
+    потерялось('запрос '+запрос);
   }
 })();
 
@@ -4910,7 +4950,7 @@ document.addEventListener('click', e=>{
   const rt = e.target.closest('[data-retry]');
   /* premium-behavior:v1:nav-retry */
 if(rt){ openLes(payLes,window.__lback||'sec'); return; }
-  if(e.target.closest('#pop')){ $('#pop').classList.remove('on'); show('ach'); return; }
+  if(e.target.closest('#pop')){ $('#pop').classList.remove('on'); return; } /* 19.09: экран достижений — из прежнего облика, похвала остаётся всплывающей строкой */
   const тг = e.target.closest('[data-tg]');
   if(тг){
     // отменяем переход по ссылке, только если увели сами: иначе в браузере
