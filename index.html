@@ -3,7 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FBFBF9">
+<meta name="theme-color" content="#EFEEE9">
+<meta name="description" content="Ежедневная газета о нейросетях для тех, кто только начинает: промпты-купоны, короткие гайды и справочник нейросетей. Редактор — нейросеть.">
+<meta property="og:title" content="ИИ без людей — ежедневная газета о нейросетях">
+<meta property="og:description" content="Промпты-купоны, короткие гайды и справочник нейросетей для тех, кто только начинает. Каждый день в 19:00.">
+<meta property="og:type" content="website">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <title>ИИ без людей</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1074,9 +1078,9 @@ button,a{-webkit-tap-highlight-color:transparent}
 .x-coupon .cap .x-ic{width:16px;height:16px}
 .x-fields{display:flex;flex-direction:column;gap:12px;margin:6px 0 14px}
 .x-field{display:block}
-.x-field input{display:block;width:100%;border:0;border-bottom:1.5px solid var(--x-ink);border-radius:0;background:transparent;padding:6px 0 5px;font:500 16px/1.3 var(--x-font);color:var(--x-amberInk);outline:none}
-.x-field input::placeholder{color:#8f8c81;font-weight:400}
-.x-field input:focus{border-bottom-color:var(--x-amber);box-shadow:0 1.5px 0 var(--x-amber)}
+.x-field input,.x-field textarea{display:block;resize:none;overflow:hidden;box-sizing:border-box;min-height:32px;width:100%;border:0;border-bottom:1.5px solid var(--x-ink);border-radius:0;background:transparent;padding:6px 0 5px;font:500 16px/1.3 var(--x-font);color:var(--x-amberInk);outline:none}
+.x-field input::placeholder,.x-field textarea::placeholder{color:#8f8c81;font-weight:400}
+.x-field input:focus,.x-field textarea:focus{border-bottom-color:var(--x-amber);box-shadow:0 1.5px 0 var(--x-amber)}
 .x-field small{display:block;font-size:12.5px;color:var(--x-muted);margin-top:4px}
 .x-full{margin:0 0 14px}
 .x-full summary{display:inline-flex;align-items:center;gap:6px;min-height:40px;cursor:pointer;font:600 14px/1 var(--x-font);text-decoration:underline;text-underline-offset:4px;list-style:none}
@@ -1130,7 +1134,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 .x-ad .x-h{font-size:30px}
 .x-ad p{font-size:15px;line-height:1.45;color:var(--x-ink2);margin:8px 0 12px}
 .x-books{display:flex;justify-content:center;gap:6px;margin:12px 0 14px}
-.x-books img{width:54px;height:54px;object-fit:cover;border-radius:2px;filter:grayscale(1) contrast(1.1);mix-blend-mode:multiply}
+.x-books img{flex:0 1 54px;min-width:0;width:54px;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:2px;filter:grayscale(1) contrast(1.1);mix-blend-mode:multiply}
 .x-ad .go{display:inline-flex;font:600 15px/1 var(--x-font);text-decoration:underline;text-underline-offset:4px}
 .x-colophon{text-align:center;font:italic 14px/1.5 var(--x-head);color:var(--x-muted);margin:22px 0 0;padding-top:12px;border-top:1px solid var(--x-hair)}
 
@@ -1411,6 +1415,15 @@ button,a{-webkit-tap-highlight-color:transparent}
 #v-lesson .practice-invite p,#v-lesson .practice-invite span{color:var(--x-ink2)!important}
 #v-lesson .practice-invite .study-go{background:var(--x-ink)!important;color:var(--x-paper)!important;border-radius:2px!important;box-shadow:none!important}
 #v-lesson .practice-invite .study-go *{color:var(--x-paper)!important}
+/* на телефонах шесть рубрик не помещаются: подпись «Рубрики» прячем, а у правого края —
+   затухание в цвет бумаги, чтобы было видно, что ряд листается дальше */
+@media (max-width:420px){.x-rubrics span{display:none}.x-rubrics{gap:16px}}
+.x-rubrics-wrap{position:sticky;top:0;z-index:30;margin:0 -18px;background:var(--x-paper);border-bottom:1px solid var(--x-rule)}
+.x-rubrics-wrap .x-rubrics{position:relative;top:auto;z-index:auto;margin:0;border-bottom:0}
+.x-rubrics-wrap::after{content:"";position:absolute;top:0;right:0;bottom:0;width:64px;pointer-events:none;background:linear-gradient(to right,rgba(239,238,233,0),var(--x-paper) 70%)}  /* без transition: видимость не должна зависеть от анимации */
+.x-rubrics-wrap.end::after{opacity:0}
+@media(max-width:380px){.x-rubrics-wrap{margin:0 -14px}}
+@media(min-width:900px){.x-rubrics-wrap{margin:0 -32px}}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -1471,6 +1484,7 @@ button,a{-webkit-tap-highlight-color:transparent}
   <div class="x-date"><span id="x-issue"></span><button class="me x-press" data-go="me" aria-label="Читательский билет"><span id="x-av"><svg class="x-ic" aria-hidden="true"><use href="#i-person"/></svg></span></button></div>
   <div class="x-access" id="feed-membership"></div>
   <section class="x-lead" id="x-lead" aria-label="Промпт номера"></section>
+  <div class="x-rubrics-wrap" id="x-rubrics-wrap">
   <nav class="x-rubrics" id="x-filters" aria-label="Рубрики">
     <span>Рубрики</span>
     <button data-feed-filter="all" aria-pressed="true">Все</button>
@@ -1480,6 +1494,7 @@ button,a{-webkit-tap-highlight-color:transparent}
     <button data-feed-filter="work" aria-pressed="false">Для работы</button>
     <button data-feed-filter="other" aria-pressed="false">Для себя</button>
   </nav>
+  </div>
   <p class="sr-only" id="feed-count" aria-live="polite"></p>
   <div id="feed-list"></div>
   <button class="x-btn line x-more x-press" id="feed-more" hidden style="width:auto">Ещё материалы</button>
@@ -3970,10 +3985,14 @@ function xFill(id,hint,val){const f=xFills();f[id]=f[id]||{};if(val)f[id][hint]=
 /* текст промпта: заполненные поля — значением, пустые — {подсказкой} */
 function xFilled(text,id){const v=xFills()[id]||{};return text.replace(/\{([^{}]{1,80})\}/g,(m,h)=>v[h]?v[h]:m);}
 function xFilledHTML(text,id){const v=xFills()[id]||{};return esc(text).replace(/\{([^{}]{1,80})\}/g,(m,h)=>{const raw=h.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"');return v[raw]?`<span class="x-slot filled">${esc(v[raw])}</span>`:`<span class="x-slot">{${h}}</span>`;});}
+/* поля, куда пишут списком: Enter переносит строку, а не переходит к следующему полю */
+const X_MULTI=/строк|спис/i;
+const xGrow=el=>{if(!el||el.tagName!=='TEXTAREA')return;el.style.height='auto';const h=el.scrollHeight;el.style.height=h?(h+2)+'px':'';};  // скрытое поле мерить нельзя — оставляем высоту в одну строку
+const xGrowAll=root=>root&&root.querySelectorAll('textarea[data-fill]').forEach(xGrow);
 function xCoupon(x){
   const v=xFills()[x.id]||{},body=FEED_STATE.bodies.get(x.id);
   return `<div class="x-coupon" data-coupon="${x.id}"><span class="cap">${xi('scissors')}Купон · заполни и вырежи</span>
-    <div class="x-fields">${(x.fields||[]).map(([label,hint])=>`<label class="x-field"><input data-fill="${x.id}" data-hint="${feedAttr(hint)}" value="${feedAttr(v[hint]||'')}" placeholder="${feedAttr(hint)}" autocomplete="off" enterkeyhint="next"><small>${esc(label)}</small></label>`).join('')}</div>
+    <div class="x-fields">${(x.fields||[]).map(([label,hint])=>`<label class="x-field"><textarea rows="1" data-fill="${x.id}" data-hint="${feedAttr(hint)}"${X_MULTI.test(hint)?' data-multi="1"':''} placeholder="${feedAttr(hint)}" autocomplete="off" enterkeyhint="${X_MULTI.test(hint)?'enter':'next'}">${esc(v[hint]||'')}</textarea><small>${esc(label)}</small></label>`).join('')}</div>
     <details class="x-full"${body?'':' data-lazy="1"'}><summary>${xi('paper')}Текст промпта целиком</summary><pre id="x-pre-${x.id}">${body?xFilledHTML(body.prompt,x.id):'Загружаем…'}</pre></details>
     <button class="x-btn x-cut x-press" data-x-cut="${x.id}"><svg class="x-ic sc" aria-hidden="true"><use href="#i-scissors"/></svg><span>Вырезать промпт</span></button>
     ${body?.note?`<p class="x-note"><b>Совет редакции.</b> ${esc(body.note)}</p>`:''}
@@ -4042,7 +4061,7 @@ function feedToggle(id){
   button.setAttribute('aria-expanded',String(open));
   button.innerHTML=xi('pen')+(open?'Свернуть купон':'Заполнить купон');
   fold.hidden=!open;
-  if(open){fold.innerHTML=xCoupon(x);if(!FEED_STATE.bodies.has(id))feedLoadPrompt(id);учесть('card',id,0,'prompt');fold.querySelector('input')?.focus({preventScroll:true});}
+  if(open){fold.innerHTML=xCoupon(x);xGrowAll(fold);if(!FEED_STATE.bodies.has(id))feedLoadPrompt(id);учесть('card',id,0,'prompt');fold.querySelector('[data-fill]')?.focus({preventScroll:true});}
 }
 function feedMembership(){
   const host=$('#feed-membership');if(!host)return;
@@ -4143,13 +4162,13 @@ function feedClick(e){
 /* поля купона: сохраняем по мере ввода и обновляем полный текст */
 document.addEventListener('input',e=>{
   const el=e.target.closest('[data-fill]');if(!el)return;
-  const id=el.dataset.fill;xFill(id,el.dataset.hint,el.value.trim());
+  xGrow(el);const id=el.dataset.fill;xFill(id,el.dataset.hint,el.value.trim());
   const body=FEED_STATE.bodies.get(id);
   if(body)document.querySelectorAll(`#x-pre-${id}`).forEach(p=>p.innerHTML=xFilledHTML(body.prompt,id));
 });
 document.addEventListener('keydown',e=>{
-  const el=e.target.closest?.('[data-fill]');if(!el||e.key!=='Enter')return;
-  e.preventDefault();const all=[...el.closest('.x-fields').querySelectorAll('input')],i=all.indexOf(el);
+  const el=e.target.closest?.('[data-fill]');if(!el||e.key!=='Enter'||el.dataset.multi||e.shiftKey)return;
+  e.preventDefault();const all=[...el.closest('.x-fields').querySelectorAll('[data-fill]')],i=all.indexOf(el);
   if(all[i+1])all[i+1].focus();else el.closest('.x-coupon').querySelector('[data-x-cut]').focus();
 });
 async function feedDeepLink(id,fresh=false){
@@ -4245,6 +4264,7 @@ function xHome(){
       <p class="x-dek">${esc(lead.summary)}</p>
       <p class="x-by">Редакция: нейросеть · ${(lead.fields||[]).length} ${скл((lead.fields||[]).length,'поле','поля','полей')} · бесплатно подписчикам</p></div>
     ${xCoupon(lead)}`;
+  xGrowAll($('#x-lead'));
   const courses=SECS.slice(6),total=courses.reduce((a,s)=>a+s.ls.length,0),free=courses.reduce((a,s)=>a+s.ls.filter(l=>!l.key).length,0);
   $('#x-ad').innerHTML=`<span class="x-rub">Объявление</span><span class="x-h">Полное собрание курсов</span>
     <span class="x-books" aria-hidden="true">${X_BOOKS.map(b=>`<img src="${xBook(b)}" alt="" width="54" height="54" loading="lazy">`).join('')}</span>
@@ -4366,6 +4386,14 @@ show=function(v,back){
   try{if(вТелеграме()&&TG.isVersionAtLeast?.('6.1')){TG.setHeaderColor?.('#EFEEE9');TG.setBackgroundColor?.('#EFEEE9');}}catch(e){}
   return _show(v,back);
 };
+
+/* затухание у правого края рубрик — пока ряд можно листать дальше */
+(()=>{const f=$('#x-filters'),w=$('#x-rubrics-wrap');if(!f||!w)return;
+  const upd=()=>w.classList.toggle('end',!f.clientWidth||f.scrollLeft+f.clientWidth>=f.scrollWidth-2);
+  f.addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);
+  new ResizeObserver(upd).observe(f);upd();
+  // ширина кнопок меняется, когда догружается шрифт, — пересчитать и тогда
+  document.fonts?.ready.then(upd);addEventListener('load',upd);})();
 /* ВИТРИНА JS END */
 function show(v, back){
   // Проверяем экран до того, как спрячем текущий. Ошибка в названии перехода
@@ -5093,8 +5121,10 @@ try{
       if(back) back.click(); else show('study',true);
     });
     const paint = () => { const n = document.documentElement.getAttribute('data-n')==='1';
-      if(tg.isVersionAtLeast?.('6.1') && tg.setHeaderColor) tg.setHeaderColor('#ffffff');
-      if(tg.isVersionAtLeast?.('6.1') && tg.setBackgroundColor) tg.setBackgroundColor('#ffffff'); };
+      // 19.09: полосы Telegram — цвета газеты: бумага сверху, краска снизу под тёмным меню
+      if(tg.isVersionAtLeast?.('6.1') && tg.setHeaderColor) tg.setHeaderColor('#EFEEE9');
+      if(tg.isVersionAtLeast?.('6.1') && tg.setBackgroundColor) tg.setBackgroundColor('#EFEEE9');
+      if(tg.isVersionAtLeast?.('7.10') && tg.setBottomBarColor) tg.setBottomBarColor('#131313'); };
     paint();
     new MutationObserver(paint).observe(document.documentElement,{attributes:true,attributeFilter:['data-n']});
   }
