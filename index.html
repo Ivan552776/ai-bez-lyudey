@@ -1024,14 +1024,10 @@ body{font-family:var(--x-font);background:var(--x-paper);color:var(--x-ink);font
 ::selection{background:var(--x-amberS);color:var(--x-ink)}
 .app{max-width:760px;margin:0 auto;padding:calc(8px + var(--tg-content-top,0px)) 18px calc(96px + var(--x-bottom))}
 .tp,.section-nav,#subbar{display:none!important}
-.view.on{animation:x-in .38s var(--x-ease)}
-@keyframes x-in{from{transform:translateY(6px)}}
 button,a{-webkit-tap-highlight-color:transparent}
 :focus-visible{outline:2px solid var(--x-ink);outline-offset:3px}
 .sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .x-ic{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.x-press{transition:transform .16s var(--x-ease)}
-.x-press:active{transform:translateY(1px)}
 
 /* ── типографика газеты ─────────────────────────────────────── */
 .x-rub{display:block;font:700 12px/1.2 var(--x-font);letter-spacing:.1em;text-transform:uppercase;color:var(--x-amberInk);margin:0 0 6px}
@@ -1051,7 +1047,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 
 /* ── шапка номера ───────────────────────────────────────────── */
 .x-mast{text-align:center;padding:6px 0 0}
-.x-mast .top{display:flex;justify-content:space-between;gap:10px;white-space:nowrap;font:600 10px/1.3 var(--x-font);letter-spacing:.08em;text-transform:uppercase;color:var(--x-muted);padding:0 0 7px;border-bottom:1px solid var(--x-rule)}
+.x-mast .top{display:flex;justify-content:space-between;gap:10px;white-space:nowrap;font:600 11px/1.3 var(--x-font);letter-spacing:.08em;text-transform:uppercase;color:var(--x-muted);padding:0 0 7px;border-bottom:1px solid var(--x-rule)}
 .x-mast h1{font-family:var(--x-head);font-weight:700;font-size:clamp(34px,10vw,64px);white-space:nowrap;line-height:.98;letter-spacing:-.02em;margin:10px 0 2px}
 .x-mast p{font-family:var(--x-head);font-style:italic;font-size:15px;color:var(--x-muted);margin:0 0 9px}
 .x-date{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-top:3px double var(--x-rule);border-bottom:1px solid var(--x-rule);font:600 12px/1.3 var(--x-font);letter-spacing:.04em;text-transform:uppercase}
@@ -1085,7 +1081,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 .x-full{margin:0 0 14px}
 .x-full summary{display:inline-flex;align-items:center;gap:6px;min-height:40px;cursor:pointer;font:600 14px/1 var(--x-font);text-decoration:underline;text-underline-offset:4px;list-style:none}
 .x-full summary::-webkit-details-marker{display:none}
-.x-full pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0 0!important;padding:12px 0 0!important;border-top:1px solid var(--x-hair)!important}
+.x-full pre{border-radius:0!important;white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0 0!important;padding:12px 0 0!important;border-top:1px solid var(--x-hair)!important}
 .x-slot{background:var(--x-amberS);color:var(--x-amberInk);border-radius:3px;padding:0 3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .x-slot.filled{background:none;color:var(--x-ink);font-weight:600;text-decoration:underline;text-decoration-color:var(--x-amber);text-decoration-thickness:2px;text-underline-offset:3px}
 .x-cut{position:relative;overflow:hidden}
@@ -1101,7 +1097,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 .x-rubrics span{font:700 11px/1 var(--x-font);letter-spacing:.1em;text-transform:uppercase;color:var(--x-faint);flex:none}
 .x-rubrics button{flex:none;min-height:46px;padding:0;border:0;background:none;font:500 15.5px/1 var(--x-font);color:var(--x-muted);cursor:pointer;position:relative}
 .x-rubrics button[aria-pressed="true"]{color:var(--x-ink);font-weight:700}
-.x-rubrics button[aria-pressed="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--x-amber)}
+.x-rubrics:not(.has-ink) button[aria-pressed="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--x-amber)}
 
 /* ── заметки ленты ──────────────────────────────────────────── */
 #feed-list{display:grid;grid-template-columns:1fr;gap:0}
@@ -1119,7 +1115,9 @@ button,a{-webkit-tap-highlight-color:transparent}
 .x-ref dt{color:var(--x-muted);white-space:nowrap}
 .x-ref div::after{content:"";order:1;flex:1;border-bottom:1.5px dotted #9b988d;transform:translateY(-4px)}
 .x-ref dd{order:2;margin:0;font-weight:600;text-align:right}
-.x-stamp{display:inline-flex;align-items:center;gap:6px;margin:10px 0 0;padding:4px 9px;border:1.5px solid currentColor;border-radius:2px;font:700 11.5px/1.2 var(--x-font);letter-spacing:.07em;text-transform:uppercase;transform:rotate(-1.5deg)}
+.x-stamp{display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px;max-width:100%;margin:10px 0 0;padding:5px 10px 5px;border:1.5px solid currentColor;border-radius:2px;box-shadow:inset 0 0 0 2px var(--x-paper),inset 0 0 0 2.75px currentColor;transform:rotate(-1.5deg);transform-origin:left center}
+.x-stamp b{font:700 11.5px/1.25 var(--x-font);letter-spacing:.07em;text-transform:uppercase;text-wrap:balance}
+.x-stamp small{font:500 11px/1.2 var(--x-font);letter-spacing:.04em;opacity:.85}
 .x-stamp.ok{color:var(--x-ok)}.x-stamp.no{color:var(--x-no)}
 .x-more{margin:22px auto 0;display:flex}
 .x-empty{padding:28px 0;text-align:center;color:var(--x-muted)}
@@ -1139,14 +1137,18 @@ button,a{-webkit-tap-highlight-color:transparent}
 .x-colophon{text-align:center;font:italic 14px/1.5 var(--x-head);color:var(--x-muted);margin:22px 0 0;padding-top:12px;border-top:1px solid var(--x-hair)}
 
 /* ── нижняя строка навигации ────────────────────────────────── */
-.feed-dock{position:fixed;z-index:40;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:0;padding:0 0 var(--x-bottom);background:var(--x-ink);transform:none;border-radius:0;box-shadow:none;max-width:none}
-.feed-dock button{flex:1;max-width:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:58px;padding:6px 0;border:0;border-radius:0;background:none;color:#a7a59c;font:600 11.5px/1 var(--x-font);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+/* 19.09 вечер: не чёрная полоса, а бумага-«материал», как панель вкладок в iOS: полупрозрачная,
+   прокрутка размывается под ней, сверху — линейка краской. Приложение читается одним листом. */
+.feed-dock{position:fixed;z-index:40;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:0;padding:0 0 var(--x-bottom);background:rgba(239,238,233,.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);backdrop-filter:blur(20px) saturate(1.8);border-top:1px solid var(--x-rule);transform:none;border-radius:0;box-shadow:none;max-width:none}
+.feed-dock button{flex:1;max-width:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:58px;padding:6px 0;border:0;border-radius:0;background:none;color:var(--x-muted);font:600 11.5px/1 var(--x-font);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
 .feed-dock button .ui-icon,.feed-dock button .x-ic{width:22px;height:22px}
 .feed-dock button span{display:block!important}
-.feed-dock button[aria-current="page"]{color:var(--x-paper);background:none}
+.feed-dock button[aria-current="page"]{color:var(--x-ink);background:none}
+.feed-dock button[aria-current="page"] .x-ic{stroke-width:2.1}
+@media(prefers-reduced-transparency:reduce){.feed-dock{background:var(--x-paper);-webkit-backdrop-filter:none;backdrop-filter:none}}
 .feed-dock button[aria-current="page"] span{box-shadow:0 2px 0 var(--x-amber)}
 .feed-dock[hidden]{display:none}
-#app-notice{bottom:calc(72px + var(--x-bottom))!important;background:var(--x-ink)!important;color:var(--x-paper)!important;border-radius:2px!important}
+#app-notice{bottom:calc(72px + var(--x-bottom))!important;background:var(--x-ink)!important;color:var(--x-paper)!important;border:0!important;border-radius:2px!important;box-shadow:0 14px 34px -14px rgba(19,19,19,.55)!important;font-size:14.5px!important;line-height:1.45!important;padding:13px 18px!important}
 .x-sticky{position:fixed;left:0;right:0;bottom:0;z-index:45;padding:10px 18px calc(10px + var(--x-bottom));background:var(--x-paper);border-top:1px solid var(--x-rule)}
 .x-sticky>*{max-width:560px;margin:0 auto}
 
@@ -1303,7 +1305,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 @media(max-width:380px){
  .app{padding-left:14px;padding-right:14px}
  .x-rubrics{margin:0 -14px;padding:0 14px;gap:14px}
- .x-mast .top{font-size:9.5px}
+ .x-mast .top{font-size:10px;letter-spacing:.06em}
 }
 @media(min-width:900px){
  .app{max-width:980px;padding-left:32px;padding-right:32px}
@@ -1315,8 +1317,7 @@ button,a{-webkit-tap-highlight-color:transparent}
  .x-item:not(:nth-child(3n))::after{content:"";position:absolute;top:18px;bottom:20px;right:-16px;border-right:1px solid var(--x-hair);display:block}
 }
 @media(prefers-reduced-motion:reduce){
- .view.on,.x-cut.done .sc{animation:none}
- .x-press{transition:none}
+ .x-cut.done .sc{animation:none}
 }
 
 .x-toggle .sw::after{content:none!important;display:none!important}  /* ::before — зона нажатия, см. ниже */
@@ -1430,6 +1431,137 @@ button,a{-webkit-tap-highlight-color:transparent}
 .x-toggle>span{cursor:pointer}
 #v-doc .prose h3,#v-doc .prose h4{font-family:var(--x-head);font-weight:700;font-size:22px;line-height:1.2;color:var(--x-ink)}  /* заголовки документов — как в уроках */
 #v-doc .toc{border-left:0!important;border-right:0!important}
+
+/* ── движение как в iOS (19.09, вечер) ─────────────────────────
+   Переходы между экранами — в vitrina.js (xMove). Старые слои держат
+   .view.on{transform:none!important} и button:active{transform:none!important},
+   поэтому здесь двигаем отдельными свойствами translate и scale — их те правила
+   не трогают. Видимость ничего не ждёт: нет анимации — всё просто на месте. */
+.view.x-leaving{display:block!important;position:fixed!important;left:0!important;right:0!important;width:auto!important;margin:0!important;overflow:hidden!important;box-sizing:border-box!important;pointer-events:none!important;background:var(--x-paper)}
+#x-veil,#x-dim{position:fixed;inset:0;pointer-events:none;visibility:hidden}
+#x-veil{z-index:44;background:var(--x-paper);box-shadow:-1px 0 0 rgba(19,19,19,.06),-18px 0 36px -10px rgba(19,19,19,.22)}
+#x-dim{z-index:43;background:#131313;opacity:0}
+.x-moving .x-sticky:not(.x-pinned){opacity:0}
+/* на время движения страница выходит за правый край — телефон не должен из-за этого
+   отдалять масштаб; и у входящего экрана своя бумага, иначе картинки с multiply светлеют */
+html,body{overflow-x:clip}
+@supports not (overflow:clip){html.x-moving,html.x-moving body{overflow-x:hidden}}
+.x-moving .view.on{background:var(--x-paper)}
+.x-sticky{transition:opacity .22s ease-out}
+
+/* Отклик на касание — сразу при нажатии, а не при отпускании. Кнопки слегка
+   поддаются; строки списков подсвечиваются, как ячейки таблицы в iOS, — с
+   задержкой в 70 мс, чтобы при прокрутке пальцем строки не мигали. */
+.x-btn,.x-link,.x-back,.x-fig,.x-ad,.x-plan,.x-date .me,.feed-dock button,#v-lesson .back,.cb,.x-rubrics button{transition:scale .32s var(--x-ease),opacity .32s var(--x-ease),background-color .32s ease-out}
+.x-btn:active{scale:.97;transition-duration:.08s}
+.x-link:active,.x-back:active,#v-lesson .back:active,.x-rubrics button:active,.x-inline:active{opacity:.5;transition-duration:.05s}
+.x-fig:active{scale:.985;transition-duration:.1s}
+.x-ad:active{scale:.985;transition-duration:.1s}
+.x-date .me:active,.feed-dock button:active{scale:.9;transition-duration:.08s}
+.x-row,.x-toc button,.x-menu button,.x-plan,.x-src{transition:background-color .35s ease-out,box-shadow .35s ease-out}
+.x-row:active,.x-toc button:active,.x-menu button:active,.x-plan:active,.x-src:active{background-color:rgba(19,19,19,.055);box-shadow:-10px 0 0 rgba(19,19,19,.055),10px 0 0 rgba(19,19,19,.055);transition-duration:0s;transition-delay:70ms}
+.x-row.cur:active{background-color:var(--x-paper2);box-shadow:-10px 0 0 var(--x-paper2),10px 0 0 var(--x-paper2)}
+@media(hover:hover){.x-row:hover,.x-toc button:hover,.x-menu button:hover{background-color:rgba(19,19,19,.03);box-shadow:-10px 0 0 rgba(19,19,19,.03),10px 0 0 rgba(19,19,19,.03)}}
+@media(prefers-reduced-motion:reduce){.x-btn:active,.x-fig:active,.x-ad:active,.x-date .me:active,.feed-dock button:active{scale:1}}
+
+/* подчёркивание рубрики переезжает к нажатой, а блоки раскрываются по высоте */
+.x-ink{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--x-amber);pointer-events:none;transition:translate .46s cubic-bezier(.32,.72,0,1),width .46s cubic-bezier(.32,.72,0,1)}
+.x-rubrics button[aria-pressed="true"]{transition:color .2s}
+.x-fold:not([hidden]),.x-full-body:not([hidden]){display:flow-root}
+/* переключатель: галочка встаёт сразу при нажатии, пока сервер подтверждает */
+.x-toggle .sw i{transition:opacity .18s ease-out,scale .34s cubic-bezier(.34,1.56,.64,1)}
+.x-toggle .sw.off i{scale:.6}
+.x-toggle .sw.x-flip.off i{opacity:1;scale:1}
+.x-toggle .sw.x-flip:not(.off) i{opacity:0;scale:.6}
+.x-toggle .sw:active{scale:.9;transition:scale .08s}
+.x-toggle .sw{transition:scale .3s var(--x-ease)}
+.x-prod{padding-top:10px}
+
+/* ── урок: остатки прежнего облика (19.09, вечер) ───────────────
+   Пункты списков были 15 px синевато-серым, у схемы — вертикальные чёрточки,
+   у раскрывашек — системные треугольники. Теперь всё по правилам газеты. */
+#v-lesson .prose ul,#v-lesson .prose ol{margin:4px 0 18px;padding:0;list-style:none}
+#v-lesson .prose ul>li,#v-lesson .prose ol>li{position:relative;font-size:inherit;line-height:1.6;color:var(--x-ink2);margin:0 0 10px;padding-left:26px}
+#v-lesson .prose ul>li::before{content:"—";position:absolute;left:0;top:0;color:var(--x-amberInk);font-weight:600}
+#v-lesson .prose ol{counter-reset:x-ol}
+#v-lesson .prose ol>li{counter-increment:x-ol}
+#v-lesson .prose ol>li::before{content:counter(x-ol);position:absolute;left:0;top:-1px;font:700 19px/1.5 var(--x-head);color:var(--x-amberInk)}
+#v-lesson .fig.steps .fl::before,#v-lesson .fig.steps .fl::after,#v-lesson .fig.steps .st::before,#v-lesson .fig.steps .st::after,#v-lesson .fig.steps .st i::before,#v-lesson .fig.steps .st i::after{display:none!important;content:none!important}
+#v-lesson .fig.steps .st,#v-lesson .fig.steps .st i{border:0!important;box-shadow:none!important}
+#v-lesson .fig.steps .st span{font-family:var(--x-font)}
+/* раскрывашки «Если интерфейс отличается», «Источники»: линейка, стрелка поворачивается */
+#v-lesson details.source-fold{margin:0!important;padding:0!important;border:0!important;border-top:1px solid var(--x-hair)!important;border-radius:0!important;background:none!important;box-shadow:none!important}
+#v-lesson details.source-fold+details.source-fold{margin-top:0!important}
+#v-lesson details.source-fold:not(:has(+details.source-fold)){border-bottom:1px solid var(--x-hair)!important;margin-bottom:28px!important}
+#v-lesson .source-fold>summary{display:flex!important;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:0!important;margin:0!important;list-style:none;cursor:pointer;font-family:var(--x-font);font-weight:600;font-size:16px;line-height:1.3;color:var(--x-ink);background:none!important;border:0!important}
+#v-lesson .source-fold>summary::-webkit-details-marker{display:none}
+#v-lesson .source-fold>summary::before{content:none!important;display:none!important}
+#v-lesson .source-fold>summary::after{content:"";flex:none;width:8px;height:8px;margin-right:5px;border-right:1.75px solid currentColor;border-bottom:1.75px solid currentColor;rotate:45deg;translate:0 -3px;transition:rotate .4s var(--x-ease),translate .4s var(--x-ease)}
+#v-lesson .source-fold[open]>summary::after{rotate:225deg;translate:0 2px}
+#v-lesson .source-fold p,#v-lesson .source-fold li{font-size:15.5px!important;line-height:1.55;color:var(--x-ink2)!important}
+#v-lesson .source-fold .x-dbody>:last-child{margin-bottom:16px!important}
+.x-dbody{display:flow-root}
+.x-full>summary .x-ic{transition:rotate .4s var(--x-ease)}
+/* «Попробуй сам»: рубрика вместо одинокой галочки, кнопка во всю ширину */
+#v-lesson .practice-invite .section-symbol{display:none!important}
+#v-lesson .practice-invite::before{content:"Практика к уроку";display:block;font-family:var(--x-font);font-weight:700;font-size:12px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:var(--x-amberInk);margin:0 0 6px}
+#v-lesson .practice-invite h4{margin:0 0 6px!important;font-size:26px!important;line-height:1.1!important}
+#v-lesson .practice-invite p{margin:0 0 14px!important;font-size:16px!important;line-height:1.5!important}
+#v-lesson .practice-invite .study-go{display:flex!important;width:100%;min-height:52px;align-items:center;justify-content:center;gap:10px;font-family:var(--x-font);font-weight:600;font-size:16px}
+
+/* текст чтения — краской, а не синевато-серым прежнего облика (#424957 держали
+   .prose>p и .prose li); размер 17 px — удобнее читателю 30–50 лет с телефона */
+.view .prose>p,.view .prose li,.view .prose>ul>li,.view .prose>ol>li{color:var(--x-ink2)}
+#v-lesson .prose>p,#v-doc .prose>p{font-size:17px;line-height:1.62}
+#v-lesson .prose>p+p{margin-top:14px!important}
+#v-exercise .prose>p,#v-exercise p.practice-lead{font-size:16.5px;line-height:1.6;color:var(--x-ink2)}
+#v-exercise .pbox pre,#v-exercise .cw pre,#v-exercise pre{color:var(--x-ink2)!important;font-size:15.5px!important;line-height:1.65!important}
+#v-lesson #l-head .k{font-size:12px!important;letter-spacing:.1em!important}
+.exercise-top small,#v-practice .exercise-card .exercise-top small{font-size:12px!important}
+#v-exercise .tst .num,.tst .num{font-size:12px!important;letter-spacing:.04em}
+#v-favs .foot,#v-recent .foot{border-color:var(--x-hair)!important}
+
+/* ── упражнение и проверка в газетном облике (19.09, вечер) ──── */
+/* шаги задания — три равные колонки под линейкой, номер янтарём */
+#v-exercise .exercise-steps{display:grid!important;grid-template-columns:repeat(3,1fr);gap:0!important}
+#v-exercise .exercise-steps span{padding:10px 10px 10px 0!important;font-size:13.5px!important;line-height:1.35!important;color:var(--x-ink2)!important}
+#v-exercise .exercise-steps span+span{padding-left:10px!important;border-left:1px solid var(--x-hair)!important}
+/* учебный пример: подпись рубрикой, кнопка — как остальные «Копировать» */
+.prose .cw:before{font-family:var(--x-font)!important;font-size:11.5px!important;font-weight:700!important;letter-spacing:.1em!important;color:var(--x-amberInk)!important;top:20px!important;left:16px!important}
+#v-exercise .cb,#v-lesson .cb{text-transform:none!important;font-family:var(--x-font)!important;font-weight:600!important;font-size:14px!important;min-height:38px!important;padding:0 12px!important}
+#v-exercise .cw pre,#v-lesson .cw pre{font-size:16px!important;padding:6px 16px 18px!important;color:var(--x-ink2)!important;background:none!important}
+.view .prose .cw{background:var(--x-sheet)!important;border:1px solid var(--x-rule)!important;border-radius:0!important;box-shadow:none!important;padding-top:52px!important}
+/* раскрывашки с полным запросом: как «Источники» в уроке — стрелка справа */
+#v-exercise details.practice-prompt{margin:10px 0 16px!important}
+#v-exercise .practice-prompt>summary{display:flex!important;align-items:center;justify-content:space-between;gap:12px;min-height:54px;padding:12px 14px!important;list-style:none;color:var(--x-ink)!important;font-family:var(--x-font);font-weight:600;font-size:15.5px!important;line-height:1.35}
+#v-exercise .practice-prompt>summary::-webkit-details-marker{display:none}
+#v-exercise .practice-prompt>summary::after{content:"";flex:none;width:8px;height:8px;margin-right:4px;border-right:1.75px solid currentColor;border-bottom:1.75px solid currentColor;rotate:45deg;translate:0 -3px;transition:rotate .4s var(--x-ease),translate .4s var(--x-ease)}
+#v-exercise .practice-prompt[open]>summary::after{rotate:225deg;translate:0 2px}
+#v-exercise .practice-prompt .pbox{border-top:1px solid var(--x-hair)!important;padding:12px 14px 14px!important}
+/* проверка в конце урока и задания: без моноширинных ярлыков, варианты — квадратики */
+.tst,.tst *{font-family:var(--x-font)!important}
+.tst .th>i{display:none!important}
+.tst .th b{font-weight:700!important;font-size:12px!important;letter-spacing:.1em!important;text-transform:uppercase;color:var(--x-amberInk)!important}
+.tst .num{color:var(--x-muted)!important;letter-spacing:.08em!important;text-transform:uppercase}
+.tst .opt{min-height:52px!important;border-radius:2px!important;background:transparent!important;box-shadow:inset 0 0 0 1px var(--x-rule)!important;color:var(--x-ink)!important;transition:background-color .3s ease-out,scale .3s var(--x-ease)!important}
+.tst .opt:active{scale:.985;transition-duration:.08s!important}
+.tst .opt .m{width:20px!important;height:20px!important;border-radius:0!important;border:1.5px solid var(--x-ink)!important;background:transparent!important;color:transparent!important;display:grid!important;place-items:center;font-size:13px!important;line-height:1!important}
+.tst .opt[aria-pressed="true"] .m,.tst .opt.ok .m,.tst .opt.right .m{color:var(--x-paper)!important;background:var(--x-ink)!important}
+.tst .opt.ok,.tst .opt.right{box-shadow:inset 0 0 0 1.5px var(--x-ok)!important;background:rgba(30,107,69,.06)!important}
+.tst .opt.ok .m,.tst .opt.right .m{background:var(--x-ok)!important;border-color:var(--x-ok)!important}
+.tst .opt.bad,.tst .opt.wrong,.tst .opt.no{box-shadow:inset 0 0 0 1.5px var(--x-no)!important;background:rgba(155,42,31,.05)!important}
+/* низ задания: одна главная кнопка краской, две — линейкой, текст по центру */
+#v-exercise .open-tool{display:flex!important;width:100%;min-height:52px!important;justify-content:center;gap:10px;margin-top:20px;background:var(--x-ink)!important;color:var(--x-paper)!important;box-shadow:none!important;font-family:var(--x-font);font-weight:600;font-size:16px}
+#v-exercise .open-tool *{color:var(--x-paper)!important}
+#v-exercise .detail-actions{display:grid!important;grid-template-columns:1fr;gap:10px!important;margin-top:10px!important}
+#v-exercise .detail-actions .quiet{width:100%;min-height:50px!important;margin:0!important;justify-content:center;font-family:var(--x-font);font-weight:600;font-size:15px}
+/* старые кнопки «← …» — как в газете: шеврон и приглушённый текст */
+.view button.back.x-back{display:inline-flex!important;align-items:center;gap:4px;min-height:44px;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;color:var(--x-muted)!important;font-family:var(--x-font)!important;font-weight:500!important;font-size:15px!important;margin:0 0 6px!important}
+
+.tst .nxt{display:flex!important;align-items:center;justify-content:center;width:100%;min-height:50px!important;border-radius:2px!important;background:var(--x-ink)!important;color:var(--x-paper)!important;border:0!important;box-shadow:none!important;font-weight:600!important;font-size:15.5px!important;transition:scale .3s var(--x-ease),opacity .2s!important}
+.tst .nxt:active{scale:.97;transition-duration:.08s!important}
+.tst .nxt:disabled{opacity:.35}
+.tst .why{font-size:15.5px!important;line-height:1.5!important;color:var(--x-ink2)!important}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -1533,7 +1665,7 @@ button,a{-webkit-tap-highlight-color:transparent}
   <!-- ===== КАРТА ОБУЧЕНИЯ ===== -->
 <!-- ВИТРИНА:route START -->
 <div class="view x-prod" id="v-route">
-  <button class="x-back x-press" data-back data-go="study"><svg class="x-ic" aria-hidden="true"><use href="#i-chev-l"/></svg>Свежий номер</button>
+  <!-- вкладка нижнего меню: как корневой экран в iOS, без кнопки «назад» -->
   <div id="x-prod"></div>
 </div>
 <!-- ВИТРИНА:route END -->
@@ -2982,7 +3114,7 @@ function blk(b){
   if(k==='practice') return `<section class="lesson-practice" data-practice="${v.id}"><h4 id="h${blk.n=(blk.n||0)+1}">${esc(v.title)}</h4><p>${esc(v.task)}</p><div>${v.checks.map((t,i)=>`<label><input type="checkbox" data-practice-check="${v.id}:${i}"><span>${esc(t)}</span></label>`).join('')}</div><small>Отметки сохраняются на этом устройстве. Отмечай только то, что проверил сам.</small></section>`;
   if(k==='sub') return `<h5>${v}</h5>`;
   if(k==='ul') return `<ul>${v.split('|').map(x=>`<li>${x}</li>`).join('')}</ul>`;
-  if(k==='code') return `<div class="cw"><pre>${esc(v)}</pre><button class="cb" data-copy="${enc(v)}">копировать</button></div>`;
+  if(k==='code') return `<div class="cw"><pre>${esc(v)}</pre><button class="cb" data-copy="${enc(v)}">Копировать</button></div>`;
   if(k==='tip') return `<div class="tip">${v}</div>`;
   /* Проверка в конце урока: несколько вопросов подряд, по одному на экране.
      Так она читается как проверка, а не как помеха в середине текста. */
@@ -3002,7 +3134,7 @@ function blk(b){
       const [q,a] = pair.split('|');
       return `<div class="fx"><div class="q"><b>Проблема</b>${q}</div><div class="a"><b>Решение</b>${a}</div></div>`;
     }).join('')}</div>`;
-  if(k==='prompt') return `<div class="pbox"><div class="ph"><span>${b[2] ? esc(b[2]) : 'запрос · вставьте в нейросеть'}</span><button class="cb" data-copy="${enc(v)}">копировать</button></div><pre>${esc(v)}</pre></div>`;
+  if(k==='prompt') return `<div class="pbox"><div class="ph"><span>${b[2] ? esc(b[2]) : 'Запрос · вставь в нейросеть'}</span><button class="cb" data-copy="${enc(v)}">Копировать</button></div><pre>${esc(v)}</pre></div>`;
   // Видео временно не показываем: ролики будут пересняты в конце, данные в уроках
   // остаются нетронутыми — вернуть показ можно этой же строкой.
   if(k==='vid') return '';
@@ -3999,11 +4131,14 @@ function xCoupon(x){
   const v=xFills()[x.id]||{},body=FEED_STATE.bodies.get(x.id);
   return `<div class="x-coupon" data-coupon="${x.id}"><span class="cap">${xi('scissors')}Купон · заполни и вырежи</span>
     <div class="x-fields">${(x.fields||[]).map(([label,hint])=>`<label class="x-field"><textarea rows="1" data-fill="${x.id}" data-hint="${feedAttr(hint)}"${X_MULTI.test(hint)?' data-multi="1"':''} placeholder="${feedAttr(hint)}" autocomplete="off" enterkeyhint="${X_MULTI.test(hint)?'enter':'next'}">${esc(v[hint]||'')}</textarea><small>${esc(label)}</small></label>`).join('')}</div>
-    <details class="x-full"${body?'':' data-lazy="1"'}><summary>${xi('paper')}Текст промпта целиком</summary><pre id="x-pre-${x.id}">${body?xFilledHTML(body.prompt,x.id):'Загружаем…'}</pre></details>
+    <details class="x-full"${body?'':' data-lazy="1"'}><summary>${xi('paper')}Текст промпта целиком</summary><div class="x-full-body"><pre id="x-pre-${x.id}">${body?xFilledHTML(body.prompt,x.id):'Загружаем…'}</pre></div></details>
     <button class="x-btn x-cut x-press" data-x-cut="${x.id}"><svg class="x-ic sc" aria-hidden="true"><use href="#i-scissors"/></svg><span>Вырезать промпт</span></button>
     ${body?.note?`<p class="x-note"><b>Совет редакции.</b> ${esc(body.note)}</p>`:''}
     <div id="feed-visit-${x.id}"></div></div>`;
 }
+/* штамп доступности — как резиновая печать: статус крупно, дата сверки мелко под ним */
+function xStamp(x,full){const d=(x.checked||'').split('-').reverse();
+  return `<span class="x-stamp ok"${full?' style="margin-bottom:18px"':''}><b>${esc(x.availability)}</b><small>сверено ${esc((full?d:d.slice(0,2)).join('.'))}</small></span>`;}
 function xItemHTML(x){
   const open=FEED_STATE.opened.has(x.id);let body='';
   if(x.type==='prompt'){
@@ -4015,7 +4150,7 @@ function xItemHTML(x){
   }else{
     const f=x.facts||[];
     body=`<dl class="x-ref"><div><dt>Разработчик</dt><dd>${esc(X_MAKER[x.brand]||'')}</dd></div><div><dt>Цена</dt><dd>${esc(f[0]||'')}</dd></div><div><dt>Вход</dt><dd>${esc(f[1]||'')}</dd></div><div><dt>Ещё</dt><dd>${esc(f[2]||'')}</dd></div></dl>
-      <span class="x-stamp ok">${esc(x.availability)} · ${esc((x.checked||'').split('-').reverse().slice(0,2).join('.'))}</span>
+      ${xStamp(x)}
       <div class="acts"><button class="x-link" data-feed-visit="${x.id}">Открыть ${esc(x.domain)}</button><button class="x-link" data-feed-read="${x.id}">Справка</button></div>
       <div id="feed-visit-${x.id}"></div>`;
   }
@@ -4066,8 +4201,32 @@ function feedToggle(id){
   if(open)FEED_STATE.opened.add(id);else FEED_STATE.opened.delete(id);
   button.setAttribute('aria-expanded',String(open));
   button.innerHTML=xi('pen')+(open?'Свернуть купон':'Заполнить купон');
-  fold.hidden=!open;
-  if(open){fold.innerHTML=xCoupon(x);xGrowAll(fold);if(!FEED_STATE.bodies.has(id))feedLoadPrompt(id);учесть('card',id,0,'prompt');fold.querySelector('[data-fill]')?.focus({preventScroll:true});}
+  const from=fold.hidden?0:fold.getBoundingClientRect().height;  // прервали на середине — продолжаем с текущей высоты
+  if(open){fold.hidden=false;fold.innerHTML=xCoupon(x);xGrowAll(fold);if(!FEED_STATE.bodies.has(id))feedLoadPrompt(id);учесть('card',id,0,'prompt');fold.querySelector('[data-fill]')?.focus({preventScroll:true});}
+  xFold(fold,from,open);
+}
+/* раскрыть или свернуть блок по высоте: от текущей высоты к новой, без отскока */
+function xFold(fold,from,open,done){
+  fold._xa?.cancel();fold._xro?.disconnect();clearTimeout(fold._xwatch);
+  if(xCalm()||!xReady||document.hidden){if(!open)fold.hidden=true;done?.();return;}
+  fold.style.overflow='hidden';
+  let to=open?fold.scrollHeight:0;
+  const end=a=>{if(fold._xa!==a)return;fold._xa=null;fold.style.overflow='';if(!open){fold.hidden=true;fold._xro?.disconnect();}done?.();done=null;};
+  const run=(h0,h1,dur,fade)=>{fold.style.overflow='hidden';
+    const a=fold.animate([{height:h0+'px',opacity:fade?(open?0:1):1},{height:h1+'px',opacity:open?1:0}],{duration:dur,easing:X_MOVE.ease});
+    fold._xa=a;a.finished.then(()=>end(a),()=>{});
+    setTimeout(()=>{if(fold._xa===a)a.finish();},dur+400);};  // страховка: встала анимация — блок всё равно раскрыт
+  run(from,to,open?420:300,true);
+  // содержимое догрузилось (текст промпта, совет редакции) — и во время раскрытия,
+  // и чуть позже: растём плавно от текущей высоты, а не прыжком
+  if(open&&window.ResizeObserver){
+    fold._xro=new ResizeObserver(()=>{const nt=fold.scrollHeight;if(Math.abs(nt-to)<2)return;
+      // внутри раскрывается свой блок («Текст промпта целиком») — он ведёт движение сам
+      if(!fold._xa&&[...fold.querySelectorAll('.x-full-body')].some(n=>n._xa)){to=nt;return;}
+      const cur=fold._xa?fold.getBoundingClientRect().height:to;to=nt;fold._xa?.cancel();run(cur,nt,340,false);});
+    [...fold.children].forEach(c=>fold._xro.observe(c));
+    fold._xwatch=setTimeout(()=>{if(!fold._xa)fold._xro?.disconnect();},6000);
+  }
 }
 function feedMembership(){
   const host=$('#feed-membership');if(!host)return;
@@ -4144,8 +4303,10 @@ function feedClick(e){
   if(filter){
     FEED_STATE.filter=filter.dataset.feedFilter;FEED_STATE.limit=12;
     document.querySelectorAll('[data-feed-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.feedFilter===FEED_STATE.filter)));
-    feedDraw();
+    feedDraw();xInk();xHaptic('select');xRise($('#feed-list'));
     const f=$('#x-filters');if(f&&f.getBoundingClientRect().top<0)f.scrollIntoView({block:'start'});
+    // выбранная рубрика у края — докрутить ряд, чтобы её было видно целиком
+    if(f){const l=filter.offsetLeft,r=l+filter.offsetWidth;if(r>f.scrollLeft+f.clientWidth-48||l<f.scrollLeft+8)f.scrollTo({left:Math.max(0,l-f.clientWidth/2+filter.offsetWidth/2),behavior:xCalm()?'auto':'smooth'});}
     return true;
   }
   if(e.target.closest('#feed-more')){FEED_STATE.limit+=12;feedDraw();return true;}
@@ -4159,7 +4320,7 @@ function feedClick(e){
   if(retry){const id=retry.dataset.feedRetry,card=FEED.find(x=>x.id===id);if(card?.type==='prompt')feedLoadPrompt(id,true);else if(card?.type==='tool'&&retry.closest('.x-item'))feedVisit(id,retry);else feedOpen(id,true);return true;}
   const sh=e.target.closest('[data-x-go]');
   if(sh){const [a,b]=sh.dataset.xGo.split(':');if(a==='sec'){openSec(+b);}else if(a==='les'){const [i,j]=b.split('-').map(Number);openSec(i);openLes(j,'study');}return true;}
-  const plan=e.target.closest('[data-x-plan]');if(plan){xPlan(plan.dataset.xPlan);return true;}
+  const plan=e.target.closest('[data-x-plan]');if(plan){if(plan.getAttribute('aria-checked')!=='true')xHaptic('select');xPlan(plan.dataset.xPlan);return true;}
   const nk=e.target.closest('[data-x-neuro]');if(nk){xCopyForAI(nk);return true;}
   const ro=e.target.closest('[data-rec-open]');
   if(ro){const it=recentList()[+ro.dataset.recOpen];if(it?.kind==='card'){feedDeepLink(it.key);return true;}}
@@ -4183,6 +4344,7 @@ async function feedDeepLink(id,fresh=false){
   S.set('hello2',true);
   if(card.type==='prompt'){
     FEED_STATE.filter='all';FEED_STATE.limit=Math.max(12,FEED.findIndex(x=>x.id===id)+1);FEED_STATE.painted=false;
+    document.querySelectorAll('[data-feed-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.feedFilter==='all')));
     show('study');
     if(id===xLeadId()){if(fresh)await feedLoadPrompt(id,true);setTimeout(()=>$('#x-lead')?.scrollIntoView({block:'start'}),60);return;}
     if(!FEED_STATE.opened.has(id))feedToggle(id);if(fresh)await feedLoadPrompt(id,true);
@@ -4239,7 +4401,7 @@ async function feedOpen(id,fresh=false){
   let html=(x.blocks||[]).map(blk).join('');
   if(x.type==='tool'){
     const f=x.facts||[];
-    html=`<dl class="x-ref" style="margin:0 0 6px"><div><dt>Разработчик</dt><dd>${esc(X_MAKER[x.brand]||'')}</dd></div><div><dt>Адрес</dt><dd>${esc(x.domain)}</dd></div><div><dt>Цена</dt><dd>${esc(f[0]||'')}</dd></div><div><dt>Вход</dt><dd>${esc(f[1]||'')}</dd></div></dl><span class="x-stamp ok" style="margin-bottom:18px">${esc(x.availability)} · сверено ${esc(x.checked.split('-').reverse().join('.'))}</span>`+html;
+    html=`<dl class="x-ref" style="margin:0 0 6px"><div><dt>Разработчик</dt><dd>${esc(X_MAKER[x.brand]||'')}</dd></div><div><dt>Адрес</dt><dd>${esc(x.domain)}</dd></div><div><dt>Цена</dt><dd>${esc(f[0]||'')}</dd></div><div><dt>Вход</dt><dd>${esc(f[1]||'')}</dd></div></dl>${xStamp(x,true)}`+html;
   }
   $('#l-body').innerHTML=html;
   $('#l-next').innerHTML=x.type==='tool'
@@ -4383,15 +4545,124 @@ function xProfile(){
   $('#p-rec').textContent=rec?rec+' '+скл(rec,'материал','материала','материалов'):'пока пусто';
 }
 
-/* ---------- переходы: бумага и шапка Telegram ---------- */
+/* ---------- переходы между экранами: как в iOS (19.09, вечер) ----------
+   Вглубь (номер → курс → урок) новая страница въезжает справа поверх прежней,
+   прежняя чуть уходит влево и темнеет; назад — тот же путь в обратную сторону.
+   Между вкладками нижнего меню — короткая смена без сдвига, как в iOS.
+   Сама смена экрана остаётся мгновенной и синхронной: на это опирается старый
+   код (navEpoch, проверки .on сразу после show). Движется только картинка:
+   уходящий экран на время движения закрепляется поверх страницы и не нажимается,
+   входящий стоит в потоке как обычно. Только transform и opacity, без fill —
+   если анимация не сыграла, экран просто на месте. */
+const X_TABS=['study','route','me'];
+const X_DEPTH={hello:0,study:0,route:0,me:0,sec:1,prompts:1,practice:1,favs:1,recent:1,docs:1,ach:1,log:1,news:1,search:1,prep:1,lesson:2,exercise:2,pay:2,doc:2,'pay-all':3};
+const X_TURN=['lesson','exercise','doc'];  // тот же экран с новым содержимым — перелистнуть
+const X_MOVE={dur:460,ease:'cubic-bezier(.32,.72,0,1)'};
+const xCalm=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+let xTrans=null,xNavN=0,xReady=false;
+addEventListener('load',()=>setTimeout(()=>xReady=true,400));  // стартовый экран появляется без движения
+function xLayer(id){let el=document.getElementById(id);if(!el){el=document.createElement('div');el.id=id;el.setAttribute('aria-hidden','true');document.body.appendChild(el);}return el;}
+/* нижняя кнопка (.x-sticky) закреплена к окну; внутри сдвигаемого экрана она
+   потерялась бы — на время движения ставим её туда же, где она видна сейчас */
+function xPin(view,box,shift=0){
+  return [...view.querySelectorAll('.x-sticky')].map(n=>{const r=n.getBoundingClientRect();
+    Object.assign(n.style,{position:'absolute',top:(r.top-box.top+shift)+'px',left:(r.left-box.left)+'px',width:r.width+'px',right:'auto',bottom:'auto'});n.classList.add('x-pinned');return n;});
+}
+function xUnpin(list){list.forEach(n=>{['position','top','left','width','right','bottom'].forEach(p=>n.style[p]='');n.classList.remove('x-pinned');});}
+function xSnap(old){
+  const r=old.getBoundingClientRect(),cs=getComputedStyle(old);
+  return {el:old,top:r.top,left:r.left,width:r.width,pl:parseFloat(cs.paddingLeft)||0,pr:parseFloat(cs.paddingRight)||0};
+}
+/* уходящий экран: окно высотой в экран, прокручено туда же, где был читатель */
+function xHold(s){
+  const el=s.el,top=Math.max(0,s.top),W=document.documentElement.clientWidth;
+  el.classList.add('x-leaving');el.inert=true;
+  [['top',top],['height',innerHeight-top],['padding-left',s.left+s.pl],['padding-right',W-s.left-s.width+s.pr]].forEach(([k,v])=>el.style.setProperty(k,v+'px','important'));
+  el.scrollTop=Math.max(0,-s.top);
+  return xPin(el,{top,left:0},el.scrollTop);
+}
+function xRelease(el){
+  el.classList.remove('x-leaving');el.inert=false;
+  ['top','height','padding-left','padding-right','z-index'].forEach(p=>el.style.removeProperty(p));el.scrollTop=0;
+}
+function xMove(s,el,from,to,back){
+  xTrans?.finish();
+  if(!xReady||document.hidden)return;
+  const calm=xCalm(),same=s.el===el;
+  if(same&&!X_TURN.includes(to))return;
+  const kind=same?'turn':X_TABS.includes(from)&&X_TABS.includes(to)?'fade'
+    :back||(X_DEPTH[to]??1)<(X_DEPTH[from]??1)?'pop':'push';
+  const W=document.documentElement.clientWidth,anims=[],dock=$('#feed-dock');
+  const A=(node,kf,o={})=>{const a=node.animate(kf,{duration:X_MOVE.dur,easing:X_MOVE.ease,...o});anims.push(a);return a;};
+  let pinned=[],pinnedNew=[],dockHeld=false,done=false;
+  const veil=xLayer('x-veil'),dim=xLayer('x-dim');
+  const finish=()=>{if(done)return;done=true;
+    anims.forEach(a=>{try{a.cancel();}catch(e){}});
+    if(!same){xUnpin(pinned);xRelease(s.el);}xUnpin(pinnedNew);
+    el.style.zIndex='';el.style.position='';veil.style.visibility='';dim.style.visibility='';
+    if(dockHeld){dock.style.zIndex='';feedNav(document.querySelector('.view.on')?.id.slice(2));}
+    document.documentElement.classList.remove('x-moving');
+    if(xTrans?.finish===finish)xTrans=null;
+  };
+  xTrans={finish};
+  // Старые слои держат .view.on{transform:none!important;opacity:1!important} —
+  // поэтому двигаем отдельным свойством translate, а проявляем через filter.
+  if(same){  // следующий урок: новая страница чуть выезжает справа
+    pinnedNew=xPin(el,el.getBoundingClientRect());
+    A(el,[{filter:'opacity(0)',translate:calm?'0 0':'28px 0'},{filter:'opacity(1)',translate:'0 0'}],{duration:calm?180:380});
+  }else{
+    pinned=xHold(s);
+    const box=el.getBoundingClientRect();pinnedNew=xPin(el,box);
+    if(kind==='fade'||calm){
+      s.el.style.zIndex=38;el.style.position='relative';el.style.zIndex=39;
+      A(s.el,[{opacity:1},{opacity:0}],{duration:calm?160:130,easing:'ease-out'});
+      A(el,[{filter:'opacity(0)'},{filter:'opacity(1)'}],{duration:calm?180:260,easing:'cubic-bezier(.2,.7,.3,1)'});
+    }else{
+      const push=kind==='push',over=push?el:s.el,under=push?s.el:el;
+      // нижнее меню уходит вместе с вкладкой (как в iOS), а не пропадает рывком
+      if(dock&&(push?X_TABS.includes(from):X_TABS.includes(to))){dock.hidden=false;dock.style.zIndex=42;dockHeld=true;}
+      under.style.zIndex=41;over.style.zIndex=45;
+      if(under===el||over===el)el.style.position='relative';
+      veil.style.visibility='visible';dim.style.visibility='visible';
+      const off=W+'px 0',par=Math.round(-W*.28)+'px 0',home='0 0';
+      const underKF=push?[{translate:home},{translate:par}]:[{translate:par},{translate:home}];
+      const overKF=push?[{translate:off},{translate:home}]:[{translate:home},{translate:off}];
+      A(under,underKF);if(dockHeld)A(dock,underKF);
+      A(over,overKF);A(veil,overKF);
+      A(dim,push?[{opacity:0},{opacity:.09}]:[{opacity:.09},{opacity:0}]);
+    }
+  }
+  document.documentElement.classList.add('x-moving');  // после закрепления кнопок — иначе они мигнут
+  Promise.all(anims.map(a=>a.finished)).then(finish,finish);
+  setTimeout(finish,X_MOVE.dur+400);  // страховка: если анимации не отыграли — всё равно убрать
+}
+const X_SCROLL=new Map();
+const xScrollKey=v=>v==='sec'?'sec'+cur:v;  // у каждого курса своё оглавление — и своё место
 const _show=show;
 show=function(v,back){
   if(v==='study')xHome();
   if(v==='pay-all')xCheckout();
   if(v==='me')xProfile();
   try{if(вТелеграме()&&TG.isVersionAtLeast?.('6.1')){TG.setHeaderColor?.('#EFEEE9');TG.setBackgroundColor?.('#EFEEE9');}}catch(e){}
-  return _show(v,back);
+  xTrans?.finish();
+  const n=++xNavN,old=document.querySelector('.view.on'),from=old?.id.slice(2),snap=old?xSnap(old):null;
+  if(from&&from!=='study'&&from!==v)X_SCROLL.set(xScrollKey(from),scrollY);
+  const r=_show(v,back);
+  const el=document.querySelector('.view.on');
+  if(v==='study')xInk(true);  // пока номер был скрыт, мерить рубрики было нельзя
+  // как в iOS: вернулся назад — экран там же, где его оставил; пришёл вглубь заново — с начала
+  const to=el?.id.slice(2),goingBack=back||(X_DEPTH[to]??1)<(X_DEPTH[from]??1)||X_TABS.includes(to);
+  if(to&&to!=='study'&&to!==from){const k=xScrollKey(to);
+    if(goingBack&&X_SCROLL.has(k)){scrollTo({top:X_SCROLL.get(k),behavior:'instant'});onScroll?.();}
+    else X_SCROLL.delete(k);}
+  if(n===xNavN&&snap&&el)try{xMove(snap,el,from,el.id.slice(2),!!back);}catch(e){xTrans?.finish();}
+  return r;
 };
+/* нажатие на уже открытую вкладку — наверх страницы, как в iOS */
+$('#feed-dock')?.addEventListener('click',e=>{
+  const b=e.target.closest('[data-go]');
+  if(b&&b.getAttribute('aria-current')==='page'){e.stopPropagation();scrollTo({top:0,behavior:xCalm()?'auto':'smooth'});}
+});
 
 /* затухание у правого края рубрик — пока ряд можно листать дальше */
 (()=>{const f=$('#x-filters'),w=$('#x-rubrics-wrap');if(!f||!w)return;
@@ -4402,6 +4673,68 @@ show=function(v,back){
   document.fonts?.ready.then(upd);addEventListener('load',upd);})();
 /* подпись переключателя тоже нажимается — как у обычной галочки */
 document.addEventListener('click',e=>{if(e.target.closest('.x-toggle>span'))$('#sw1')?.click();});
+
+/* ---------- мелкая моторика (19.09, вечер) ---------- */
+/* Вибрация Telegram — только там, где она что-то значит: выбор из ряда,
+   переключатель, прочитанный урок. На каждое нажатие — нет: к ней привыкают. */
+function xHaptic(k){try{if(!вТелеграме())return;const h=TG?.HapticFeedback;if(!h)return;
+  if(k==='select')h.selectionChanged?.();else if(k==='success')h.notificationOccurred?.('success');else h.impactOccurred?.(k);}catch(e){}}
+/* подчёркивание выбранной рубрики — одна полоска, переезжает к нажатой */
+function xInk(instant){
+  const nav=$('#x-filters');if(!nav)return;
+  let ink=nav.querySelector('.x-ink');
+  if(!ink){ink=document.createElement('i');ink.className='x-ink';ink.setAttribute('aria-hidden','true');nav.appendChild(ink);nav.classList.add('has-ink');instant=true;}
+  const b=nav.querySelector('[aria-pressed="true"]');if(!b||!b.offsetWidth)return;
+  if(instant||xCalm()){ink.style.transition='none';void ink.offsetWidth;}
+  ink.style.width=b.offsetWidth+'px';ink.style.translate=b.offsetLeft+'px 0';
+  if(instant)requestAnimationFrame(()=>ink.style.transition='');
+}
+addEventListener('resize',()=>xInk(true));document.fonts?.ready.then(()=>xInk(true));addEventListener('load',()=>xInk(true));
+/* новые материалы после смены рубрики проявляются снизу вверх, по очереди.
+   Задержка — внутри ключевых кадров, без fill: не сыграло — всё просто видно. */
+function xRise(list){
+  if(!list||xCalm()||!xReady||document.hidden)return;
+  [...list.children].slice(0,5).forEach((el,i)=>{
+    const hold=i*45,dur=360+hold,o=hold/dur;
+    const a=el.animate([{opacity:0,translate:'0 12px'},{opacity:0,translate:'0 12px',offset:o},{opacity:1,translate:'0 0'}],{duration:dur,easing:'cubic-bezier(.2,.7,.3,1)'});
+    setTimeout(()=>a.finish(),dur+400);
+  });
+}
+/* переключатель рассылки отвечает сразу: галочка встаёт при нажатии, а если
+   сервер не подтвердит — возвращается. Настоящее состояние ставит старый код. */
+(()=>{const sw=$('#sw1');if(!sw)return;
+  sw.addEventListener('click',()=>{if(sw.disabled)return;sw.classList.add('x-flip');xHaptic('light');},true);
+  new MutationObserver(()=>{if(!sw.disabled&&sw.classList.contains('x-flip'))sw.classList.remove('x-flip');}).observe(sw,{attributes:true,attributeFilter:['disabled']});})();
+/* прочитанный урок — короткий «успех» */
+const _markDone=markDone;
+markDone=function(id){const was=doneList().includes(id);const r=_markDone(id);if(!was)xHaptic('success');return r;};
+/* раскрывашки («Текст промпта целиком», «Источники», «Если интерфейс отличается»)
+   открываются и закрываются плавно, а не рывком. У «Источников» содержимое без
+   обёртки — оборачиваем при первом нажатии: движется обёртка, а не каждый абзац. */
+document.addEventListener('click',e=>{
+  const sum=e.target.closest('.x-full>summary,details.source-fold>summary,details.practice-prompt>summary');if(!sum||xCalm()||!xReady)return;
+  const d=sum.parentElement;
+  let body=d.querySelector(':scope>.x-full-body,:scope>.x-dbody');
+  if(!body){body=document.createElement('div');body.className='x-dbody';[...d.childNodes].filter(n=>n!==sum).forEach(n=>body.appendChild(n));d.appendChild(body);}
+  e.preventDefault();
+  if(d.open&&!d._closing){d._closing=true;xFold(body,body.getBoundingClientRect().height,false,()=>{d.open=false;d._closing=false;body.hidden=false;});}
+  else{d._closing=false;d.open=true;body.hidden=false;xFold(body,0,true);}
+});
+/* подсказка внизу экрана выезжает мягко и так же уходит, а не мигает */
+const _appNotice=appNotice;
+appNotice=function(text){
+  const n=$('#app-notice');if(!n||xCalm())return _appNotice(text);
+  const was=n.hidden;n.textContent=text;n.hidden=false;clearTimeout(appNotice.timer);n._out?.cancel();
+  if(was)n.animate([{opacity:0,translate:'0 14px',scale:.96},{opacity:1,translate:'0 0',scale:1}],{duration:420,easing:'cubic-bezier(.3,1.25,.5,1)'});
+  appNotice.timer=setTimeout(()=>{const a=n.animate([{opacity:1},{opacity:0,translate:'0 10px'}],{duration:240,easing:'ease-in'});n._out=a;
+    const hide=()=>{if(n._out===a){n.hidden=true;n._out=null;}};a.finished.then(hide,()=>{});setTimeout(hide,700);},5000);
+};
+/* старые кнопки «← Все задания» и подобные — шеврон вместо стрелки-символа */
+function xBacks(root=document){root.querySelectorAll('button.back:not(.x-back)').forEach(b=>{const t=b.textContent.trim();if(!t.startsWith('←'))return;b.innerHTML=xi('chev-l')+esc(t.slice(1).trim());b.classList.add('x-back');});}
+xBacks();
+/* скопировал промпт — короткий «успех» в руке, как у «Вырезать» */
+const _copyText=copyText;
+copyText=async function(b){const r=await _copyText(b);if(b?.classList.contains('done'))xHaptic('success');return r;};
 /* ВИТРИНА JS END */
 function show(v, back){
   // Проверяем экран до того, как спрячем текущий. Ошибка в названии перехода
@@ -5129,10 +5462,10 @@ try{
       if(back) back.click(); else show('study',true);
     });
     const paint = () => { const n = document.documentElement.getAttribute('data-n')==='1';
-      // 19.09: полосы Telegram — цвета газеты: бумага сверху, краска снизу под тёмным меню
+      // 19.09: полосы Telegram — цвета газеты: бумага и сверху, и снизу (меню тоже бумажное)
       if(tg.isVersionAtLeast?.('6.1') && tg.setHeaderColor) tg.setHeaderColor('#EFEEE9');
       if(tg.isVersionAtLeast?.('6.1') && tg.setBackgroundColor) tg.setBackgroundColor('#EFEEE9');
-      if(tg.isVersionAtLeast?.('7.10') && tg.setBottomBarColor) tg.setBottomBarColor('#131313'); };
+      if(tg.isVersionAtLeast?.('7.10') && tg.setBottomBarColor) tg.setBottomBarColor('#EFEEE9'); };
     paint();
     new MutationObserver(paint).observe(document.documentElement,{attributes:true,attributeFilter:['data-n']});
   }
