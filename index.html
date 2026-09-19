@@ -1577,6 +1577,12 @@ html,body{overflow-x:clip}
 .x-toc .x-tom{justify-self:center}
 #sec-head{grid-template-columns:62px 1fr!important;align-items:start!important}
 #sec-head .x-tom{margin-top:4px}
+
+/* «Недавно открытое» и пустые списки */
+.x-rec small.k{display:block;margin:0 0 3px;font-family:var(--x-font);font-weight:700;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--x-amberInk)}
+.x-rec b{font-size:19px!important}
+#v-recent .sh{display:none}
+.x-empty-note,#v-favs .foot{margin:14px 0 0!important;padding:16px 0!important;border:0!important;border-top:1px solid var(--x-rule)!important;border-bottom:1px solid var(--x-hair)!important;background:none!important;font-family:var(--x-head)!important;font-style:italic;font-size:17px!important;line-height:1.45!important;color:var(--x-muted)!important;text-align:left}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -4822,6 +4828,22 @@ xBacks();
 /* скопировал промпт — короткий «успех» в руке, как у «Вырезать» */
 const _copyText=copyText;
 copyText=async function(b){const r=await _copyText(b);if(b?.classList.contains('done'))xHaptic('success');return r;};
+/* «Недавно открытое» как в газете: рубрика с типом и днём, заголовок гарнитурой номера.
+   Раньше всё из номера подписывалось «урок», даже гайды и промпты. */
+function xAgo(t){if(!t)return '';const d0=new Date();d0.setHours(0,0,0,0);const d=Math.floor((d0-new Date(t).setHours(0,0,0,0))/864e5);
+  return d<=0?'сегодня':d===1?'вчера':d<7?d+' '+скл(d,'день','дня','дней')+' назад':new Date(t).toLocaleDateString('ru-RU',{day:'numeric',month:'long'});}
+function xRecKind(x){
+  if(x.kind==='card'){const c=FEED.find(f=>f.id===x.key);return c?X_TYPE[c.type]:'Материал номера';}
+  if(x.kind==='lesson'){const si=+String(x.key).split('-')[0];return 'Урок'+(SECS[si]?' · '+SECS[si].t:'');}
+  return 'Разбор';
+}
+const _paintRecent=paintRecent;
+paintRecent=function(){
+  _paintRecent();
+  const r=recentList(),box=$('#recent');if(!box)return;
+  box.innerHTML=r.length?`<div class="x-menu x-rec">${r.map((x,i)=>`<button class="x-press" data-rec-open="${i}"><span><small class="k">${esc(xRecKind(x))} · ${xAgo(x.t)}</small><b>${esc(x.title)}</b></span>${xi('chev')}</button>`).join('')}</div>`
+    :'<p class="x-empty-note">Пока пусто. Здесь появится всё, что ты открывал: уроки, гайды, промпты, — чтобы вернуться, не листая номер.</p>';
+};  // первый раз список рисует старый код в конце загрузки — хранилище к тому времени готово
 /* ВИТРИНА JS END */
 function show(v, back){
   // Проверяем экран до того, как спрячем текущий. Ошибка в названии перехода
@@ -5191,7 +5213,7 @@ function paintRecent(){
       <span class="ic ${x.kind==='tool'?'i5':'i1'} sm">${x.kind==='tool'?'⚒':'◱'}</span>
       <span class="tx"><b>${x.title}</b><span>${x.kind==='tool'?'инструмент':'урок'}</span></span>
       <span class="ch">›</span></button>`).join('')
-    : '<p style="font-size:15px;color:var(--soft);margin:0">Здесь появятся материалы, которые вы открывали, — чтобы вернуться к ним не листая каталог.</p>';
+    : '<p style="font-size:15px;color:var(--soft);margin:0">Здесь появится всё, что ты открывал: уроки, гайды, промпты. Чтобы вернуться, не листая номер.</p>';
 }
 
 /* ---------- документы ---------- */
