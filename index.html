@@ -1618,8 +1618,11 @@ html,body{overflow-x:clip}
 #copy-fallback button:active{scale:.97;transition-duration:.08s}
 @media(prefers-reduced-motion:reduce){#copy-fallback[open],#copy-fallback::backdrop{animation:none}}
 /* пометка «Новое» перед рубрикой: янтарная плашка, как штамп выпускающего */
-.x-new{display:inline-block;margin:0 8px 0 0;padding:2px 6px 1px;background:var(--x-amber);color:var(--x-ink);font-weight:700;font-size:10.5px;letter-spacing:.1em;vertical-align:1px}
+.x-new{display:inline-block;margin:0 8px 0 0;padding:2px 6px 1px;background:var(--x-amber);color:var(--x-ink);font-weight:700;font-size:11px;letter-spacing:.09em;vertical-align:1px}
 .x-sub .x-h,.x-ad .x-h,.x-locked .x-h{text-wrap:balance}
+#l-fav.on svg,#l-fav[aria-pressed="true"] svg{fill:currentColor}
+#l-fav,#l-share{transition:scale .3s var(--x-ease)}
+#l-fav:active,#l-share:active{scale:.92;transition-duration:.08s}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -4585,7 +4588,7 @@ function xHome(){
   const courses=SECS.slice(6),total=courses.reduce((a,s)=>a+s.ls.length,0),free=courses.reduce((a,s)=>a+s.ls.filter(l=>!l.key).length,0);
   $('#x-ad').innerHTML=`<span class="x-rub">Объявление</span><span class="x-h">Полное собрание курсов</span>
     <span class="x-books" aria-hidden="true">${X_BOOKS.map(b=>xTom(b,50)).join('')}</span>
-    <p>${courses.length} курсов по нейросетям, ${total} уроков с готовыми запросами и проверкой. ${free} уроков открыты без оплаты.</p><span class="go">Открыть оглавление</span>`;
+    <p>${courses.length}&nbsp;курсов по нейросетям, ${total}&nbsp;уроков с готовыми запросами и проверкой. ${free}&nbsp;уроков открыты без оплаты.</p><span class="go">Открыть оглавление</span>`;
 }
 
 /* ---------- оглавление курса ---------- */
@@ -4598,7 +4601,8 @@ function xRenderSec(i){
     ?`<span></span><div><h2>${esc(s.t)}</h2><p>Материал прежней программы. Сохранён по старой ссылке.</p></div>`
     :`${xTom(s.slug,76)}<div><h2>${esc(s.t)}</h2><p>${esc(s.d||'')}</p>${xRu(s.slug)}</div>`;
   const free=s.ls.filter(l=>!l.key).length;
-  $('#sec-overview').innerHTML=`<span>${s.ls.length} ${скл(s.ls.length,'урок','урока','уроков')} · ${free===s.ls.length?'все открыты':free+' открыто'}</span>${!paid&&free<s.ls.length?`<button class="x-link" data-go="pay-all">Открыть все уроки</button>`:''}`;
+  const read=s.ls.filter((l,j)=>done.includes(i+'-'+j)).length;  // сколько уже прочитано — видно прогресс
+  $('#sec-overview').innerHTML=`<span>${read?`прочитано ${read} из ${s.ls.length}`:`${s.ls.length} ${скл(s.ls.length,'урок','урока','уроков')} · ${free===s.ls.length?'все открыты':free+' открыто'}`}</span>${!paid&&free<s.ls.length?`<button class="x-link" data-go="pay-all">Открыть все уроки</button>`:''}`;
   const parts=s.archived?[[0,s.ls.length,'Уроки']]:[[0,3,X_PART[0]],[3,7,X_PART[1]],[7,8,X_PART[2]]];
   $('#sec-list').innerHTML=parts.map(([a,b,name])=>`<p class="x-part">${name}</p>`+s.ls.slice(a,b).map((l,k)=>{
       const j=a+k,isDone=done.includes(i+'-'+j),locked=!!l.key&&!paid,isCur=j===curJ;
@@ -4660,7 +4664,7 @@ routePaint=function(){
    <div class="x-count"><div><b>${courses.length}</b><span>курсов</span></div><div><b>${total}</b><span>уроков</span></div><div><b>${free}</b><span>открыто сразу</span></div></div>
    <p class="x-ru-note"><span class="x-ru ok">${xi('check')}Открывается в России</span> — так отмечены курсы, которые проходятся в самой нейросети без подготовки. Запросы из остальных курсов работают и в DeepSeek, Алисе AI, GigaChat.</p>
    <h2>Оглавление собрания</h2>
-   <div class="x-toc">${courses.map((s,k)=>`<button class="x-press" data-sec-go="${k+6}">${xTom(s.slug,58)}<span><b>${esc(s.t)}</b>${xRu(s.slug)}<small>${esc(s.d)}</small><small>${s.ls.length} уроков · ${s.ls.filter(l=>!l.key).length} открыто</small></span>${xi('chev')}</button>`).join('')}</div>
+   <div class="x-toc">${courses.map((s,k)=>`<button class="x-press" data-sec-go="${k+6}">${xTom(s.slug,58)}<span><b>${esc(s.t)}</b>${xRu(s.slug)}<small>${esc(s.d)}</small><small>${s.ls.length} уроков · ${s.ls.filter(l=>!l.key).length} открыто${(r=>r?' · прочитано '+r:'')(s.ls.filter((l,j)=>doneList().includes((k+6)+'-'+j)).length)}</small></span>${xi('chev')}</button>`).join('')}</div>
    <h2>Кому это нужно</h2>
    <ul class="x-list"><li><b>Тем, кто только начинает</b>Ничего не нужно знать заранее: первый урок начинается с регистрации и первого запроса.</li><li><b>Тем, кто работает с текстами и людьми</b>Письма клиентам, отчёты, таблицы, заметки встреч. Каждый урок решает одну рабочую задачу.</li><li><b>Тем, кто уже пробовал, но разочаровался</b>Разбираем, почему ответ выходит общим, и как заставить нейросеть опираться на твои данные.</li></ul>
    <h2>Как устроен урок</h2>
@@ -4935,6 +4939,10 @@ paintRecent=function(){
   document.addEventListener('click',e=>{const d=e.target;if(d.id!=='copy-fallback')return;
     const r=d.getBoundingClientRect();if(e.clientY<r.top)shut(d,e);});  // нажатие на затемнение над шторкой — закрыть
 })();
+/* закладка: значок заполняется и чуть «встаёт на место», в руке — лёгкий щелчок */
+document.addEventListener('click',e=>{const b=e.target.closest('#l-fav');if(!b)return;
+  requestAnimationFrame(()=>{const on=b.classList.contains('on');xHaptic('light');
+    const svg=b.querySelector('svg');if(svg&&on&&!xCalm())svg.animate([{scale:.6},{scale:1}],{duration:320,easing:'cubic-bezier(.22,1,.36,1)'});});});
 /* ВИТРИНА JS END */
 function show(v, back){
   // Проверяем экран до того, как спрячем текущий. Ошибка в названии перехода
