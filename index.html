@@ -4938,7 +4938,7 @@ const X_DEPTH={hello:0,study:0,route:0,me:0,sec:1,prompts:1,practice:1,favs:1,re
 const X_TURN=['lesson','exercise','doc'];  // тот же экран с новым содержимым — перелистнуть
 const X_MOVE={dur:460,ease:'cubic-bezier(.32,.72,0,1)'};
 const xCalm=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
-let xTrans=null,xNavN=0,xReady=false;
+let xTrans=null,xNavN=0,xReady=false,xDrag=null;
 addEventListener('load',()=>setTimeout(()=>xReady=true,400));  // стартовый экран появляется без движения
 function xLayer(id){let el=document.getElementById(id);if(!el){el=document.createElement('div');el.id=id;el.setAttribute('aria-hidden','true');document.body.appendChild(el);}return el;}
 /* нижняя кнопка (.x-sticky) закреплена к окну; внутри сдвигаемого экрана она
@@ -5004,11 +5004,15 @@ function xMove(s,el,from,to,back){
       if(under===el||over===el)el.style.position='relative';
       veil.style.visibility='visible';dim.style.visibility='visible';
       const off=W+'px 0',par=Math.round(-W*.28)+'px 0',home='0 0';
-      const underKF=push?[{translate:home},{translate:par}]:[{translate:par},{translate:home}];
-      const overKF=push?[{translate:off},{translate:home}]:[{translate:home},{translate:off}];
-      A(under,underKF);if(dockHeld)A(dock,underKF);
-      A(over,overKF);A(veil,overKF);
-      A(dim,push?[{opacity:0},{opacity:.09}]:[{opacity:.09},{opacity:0}]);
+      // жест «назад» от края отдал движение: начинаем с места пальца и с его скоростью
+      const d=!push&&xDrag?xDrag:null;xDrag=null;
+      const p=d?d.p:0,o=d?{duration:Math.round(Math.max(180,Math.min(X_MOVE.dur,d.v>.05?2.25*W*(1-p)/d.v:X_MOVE.dur*(1-p)+120)))}:{};
+      const parP=Math.round(-W*.28*(1-p))+'px 0',overP=Math.round(W*p)+'px 0';
+      const underKF=push?[{translate:home},{translate:par}]:[{translate:parP},{translate:home}];
+      const overKF=push?[{translate:off},{translate:home}]:[{translate:overP},{translate:off}];
+      A(under,underKF,o);if(dockHeld)A(dock,underKF,o);
+      A(over,overKF,o);A(veil,overKF,o);
+      A(dim,push?[{opacity:0},{opacity:.09}]:[{opacity:.09*(1-p)},{opacity:0}],o);
     }
   }
   document.documentElement.classList.add('x-moving');  // после закрепления кнопок — иначе они мигнут
@@ -5161,6 +5165,74 @@ paintRecent=function(){
 document.addEventListener('click',e=>{const b=e.target.closest('#l-fav');if(!b)return;
   requestAnimationFrame(()=>{const on=b.classList.contains('on');xHaptic('light');
     const svg=b.querySelector('svg');if(svg&&on&&!xCalm())svg.animate([{scale:.6},{scale:1}],{duration:320,easing:'cubic-bezier(.22,1,.36,1)'});});});
+/* ---------- «назад» свайпом от левого края — как в iOS ----------
+   Страница тянется за пальцем 1:1, под ней — предыдущий экран (он и так лежит в
+   разметке, мы только показываем его слоем). Отпустил — решаем по месту и скорости
+   (проекция инерции, как в iOS): уйти назад или вернуться. Только iPhone: на Android
+   это делает системный жест, и Telegram превращает его в обычное «назад». */
+(()=>{
+  const ios=()=>window.X_SWIPE_TEST||TG?.platform==='ios';
+  let g=null;
+  const backOf=view=>{const b=view.querySelector('button[data-back],#l-back');if(!b)return null;
+    const to=b.id==='l-back'?(window.__lback||'sec'):b.dataset.go;return to&&$('#v-'+to)&&to!==view.id.slice(2)?{b,to}:null;};
+  function start(){
+    const W=document.documentElement.clientWidth,box=g.view.getBoundingClientRect(),cs=getComputedStyle(g.view);
+    const peek=$('#v-'+g.to),saved=g.to==='study'?FEED_STATE.scroll:(X_SCROLL.get(xScrollKey(g.to))||0);
+    Object.assign(g,{W,peek,veil:xLayer('x-veil'),dim:xLayer('x-dim'),dock:$('#feed-dock'),on:true});
+    g.pinned=xPin(g.view,box);
+    g.peekPins=xHold({el:peek,top:box.top+scrollY-saved,left:box.left,width:box.width,pl:parseFloat(cs.paddingLeft)||0,pr:parseFloat(cs.paddingRight)||0});
+    peek.style.zIndex=41;g.view.style.position='relative';g.view.style.zIndex=45;
+    g.dockWas=g.dock?.hidden;if(g.dock&&X_TABS.includes(g.to)){g.dock.hidden=false;g.dock.style.zIndex=42;}
+    g.veil.style.visibility='visible';g.dim.style.visibility='visible';
+    document.documentElement.classList.add('x-moving');
+  }
+  function paint(dx){
+    const p=dx/g.W,under=Math.round(-g.W*.28*(1-p))+'px 0';
+    g.view.style.translate=g.veil.style.translate=dx+'px 0';g.peek.style.translate=under;
+    if(g.dock&&!g.dock.hidden)g.dock.style.translate=under;g.dim.style.opacity=.09*(1-p);
+  }
+  function clean(G){
+    if(!G?.on||G.cleaned)return;G.cleaned=true;(G.anims||[]).forEach(a=>{try{a.cancel();}catch(e){}});
+    xUnpin(G.pinned);xUnpin(G.peekPins);xRelease(G.peek);
+    [G.view,G.peek,G.veil,G.dock].forEach(n=>n&&(n.style.translate=''));G.peek.style.zIndex='';
+    G.view.style.position='';G.view.style.zIndex='';
+    if(G.dock){G.dock.hidden=G.dockWas;G.dock.style.zIndex='';}
+    G.veil.style.visibility='';G.dim.style.visibility='';G.dim.style.opacity='';
+    document.documentElement.classList.remove('x-moving');
+  }
+  let settle=null;  // страница возвращается на место после недотянутого жеста
+  addEventListener('touchstart',e=>{
+    g=null;if(settle){clean(settle);settle=null;}
+    if(!ios()||e.touches.length!==1||xTrans||xCalm()||!xReady)return;
+    const t=e.touches[0];if(t.clientX>24)return;
+    const view=document.querySelector('.view.on');if(!view||X_TABS.includes(view.id.slice(2)))return;
+    const back=backOf(view);if(!back)return;
+    g={x0:t.clientX,y0:t.clientY,view,to:back.to,b:back.b,on:false,hist:[[t.clientX,performance.now()]]};
+  },{passive:true});
+  addEventListener('touchmove',e=>{
+    if(!g)return;const t=e.touches[0],dx=t.clientX-g.x0,dy=t.clientY-g.y0;
+    if(!g.on){if(Math.abs(dx)<10&&Math.abs(dy)<10)return;if(dx<=0||Math.abs(dy)>Math.abs(dx)){g=null;return;}start();}
+    e.preventDefault();
+    g.hist.push([t.clientX,performance.now()]);if(g.hist.length>6)g.hist.shift();
+    paint(Math.max(0,Math.min(g.W,dx)));
+  },{passive:false});
+  const end=()=>{
+    if(!g)return;const G=g;g=null;if(!G.on)return;
+    const h=G.hist,[x1,t1]=h[h.length-1],[x0,t0]=h[0],v=t1>t0?(x1-x0)/(t1-t0):0;  // пикселей в мс
+    const dx=Math.max(0,x1-G.x0),proj=dx+v*499;  // проекция инерции iOS: v·d/(1−d), d=0,998
+    if(v>-.05&&proj>G.W/2){clean(G);xDrag={p:dx/G.W,v:Math.max(0,v)};xHaptic('light');G.b.click();xDrag=null;return;}
+    // не дотянул — страница возвращается на место с той же скоростью
+    const W=G.W,p=dx/W,dur=Math.max(160,Math.min(360,Math.abs(v)>.05?2.25*dx/Math.abs(v):320*p+80)),o={duration:dur,easing:X_MOVE.ease};
+    const under=Math.round(-W*.28*(1-p))+'px 0',anims=[G.view.animate([{translate:dx+'px 0'},{translate:'0 0'}],o),G.veil.animate([{translate:dx+'px 0'},{translate:'0 0'}],o),
+      G.peek.animate([{translate:under},{translate:Math.round(-W*.28)+'px 0'}],o),G.dim.animate([{opacity:.09*(1-p)},{opacity:.09}],o)];
+    if(G.dock&&!G.dock.hidden)anims.push(G.dock.animate([{translate:under},{translate:Math.round(-W*.28)+'px 0'}],o));
+    [G.view,G.veil,G.peek,G.dock].forEach(n=>n&&(n.style.translate=''));G.dim.style.opacity='';
+    G.anims=anims;settle=G;
+    const fin=()=>{if(settle===G)settle=null;clean(G);};
+    Promise.all(anims.map(a=>a.finished)).then(fin,fin);setTimeout(fin,dur+300);
+  };
+  addEventListener('touchend',end,{passive:true});addEventListener('touchcancel',end,{passive:true});
+})();
 /* ВИТРИНА JS END */
 function show(v, back){
   // Проверяем экран до того, как спрячем текущий. Ошибка в названии перехода
