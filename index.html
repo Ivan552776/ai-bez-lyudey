@@ -2105,7 +2105,7 @@ html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
   <div class="view" id="v-favs">
     <button class="back" data-back data-go="me">← Профиль</button>
     <h2 class="big">Закладки</h2>
-    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">То, к чему ты хочешь вернуться. Нажми на закладку в заголовке урока — и он появится здесь.</p>
+    <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">То, к чему ты хочешь вернуться.</p>
     <div class="stack" id="fav-out"></div>
   </div>
 
@@ -2142,7 +2142,7 @@ html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
     <button class="back" data-back data-go="me">← Профиль</button>
     <h2 class="big">Недавно открытое</h2>
     <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Чтобы вернуться туда, где ты остановился.</p>
-    <div class="sh">Материалы</div>
+    <div class="sh" id="recent-sh">Материалы</div>
     <div class="stack" id="recent"></div>
   </div>
 
@@ -4038,7 +4038,7 @@ function favPaintList(){
       <span class="ic i2 sm">${x.kind === 'tool' ? '⚒' : '◱'}</span>
       <span class="tx"><b>${esc(x.t)}</b><span>${esc(x.s || '')}</span></span>
       <span class="ch">›</span></button>`).join('')
-    : '<p class="foot">Пока пусто. Уроки, отмеченные закладкой, будут ждать здесь.</p>';
+    : '<p class="foot">Пока пусто. Нажми на закладку в заголовке урока — и он появится здесь.</p><button class="s-btn" data-go="route" style="margin-top:12px">Выбрать курс</button>';
   out.querySelectorAll('[data-fav]').forEach(el => {
     el.onclick = () => {
       const x = списк[+el.dataset.fav];
@@ -5222,6 +5222,7 @@ const _paintRecent=paintRecent;
 paintRecent=function(){
   _paintRecent();
   const r=recentList(),box=$('#recent');if(!box)return;
+  const sh=$('#recent-sh');if(sh)sh.hidden=!r.length;   // заголовок списка над пустотой не нужен
   box.innerHTML=r.length?`<div class="s-grp s-rec">${r.map((x,i)=>`<button data-rec-open="${i}"><span><small class="k">${esc(xRecKind(x))} · ${xAgo(x.t)}</small><b>${esc(x.title)}</b></span>${si('chev','ch')}</button>`).join('')}</div>`
     :'<p class="s-empty-note">Пока пусто. Здесь появится всё, что ты открывал: уроки, гайды, промпты — чтобы вернуться, не листая ленту.</p>';
 };  // первый раз список рисует старый код в конце загрузки — хранилище к тому времени готово
