@@ -1234,12 +1234,16 @@ button:active,.item:active,.row:active,.book-course:active{transform:none!import
  --s-card2:#EBE9E4;     /* нажатие */
  --s-ink:#14161A;--s-ink2:#33363D;--s-soft:#6E7179;--s-faint:#8C8F97;
  --s-line:#E9E7E1;
- --s-acc:#5A5CF0;--s-acc-s:#ECECFE;--s-acc-d:#4446D8;
+ /* Зелёный облик (21.09): марка — глубокий зелёный, «сделано» — мята,
+    тёмные плашки — обсидиан с зеленцой. Главные кнопки остаются чёрными:
+    так действие не спорит с отметками. */
+ --s-acc:#0B6E4F;--s-acc-s:#E2F3EA;--s-acc-d:#085540;
+ --s-mint:#6CF8BB;--s-mint-d:#3FDFA0;
  --s-amber:#E8912A;--s-amber-s:#FDF0DE;
- --s-green:#12A150;--s-green-s:#E6F6EE;
+ --s-green:#0B6E4F;--s-green-s:#D6F2E4;
  --s-pink:#E45CA8;--s-pink-s:#FDEBF5;
  --s-blue:#2AABEE;--s-blue-s:#E4F5FD;
- --s-dark:#17181D;
+ --s-dark:#0E2420;
  --s-font:"Golos Text",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
  --s-mono:"JetBrains Mono",ui-monospace,monospace;
  --s-r:22px;            /* радиус карточки */
@@ -1886,14 +1890,14 @@ a.s-pill,a.s-btn{text-decoration:none}
    Первый вопрос человека — «где я остановился», а на него экран не отвечал. */
 .s-prog{display:flex;flex-direction:column;gap:7px;margin:0 0 10px}
 .s-prog .bar{height:7px;border-radius:999px;background:var(--s-card2);overflow:hidden}
-.s-prog .bar i{display:block;height:100%;border-radius:999px;background:var(--lesson-accent,var(--s-acc));
+.s-prog .bar i{display:block;height:100%;border-radius:999px;background:var(--s-acc);
  transition:width .5s var(--x-ease)}
 .s-prog span{font-size:13.5px;line-height:1.35;color:var(--s-soft);font-variant-numeric:tabular-nums}
 .s-prog span b{color:var(--s-ink);font-weight:600}
 
 .s-now{background:var(--s-white);border:1px solid var(--s-line);border-radius:20px;padding:16px;margin:0 0 18px}
 .s-now .k{display:block;font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
- color:var(--lesson-accent,var(--s-acc));margin:0 0 7px}
+ color:var(--s-acc);margin:0 0 7px}
 .s-now b{display:block;font-size:19px;font-weight:700;letter-spacing:-.02em;line-height:1.25;text-wrap:balance}
 .s-now p{margin:7px 0 0;font-size:14.5px;line-height:1.45;color:var(--s-soft);text-wrap:pretty}
 .s-now .s-btn{margin:14px 0 0;width:100%}
@@ -1905,9 +1909,9 @@ a.s-pill,a.s-btn{text-decoration:none}
 /* У каждого курса свой цвет — значок, полоса движения и метка «сейчас
    читаешь» уже в нём. Текущий урок в списке оставался индиговым, и на экране
    спорили два акцента. Теперь весь экран курса носит цвет своего курса. */
-.s-row.cur{border-color:var(--lesson-accent,var(--s-acc));box-shadow:0 0 0 3px var(--lesson-tint,var(--s-acc-s))}
-.s-row.cur .n{background:var(--lesson-accent,var(--s-acc))}
-.s-row .s.go{color:var(--lesson-accent,var(--s-acc))}
+.s-row.cur{border-color:var(--s-acc);box-shadow:0 0 0 3px var(--s-acc-s)}
+.s-row.cur .n{background:var(--s-acc)}
+.s-row .s.go{color:var(--s-acc)}
 
 /* ── Засечный шрифт в крупных заголовках ──────────────────────────────────
    Продукт — ежедневный выпуск с редакцией, и в референсах Ivan'а сквозная
@@ -2141,9 +2145,9 @@ a.s-pill,a.s-btn{text-decoration:none}
     <span class="tag" id="p-tag">ГОСТЬ</span>
   </section>
   <div class="s-grp">
-    <button id="p-status" data-go="pay-all"><span class="ic" style="background:#5A5CF0"><svg class="s-ic" aria-hidden="true"><use href="#i-layers"/></svg></span><span><b id="p-st-t">Полный доступ</b><small id="p-st-d">6 курсов, 48 уроков</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
+    <button id="p-status" data-go="pay-all"><span class="ic" style="background:#0B6E4F"><svg class="s-ic" aria-hidden="true"><use href="#i-layers"/></svg></span><span><b id="p-st-t">Полный доступ</b><small id="p-st-d">6 курсов, 48 уроков</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-go="route"><span class="ic" style="background:#E8912A"><svg class="s-ic" aria-hidden="true"><use href="#i-book"/></svg></span><span><b>Курсы</b><small>шесть нейросетей, 48 уроков</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
-    <button data-go="prompts"><span class="ic" style="background:#12A150"><svg class="s-ic" aria-hidden="true"><use href="#i-pen"/></svg></span><span><b>Промпты из курсов</b><small>96 запросов по задачам</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
+    <button data-go="prompts"><span class="ic" style="background:#0E8C93"><svg class="s-ic" aria-hidden="true"><use href="#i-pen"/></svg></span><span><b>Промпты из курсов</b><small>96 запросов по задачам</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
   </div>
   <div class="s-grp">
     <button data-recent="1"><span class="ic" style="background:#2AABEE"><svg class="s-ic" aria-hidden="true"><use href="#i-refresh"/></svg></span><span><b>Недавно открытое</b><small id="p-rec">пока пусто</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
@@ -4454,11 +4458,11 @@ const FEED=[{"id":"guide-check-answer","type":"guide","title":"Ответ ней
 /* Иллюстрации гайдов, облик «Свет» (20.09.2026): мягкие плоские рисунки на светлой
    подложке, наши цвета (индиго, янтарь, зелёный). Прежние газетные гравюры не годятся.
    Формат тот же: [подложка, акцент, содержимое] — sCover собирает <svg>. */
-const S_IND='#5A5CF0',S_IND2='#8E90FF',S_AMB='#E8912A',S_GRN='#12A150',S_INK='#14161A',S_W='#FFFFFF';
+const S_IND='#0B6E4F',S_IND2='#5FD5A2',S_AMB='#E8912A',S_GRN='#0B6E4F',S_INK='#14161A',S_W='#FFFFFF';
 const sd=(d,c=S_INK,w=2.2)=>`fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" ${d||''}`;
 const sLines=(x,y,ws,gap=13,c='#D9DAE6')=>ws.map((w,i)=>`<rect x="${x}" y="${y+i*gap}" width="${w}" height="6" rx="3" fill="${c}"/>`).join('');
 const S_ART={
-  document:['#EEEEFB',`
+  document:['#E4F3EC',`
     <g transform="rotate(-6 120 104)"><rect x="60" y="34" width="106" height="134" rx="14" fill="${S_W}"/>${sLines(78,60,[70,58,66,44,62])}</g>
     <g transform="rotate(5 206 100)"><rect x="150" y="30" width="114" height="132" rx="14" fill="${S_W}"/>
       <rect x="166" y="48" width="66" height="10" rx="5" fill="${S_IND}"/>${sLines(166,74,[80,70],14)}
@@ -4480,7 +4484,7 @@ const S_ART={
     <g transform="rotate(4 236 144)"><rect x="180" y="110" width="112" height="72" rx="14" fill="${S_W}"/>
       <circle cx="205" cy="146" r="15" fill="${S_GRN}"/><path d="M198 146l5 5 9-10" ${sd('',S_W,2.8)}/>
       ${sLines(228,138,[46,34],13,'#E2E4EE')}</g>`],
-  steps:['#EEEEFB',`
+  steps:['#E4F3EC',`
     ${[[44,140,44],[104,112,72],[164,84,100],[224,56,128]].map(([x,y,h],i)=>`<rect x="${x}" y="${y}" width="56" height="${h}" rx="14" fill="${i===3?S_IND:S_W}"/><text x="${x+28}" y="${y+28}" text-anchor="middle" font-family="Golos Text,system-ui" font-weight="700" font-size="17" fill="${i===3?S_W:S_IND}">${i+1}</text>`).join('')}
     <path d="M58 128C100 92 150 66 236 44" ${sd('stroke-dasharray="1 8"',S_IND2,2.6)}/>
     <path d="M252 52V22" ${sd('',S_INK,2.6)}/><path d="M254 23h32l-9 9 9 9h-32z" fill="${S_AMB}"/>`],
@@ -4504,7 +4508,7 @@ const S_ART={
       <path d="M226 86c0-6 8-6 8-12M244 86c0-6 8-6 8-12" ${sd('opacity=".55"','#E45CA8',2.4)}/>
       <rect x="208" y="140" width="62" height="6" rx="3" fill="#F3D9E8"/></g>
     <path d="M156 52c1.4 8 5 11.6 13 13-8 1.4-11.6 5-13 13-1.4-8-5-11.6-13-13 8-1.4 11.6-5 13-13Z" fill="${S_AMB}"/>`],
-  check:['#EEEEFB',`
+  check:['#E4F3EC',`
     <g transform="rotate(-4 134 104)"><rect x="70" y="30" width="130" height="146" rx="16" fill="${S_W}"/>
       ${sLines(88,56,[92,78,96])}<rect x="86" y="96" width="100" height="14" rx="7" fill="#FDF0DE"/><rect x="90" y="100" width="92" height="6" rx="3" fill="${S_AMB}"/>${sLines(88,126,[88,70,82])}</g>
     <circle cx="196" cy="104" r="42" fill="${S_W}" fill-opacity=".55" ${sd('',S_IND,3)}/>
@@ -4518,7 +4522,7 @@ const S_ART={
     <path d="M132 90a36 36 0 0 0 72 0M168 126v20M150 148h36" ${sd('',S_GRN,2.8)}/>
     <path d="M212 62a32 32 0 0 1 0 44M224 52a48 48 0 0 1 0 64" ${sd('',S_AMB,3)}/>
     <rect x="238" y="38" width="74" height="112" rx="16" fill="${S_W}"/>
-    ${[0,1,2].map(i=>`<circle cx="257" cy="${66+i*30}" r="9.5" fill="#ECECFE"/><text x="257" y="${71+i*30}" text-anchor="middle" font-family="Golos Text,system-ui" font-weight="700" font-size="11" fill="${S_IND}">${i+1}</text><rect x="274" y="${62+i*30}" width="28" height="7" rx="3.5" fill="#E2E4EE"/>`).join('')}`],
+    ${[0,1,2].map(i=>`<circle cx="257" cy="${66+i*30}" r="9.5" fill="#DCF6EA"/><text x="257" y="${71+i*30}" text-anchor="middle" font-family="Golos Text,system-ui" font-weight="700" font-size="11" fill="${S_IND}">${i+1}</text><rect x="274" y="${62+i*30}" width="28" height="7" rx="3.5" fill="#E2E4EE"/>`).join('')}`],
 };
 function sCover(art){
   const [bg,g]=S_ART[art]||S_ART.document;
@@ -4554,14 +4558,14 @@ const feedAttr=v=>String(v??'').replace(/[&"<>]/g,c=>({'&':'&amp;','"':'&quot;',
 
 /* ---------- словари ---------- */
 const X_BOOKS=['chatgpt','claude','perplexity','gemini','notebook','deepseek'];
-const S_COURSE={chatgpt:['GPT','#12A150','#E6F6EE'],claude:['Cl','#C2571E','#FBEDE3'],perplexity:['Px','#0E8C93','#E2F5F5'],
-  gemini:['Gm','#2F6BFF','#E8EFFF'],notebook:['NB','#B07A0B','#FDF3DC'],deepseek:['DS','#5A5CF0','#ECECFE']};
+const S_COURSE={chatgpt:['GPT','#0B6E4F','#D6F2E4'],claude:['Cl','#C2571E','#FBEDE3'],perplexity:['Px','#0E8C93','#E2F5F5'],
+  gemini:['Gm','#2F6BFF','#E8EFFF'],notebook:['NB','#B07A0B','#FDF3DC'],deepseek:['DS','#2F6BFF','#E8EFFF']};
 /* Доступность из России, сверено 18–19.09.2026. Отрицательных надписей нет:
    отметку получают только те, что открываются напрямую (решение Ivan'а). */
 const X_RU={chatgpt:false,claude:false,gemini:false,notebook:false,perplexity:true,deepseek:true};
 const sRu=slug=>X_RU[slug]?`<span class="s-ru">${si('check')}Работает из России</span>`:'';
 const X_MAKER={alice:'Яндекс',gigachat:'Сбер',deepseek:'DeepSeek, Китай',shedevrum:'Яндекс'};
-const S_TOOL={alice:['А','#5A5CF0','#ECECFE'],gigachat:['G','#12A150','#E6F6EE'],
+const S_TOOL={alice:['А','#C2571E','#FBEDE3'],gigachat:['G','#0B6E4F','#D6F2E4'],
   deepseek:['D','#2F6BFF','#E8EFFF'],shedevrum:['Ш','#C2571E','#FBEDE3']};
 const X_TAG={work:'для работы',other:'для себя'};
 const X_TYPE={prompt:'Промпт',guide:'Гайд',tool:'Нейросеть'};
@@ -4854,16 +4858,16 @@ function sBot(id='b'){
     <linearGradient id="${g('body')}" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#F4F4FA"/><stop offset="1" stop-color="#DCDCEA"/></linearGradient>
     <linearGradient id="${g('ear')}" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#9FA1FF"/><stop offset="1" stop-color="#5A5CF0"/></linearGradient>
+      <stop offset="0" stop-color="#7BEFBE"/><stop offset="1" stop-color="#0B6E4F"/></linearGradient>
     <linearGradient id="${g('visor')}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#2B2E3A"/><stop offset="1" stop-color="#14161A"/></linearGradient>
+      <stop offset="0" stop-color="#24322D"/><stop offset="1" stop-color="#0E2420"/></linearGradient>
     <radialGradient id="${g('eye')}" cx=".5" cy=".4" r=".7">
-      <stop offset="0" stop-color="#BFC1FF"/><stop offset=".55" stop-color="#6E70FF"/><stop offset="1" stop-color="#4446D8"/></radialGradient>
+      <stop offset="0" stop-color="#D6FFEE"/><stop offset=".55" stop-color="#4FE3A7"/><stop offset="1" stop-color="#0B6E4F"/></radialGradient>
     <radialGradient id="${g('sh')}" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#14161A" stop-opacity=".22"/><stop offset="1" stop-color="#14161A" stop-opacity="0"/></radialGradient>
+      <stop offset="0" stop-color="#0E2420" stop-opacity=".22"/><stop offset="1" stop-color="#0E2420" stop-opacity="0"/></radialGradient>
    </defs>
    <ellipse cx="32" cy="57" rx="19" ry="4.6" fill="url(#${g('sh')})"/>
-   <path d="M32 9V14" fill="none" stroke="#9FA1FF" stroke-width="2.6" stroke-linecap="round"/>
+   <path d="M32 9V14" fill="none" stroke="#7BEFBE" stroke-width="2.6" stroke-linecap="round"/>
    <circle cx="32" cy="7" r="3.4" fill="url(#${g('ear')})"/>
    <circle cx="30.9" cy="5.9" r="1.1" fill="#FFFFFF" opacity=".85"/>
    <rect x="4.5" y="25" width="7.5" height="15" rx="3.75" fill="url(#${g('ear')})"/>
@@ -4891,13 +4895,13 @@ function sBotFull(id='f',tablet){
     <linearGradient id="${g('b')}" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#F4F4FA"/><stop offset="1" stop-color="#DBDBEA"/></linearGradient>
     <linearGradient id="${g('e')}" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#9FA1FF"/><stop offset="1" stop-color="#5A5CF0"/></linearGradient>
+      <stop offset="0" stop-color="#7BEFBE"/><stop offset="1" stop-color="#0B6E4F"/></linearGradient>
     <linearGradient id="${g('v')}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#2B2E3A"/><stop offset="1" stop-color="#14161A"/></linearGradient>
+      <stop offset="0" stop-color="#24322D"/><stop offset="1" stop-color="#0E2420"/></linearGradient>
     <radialGradient id="${g('i')}" cx=".5" cy=".4" r=".7">
-      <stop offset="0" stop-color="#BFC1FF"/><stop offset=".55" stop-color="#6E70FF"/><stop offset="1" stop-color="#4446D8"/></radialGradient>
+      <stop offset="0" stop-color="#D6FFEE"/><stop offset=".55" stop-color="#4FE3A7"/><stop offset="1" stop-color="#0B6E4F"/></radialGradient>
     <radialGradient id="${g('s')}" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#14161A" stop-opacity=".2"/><stop offset="1" stop-color="#14161A" stop-opacity="0"/></radialGradient>
+      <stop offset="0" stop-color="#0E2420" stop-opacity=".2"/><stop offset="1" stop-color="#0E2420" stop-opacity="0"/></radialGradient>
    </defs>
    <ellipse cx="60" cy="163" rx="35" ry="7" fill="url(#${g('s')})"/>
    <rect x="43" y="132" width="15" height="22" rx="7.5" fill="url(#${g('e')})"/>
@@ -4914,7 +4918,7 @@ function sBotFull(id='f',tablet){
    <circle cx="60" cy="103" r="6" fill="url(#${g('i')})"/>
    <circle cx="58" cy="100.6" r="2" fill="#FFFFFF" opacity=".85"/>
    <rect x="52" y="66" width="16" height="12" rx="5" fill="#C9CAD8"/>
-   <path d="M60 10v7" fill="none" stroke="#9FA1FF" stroke-width="3" stroke-linecap="round"/>
+   <path d="M60 10v7" fill="none" stroke="#7BEFBE" stroke-width="3" stroke-linecap="round"/>
    <circle cx="60" cy="7.5" r="4" fill="url(#${g('e')})"/>
    <circle cx="58.7" cy="6.2" r="1.3" fill="#FFFFFF" opacity=".85"/>
    <rect x="16" y="35" width="9" height="18" rx="4.5" fill="url(#${g('e')})"/>
@@ -4929,7 +4933,7 @@ function sBotFull(id='f',tablet){
    <path d="M35 33c5-2.4 11-3.6 18-3.6" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity=".18"/>
    ${tablet?`<g transform="rotate(-8 98 140)">
      <rect x="80" y="118" width="36" height="44" rx="7" fill="#FFFFFF" stroke="#C9CAD8" stroke-width="1"/>
-     <rect x="86" y="126" width="24" height="4" rx="2" fill="#ECECFE"/>
+     <rect x="86" y="126" width="24" height="4" rx="2" fill="#DCF6EA"/>
      <rect x="86" y="134" width="18" height="4" rx="2" fill="#E2E4EE"/>
      <rect x="86" y="142" width="22" height="4" rx="2" fill="#E2E4EE"/>
      <rect x="86" y="151" width="17" height="7" rx="3.5" fill="url(#${g('e')})"/>
@@ -4982,7 +4986,7 @@ function sHome(){
 /* ---------- оглавление курса ---------- */
 function sRenderSec(i){
   const s=SECS[i];if(!s)return;cur=i;
-  const [mono,col,bg]=S_COURSE[s.slug]||['?','#5A5CF0','#ECECFE'];
+  const [mono,col,bg]=S_COURSE[s.slug]||['?','#0B6E4F','#E2F3EA'];
   document.body.style.setProperty('--lesson-tint',bg);document.body.style.setProperty('--lesson-accent',col);
   const done=doneList(),paid=!!ME?.paid;
   const read=s.ls.filter((l,j)=>done.includes(i+'-'+j)).length;
@@ -5038,7 +5042,7 @@ routePaint=function(){
    <p class="s-lead">Курс — это одна нейросеть, восемь уроков и одна рабочая задача в каждом: готовый запрос, учебный пример и проверка результата.</p>
    <div class="s-count"><div><b>${courses.length}</b><span>курсов</span></div><div><b>${total}</b><span>уроков</span></div><div><b>${read||free}</b><span>${read?'прочитано':'открыто сразу'}</span></div></div>
    <p class="s-sec">Все курсы</p>
-   ${courses.map((s,k)=>{const [m,c,g]=S_COURSE[s.slug]||['?','#5A5CF0','#ECECFE'];
+   ${courses.map((s,k)=>{const [m,c,g]=S_COURSE[s.slug]||['?','#0B6E4F','#E2F3EA'];
      const d=s.ls.filter((l,j)=>done.includes((k+6)+'-'+j)).length;
      return `<button class="s-course" data-sec-go="${k+6}"><span class="cv" style="background:${g};color:${c}">${m}</span><span><b>${esc(s.t)}</b><small>${esc(s.d)}</small><small>${s.ls.length} уроков · ${s.ls.filter(l=>!l.key).length} открыто${d?' · прочитано '+d:''}${X_RU[s.slug]?' · из России':''}</small></span>${si('chev')}</button>`;}).join('')}
    <p class="s-sec">Как устроен урок</p>
