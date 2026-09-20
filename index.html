@@ -1951,6 +1951,37 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-promo .bot u{background:var(--s-mint);color:#08402F;text-decoration:none}
 .s-promo .k{color:#8FB8A8}
 .s-fil button[aria-pressed="true"]::before{background:var(--s-dark)}
+
+/* ── Курс во всю ширину и полоска недели ────────────────────────────────
+   Взято из макета, который выбрал Ivan: движение по курсу и ритм недели
+   вместо двух тесных колец. Кольцо «Серия: 0» у нового человека читалось
+   как упрёк — неделя показывает, что всё только начинается. */
+.s-tiles{grid-template-columns:1fr;gap:10px}
+.s-tile.wide{gap:13px;padding:14px}
+.s-tile .cv{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+ font-size:14px;font-weight:700;letter-spacing:-.02em;flex:none}
+.s-tile .tx{flex:1;min-width:0}
+.s-tile .tx b{display:block;font-size:16px;font-weight:600;letter-spacing:-.01em}
+.s-tile .tx small{display:block;font-size:13px;color:var(--s-soft);margin:2px 0 0;font-variant-numeric:tabular-nums}
+.s-tile .bar{display:block;height:5px;border-radius:999px;background:var(--s-card2);margin:9px 0 1px;overflow:hidden}
+.s-tile .bar i{display:block;height:100%;border-radius:999px;background:var(--s-acc);transition:width .5s var(--x-ease)}
+.s-tile .ch{color:var(--s-faint);flex:none}
+
+.s-week{background:var(--s-white);border:1px solid var(--s-line);border-radius:20px;padding:14px}
+.s-week .hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 11px}
+.s-week .hd b{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.s-week .hd u{text-decoration:none;background:var(--s-acc-s);color:var(--s-acc);border-radius:999px;
+ padding:5px 11px;font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums}
+.s-week .hd u.q{background:var(--s-card);color:var(--s-soft);font-weight:500}
+.s-week .row{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.s-week .d{display:grid;justify-items:center;gap:5px}
+.s-week .d i{width:30px;height:30px;border-radius:50%;background:var(--s-card);display:grid;place-items:center}
+.s-week .d i .s-ic{width:16px;height:16px;color:var(--s-acc)}
+.s-week .d.on i{background:var(--s-green-s)}
+.s-week .d.now i{box-shadow:0 0 0 2px var(--s-acc)}
+.s-week .d.off i{background:transparent;border:1.5px dashed var(--s-line)}
+.s-week .d em{font-style:normal;font-size:11.5px;color:var(--s-faint)}
+.s-week .d.now em{color:var(--s-ink);font-weight:600}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -4980,9 +5011,26 @@ function sHome(){
   const [mono,col,bg]=S_COURSE[cs.s.slug]||S_COURSE.chatgpt;
   const streak=(typeof currentStreak==='function'?currentStreak().streak:0)||0;
   const pct=Math.round(cs.d/cs.s.ls.length*100);
+  /* Курс — во всю ширину с полосой движения, под ним неделя.
+     Раньше здесь стояли две тесные плитки с кольцами, и кольцо «Серия: 0»
+     у нового человека читалось как упрёк. Неделя показывает ритм, а не ноль. */
+  const dlog=(typeof S!=='undefined'&&S.get?S.get('dlog',[]):[])||[];
+  const D=['пн','вт','ср','чт','пт','сб','вс'];
+  const today=new Date();today.setHours(12,0,0,0);
+  const mon=new Date(today);mon.setDate(today.getDate()-((today.getDay()+6)%7));
+  const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const week=D.map((n,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);
+    const k=iso(d),now=k===iso(today),later=d>today,was=dlog.includes(k)&&!later;
+    return `<span class="d${was?' on':''}${now?' now':''}${later?' off':''}"><i>${was?si('check'):''}</i><em>${n}</em></span>`;}).join('');
   $('#s-tiles').innerHTML=`
-    <button class="s-tile" data-sec-go="${cs.i}"><span class="ring" style="background:conic-gradient(${col} ${pct}%,${bg} 0)"><span style="color:${col}">${cs.d}/${cs.s.ls.length}</span></span><span><b>${esc(cs.s.t)}</b><small>${cs.d?'курс идёт':'начать курс'}</small></span></button>
-    <button class="s-tile" data-go="me"><span class="ring" style="background:conic-gradient(var(--s-amber) ${Math.min(100,streak*14)}%,var(--s-amber-s) 0)"><span style="color:var(--s-amber)">${streak||0}</span></span><span><b>${streak?скл(streak,'день','дня','дней'):'Серия'}</b><small>${streak?'подряд с нами':'заходи каждый день'}</small></span></button>`;
+    <button class="s-tile wide" data-sec-go="${cs.i}">
+      <span class="cv" style="background:${bg};color:${col}">${mono}</span>
+      <span class="tx"><b>${esc(cs.s.t)}</b><small>${cs.d?`${cs.d} из ${cs.s.ls.length} ${скл(cs.s.ls.length,'урока','уроков','уроков')}`:'начать курс'}</small>
+        ${pct?`<span class="bar"><i style="width:${pct}%"></i></span>`:''}</span>
+      ${si('chev','ch')}</button>
+    <div class="s-week">
+      <span class="hd"><b>Твой темп</b>${streak?`<u>${streak} ${скл(streak,'день','дня','дней')} подряд</u>`:'<u class="q">заходи каждый день</u>'}</span>
+      <span class="row">${week}</span></div>`;
   /* тёмный баннер курсов */
   const courses=SECS.slice(6),total=courses.reduce((a,s)=>a+s.ls.length,0),free=courses.reduce((a,s)=>a+s.ls.filter(l=>!l.key).length,0);
   $('#s-promo').innerHTML=`<span class="k">Полный доступ</span>
