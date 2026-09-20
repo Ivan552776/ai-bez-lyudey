@@ -1871,6 +1871,15 @@ html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .s-inc li::before{content:"";position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;
  background:var(--s-green) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'><path d='m5 12.5 4.5 4.5L19 7'/></svg>") center/12px no-repeat}
 .s-plan strong{white-space:nowrap}
+/* Ссылка-таблетка «Подписаться» была с подчёркиванием — выглядела как
+   сломанная ссылка внутри кнопки. */
+a.s-pill,a.s-btn{text-decoration:none}
+/* Список «что входит» внутри читалки: там своя разметка списков с точками,
+   и она перебивала зелёные отметки. */
+#v-lesson .s-inc,#v-exercise .s-inc{list-style:none;padding:0}
+#v-lesson ul.s-inc>li,#v-exercise ul.s-inc>li{position:relative;padding:0 0 0 30px;margin:0 0 11px;list-style:none}
+#v-lesson ul.s-inc>li::before,#v-exercise ul.s-inc>li::before{content:"";position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;
+ background:var(--s-green) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'><path d='m5 12.5 4.5 4.5L19 7'/></svg>") center/12px no-repeat}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -4579,7 +4588,22 @@ function feedNav(v){
 function feedAccessError(response,id){
   const deep='https://t.me/ai_bez_lyudey_bot/kurs?startapp=card_'+id;
   if(!TG?.initData||response?.status===401)return `<p class="s-note">Материалы открываются в приложении внутри Telegram.</p><a class="s-link" href="${deep}" data-tg="${deep}">Открыть в Telegram</a>`;
-  if(response?.status===403)return `<p class="s-note">Этот материал для подписчиков канала. Подпишись, вернись сюда и нажми «Я подписался».</p><div class="s-acts"><a class="s-pill acc" href="${CHANNEL_LINK}" data-tg="${CHANNEL_LINK}">Подписаться</a><button class="s-pill" data-feed-check="${id}">Я подписался</button></div>`;
+  if(response?.status===403){
+    // Сюда приходит каждый, кто пришёл из канала и ещё не подписан. Раньше здесь
+    // были две кнопки и пустой экран: ни о чём материал, ни ради чего подписка.
+    const c=FEED.find(f=>f.id===id);
+    const free=SECS.slice(6).reduce((a,x)=>a+x.ls.filter(l=>!l.key).length,0);
+    return `${c?.summary?`<p class="s-lead">${esc(c.summary)}</p>`:''}
+      <p class="s-note">Этот материал для подписчиков канала. Подпишись, вернись сюда и нажми «Я подписался».</p>
+      <div class="s-acts"><a class="s-pill acc" href="${CHANNEL_LINK}" data-tg="${CHANNEL_LINK}">Подписаться</a><button class="s-pill" data-feed-check="${id}">Я подписался</button></div>
+      <p class="s-sec">Что открывает подписка</p>
+      <ul class="s-inc">
+       <li><b>Каждый день новый материал</b> в 19:00: готовый промпт, короткий гайд или разбор нейросети</li>
+       <li><b>Вся лента целиком</b> — ${FEED.length} ${скл(FEED.length,'материал','материала','материалов')}, а не только сегодняшний</li>
+       <li><b>${free} ${скл(free,'урок','урока','уроков')} из курсов</b> — бесплатно, оплата для них не нужна</li>
+      </ul>
+      <p class="s-foot-note">Отписаться можно в любой момент — доступ к тому, что уже куплено, от этого не зависит.</p>`;
+  }
   return `<p class="s-note">Не получилось загрузить. Проверь связь и попробуй ещё раз.</p><button class="s-pill" data-feed-retry="${id}">${si('refresh')}Повторить</button>`;
 }
 async function feedGet(id,fresh=false){
