@@ -3519,7 +3519,7 @@ function paintSectionNav(v){
 
 if($('#secs'))$('#secs').innerHTML = activeCourses().map(({s,i})=>`
   <button class="book-course" data-sec="${i}" data-course-tags="${s.tags.join(' ')}" style="--course-tint:${s.g};--course-ink:${s.accent}">
-    <span class="book-art"><img src="assets/${s.slug}-book.webp" alt="" width="1254" height="1254" decoding="async" loading="${i<8?'eager':'lazy'}"></span>
+    <span class="book-art" style="background:${s.g};color:${s.accent}"></span>
     <span class="book-copy"><strong>${s.t}</strong><span>${s.d}</span><small>8 уроков · 3 бесплатно</small><span class="book-open">Открыть курс <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></span>
   </button>`).join('');
 
@@ -3721,7 +3721,7 @@ function openSec(i){
   $('#sec-head').style.background=s.g;
   $('#sec-k').textContent=s.archived?'Материал прежней программы':'ПРАКТИЧЕСКИЙ КУРС';
   $('#sec-t').textContent=s.t;
-  $('#sec-overview').innerHTML=s.archived ? '<p>Этот материал сохранён по старой ссылке. Новые курсы — в библиотеке.</p>' : `<div class="pk-course-summary"><img class="course-detail-book" src="assets/${s.slug}-book.webp" alt="" width="160" height="160"><div><p>${s.d}</p><span class="pk-course-count">8 уроков</span><span class="pk-course-count">3 бесплатно</span></div></div><details class="source-fold pk-outcomes"><summary>Чему научитесь</summary><ul>${s.outcomes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details><button class="pk-setup-row" data-prep="${i}"><span>${icon('person')}</span><span><b>Ещё нет аккаунта?</b><small>Регистрация и первый вход</small></span><i aria-hidden="true">↗</i></button>`;
+  $('#sec-overview').innerHTML=s.archived ? '<p>Этот материал сохранён по старой ссылке. Новые курсы — в библиотеке.</p>' : `<div class="pk-course-summary"><div><p>${s.d}</p><span class="pk-course-count">8 уроков</span><span class="pk-course-count">3 бесплатно</span></div></div><details class="source-fold pk-outcomes"><summary>Чему научитесь</summary><ul>${s.outcomes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details><button class="pk-setup-row" data-prep="${i}"><span>${icon('person')}</span><span><b>Ещё нет аккаунта?</b><small>Регистрация и первый вход</small></span><i aria-hidden="true">↗</i></button>`;
   $('#sec-list').innerHTML=s.ls.map((l,j)=>`${!s.archived && [0,3,7].includes(j)?`<h4 class="module-title">${j===0?'Освоиться':j===3?'Применять в работе':'Собрать свой результат'}</h4>`:''}<button class="item les${l.free||s.free||ME?.paid?'':' shut'}" data-les="${j}"><span class="lesson-number">${j+1}</span><span class="tx"><b>${esc(l.t)}</b><span class="tz">${esc(l.d||'')}</span><span class="meta">${l.min} мин · ${doneList().includes(i+'-'+j)?'прочитан':l.free||s.free?'бесплатно':ME?.paid?'доступ открыт':'по подписке'}</span></span><span class="lesson-arrow" aria-hidden="true">${l.free||s.free||ME?.paid?'↗':icon('lock')}</span></button>`).join('');
   $('#sec-foot').innerHTML=s.archived?'':'<p class="foot">Один урок — один результат. Проходите в своём темпе.</p>';
   show('sec');
