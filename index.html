@@ -1903,16 +1903,17 @@ html,body{overflow-x:clip}
  <div class="prose" id="exercise-content"></div>
  <div class="detail-actions"><button class="quiet" id="exercise-prompts">Промпты этого задания</button><button class="quiet" id="exercise-return">Вернуться к уроку</button></div>
 </div>
+<!-- ВИТРИНА:prep START -->
 <div class="view" id="v-prep">
- <button class="back" data-back data-go="route">← Курсы</button>
- <div class="section-title pk-section pk-connection"><div><span class="pk-eyebrow">ПЕРВЫЙ ШАГ</span><h1>Создать аккаунт</h1><p>Выберите нейросеть — покажем, где зарегистрироваться и с чего начать.</p></div><img src="assets/premium-connection.webp" alt="" width="640" height="640"></div>
- <label class="prompt-select">Нейросеть<select id="prep-course"></select></label>
- <div class="prose setup-steps" id="prep-content"></div>
- <details class="source-fold"><summary>Как создать почту с телефона</summary><p>Удобный вариант — Gmail. Откройте приложение Gmail → фото профиля → «Добавить аккаунт» → Google → «Создать аккаунт». Заполните данные и пройдите проверки Google.</p><p>Используйте почту с постоянным доступом и добавьте способ восстановления. Адрес @gmail.com подходит, но обязательного требования именно к окончанию .com нет. Если в браузере регистрация не получается, попробуйте приложение на телефоне.</p><a href="https://support.google.com/accounts/answer/27441" target="_blank" rel="noopener">Инструкция Google ↗</a></details>
- <button class="study-go" id="prep-return">К урокам</button>
+  <button class="back" data-back data-go="route">← Курсы</button>
+  <h1 class="s-h2">Создать аккаунт</h1>
+  <p class="s-lead">Выбери нейросеть — покажу, где зарегистрироваться, что для этого нужно и с чего начать.</p>
+  <label class="s-pick">Нейросеть<select id="prep-course"></select></label>
+  <div class="prose setup-steps" id="prep-content"></div>
+  <details class="source-fold"><summary>Как создать почту с телефона</summary><p>Удобный вариант — Gmail. Открой приложение Gmail → фото профиля → «Добавить аккаунт» → Google → «Создать аккаунт». Заполни данные и пройди проверки Google.</p><p>Бери почту, доступ к которой не потеряешь, и добавь способ восстановления. Адрес @gmail.com подходит, но обязательного требования именно к окончанию .com нет. Если в браузере регистрация не получается, попробуй приложение на телефоне.</p><a href="https://support.google.com/accounts/answer/27441" target="_blank" rel="noopener">Инструкция Google ↗</a></details>
+  <button class="study-go" id="prep-return">К урокам</button>
 </div>
-<!-- экраны VPN и иностранных номеров удалены 18.09.2026: правовой риск -->
-
+<!-- ВИТРИНА:prep END -->
   <!-- ===== КАРТА ОБУЧЕНИЯ ===== -->
 <!-- ВИТРИНА:route START -->
 <div class="view" id="v-route">
@@ -2033,7 +2034,7 @@ html,body{overflow-x:clip}
   <!-- ===== ДОСТИЖЕНИЯ ===== -->
   <div class="view" id="v-ach">
     <button class="back" data-back data-go="me">← Профиль</button>
-    <h2 class="big">Ваш прогресс</h2>
+    <h2 class="big">Твой прогресс</h2>
     <p style="margin:0 0 4px;font-size:14px;color:var(--soft)">Отметки о том, что уже сделано.
       Ни на что не влияют и никуда не отправляются — просто видно, сколько пройдено.</p>
     <div class="strk" id="strk2" style="margin:16px 0 0"></div>
@@ -3526,7 +3527,7 @@ if($('#secs'))$('#secs').innerHTML = activeCourses().map(({s,i})=>`
 const NEWS = [
  ['18 сентября','нов','Библиотека в ленте','Промпты, гайды и разборы нейросетей в одной ленте. Открыта подписчикам канала.'],
  ['15 сентября','нов','Учиться — и сразу пробовать','48 уроков: вход и настройка, тексты, документы, поиск и личные помощники. Схемы — в уроках, запросы — в промптах, задания — в практике.'],
- ['15 сентября','прав','Ваши результаты под рукой','Отмечайте выполненные шаги, сохраняйте уроки и возвращайтесь к нужному промпту. Прогресс хранится на этом устройстве.']
+ ['15 сентября','прав','Твои результаты под рукой','Отмечайте выполненные шаги, сохраняйте уроки и возвращайтесь к нужному промпту. Прогресс хранится на этом устройстве.']
 ];
 
 /* ---------- прогресс на экранах ---------- */
