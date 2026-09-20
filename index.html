@@ -2014,6 +2014,12 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-hero-note{margin:0 0 16px;font-size:15px;line-height:1.5;color:var(--s-soft);text-wrap:pretty}
 /* шапка курса переехала в тёмную карточку — прежний блок остался пустым */
 #sec-overview:empty,#sec-now:empty{display:none!important}
+/* Уведомление центрировалось сдвигом на половину собственной ширины
+   (left:50% + translateX(-50%)). Если в момент показа ширина ещё не
+   пересчитана, его уносит за левый край — так и выходило в конце урока.
+   Теперь центр держат поля, а не проценты: ширина роли не играет. */
+#app-notice{left:16px!important;right:16px!important;width:auto!important;
+ max-width:460px!important;margin:0 auto!important;transform:none!important}
 /* ВИТРИНА END */
 </style>
 </head>
