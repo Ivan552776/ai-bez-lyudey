@@ -1926,23 +1926,25 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-today{font-size:31px}
 /* на чёрной плашке тонкие засечки светлым по тёмному истончаются — там Golos */
 /* Робот-редактор в реплике на главной */
-.s-say .av{width:52px;height:52px;border-radius:16px;background:var(--s-acc-s);flex:none;overflow:visible;place-items:end center}
-.s-say .av .s-bot{width:50px;height:50px;display:block;margin-bottom:-2px}
+.s-say .av{width:54px;height:54px;border-radius:16px;background:var(--s-acc-s);flex:none;
+ display:grid;place-items:center;overflow:hidden}
+.s-say .av .s-bot{width:50px;height:50px;display:block;object-fit:contain}
 .s-say .av i{right:-2px;bottom:-2px}
 .s-say .bub{flex:1;min-width:0}
 /* Робот в полный рост */
 .s-bot-full{display:block;width:100%;height:auto}
+.s-bot{display:block}
 
 /* ── Робот-редактор по экранам ───────────────────────────────────────────
    Он же в аватаре реплики на главной. Там, где экран иначе пустует,
    робот объясняет, кто ведёт выпуск. */
 .s-botsay{display:flex;align-items:center;gap:14px;background:var(--s-card);border-radius:20px;
  padding:14px 16px 14px 12px;margin:18px 0 0}
-.s-botsay .s-bot-full{width:78px;flex:none}
+.s-botsay .s-bot-full{width:86px;flex:none}
 .s-botsay p{margin:0;font-size:14.5px;line-height:1.5;color:var(--s-soft);text-wrap:pretty}
 .s-botsay p b{color:var(--s-ink);font-weight:600}
 /* в уроке — только голова, рядом со строкой про другие нейросети */
-.s-ru-note .s-bot{width:34px;height:34px;flex:none;margin-top:-2px}
+.s-ru-note .s-bot{width:38px;height:38px;flex:none;margin-top:-4px;object-fit:contain}
 
 /* ── Под референс «обсидиан и мята» ──────────────────────────────────────
    На тёмной плашке главное действие — мятное, как в макете: белая кнопка
@@ -4189,7 +4191,7 @@ function favPaintList(){
       <span class="ic i2 sm">${x.kind === 'tool' ? '⚒' : '◱'}</span>
       <span class="tx"><b>${esc(x.t)}</b><span>${esc(x.s || '')}</span></span>
       <span class="ch">›</span></button>`).join('')
-    : '<p class="foot">Пока пусто. Нажми на закладку в заголовке урока — и он появится здесь.</p><button class="s-btn" data-go="route" style="margin-top:12px">Выбрать курс</button>' + sBotSay('fav','Отмечай то, к чему захочешь вернуться — я сохраню.');
+    : '<p class="foot">Пока пусто. Нажми на закладку в заголовке урока — и он появится здесь.</p><button class="s-btn" data-go="route" style="margin-top:12px">Выбрать курс</button>' + sBotSay('kartochki','Отмечай то, к чему захочешь вернуться — я сохраню.');
   out.querySelectorAll('[data-fav]').forEach(el => {
     el.onclick = () => {
       const x = списк[+el.dataset.fav];
@@ -4745,7 +4747,7 @@ function feedAccessError(response,id){
        <li><b>${free} ${скл(free,'урок','урока','уроков')} из курсов</b> — бесплатно, оплата для них не нужна</li>
       </ul>
       <p class="s-foot-note">Отписаться можно в любой момент — доступ к тому, что уже куплено, от этого не зависит.</p>
-      ${sBotSay('gate','<b>Выпуск ведёт нейросеть.</b> Каждый день она собирает один материал и проверяет его на живой задаче.',true)}`;
+      ${sBotSay('privet','<b>Выпуск ведёт нейросеть.</b> Каждый день она собирает один материал и проверяет его на живой задаче.')}`;
   }
   return `<p class="s-note">Не получилось загрузить. Проверь связь и попробуй ещё раз.</p><button class="s-pill" data-feed-retry="${id}">${si('refresh')}Повторить</button>`;
 }
@@ -4925,102 +4927,14 @@ paintNext=function(nx){
    говорила только строка внизу главной, которую никто не дочитывал.
    Рисунок плоский, в манере рисунков гайдов: никакого 3D и стоковых картинок,
    вес — меньше килобайта. */
-function sBot(id='b'){
-  /* Объём даём вектором: мягкая тень под роботом, переливы на корпусе,
-     блик на визоре и светящиеся глаза. Стоковый 3D-рендер весил бы
-     сотни килобайт на позу — этот робот весит около двух. */
-  const g=n=>`${id}-${n}`;
-  return `<svg class="s-bot" viewBox="0 0 64 64" aria-hidden="true">
-   <defs>
-    <linearGradient id="${g('body')}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#F4F4FA"/><stop offset="1" stop-color="#DCDCEA"/></linearGradient>
-    <linearGradient id="${g('ear')}" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#7BEFBE"/><stop offset="1" stop-color="#0B6E4F"/></linearGradient>
-    <linearGradient id="${g('visor')}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#24322D"/><stop offset="1" stop-color="#0E2420"/></linearGradient>
-    <radialGradient id="${g('eye')}" cx=".5" cy=".4" r=".7">
-      <stop offset="0" stop-color="#D6FFEE"/><stop offset=".55" stop-color="#4FE3A7"/><stop offset="1" stop-color="#0B6E4F"/></radialGradient>
-    <radialGradient id="${g('sh')}" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#0E2420" stop-opacity=".22"/><stop offset="1" stop-color="#0E2420" stop-opacity="0"/></radialGradient>
-   </defs>
-   <ellipse cx="32" cy="57" rx="19" ry="4.6" fill="url(#${g('sh')})"/>
-   <path d="M32 9V14" fill="none" stroke="#7BEFBE" stroke-width="2.6" stroke-linecap="round"/>
-   <circle cx="32" cy="7" r="3.4" fill="url(#${g('ear')})"/>
-   <circle cx="30.9" cy="5.9" r="1.1" fill="#FFFFFF" opacity=".85"/>
-   <rect x="4.5" y="25" width="7.5" height="15" rx="3.75" fill="url(#${g('ear')})"/>
-   <rect x="52" y="25" width="7.5" height="15" rx="3.75" fill="url(#${g('ear')})"/>
-   <rect x="11" y="14.5" width="42" height="36" rx="12.5" fill="url(#${g('body')})"/>
-   <rect x="11" y="14.5" width="42" height="36" rx="12.5" fill="none" stroke="#C9CAD8" stroke-width="1"/>
-   <path d="M18 18h28a7 7 0 0 1 4.6 1.8C46 17.6 39.4 16.4 32 16.4s-14 1.2-18.6 3.4A7 7 0 0 1 18 18Z" fill="#FFFFFF" opacity=".9"/>
-   <rect x="16.5" y="22" width="31" height="20" rx="9" fill="url(#${g('visor')})"/>
-   <ellipse cx="25" cy="32" rx="4.4" ry="4.8" fill="url(#${g('eye')})"/>
-   <ellipse cx="39" cy="32" rx="4.4" ry="4.8" fill="url(#${g('eye')})"/>
-   <circle cx="23.6" cy="30.2" r="1.5" fill="#FFFFFF" opacity=".9"/>
-   <circle cx="37.6" cy="30.2" r="1.5" fill="#FFFFFF" opacity=".9"/>
-   <path d="M20 24.5c3.4-1.6 7.4-2.4 12-2.4" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" opacity=".18"/>
-   <path d="M26 46.5c3.8 1.5 8.2 1.5 12 0" fill="none" stroke="#C9CAD8" stroke-width="2" stroke-linecap="round"/>
-  </svg>`;
-}
-/* Робот в полный рост. Тот же персонаж, что в аватаре, только целиком:
-   корпус с переливом, руки на шарнирах, огонёк на груди, мягкая тень.
-   Вариант с планшетом — там, где он что-то показывает.
-   Всё вектором: стоковый 3D-рендер стоил бы сотни килобайт на позу. */
-function sBotFull(id='f',tablet){
-  const g=n=>`${id}-${n}`;
-  return `<svg class="s-bot-full" viewBox="0 0 120 172" aria-hidden="true">
-   <defs>
-    <linearGradient id="${g('b')}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#F4F4FA"/><stop offset="1" stop-color="#DBDBEA"/></linearGradient>
-    <linearGradient id="${g('e')}" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#7BEFBE"/><stop offset="1" stop-color="#0B6E4F"/></linearGradient>
-    <linearGradient id="${g('v')}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#24322D"/><stop offset="1" stop-color="#0E2420"/></linearGradient>
-    <radialGradient id="${g('i')}" cx=".5" cy=".4" r=".7">
-      <stop offset="0" stop-color="#D6FFEE"/><stop offset=".55" stop-color="#4FE3A7"/><stop offset="1" stop-color="#0B6E4F"/></radialGradient>
-    <radialGradient id="${g('s')}" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#0E2420" stop-opacity=".2"/><stop offset="1" stop-color="#0E2420" stop-opacity="0"/></radialGradient>
-   </defs>
-   <ellipse cx="60" cy="163" rx="35" ry="7" fill="url(#${g('s')})"/>
-   <rect x="43" y="132" width="15" height="22" rx="7.5" fill="url(#${g('e')})"/>
-   <rect x="62" y="132" width="15" height="22" rx="7.5" fill="url(#${g('e')})"/>
-   <rect x="38" y="148" width="24" height="12" rx="6" fill="url(#${g('b')})" stroke="#C9CAD8" stroke-width="1"/>
-   <rect x="58" y="148" width="24" height="12" rx="6" fill="url(#${g('b')})" stroke="#C9CAD8" stroke-width="1"/>
-   <rect x="14" y="82" width="15" height="40" rx="7.5" fill="url(#${g('e')})"/>
-   <rect x="91" y="82" width="15" height="${tablet?28:40}" rx="7.5" fill="url(#${g('e')})"/>
-   <circle cx="21.5" cy="124" r="8.5" fill="url(#${g('b')})" stroke="#C9CAD8" stroke-width="1"/>
-   <circle cx="98.5" cy="${tablet?112:124}" r="8.5" fill="url(#${g('b')})" stroke="#C9CAD8" stroke-width="1"/>
-   <rect x="28" y="76" width="64" height="60" rx="22" fill="url(#${g('b')})" stroke="#C9CAD8" stroke-width="1"/>
-   <path d="M40 80h40a18 18 0 0 1 9 2.5C82 79.6 71.6 78 60 78s-22 1.6-29 4.5A18 18 0 0 1 40 80Z" fill="#FFFFFF" opacity=".9"/>
-   <rect x="46" y="92" width="28" height="22" rx="10" fill="url(#${g('v')})"/>
-   <circle cx="60" cy="103" r="6" fill="url(#${g('i')})"/>
-   <circle cx="58" cy="100.6" r="2" fill="#FFFFFF" opacity=".85"/>
-   <rect x="52" y="66" width="16" height="12" rx="5" fill="#C9CAD8"/>
-   <path d="M60 10v7" fill="none" stroke="#7BEFBE" stroke-width="3" stroke-linecap="round"/>
-   <circle cx="60" cy="7.5" r="4" fill="url(#${g('e')})"/>
-   <circle cx="58.7" cy="6.2" r="1.3" fill="#FFFFFF" opacity=".85"/>
-   <rect x="16" y="35" width="9" height="18" rx="4.5" fill="url(#${g('e')})"/>
-   <rect x="95" y="35" width="9" height="18" rx="4.5" fill="url(#${g('e')})"/>
-   <rect x="23" y="18" width="74" height="52" rx="20" fill="url(#${g('b')})" stroke="#C9CAD8" stroke-width="1"/>
-   <path d="M35 22h50a12 12 0 0 1 8 3C86.4 21.8 74 20 60 20s-26.4 1.8-33 5a12 12 0 0 1 8-3Z" fill="#FFFFFF" opacity=".9"/>
-   <rect x="30" y="29" width="60" height="30" rx="14" fill="url(#${g('v')})"/>
-   <ellipse cx="46" cy="44" rx="6.4" ry="7" fill="url(#${g('i')})"/>
-   <ellipse cx="74" cy="44" rx="6.4" ry="7" fill="url(#${g('i')})"/>
-   <circle cx="44" cy="41.4" r="2.2" fill="#FFFFFF" opacity=".9"/>
-   <circle cx="72" cy="41.4" r="2.2" fill="#FFFFFF" opacity=".9"/>
-   <path d="M35 33c5-2.4 11-3.6 18-3.6" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity=".18"/>
-   ${tablet?`<g transform="rotate(-8 98 140)">
-     <rect x="80" y="118" width="36" height="44" rx="7" fill="#FFFFFF" stroke="#C9CAD8" stroke-width="1"/>
-     <rect x="86" y="126" width="24" height="4" rx="2" fill="#DCF6EA"/>
-     <rect x="86" y="134" width="18" height="4" rx="2" fill="#E2E4EE"/>
-     <rect x="86" y="142" width="22" height="4" rx="2" fill="#E2E4EE"/>
-     <rect x="86" y="151" width="17" height="7" rx="3.5" fill="url(#${g('e')})"/>
-    </g>`:''}
-  </svg>`;
-}
-/* Робот-редактор блоком: там, где экран иначе остаётся пустым, и там,
-   где важно напомнить — выпуск ведёт нейросеть, а не люди. */
-function sBotSay(id,text,tablet){
-  return `<div class="s-botsay">${sBotFull(id,tablet)}<p>${text}</p></div>`;
+/* Робот-редактор: 3D-картинки, сгенерированы GigaChat 21.09 и вырезаны с
+   прозрачным фоном. Лежат в assets/robot/*.webp, восемь штук на 272 КБ —
+   векторный робот, что был здесь до этого, остался в истории git. */
+const S_ROBOT='assets/robot/';
+function sBot(){return `<img class="s-bot" src="${S_ROBOT}golova.webp" alt="" loading="lazy" decoding="async">`;}
+function sBotFull(поза='privet'){return `<img class="s-bot-full" src="${S_ROBOT}${поза}.webp" alt="" loading="lazy" decoding="async">`;}
+function sBotSay(поза,text){
+  return `<div class="s-botsay">${sBotFull(поза)}<p>${text}</p></div>`;
 }
 const S_SAY={
   prompt:'Сегодня даю <b>готовый текст</b>. Скопируй и отправь — поля заполнять не надо.',
@@ -5104,7 +5018,8 @@ function sRenderSec(i){
        ${!paid&&free<s.ls.length?`<button class="all" data-go="pay-all">Открыть все уроки${si('chev')}</button>`:''}
      </div>`;
   $('#sec-overview').innerHTML='';
-  $('#sec-now').innerHTML=nl&&nl.d&&!s.archived?`<p class="s-hero-note">${esc(nl.d)}</p>`:'';
+  $('#sec-now').innerHTML=s.archived?'':nl?(nl.d?`<p class="s-hero-note">${esc(nl.d)}</p>`:'')
+    :read===s.ls.length?sBotSay('raduetsya','<b>Курс пройден.</b> Запросы из него работают и в других нейросетях — попробуй на своей задаче.'):'';
   const parts=s.archived?[[0,s.ls.length,'Уроки']]:[[0,3,S_PART[0]],[3,7,S_PART[1]],[7,8,S_PART[2]]];
   $('#sec-list').innerHTML=parts.map(([a,b,name])=>{
     const dn=s.ls.slice(a,b).filter((l,k)=>done.includes(i+'-'+(a+k))).length;
@@ -5172,7 +5087,7 @@ function sWhat(){
   <p class="s-lead" style="margin:0 0 6px">${free} ${скл(free,'урок','урока','уроков')} — по три в каждом курсе, и каждый день новый материал в ленте: промпт, гайд или разбор нейросети.
   Полный доступ добавляет остальные ${all-free} и практику ко всем.</p>
   <p class="s-foot-note">Не подойдёт — вернём деньги в течение 7 дней, объяснять причину не нужно.</p>
-  ${sBotSay('pay','<b>Всё это собирает нейросеть.</b> Уроки, запросы и разборы пишет она же, что ведёт канал. Людей в редакции нет.',true)}`;
+  ${sBotSay('planshet','<b>Всё это собирает нейросеть.</b> Уроки, запросы и разборы пишет она же, что ведёт канал. Людей в редакции нет.')}`;
 }
 function xCheckout(){$('#s-checkout').innerHTML=sSub(false)+(ME?.paid?'':sWhat());}
 
@@ -5222,7 +5137,7 @@ openLes=function(j,returnView='sec'){
   return Promise.resolve(_openLes(j,returnView)).then(()=>{
     const s=SECS[cur],body=$('#l-body');
     if(s&&!X_RU[s.slug]&&body&&$('#v-lesson').classList.contains('on')&&!body.querySelector('.s-ru-note'))
-      body.insertAdjacentHTML('afterbegin',`<aside class="s-ru-note">${sBot('ru')}<p><b>Урок можно пройти и в другой нейросети.</b> Запросы из него работают в DeepSeek, Алисе AI и GigaChat — особые функции ${esc(s.t)} там устроены иначе.</p></aside>`);
+      body.insertAdjacentHTML('afterbegin',`<aside class="s-ru-note">${sBot()}<p><b>Урок можно пройти и в другой нейросети.</b> Запросы из него работают в DeepSeek, Алисе AI и GigaChat — особые функции ${esc(s.t)} там устроены иначе.</p></aside>`);
   });
 };
 
@@ -5536,7 +5451,7 @@ paintRecent=function(){
   const sh=$('#recent-sh');if(sh)sh.hidden=!r.length;   // заголовок списка над пустотой не нужен
   box.innerHTML=r.length?`<div class="s-grp s-rec">${r.map((x,i)=>`<button data-rec-open="${i}"><span><small class="k">${esc(xRecKind(x))} · ${xAgo(x.t)}</small><b>${esc(x.title)}</b></span>${si('chev','ch')}</button>`).join('')}</div>`
     :'<p class="s-empty-note">Пока пусто. Здесь появится всё, что ты открывал: уроки, гайды, промпты — чтобы вернуться, не листая ленту.</p>'
-      +sBotSay('rec','Открой любой материал — и он появится здесь.');
+      +sBotSay('spit','Открой любой материал — и он появится здесь.');
 };  // первый раз список рисует старый код в конце загрузки — хранилище к тому времени готово
 /* шторка «Скопируй вручную» уезжает вниз тем же путём, каким пришла. Окно стоит в
    разметке после этого кода — поэтому слушаем на документе, а не на самом окне. */
