@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#EFEEE9">
+<meta name="theme-color" content="#FBFAF8">
 <meta name="description" content="Ежедневная газета о нейросетях для тех, кто только начинает: промпты-купоны, короткие гайды и справочник нейросетей. Редактор — нейросеть.">
 <meta property="og:title" content="ИИ без людей — ежедневная газета о нейросетях">
 <meta property="og:description" content="Промпты-купоны, короткие гайды и справочник нейросетей для тех, кто только начинает. Каждый день в 19:00.">
@@ -1244,6 +1244,8 @@ button:active,.item:active,.row:active,.book-course:active{transform:none!import
  --s-mono:"JetBrains Mono",ui-monospace,monospace;
  --s-r:22px;            /* радиус карточки */
  --s-bottom:env(safe-area-inset-bottom,0px);
+ --s-top:max(env(safe-area-inset-top,0px),var(--tg-content-top,0px));
+ --s-navh:44px;          /* высота верхней панели, как в iOS */
  --x-ease:cubic-bezier(.32,.72,0,1);
  /* старые переменные сохранённых экранов — на новую палитру */
  --bg:var(--s-bg);--card:var(--s-card);--ink:var(--s-ink);--soft:var(--s-soft);--faint:var(--s-faint);
@@ -1252,10 +1254,10 @@ button:active,.item:active,.row:active,.book-course:active{transform:none!import
  --ok:#12A150;--okS:var(--s-green-s);--warn:#C4452C;--warnS:#FBEAE6;
  --sig:var(--s-amber);--sigInk:#7A4A08;
 }
-html{background:var(--s-bg);scroll-padding-top:20px;scroll-padding-bottom:120px;-webkit-text-size-adjust:100%}
+html{background:var(--s-bg);scroll-padding-top:calc(var(--s-navh) + var(--s-top) + 12px);scroll-padding-bottom:120px;-webkit-text-size-adjust:100%}
 body{font-family:var(--s-font);background:var(--s-bg);color:var(--s-ink);font-variant-numeric:lining-nums}
 ::selection{background:var(--s-acc-s);color:var(--s-ink)}
-.app{max-width:760px;margin:0 auto;padding:calc(10px + var(--tg-content-top,0px)) 16px calc(112px + var(--s-bottom))}
+.app{max-width:760px;margin:0 auto;padding:calc(var(--s-navh) + var(--s-top) + 4px) 16px calc(112px + var(--s-bottom))}
 .tp,.section-nav,#subbar{display:none!important}
 button,a{-webkit-tap-highlight-color:transparent}
 :focus-visible{outline:2px solid var(--s-acc);outline-offset:3px}
@@ -1308,22 +1310,29 @@ button,a{-webkit-tap-highlight-color:transparent}
 .s-promo:active{scale:.985;transition-duration:.08s}
 .s-promo .k{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9CA0AC}
 .s-promo h2{margin:8px 0 13px;font-size:18px;line-height:1.3;font-weight:600;letter-spacing:-.02em;color:#fff}
-.s-promo .row{display:flex;gap:7px;margin:0 0 14px}
+.s-promo .row{display:flex;gap:8px;margin:0 0 14px}
 .s-promo .row img{flex:1;min-width:0;height:64px;border-radius:12px;object-fit:cover;background:#23252C}
+/* шесть значков курсов — как ряд приложений на рабочем столе */
+.s-promo .row .ci{flex:1;min-width:0;aspect-ratio:1;max-width:54px;border-radius:14px;display:grid;place-items:center;font-size:15px;font-weight:700;letter-spacing:-.02em}
 .s-promo .bot{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .s-promo .bot span{font-size:13px;color:#9CA0AC}
 .s-promo .bot u{text-decoration:none;background:#fff;color:var(--s-ink);font-size:14px;font-weight:600;padding:9px 16px;border-radius:999px}
 
 /* ── рубрики ──────────────────────────────────────────────── */
-.s-fil-wrap{position:sticky;top:0;z-index:30;margin:0 -16px;padding:6px 0 0;background:linear-gradient(var(--s-bg) 72%,rgba(251,250,248,0))}
-.s-fil{position:relative;display:flex;align-items:center;gap:14px;overflow-x:auto;white-space:nowrap;padding:0 16px 10px;scrollbar-width:none}
+.s-fil-wrap{position:sticky;top:calc(var(--s-navh) + var(--s-top));z-index:30;margin:0 -16px;padding:8px 0 10px;
+ background:rgba(251,250,248,.82);-webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%)}
+.s-fil-wrap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:rgba(20,22,26,.09);opacity:0;transition:opacity .25s}
+.s-fil-wrap.stuck::after{opacity:1}
+/* ряд листается вбок; у края, за которым ещё есть рубрики, он растворяется */
+.s-fil{--m0:0px;--m1:0px;position:relative;display:flex;align-items:center;gap:8px;overflow-x:auto;white-space:nowrap;padding:0 16px;scrollbar-width:none;
+ -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--m0),#000 calc(100% - var(--m1)),transparent 100%);
+ mask-image:linear-gradient(90deg,transparent 0,#000 var(--m0),#000 calc(100% - var(--m1)),transparent 100%)}
+.s-fil-wrap.can-l .s-fil{--m0:26px}
+.s-fil-wrap.can-r .s-fil{--m1:30px}
 .s-fil::-webkit-scrollbar{display:none}
-.s-fil button{flex:none;border:0;background:none;padding:6px 0;font-family:var(--s-font);font-size:14.5px;font-weight:500;color:var(--s-soft);cursor:pointer;transition:color .2s}
-.s-fil button[aria-pressed="true"]{color:var(--s-ink);font-weight:600}
-.s-fil button[data-feed-filter="all"]{background:var(--s-ink);color:#fff;border-radius:999px;padding:7px 14px;font-weight:600}
-.s-fil button[data-feed-filter="all"][aria-pressed="true"]{background:var(--s-ink);color:#fff}
-.s-ink{position:absolute;left:0;bottom:4px;height:2.5px;width:0;border-radius:2px;background:var(--s-acc);pointer-events:none;transition:translate .46s var(--x-ease),width .46s var(--x-ease)}
-.s-fil.has-all-ink button[data-feed-filter="all"]~.s-ink{display:block}
+.s-fil button{flex:none;border:0;min-height:34px;padding:0 14px;border-radius:999px;background:var(--s-card);font-family:var(--s-font);font-size:14.5px;font-weight:600;color:var(--s-ink2);cursor:pointer;transition:background-color .25s,color .25s,scale .3s var(--x-ease)}
+.s-fil button:active{scale:.94;transition-duration:.08s}
+.s-fil button[aria-pressed="true"]{background:var(--s-ink);color:#fff}
 
 /* ── строка доступа ───────────────────────────────────────── */
 .s-access{display:flex;align-items:center;gap:11px;background:var(--s-card);border-radius:16px;padding:12px 14px;margin:0 0 14px;font-size:13.5px;line-height:1.4;color:var(--s-ink2)}
@@ -1335,7 +1344,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 
 /* ── карточка ленты ───────────────────────────────────────── */
 #feed-list{display:grid;grid-template-columns:1fr;gap:12px}
-.s-card{position:relative;background:var(--s-white);border:1px solid var(--s-line);border-radius:var(--s-r);padding:15px;scroll-margin-top:70px}
+.s-card{position:relative;background:var(--s-white);border:1px solid var(--s-line);border-radius:var(--s-r);padding:15px;scroll-margin-top:calc(var(--s-navh) + var(--s-top) + 58px)}
 .s-who{display:flex;align-items:center;gap:9px;margin:0 0 10px}
 .s-who .b{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;flex:none}
 .s-who .b .s-ic{width:16px;height:16px;stroke-width:2}
@@ -1505,16 +1514,17 @@ button,a{-webkit-tap-highlight-color:transparent}
 .s-ticket b{display:block;font-size:19px;font-weight:700;letter-spacing:-.02em}
 .s-ticket small{display:block;font-size:13.5px;color:var(--s-soft);margin-top:3px}
 .s-ticket .tag{margin-left:auto;background:var(--s-acc-s);color:var(--s-acc);font-size:11.5px;font-weight:700;letter-spacing:.04em;padding:6px 10px;border-radius:999px;flex:none}
-.s-grp{background:var(--s-card);border-radius:20px;padding:0 14px;margin:0 0 14px}
-.s-grp button,.s-grp .r{display:flex;align-items:center;gap:13px;width:100%;text-align:left;background:none;border:0;padding:13px 0;font-family:var(--s-font);color:var(--s-ink);cursor:pointer}
-.s-grp button+button,.s-grp .r+.r,.s-grp button+.r,.s-grp .r+button{border-top:1px solid #E5E3DD}
-.s-grp .ic{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none}
+.s-grp{background:var(--s-card);border-radius:20px;padding:0;margin:0 0 14px;overflow:hidden}
+.s-grp button,.s-grp .r{position:relative;display:flex;align-items:center;gap:13px;width:100%;text-align:left;background:none;border:0;padding:13px 14px;font-family:var(--s-font);color:var(--s-ink);cursor:pointer;transition:background-color .2s}
+/* разделитель начинается после значка — так же, как в настройках iPhone */
+.s-grp>*+*::before{content:"";position:absolute;left:61px;right:0;top:0;height:1px;background:#E3E1DB}
+.s-grp .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;flex:none}
 .s-grp .ic .s-ic{width:17px;height:17px;stroke-width:2.1}
 .s-grp b{display:block;font-size:16px;font-weight:600;letter-spacing:-.01em}
 .s-grp small{display:block;font-size:13px;color:var(--s-soft);margin-top:2px;line-height:1.35}
 .s-grp .ch{margin-left:auto;color:#C3C5CB;flex:none}
-.s-grp button:active{opacity:.6}
-.s-switch{display:flex;align-items:center;gap:13px;padding:13px 0}
+.s-grp button:active{background:var(--s-card2);transition-duration:.05s}
+.s-switch{display:flex;align-items:center;gap:13px;padding:13px 14px}
 .s-switch .sw{all:unset;position:relative;width:48px;height:29px;border-radius:999px;background:#D6D4CE;flex:none;cursor:pointer;transition:background-color .25s}
 .s-switch .sw i{all:unset;position:absolute;top:3px;left:3px;width:23px;height:23px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.2);transition:translate .28s var(--x-ease)}
 .s-switch .sw:not(.off){background:var(--s-green)}
@@ -1689,6 +1699,104 @@ html,body{overflow-x:clip}
 #v-lesson .practice-invite .section-symbol{display:none!important}
 #v-lesson .practice-invite::before{content:"Практика к уроку";display:block;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s-soft);margin:0 0 8px}
 #v-lesson .practice-invite h4{margin:0 0 6px!important;font-size:21px!important}
+
+/* ── верхняя панель, как в приложениях iPhone ─────────────────
+   Пока экран в начале — панели не видно: имя экрана живёт крупным заголовком
+   в тексте. Стоит увести заголовок за верх — панель проявляется: матовое
+   стекло, волосяная линия и короткое имя, слева — «назад» того же экрана.
+   Панель одна на всё приложение, её ведёт xNav в svet.js. */
+#s-nav{position:fixed;left:0;right:0;top:0;z-index:42;box-sizing:border-box;
+ display:flex;align-items:center;justify-content:center;
+ height:calc(var(--s-navh) + var(--s-top));padding:var(--s-top) 60px 0;
+ background:rgba(251,250,248,0);pointer-events:none;
+ transition:background-color .3s ease,opacity .22s ease-out}
+#s-nav::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:rgba(20,22,26,.09);opacity:0;transition:opacity .3s}
+#s-nav.on{background:rgba(251,250,248,.82);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%)}
+#s-nav.on::after{opacity:1}
+#s-nav b{font-size:16.5px;font-weight:600;letter-spacing:-.02em;line-height:1.2;color:var(--s-ink);
+ max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ opacity:0;translate:0 8px;transition:opacity .26s ease,translate .32s var(--x-ease)}
+#s-nav.on b{opacity:1;translate:0 0}
+/* «Назад» видно всегда — и когда панель ещё прозрачная, как в iOS */
+#s-nav #s-nav-back{position:absolute;left:4px;top:var(--s-top);display:inline-flex;align-items:center;gap:3px;
+ height:var(--s-navh);min-width:44px;padding:0 10px 0 6px;border:0;background:none;cursor:pointer;
+ font-family:var(--s-font);font-size:15.5px;font-weight:500;color:var(--s-acc);
+ max-width:44%;white-space:nowrap;overflow:hidden;pointer-events:auto;
+ transition:opacity .2s ease}
+#s-nav #s-nav-back span{overflow:hidden;text-overflow:ellipsis}
+#s-nav #s-nav-back .s-ic{width:19px;height:19px;stroke-width:2.4;flex:none}
+#s-nav #s-nav-back:active{opacity:.45;transition-duration:.05s}
+#s-nav[hidden]{display:none}
+/* во время перехода между экранами панель не мелькает: уходит и возвращается */
+.x-moving #s-nav{opacity:0}
+@media(prefers-reduced-transparency:reduce){#s-nav.on{background:var(--s-bg)}.s-fil-wrap{background:var(--s-bg)}}
+@media(prefers-reduced-motion:reduce){#s-nav b,#s-nav #s-nav-back{transition-duration:.01ms}}
+/* «Назад» переехало в верхнюю панель: в тексте экрана кнопка остаётся для
+   жеста и для кнопки Telegram, но её не видно — иначе стрелок было бы три. */
+.view>button.back,.view>.s-back,#v-lesson>#l-back,.view button.back.s-back{
+ position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;
+ margin:0!important;padding:0!important;overflow:hidden!important;clip-path:inset(50%);
+ white-space:nowrap;pointer-events:none}
+/* полоска прочитанного у урока — по нижнему краю панели, а не под ней */
+#v-lesson .rp,.rp{top:calc(var(--s-navh) + var(--s-top) - 2.5px);z-index:43}
+
+/* ── практика: список «проверь себя» и разбор ─────────────────
+   Экран остался от прежнего облика: зелёный текст, синяя плашка, галочки
+   браузера по умолчанию. Здесь всё переведено в палитру «Света», а отметка
+   сделана круглой и зелёной — как в списках iPhone. */
+#v-lesson .lesson-practice,#v-exercise .lesson-practice{background:var(--s-white)!important;border:1px solid var(--s-line)!important;color:var(--s-ink)!important;border-radius:var(--s-r)!important;padding:18px!important;margin:20px 0!important}
+#v-lesson .lesson-practice h4,#v-exercise .lesson-practice h4{color:var(--s-ink)!important;font-size:20px!important;font-weight:700!important;letter-spacing:-.02em;margin:0 0 8px!important}
+#v-lesson .lesson-practice p,#v-exercise .lesson-practice p{color:var(--s-ink2)!important;font-size:15.5px!important;line-height:1.5!important}
+#v-lesson .lesson-practice label,#v-exercise .lesson-practice label{border-top:1px solid var(--s-line)!important;color:var(--s-ink)!important;font-size:15.5px!important;line-height:1.45!important;align-items:center!important;padding:12px 0!important;gap:12px!important}
+#v-lesson .lesson-practice label span,#v-exercise .lesson-practice label span{color:var(--s-ink)!important;transition:color .25s}
+#v-lesson .lesson-practice input,#v-exercise .lesson-practice input{-webkit-appearance:none;appearance:none;width:25px!important;height:25px!important;margin:0!important;border:2px solid #C7C9D1;border-radius:50%;background:var(--s-white);cursor:pointer;transition:background-color .2s,border-color .2s,scale .3s var(--x-ease)}
+#v-lesson .lesson-practice input:active,#v-exercise .lesson-practice input:active{scale:.9;transition-duration:.08s}
+#v-lesson .lesson-practice input:checked,#v-exercise .lesson-practice input:checked{border-color:var(--s-green);background:var(--s-green) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'><path d='m5 12.5 4.5 4.5L19 7'/></svg>") center/15px no-repeat}
+#v-lesson .lesson-practice label:has(input:checked) span,#v-exercise .lesson-practice label:has(input:checked) span{color:var(--s-faint)!important;text-decoration:none}
+#v-lesson .lesson-practice small,#v-exercise .lesson-practice small{color:var(--s-soft)!important;font-size:13px!important;line-height:1.45!important;margin-top:12px!important}
+/* разбор «на что должен быть похож ответ» — тот же светлый блок, без синевы */
+#v-lesson .worked-result,#v-exercise .worked-result{background:var(--s-card)!important;border:0!important;color:var(--s-ink)!important;border-radius:18px!important;padding:16px!important;margin:18px 0!important}
+#v-lesson .worked-result>span,#v-exercise .worked-result>span{width:28px!important;height:28px!important;border-radius:9px!important;background:var(--s-green-s)!important;color:var(--s-green)!important}
+#v-lesson .worked-result h5,#v-exercise .worked-result h5{color:var(--s-ink)!important;font-size:16.5px!important;font-weight:600!important;margin:0 0 6px!important}
+#v-lesson .worked-result p,#v-exercise .worked-result p{color:var(--s-ink2)!important;font-size:15px!important;line-height:1.5!important}
+/* раскрывашка с запросом — со стрелкой, без чёрного треугольника браузера */
+#v-exercise details.practice-prompt>summary,#v-lesson details.practice-prompt>summary{display:flex!important;align-items:center;justify-content:space-between;gap:12px;list-style:none;padding:0 14px!important;min-height:56px}
+#v-exercise details.practice-prompt>summary::-webkit-details-marker,#v-lesson details.practice-prompt>summary::-webkit-details-marker{display:none}
+#v-exercise details.practice-prompt>summary::after,#v-lesson details.practice-prompt>summary::after{content:"";flex:none;width:8px;height:8px;border-right:2px solid var(--s-soft);border-bottom:2px solid var(--s-soft);rotate:45deg;translate:0 -3px;transition:rotate .4s var(--x-ease),translate .4s var(--x-ease)}
+#v-exercise details.practice-prompt[open]>summary::after,#v-lesson details.practice-prompt[open]>summary::after{rotate:225deg;translate:0 2px}
+/* три шага сверху — ровные плитки с номером */
+#v-exercise .exercise-steps span{display:flex!important;align-items:center;gap:8px;background:var(--s-white)!important;border:1px solid var(--s-line);border-radius:14px!important;padding:10px!important;font-size:12.5px!important;font-weight:500!important;color:var(--s-ink)!important;line-height:1.25;text-align:left}
+
+/* ── поиск и выбор нейросети (промпты, практика) ──────────────
+   Поле поиска — как в iPhone: серая скруглённая строка со значком внутри
+   и круглым крестиком справа. Размер шрифта 16 пикселей не просто так:
+   на меньшем iPhone при наборе увеличивает всю страницу. */
+.s-find{display:flex;align-items:center;gap:9px;background:var(--s-card);border-radius:13px;padding:0 12px;margin:0 0 12px}
+.s-find>.s-ic{width:17px;height:17px;color:var(--s-faint);flex:none;stroke-width:2.2}
+.s-find input{flex:1;min-width:0;min-height:42px;border:0!important;background:none!important;outline:none;padding:0!important;
+ font-family:var(--s-font);font-size:16px;color:var(--s-ink);box-shadow:none!important;border-radius:0!important}
+.s-find input::placeholder{color:var(--s-faint)}
+.s-find input::-webkit-search-cancel-button,.s-find input::-webkit-search-decoration{-webkit-appearance:none;display:none}
+.s-find button{flex:none;width:22px;height:22px;display:grid;place-items:center;border:0;border-radius:50%;background:#C3C5CB;color:var(--s-card);cursor:pointer;padding:0;min-height:0}
+.s-find button .s-ic{width:13px;height:13px;stroke-width:3}
+.s-find button[hidden]{display:none}
+.s-pick{display:inline-flex;align-items:center;gap:9px;margin:0 0 14px;font-size:13.5px;font-weight:500;color:var(--s-soft)}
+.s-pick select{-webkit-appearance:none;appearance:none;border:0!important;border-radius:999px!important;min-height:36px;padding:0 34px 0 14px!important;
+ font-family:var(--s-font);font-size:14.5px;font-weight:600;color:var(--s-ink);cursor:pointer;box-shadow:none!important;
+ background:var(--s-card) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236E7179' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>") no-repeat right 11px center/13px!important}
+.s-pick select:active{background-color:var(--s-card2)!important}
+#v-prompts .list-status,#v-practice .list-status{font-size:13.5px;color:var(--s-soft);margin:0 0 14px}
+#v-prompts .quiet,#v-practice .quiet{margin:0 0 12px}
+/* справа в панели — действие самого экрана (на главной аватар) */
+#s-nav #s-nav-act{position:absolute;right:8px;top:calc(var(--s-top) + (var(--s-navh) - 32px)/2);
+ width:32px;height:32px;padding:0;border:0;border-radius:50%;background:var(--s-card) center/cover;
+ display:grid;place-items:center;color:var(--s-soft);cursor:pointer;pointer-events:auto;
+ opacity:0;scale:.8;transition:opacity .24s ease,scale .3s var(--x-ease)}
+#s-nav.on #s-nav-act{opacity:1;scale:1}
+#s-nav #s-nav-act[hidden]{display:none}
+#s-nav #s-nav-act .s-ic{width:17px;height:17px}
+#s-nav #s-nav-act img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+#s-nav #s-nav-act:active{scale:.9;transition-duration:.08s}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -1762,12 +1870,17 @@ html,body{overflow-x:clip}
   <p class="s-colophon">Материалы собирает нейросеть. Людей в редакции нет.</p>
 </div>
 <!-- ВИТРИНА:study END -->
+<!-- ВИТРИНА:practice START -->
 <div class="view" id="v-practice">
- <button class="back" data-back data-go="study">← На главную</button>
- <div class="section-title pk-section pk-practice"><div><span class="pk-eyebrow">УЧИМСЯ НА ДЕЛЕ</span><h1>Практика</h1><p>Задания, примеры и проверка результата. Попробуй на своей задаче.</p></div><img src="assets/premium-practice.webp" alt="" width="640" height="640"></div>
- <label class="prompt-select">Нейросеть<select id="practice-course"></select></label><p class="list-status" id="practice-count" aria-live="polite"></p>
- <div id="practice-list"></div><button class="load-more" id="practice-more">Показать ещё задания</button>
+  <button class="back" data-back data-go="study">← На главную</button>
+  <h1 class="s-h2">Практика</h1>
+  <p class="s-lead">Задания к урокам: готовый пример, запрос и проверка результата. Попробуй на своей задаче.</p>
+  <label class="s-pick">Нейросеть<select id="practice-course"></select></label>
+  <p class="list-status" id="practice-count" aria-live="polite"></p>
+  <div id="practice-list"></div>
+  <button class="load-more" id="practice-more">Показать ещё задания</button>
 </div>
+<!-- ВИТРИНА:practice END -->
 <div class="view" id="v-exercise">
  <button class="back" data-back data-go="practice">← Все задания</button>
  <div class="exercise-heading"><span id="exercise-meta"></span><h1 id="exercise-title"></h1></div>
@@ -1921,11 +2034,23 @@ html,body{overflow-x:clip}
     <div class="stack" id="fav-out"></div>
   </div>
 
-  <div class="view" id="v-prompts">
-    <button class="back" data-back data-go="me">← Профиль</button><div class="section-title pk-section pk-prompts"><div><span class="pk-eyebrow">ГОТОВЫЕ ЗАПРОСЫ</span><h1>Промпты</h1><p>Выбери задачу, добавь свои данные и отправь нейросети.</p></div><img src="assets/premium-prompts.webp" alt="" width="640" height="640"></div><button class="quiet" id="prompt-return" hidden>← Вернуться к практике</button>
-    <label class="prompt-select">Инструмент<select id="prompt-course"><option value="all">Все инструменты</option></select></label><div class="prompt-search"><label for="prompt-query">Задача</label><input class="prompt-query" id="prompt-query" type="search" placeholder="Письмо, документ, настройки…" autocomplete="off"><button id="prompt-clear" hidden>Очистить поиск</button></div><p class="list-status" id="prompt-count" role="status"></p><div id="pr-out"></div><button class="load-more" id="prompt-more">Показать ещё промпты</button>
+<!-- ВИТРИНА:prompts START -->
+<div class="view" id="v-prompts">
+  <button class="back" data-back data-go="me">← Профиль</button>
+  <h1 class="s-h2">Промпты</h1>
+  <p class="s-lead">Готовые запросы из курсов. Выбери задачу, скопируй текст и отправь нейросети — она сама спросит, чего ей не хватает.</p>
+  <button class="quiet" id="prompt-return" hidden>← Вернуться к практике</button>
+  <div class="s-find">
+    <svg class="s-ic" aria-hidden="true"><use href="#i-search"/></svg>
+    <input class="prompt-query" id="prompt-query" type="search" placeholder="Письмо, документ, настройки" autocomplete="off" aria-label="Поиск промпта по задаче">
+    <button id="prompt-clear" hidden aria-label="Очистить поиск"><svg class="s-ic" aria-hidden="true"><use href="#i-close-x"/></svg></button>
   </div>
-
+  <label class="s-pick">Нейросеть<select id="prompt-course"><option value="all">Все инструменты</option></select></label>
+  <p class="list-status" id="prompt-count" role="status"></p>
+  <div id="pr-out"></div>
+  <button class="load-more" id="prompt-more">Показать ещё промпты</button>
+</div>
+<!-- ВИТРИНА:prompts END -->
   <div class="view" id="v-search">
     <button class="back" data-back data-go="study">← Назад</button>
     <div class="pk-small-title"><span class="pk-eyebrow">ПО ВСЕЙ БИБЛИОТЕКЕ</span><h1>Что найти?</h1><p>Урок, нейросеть или готовый запрос.</p></div>
@@ -4266,7 +4391,8 @@ function sCover(art){
     ['fire','<path d="M12 3c3 4 1 6 3 8 1-1 1.5-2 1.5-3 2 2 3 4 3 6a7.5 7.5 0 0 1-15 0c0-3 2-6 5-8 0 2 .8 3 2.5 4 1-2 .7-5 0-7Z"/>'],
     ['list','<path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>'],
     ['refresh','<path d="M20 11a8 8 0 0 0-14.3-4.9L4 8M4 3v5h5M4 13a8 8 0 0 0 14.3 4.9L20 16m0 5v-5h-5"/>'],
-    ['play','<path d="M8 5.5v13a1 1 0 0 0 1.5.9l10-6.5a1 1 0 0 0 0-1.8l-10-6.5A1 1 0 0 0 8 5.5Z"/>']
+    ['play','<path d="M8 5.5v13a1 1 0 0 0 1.5.9l10-6.5a1 1 0 0 0 0-1.8l-10-6.5A1 1 0 0 0 8 5.5Z"/>'],
+    ['close-x','<path d="m7 7 10 10M17 7 7 17"/>']
   ].map(([n,p])=>`<symbol id="i-${n}" viewBox="0 0 24 24">${p}</symbol>`).join(''));
 })();
 const si=(n,c='')=>`<svg class="s-ic ${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
@@ -4418,7 +4544,7 @@ function feedClick(e){
   if(filter){
     FEED_STATE.filter=filter.dataset.feedFilter;FEED_STATE.limit=12;
     document.querySelectorAll('[data-feed-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.feedFilter===FEED_STATE.filter)));
-    feedDraw();xInk();xHaptic('select');xRise($('#feed-list'));
+    feedDraw();xFilters();xHaptic('select');xRise($('#feed-list'));
     const f=$('#x-filters');if(f&&f.getBoundingClientRect().top<0)f.scrollIntoView({block:'start'});
     if(f){const l=filter.offsetLeft,r=l+filter.offsetWidth;if(r>f.scrollLeft+f.clientWidth-48||l<f.scrollLeft+8)f.scrollTo({left:Math.max(0,l-f.clientWidth/2+filter.offsetWidth/2),behavior:xCalm()?'auto':'smooth'});}
     return true;
@@ -4560,7 +4686,7 @@ function sHome(){
   const courses=SECS.slice(6),total=courses.reduce((a,s)=>a+s.ls.length,0),free=courses.reduce((a,s)=>a+s.ls.filter(l=>!l.key).length,0);
   $('#s-promo').innerHTML=`<span class="k">Полный доступ</span>
     <h2>${courses.length}&nbsp;${скл(courses.length,'курс','курса','курсов')} по нейросетям, ${total}&nbsp;${скл(total,'урок','урока','уроков')} с готовыми запросами</h2>
-    <span class="row">${X_BOOKS.slice(0,3).map(b=>{const [m,c,g]=S_COURSE[b];return `<span style="flex:1;height:64px;border-radius:12px;background:${c};display:grid;place-items:center;color:#fff;font-weight:700;font-size:17px;letter-spacing:-.02em">${m}</span>`;}).join('')}</span>
+    <span class="row">${X_BOOKS.map(b=>{const [m,c,g]=S_COURSE[b];return `<span class="ci" style="background:${g};color:${c}">${m}</span>`;}).join('')}</span>
     <span class="bot"><span>${free}&nbsp;${скл(free,'урок открыт','урока открыты','уроков открыты')} бесплатно</span><u>Открыть</u></span>`;
 }
 
@@ -4801,19 +4927,20 @@ show=function(v,back){
   if(v==='study')sHome();
   if(v==='pay-all')xCheckout();
   if(v==='me')sProfile();
-  try{if(вТелеграме()&&TG.isVersionAtLeast?.('6.1')){TG.setHeaderColor?.('#EFEEE9');TG.setBackgroundColor?.('#EFEEE9');}}catch(e){}
+  try{if(вТелеграме()&&TG.isVersionAtLeast?.('6.1')){TG.setHeaderColor?.('#FBFAF8');TG.setBackgroundColor?.('#FBFAF8');}}catch(e){}
   xTrans?.finish();
   const n=++xNavN,old=document.querySelector('.view.on'),from=old?.id.slice(2),snap=old?xSnap(old):null;
   if(from&&from!=='study'&&from!==v)X_SCROLL.set(xScrollKey(from),scrollY);
   const r=_show(v,back);
   const el=document.querySelector('.view.on');
-  if(v==='study')xInk(true);  // пока номер был скрыт, мерить рубрики было нельзя
+  if(v==='study')xFilters(true);  // пока экран был скрыт, мерить ряд рубрик было нельзя
   // как в iOS: вернулся назад — экран там же, где его оставил; пришёл вглубь заново — с начала
   const to=el?.id.slice(2),goingBack=back||(X_DEPTH[to]??1)<(X_DEPTH[from]??1)||X_TABS.includes(to);
   if(to&&to!=='study'&&to!==from){const k=xScrollKey(to);
     if(goingBack&&X_SCROLL.has(k)){scrollTo({top:X_SCROLL.get(k),behavior:'instant'});onScroll?.();}
     else X_SCROLL.delete(k);}
   if(n===xNavN&&snap&&el)try{xMove(snap,el,from,el.id.slice(2),!!back);}catch(e){xTrans?.finish();}
+  xNav.pick();
   return r;
 };
 /* нажатие на уже открытую вкладку — наверх страницы, как в iOS */
@@ -4822,9 +4949,96 @@ $('#feed-dock')?.addEventListener('click',e=>{
   if(b&&b.getAttribute('aria-current')==='page'){e.stopPropagation();scrollTo({top:0,behavior:xCalm()?'auto':'smooth'});}
 });
 
-/* затухание у правого края рубрик — пока ряд можно листать дальше */
-(()=>{const f=$('#x-filters'),w=$('#x-rubrics-wrap');if(!f||!w)return;
-  const upd=()=>w.classList.toggle('end',!f.clientWidth||f.scrollLeft+f.clientWidth>=f.scrollWidth-2);
+/* ---------- верхняя панель, как в приложениях iPhone ----------
+   Панель одна на всё приложение и висит над всеми экранами. Пока крупный
+   заголовок экрана виден — панели нет: имя экрана и так на виду. Ушёл
+   заголовок за верх — панель проявляется матовым стеклом с волосяной линией,
+   в ней короткое имя экрана, а слева «назад», который нажимает кнопку
+   самого экрана (поэтому возврат везде одинаковый и жест тоже работает). */
+const S_NAV_NAME={study:'Сегодня',route:'Курсы',me:'Профиль',prompts:'Промпты',practice:'Практика',
+  docs:'Документы',favs:'Закладки',recent:'Недавно открытое',search:'Поиск',news:'Что нового',
+  ach:'Отметки',log:'Журнал','pay-all':'Полный доступ',pay:'Доступ',exercise:'Практика'};
+const xNav=(()=>{
+  const bar=document.createElement('header');
+  bar.id='s-nav';
+  bar.innerHTML='<button type="button" id="s-nav-back">'+si('chev-l')+'<span></span></button><b id="s-nav-title"></b>'
+    +'<button type="button" id="s-nav-act" hidden aria-label="Профиль"></button>';
+  document.body.appendChild(bar);
+  /* кнопки «назад» в тексте экранов спрятаны — уберём их и от чтения с экрана */
+  document.querySelectorAll('.view>button.back,.view>.s-back,#l-back').forEach(b=>{b.tabIndex=-1;b.setAttribute('aria-hidden','true');});
+  const btn=bar.querySelector('#s-nav-back'),cap=btn.querySelector('span'),ttl=bar.querySelector('#s-nav-title');
+  const act=bar.querySelector('#s-nav-act');let actSrc=null;
+  let head=null,back=null,on=false;
+  /* заголовок экрана: у каждого свой, порядок — от самого точного к общему */
+  const headOf=v=>v.querySelector('.s-today,#sec-head h2,.lhead h1,h1,h2.big,.pk-section h1,.exercise-heading h1');
+  const backOf=v=>v.querySelector('button[data-back],#l-back,button.back,.s-back');
+  /* в Telegram «назад» уже есть в его шапке — своё не показываем, иначе
+     стрелки стоят одна под другой. В браузере кнопка наша. */
+  const own=()=>{try{return !(вТелеграме()&&TG?.isVersionAtLeast?.('6.1')&&TG?.BackButton);}catch(e){return true;}};
+  /* подпись у «назад» — имя экрана, куда вернёмся (как в iOS), а не слово «назад» */
+  function backName(b){
+    const to=b.id==='l-back'?(window.__lback||'sec'):b.dataset.go;
+    if(!to)return b.textContent.trim()||'Назад';
+    if(to==='sec')return $('#sec-head h2')?.textContent.trim()||'Курс';
+    const v=$('#v-'+to);
+    return S_NAV_NAME[to]||v&&headOf(v)?.textContent.trim()||b.textContent.trim()||'Назад';
+  }
+  function fill(v){
+    const id=v.id.slice(2);
+    head=headOf(v);back=backOf(v);
+    ttl.textContent=S_NAV_NAME[id]||head?.textContent.trim()||'';
+    cap.textContent=back?backName(back):'Назад';
+    btn.style.display=back&&own()?'':'none';
+    /* справа — то же, что у экрана: на главной это аватар, он уезжает вверх */
+    actSrc=v.querySelector('.s-me');
+    act.hidden=!actSrc;
+    if(actSrc){  // не копируем разметку целиком: в ней есть id, он должен быть один
+      const img=actSrc.querySelector('img');
+      act.style.backgroundImage=img?`url("${img.src}")`:'';
+      act.innerHTML=img?'':si('person');
+    }
+    /* имя экрана стоит ровно посередине и не наезжает на «назад» */
+    const pad=Math.max(56,(btn.style.display==='none'?0:btn.offsetWidth)+12);
+    bar.style.paddingLeft=bar.style.paddingRight=pad+'px';
+  }
+  function pick(){
+    const v=document.querySelector('.view.on');if(!v)return;
+    fill(v);sync();
+    /* содержимое экрана иногда приходит следом (урок с сервера) — перечитать */
+    requestAnimationFrame(()=>{if(document.querySelector('.view.on')===v){fill(v);sync();}});
+  }
+  function sync(){
+    const h=bar.offsetHeight||50;
+    const now=head?head.getBoundingClientRect().bottom<h-2:scrollY>h;
+    if(now!==on){on=now;bar.classList.toggle('on',on);}
+    /* ряд рубрик прилип к панели — под ним появляется волосяная линия */
+    const w=$('.view.on .s-fil-wrap');
+    if(w)w.classList.toggle('stuck',w.getBoundingClientRect().top<=h+1);
+  }
+  btn.addEventListener('click',()=>{const b=back;if(!b)return;xHaptic('light');b.click();});
+  act.addEventListener('click',()=>actSrc?.click());
+  addEventListener('scroll',sync,{passive:true});
+  addEventListener('resize',()=>{sync();});
+  document.fonts?.ready.then(()=>sync());
+  return {pick,sync};
+})();
+
+/* Ряд рубрик: у края, за которым ещё есть рубрики, он растворяется, а выбранная
+   рубрика сама подъезжает в видимое место — как ряды в приложениях iPhone.
+   Прежний код искал #x-rubrics-wrap, которого в разметке нет, и ничего не делал. */
+function xFilters(instant){
+  const f=$('#x-filters'),w=f?.closest('.s-fil-wrap');if(!f||!w)return;
+  w.classList.toggle('can-l',f.scrollLeft>2);
+  w.classList.toggle('can-r',!!f.clientWidth&&f.scrollLeft+f.clientWidth<f.scrollWidth-2);
+  const b=f.querySelector('[aria-pressed="true"]');
+  if(b&&b.offsetWidth){
+    const l=b.offsetLeft-16,r=b.offsetLeft+b.offsetWidth+16;
+    if(l<f.scrollLeft||r>f.scrollLeft+f.clientWidth)
+      f.scrollTo({left:Math.max(0,l),behavior:instant||xCalm()?'auto':'smooth'});
+  }
+}
+(()=>{const f=$('#x-filters');if(!f)return;
+  const upd=()=>xFilters(true);
   f.addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);
   new ResizeObserver(upd).observe(f);upd();
   // ширина кнопок меняется, когда догружается шрифт, — пересчитать и тогда
@@ -4837,17 +5051,7 @@ document.addEventListener('click',e=>{if(e.target.closest('.x-toggle>span'))$('#
    переключатель, прочитанный урок. На каждое нажатие — нет: к ней привыкают. */
 function xHaptic(k){try{if(!вТелеграме())return;const h=TG?.HapticFeedback;if(!h)return;
   if(k==='select')h.selectionChanged?.();else if(k==='success')h.notificationOccurred?.('success');else h.impactOccurred?.(k);}catch(e){}}
-/* подчёркивание выбранной рубрики — одна полоска, переезжает к нажатой */
-function xInk(instant){
-  const nav=$('#x-filters');if(!nav)return;
-  let ink=nav.querySelector('.s-ink');
-  if(!ink){ink=document.createElement('i');ink.className='s-ink';ink.setAttribute('aria-hidden','true');nav.appendChild(ink);nav.classList.add('has-ink');instant=true;}
-  const b=nav.querySelector('[aria-pressed="true"]');if(!b||!b.offsetWidth)return;
-  if(instant||xCalm()){ink.style.transition='none';void ink.offsetWidth;}
-  ink.style.width=b.offsetWidth+'px';ink.style.translate=b.offsetLeft+'px 0';
-  if(instant)requestAnimationFrame(()=>ink.style.transition='');
-}
-addEventListener('resize',()=>xInk(true));document.fonts?.ready.then(()=>xInk(true));addEventListener('load',()=>xInk(true));
+
 /* новые материалы после смены рубрики проявляются снизу вверх, по очереди.
    Задержка — внутри ключевых кадров, без fill: не сыграло — всё просто видно. */
 function xRise(list){
@@ -5721,9 +5925,9 @@ try{
     });
     const paint = () => { const n = document.documentElement.getAttribute('data-n')==='1';
       // 19.09: полосы Telegram — цвета газеты: бумага и сверху, и снизу (меню тоже бумажное)
-      if(tg.isVersionAtLeast?.('6.1') && tg.setHeaderColor) tg.setHeaderColor('#EFEEE9');
-      if(tg.isVersionAtLeast?.('6.1') && tg.setBackgroundColor) tg.setBackgroundColor('#EFEEE9');
-      if(tg.isVersionAtLeast?.('7.10') && tg.setBottomBarColor) tg.setBottomBarColor('#EFEEE9'); };
+      if(tg.isVersionAtLeast?.('6.1') && tg.setHeaderColor) tg.setHeaderColor('#FBFAF8');
+      if(tg.isVersionAtLeast?.('6.1') && tg.setBackgroundColor) tg.setBackgroundColor('#FBFAF8');
+      if(tg.isVersionAtLeast?.('7.10') && tg.setBottomBarColor) tg.setBottomBarColor('#FBFAF8'); };
     paint();
     new MutationObserver(paint).observe(document.documentElement,{attributes:true,attributeFilter:['data-n']});
   }
