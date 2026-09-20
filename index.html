@@ -1982,6 +1982,38 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-week .d.off i{background:transparent;border:1.5px dashed var(--s-line)}
 .s-week .d em{font-style:normal;font-size:11.5px;color:var(--s-faint)}
 .s-week .d.now em{color:var(--s-ink);font-weight:600}
+
+/* ── Тёмная шапка курса ─────────────────────────────────────────────────
+   Приём из макета: кто ты, сколько пройдено и что открыть дальше — одной
+   карточкой, мятной кнопкой. Было три светлых блока подряд. */
+.s-hero{display:block;background:var(--s-dark);border-radius:var(--s-r);padding:18px;margin:0 0 14px;color:#fff}
+.s-hero .top{display:flex;align-items:flex-start;gap:13px;margin:0 0 16px}
+.s-hero .cv{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+ font-size:15px;font-weight:700;letter-spacing:-.02em;flex:none}
+.s-hero .top b{display:block;font-family:"Old Standard TT",Georgia,serif;font-size:25px;line-height:1.15;letter-spacing:0}
+.s-hero .top small{display:block;font-size:14px;line-height:1.45;color:#8FB8A8;margin:5px 0 0;text-wrap:pretty}
+.s-hero .prog{display:block;margin:0 0 15px}
+.s-hero .bar{display:block;height:7px;border-radius:999px;background:rgba(255,255,255,.14);overflow:hidden;margin:0 0 9px}
+.s-hero .bar i{display:block;height:100%;border-radius:999px;background:var(--s-mint);transition:width .5s var(--x-ease)}
+.s-hero .n{display:block;font-size:13.5px;color:#8FB8A8;font-variant-numeric:tabular-nums}
+.s-hero .n b{color:#fff;font-weight:600}
+.s-hero .go{display:flex;align-items:center;gap:10px;width:100%;border:0;border-radius:16px;
+ background:var(--s-mint);color:#08402F;font-family:var(--s-font);padding:13px 16px;text-align:left;
+ cursor:pointer;transition:scale .3s var(--x-ease),background-color .2s}
+.s-hero .go:active{scale:.98;background:var(--s-mint-d);transition-duration:.08s}
+.s-hero .go span{flex:1;min-width:0;font-size:15.5px;font-weight:600;letter-spacing:-.01em;line-height:1.25}
+.s-hero .go u{display:block;text-decoration:none;font-size:11.5px;font-weight:700;letter-spacing:.07em;
+ text-transform:uppercase;opacity:.65;margin:0 0 3px}
+.s-hero .go .s-ic{width:20px;height:20px;flex:none}
+.s-hero .all{display:inline-flex;align-items:center;gap:5px;margin:13px 0 0;border:0;background:none;padding:0;
+ color:var(--s-mint);font-family:var(--s-font);font-size:14px;font-weight:600;cursor:pointer;min-height:24px}
+.s-hero .all .s-ic{width:16px;height:16px}
+.s-hero.arch{background:var(--s-card);color:var(--s-ink)}
+.s-hero.arch h2{font-family:"Old Standard TT",Georgia,serif;font-size:25px;margin:0}
+.s-hero.arch p{margin:6px 0 0;font-size:14px;color:var(--s-soft)}
+.s-hero-note{margin:0 0 16px;font-size:15px;line-height:1.5;color:var(--s-soft);text-wrap:pretty}
+/* шапка курса переехала в тёмную карточку — прежний блок остался пустым */
+#sec-overview:empty,#sec-now:empty{display:none!important}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -5047,35 +5079,26 @@ function sRenderSec(i){
   const done=doneList(),paid=!!ME?.paid;
   const read=s.ls.filter((l,j)=>done.includes(i+'-'+j)).length;
   const curJ=s.ls.findIndex((l,j)=>!done.includes(i+'-'+j)&&(!l.key||paid));
-  $('#sec-head').innerHTML=s.archived
-    ?`<div><h2>${esc(s.t)}</h2><p>Материал прежней программы. Сохранён по старой ссылке.</p></div>`
-    :`<span class="cv" style="background:${bg};color:${col}">${mono}</span><div><h2>${esc(s.t)}</h2><p>${esc(s.d||'')}</p></div>`;
+  /* Шапка курса одной тёмной карточкой — приём из макета, который выбрал
+     Ivan: кто ты, сколько пройдено и что открыть дальше — в одном месте,
+     мятной кнопкой. Раньше это были три светлых блока подряд. */
   const free=s.ls.filter(l=>!l.key).length;
-  /* Полоса движения по курсу. Раньше здесь была только строка о доступе
-     («8 уроков · 3 открыто») — она отвечала на вопрос «сколько мне открыто»,
-     но не на «где я сейчас». Теперь видно и то и другое. */
   const pct=Math.round(read/s.ls.length*100);
-  $('#sec-overview').innerHTML=`
-    ${read?`<div class="s-prog"><div class="bar"><i style="width:${pct}%"></i></div>
-       <span><b>${pct}% пройдено</b> · ${read} из ${s.ls.length}</span></div>`:''}
-    <span>${read?'':`${s.ls.length} ${скл(s.ls.length,'урок','урока','уроков')} · ${free===s.ls.length?'все открыты':free+' открыто'}`}${X_RU[s.slug]?(read?'':' · ')+'открывается из России':''}</span>${!paid&&free<s.ls.length?`<button class="s-link" data-go="pay-all">Открыть все</button>`:''}`;
-  /* Карточка «где я остановился». До неё текущий урок отмечался тонкой рамкой
-     в списке — человек, открывший приложение впервые, её не замечал. */
   const nl=curJ>=0?s.ls[curJ]:null;
-  $('#sec-now').innerHTML=s.archived?'':nl?`
-    <div class="s-now">
-      <span class="k">${read?'Сейчас читаешь':'Начни отсюда'}</span>
-      <b>${esc(nl.t)}</b>
-      ${nl.d?`<p>${esc(nl.d)}</p>`:''}
-      <button class="s-btn" data-les="${curJ}">Открыть урок${nl.min?` · ${nl.min} мин`:''} ${si('chev')}</button>
-    </div>`:read===s.ls.length?`
-    <div class="s-now done">
-      <span class="k">Курс пройден</span>
-      <b>Все ${s.ls.length} ${скл(s.ls.length,'урок прочитан','урока прочитаны','уроков прочитаны')}</b>
-      <p>Возвращайся к любому уроку — запросы из них работают и дальше.</p>
-      <button class="s-btn" data-go="route">Выбрать следующий курс ${si('chev')}</button>
-    </div>
-    ${sBotSay('fin','<b>Хорошо прошёл.</b> Запросы из этого курса работают и в других нейросетях — попробуй на своей задаче.')}`:'';
+  $('#sec-head').innerHTML=s.archived
+    ?`<div class="s-hero arch"><h2>${esc(s.t)}</h2><p>Материал прежней программы. Сохранён по старой ссылке.</p></div>`
+    :`<div class="s-hero">
+       <span class="top"><span class="cv" style="background:${bg};color:${col}">${mono}</span>
+         <span><b>${esc(s.t)}</b><small>${esc(s.d||'')}</small></span></span>
+       ${read?`<span class="prog"><span class="bar"><i style="width:${pct}%"></i></span>
+          <span class="n"><b>${pct}% пройдено</b> · ${read} из ${s.ls.length}</span></span>`
+        :`<span class="prog"><span class="n">${s.ls.length} ${скл(s.ls.length,'урок','урока','уроков')} · ${free===s.ls.length?'все открыты':free+' открыто'}${X_RU[s.slug]?' · открывается из России':''}</span></span>`}
+       ${nl?`<button class="go" data-les="${curJ}"><span><u>${read?'Продолжить':'Начать'}</u>${esc(nl.t)}</span>${si('chev')}</button>`
+        :read===s.ls.length?`<button class="go" data-go="route"><span><u>Курс пройден</u>Выбрать следующий</span>${si('chev')}</button>`:''}
+       ${!paid&&free<s.ls.length?`<button class="all" data-go="pay-all">Открыть все уроки${si('chev')}</button>`:''}
+     </div>`;
+  $('#sec-overview').innerHTML='';
+  $('#sec-now').innerHTML=nl&&nl.d&&!s.archived?`<p class="s-hero-note">${esc(nl.d)}</p>`:'';
   const parts=s.archived?[[0,s.ls.length,'Уроки']]:[[0,3,S_PART[0]],[3,7,S_PART[1]],[7,8,S_PART[2]]];
   $('#sec-list').innerHTML=parts.map(([a,b,name])=>{
     const dn=s.ls.slice(a,b).filter((l,k)=>done.includes(i+'-'+(a+k))).length;
