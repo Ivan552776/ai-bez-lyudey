@@ -1862,6 +1862,15 @@ html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
    сбрасывало сдвиг, и включённый переключатель выглядел сломанным —
    зелёный, а кружок слева. Проверено снимком. */
 .s-switch .sw:not(.off) i{translate:19px 0!important}
+
+/* Что входит в полный доступ: список с зелёными галочками, как отметки
+   в практике. Раньше на экране подписки была одна цена и пустота под ней. */
+.s-inc{list-style:none;margin:0 0 4px;padding:0}
+.s-inc li{position:relative;padding:0 0 0 30px;margin:0 0 11px;font-size:15.5px;line-height:1.45;color:var(--s-ink2);text-wrap:pretty}
+.s-inc li b{color:var(--s-ink);font-weight:600}
+.s-inc li::before{content:"";position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;
+ background:var(--s-green) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'><path d='m5 12.5 4.5 4.5L19 7'/></svg>") center/12px no-repeat}
+.s-plan strong{white-space:nowrap}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -4396,11 +4405,11 @@ const S_ART={
     <g transform="rotate(-5 76 102)"><rect x="24" y="40" width="98" height="124" rx="14" fill="${S_W}"/>
       ${sLines(40,58,[66,54,62,48,58,44],14,'#EFD9BC')}</g>
     <path d="M138 101h24" ${sd('',S_AMB,2.8)}/><path d="M156 93l10 8-10 8" ${sd('',S_AMB,2.8)}/>
-    <g transform="rotate(-6 236 74)"><rect x="180" y="32" width="112" height="76" rx="14" fill="${S_W}"/>
-      <text x="236" y="83" text-anchor="middle" font-family="Golos Text,system-ui" font-weight="700" font-size="38" fill="${S_AMB}">?</text></g>
-    <g transform="rotate(4 236 140)"><rect x="180" y="106" width="112" height="76" rx="14" fill="${S_W}"/>
-      <circle cx="205" cy="144" r="15" fill="${S_GRN}"/><path d="M198 144l5 5 9-10" ${sd('',S_W,2.8)}/>
-      ${sLines(228,136,[46,34],13,'#E2E4EE')}</g>`],
+    <g transform="rotate(-6 236 68)"><rect x="180" y="28" width="112" height="72" rx="14" fill="${S_W}"/>
+      <text x="236" y="78" text-anchor="middle" font-family="Golos Text,system-ui" font-weight="700" font-size="36" fill="${S_AMB}">?</text></g>
+    <g transform="rotate(4 236 144)"><rect x="180" y="110" width="112" height="72" rx="14" fill="${S_W}"/>
+      <circle cx="205" cy="146" r="15" fill="${S_GRN}"/><path d="M198 146l5 5 9-10" ${sd('',S_W,2.8)}/>
+      ${sLines(228,138,[46,34],13,'#E2E4EE')}</g>`],
   steps:['#EEEEFB',`
     ${[[44,140,44],[104,112,72],[164,84,100],[224,56,128]].map(([x,y,h],i)=>`<rect x="${x}" y="${y}" width="56" height="${h}" rx="14" fill="${i===3?S_IND:S_W}"/><text x="${x+28}" y="${y+28}" text-anchor="middle" font-family="Golos Text,system-ui" font-weight="700" font-size="17" fill="${i===3?S_W:S_IND}">${i+1}</text>`).join('')}
     <path d="M58 128C100 92 150 66 236 44" ${sd('stroke-dasharray="1 8"',S_IND2,2.6)}/>
@@ -4424,7 +4433,7 @@ const S_ART={
       <path d="M264 104h8a9 9 0 0 1 0 18h-8" ${sd('','#E45CA8',3)}/>
       <path d="M226 86c0-6 8-6 8-12M244 86c0-6 8-6 8-12" ${sd('opacity=".55"','#E45CA8',2.4)}/>
       <rect x="208" y="140" width="62" height="6" rx="3" fill="#F3D9E8"/></g>
-    <path d="M152 168c1.4 8 5 11.6 13 13-8 1.4-11.6 5-13 13-1.4-8-5-11.6-13-13 8-1.4 11.6-5 13-13Z" fill="${S_AMB}"/>`],
+    <path d="M156 52c1.4 8 5 11.6 13 13-8 1.4-11.6 5-13 13-1.4-8-5-11.6-13-13 8-1.4 11.6-5 13-13Z" fill="${S_AMB}"/>`],
   check:['#EEEEFB',`
     <g transform="rotate(-4 134 104)"><rect x="70" y="30" width="130" height="146" rx="16" fill="${S_W}"/>
       ${sLines(88,56,[92,78,96])}<rect x="86" y="96" width="100" height="14" rx="7" fill="#FDF0DE"/><rect x="90" y="100" width="92" height="6" rx="3" fill="${S_AMB}"/>${sLines(88,126,[88,70,82])}</g>
@@ -4826,17 +4835,35 @@ function sPlan(p){
 function sSub(short){
   const paid=!!ME?.paid,until=ME?.until?ME.until.split('-').reverse().join('.'):'';
   return `<div class="s-sub"><h2>Полный доступ ко всем курсам</h2>
-    <p>Все шесть курсов и всё, что выйдет потом. Без автосписаний: продление только когда решишь сам. Возврат в течение 7 дней.</p>
+    <p>Все шесть курсов и всё, что выйдет потом. Без автосписаний: продление только когда решишь сам.</p>
     ${paid?`<div class="s-plan" aria-checked="true"><span class="box"></span><span><b>Доступ оформлен</b><small>${until?'действует до '+until:'без срока'}</small></span></div>`:`
     <div role="radiogroup" aria-label="Срок подписки">
-     <button class="s-plan" role="radio" data-s-plan="month" aria-checked="${sPlanSel==='month'}"><span class="box"></span><span><b>На месяц</b><small>можно начать с одного месяца</small></span><strong>500 ₽</strong></button>
-     <button class="s-plan" role="radio" data-s-plan="year" aria-checked="${sPlanSel==='year'}"><span class="box"></span><span><b>На год</b><small>два месяца в подарок</small></span><strong>4 900 ₽</strong></button>
+     <button class="s-plan" role="radio" data-s-plan="month" aria-checked="${sPlanSel==='month'}"><span class="box"></span><span><b>На месяц</b><small>можно начать с месяца<br>дальше — как решишь</small></span><strong>500 ₽</strong></button>
+     <button class="s-plan" role="radio" data-s-plan="year" aria-checked="${sPlanSel==='year'}"><span class="box"></span><span><b>На год</b><small>два месяца в подарок<br>408 ₽ в месяц</small></span><strong>4 900 ₽</strong></button>
     </div>`}
     ${short?`<button class="s-btn" data-go="pay-all" style="margin-top:14px">${paid?'Подробнее о доступе':'Открыть все уроки'}</button>`:`<button class="s-btn s-buy" data-write="pay" style="margin-top:14px">${paid?'Продлить в боте':(sPlanSel==='year'?'Оформить год за 4 900 ₽':'Оформить месяц за 500 ₽')}</button>
     <p class="s-honest">Онлайн-оплата подключается: пока доступ оформляется в боте — он пришлёт реквизиты и откроет уроки сразу после оплаты. <button data-doc="oferta">Публичная оферта</button></p>`}
   </div>`;
 }
-function xCheckout(){$('#s-checkout').innerHTML=sSub(false);}
+function sWhat(){
+  const cs=SECS.slice(6), all=cs.reduce((a,x)=>a+x.ls.length,0),
+        free=cs.reduce((a,x)=>a+x.ls.filter(l=>!l.key).length,0),
+        pr=cs.reduce((a,x)=>a+x.ls.reduce((b,l)=>b+(l.promptTitles?.length||0),0),0);
+  const li=t=>`<li>${t}</li>`;
+  return `<p class="s-sec">Что входит</p>
+  <ul class="s-inc">
+   ${li(`<b>${cs.length} ${скл(cs.length,'курс','курса','курсов')}</b> по нейросетям: ${cs.map(x=>esc(x.t)).join(', ')}`)}
+   ${li(`<b>${all} ${скл(all,'урок','урока','уроков')}</b> — в каждом одна рабочая задача и разбор ответа`)}
+   ${li(`<b>${pr} ${скл(pr,'готовый запрос','готовых запроса','готовых запросов')}</b> — копируешь и отправляешь, поля заполнять не надо`)}
+   ${li('<b>Практика к каждому уроку</b> и проверка: на что должен быть похож ответ')}
+   ${li('<b>Всё новое входит без доплат</b>, пока доступ открыт')}
+  </ul>
+  <p class="s-sec">Уже открыто бесплатно</p>
+  <p class="s-lead" style="margin:0 0 6px">${free} ${скл(free,'урок','урока','уроков')} — по три в каждом курсе, и каждый день новый материал в ленте: промпт, гайд или разбор нейросети.
+  Полный доступ добавляет остальные ${all-free} и практику ко всем.</p>
+  <p class="s-foot-note">Не подойдёт — вернём деньги в течение 7 дней, объяснять причину не нужно.</p>`;
+}
+function xCheckout(){$('#s-checkout').innerHTML=sSub(false)+(ME?.paid?'':sWhat());}
 
 /* ---------- закрытый урок ---------- */
 showPay=function(sec,les){
