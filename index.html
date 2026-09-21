@@ -1926,10 +1926,14 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-today{font-size:31px}
 /* на чёрной плашке тонкие засечки светлым по тёмному истончаются — там Golos */
 /* Робот-редактор в реплике на главной */
-.s-say .av{width:54px;height:54px;border-radius:16px;background:var(--s-acc-s);flex:none;
- display:grid;place-items:center;overflow:hidden}
-.s-say .av .s-bot{width:50px;height:50px;display:block;object-fit:contain}
-.s-say .av i{right:-2px;bottom:-2px}
+/* Робот на главной стоит в полный рост — так его и видно, и он не занимает
+   лишней высоты: реплика рядом всё равно в две-три строки. */
+.s-say{align-items:flex-end;gap:4px;min-height:100px;margin:2px 0 16px}
+.s-say .av{width:96px;height:auto;flex:none;display:block;background:none!important;
+ border-radius:0!important;overflow:visible;position:static}
+.s-say .av .s-bot-full{width:96px;height:auto;display:block;margin:0 0 -6px}
+.s-say .av i{display:none}
+.s-say .bub{border-radius:16px 16px 16px 6px;margin:0 0 10px}
 .s-say .bub{flex:1;min-width:0}
 /* Робот в полный рост */
 .s-bot-full{display:block;width:100%;height:auto}
@@ -4953,7 +4957,7 @@ function sHome(){
     <p class="s-widget-note">Готовый текст. Скопируй и вставь в нейросеть — она сама спросит, чего ей не хватает.</p>`;
   /* Реплика редакции: у нейросети, которая ведёт выпуск, появилось лицо. */
   const say=$('#s-say');
-  if(say)say.innerHTML=`<span class="av">${sBot()}<i></i></span><span class="bub"><b>Редакция.</b> ${S_SAY[lead.type]||S_SAY.prompt}</span>`;
+  if(say)say.innerHTML=`<span class="av">${sBotFull('privet')}</span><span class="bub"><b>Редакция.</b> ${S_SAY[lead.type]||S_SAY.prompt}</span>`;
   /* плитки: курс и серия дней */
   const done=doneList();
   let cs=null;
