@@ -1255,6 +1255,14 @@ button:active,.item:active,.row:active,.book-course:active{transform:none!import
  --bg:var(--s-bg);--card:var(--s-card);--ink:var(--s-ink);--soft:var(--s-soft);--faint:var(--s-faint);
  --line:var(--s-line);--line2:var(--s-card2);--brand:var(--s-acc);--brand2:var(--s-acc-d);--brandS:var(--s-acc-s);
  --body:var(--s-font);--sans:var(--s-font);--mono:var(--s-mono);
+ /* Пастельные подложки прежнего облика (сирень, персик, голубой) остались
+    в переменных hub-*. Витрина перекрыла их там, где переписывала экраны,
+    но они вылезали в мелочах: шапка проверки в практике была голубой.
+    Переводим сами переменные на зелёную палитру — чинится разом и везде. */
+ --hub-mint:var(--s-green-s);--hub-mint-ink:var(--s-acc-d);
+ --hub-lilac:var(--s-acc-s);--hub-lilac-ink:var(--s-acc-d);
+ --hub-peach:var(--s-amber-s);--hub-peach-ink:#7A4A08;
+ --hub-blue:var(--s-acc-s);--hub-blue-ink:var(--s-acc-d);
  /* Синяя кнопка прежнего облика осталась в переменной --pk-action и вылезала
     на экранах, которые витрина не переписывала (например «Создать аккаунт»).
     Главное действие у нас чёрное — как везде. */
@@ -1601,6 +1609,9 @@ html,body{overflow-x:clip}
 #v-exercise .detail-actions{display:grid!important;grid-template-columns:1fr;gap:10px!important;margin-top:10px!important}
 #v-exercise .detail-actions .quiet{width:100%;min-height:50px!important;margin:0!important;justify-content:center}
 .tst,.tst *{font-family:var(--s-font)!important}
+/* Шапка проверки осталась голубой от прежнего облика: цвет стоял прямо
+   в правиле, а не в переменной — потому и пережил смену палитры. */
+.tst .th{background:var(--s-card)!important;color:var(--s-soft)!important}
 .tst .th>i{display:none!important}
 .tst .th b{font-size:12.5px!important;font-weight:700!important;letter-spacing:.06em!important;text-transform:uppercase;color:var(--s-soft)!important}
 .tst .num{color:var(--s-soft)!important;font-size:12.5px!important}
@@ -4788,7 +4799,8 @@ function feedAccessError(response,id){
       <p class="s-foot-note">Отписаться можно в любой момент — доступ к тому, что уже куплено, от этого не зависит.</p>
       ${sBotSay('privet','<b>Выпуск ведёт нейросеть.</b> Каждый день она собирает один материал и проверяет его на живой задаче.')}`;
   }
-  return `<p class="s-note">Не получилось загрузить. Проверь связь и попробуй ещё раз.</p><button class="s-pill" data-feed-retry="${id}">${si('refresh')}Повторить</button>`;
+  return `<p class="s-note">Не получилось загрузить. Проверь связь и попробуй ещё раз.</p><button class="s-pill" data-feed-retry="${id}">${si('refresh')}Повторить</button>
+    ${sBotSay('plechi','<b>Это не из-за тебя.</b> Материал лежит на сервере — открытые уроки читаются и без сети, а этот вернётся, как только связь появится.')}`;
 }
 async function feedGet(id,fresh=false){
   if(!fresh&&FEED_STATE.bodies.has(id))return {ok:true,material:FEED_STATE.bodies.get(id)};
@@ -5104,7 +5116,7 @@ routePaint=function(){
      return `<button class="s-course" data-sec-go="${k+6}"><span class="cv" style="background:${g};color:${c}">${m}</span><span><b>${esc(s.t)}</b><small>${esc(s.d)}</small><small>${s.ls.length} уроков · ${s.ls.filter(l=>!l.key).length} открыто${d?' · прочитано '+d:''}${X_RU[s.slug]?' · из России':''}</small></span>${si('chev')}</button>`;}).join('')}
    <p class="s-sec">Как устроен урок</p>
    <ol class="s-how"><li>Открываешь урок и читаешь короткий разбор задачи.</li><li>Копируешь готовый запрос и пробуешь на учебном примере.</li><li>Сравниваешь ответ с разобранным и проходишь короткую проверку.</li><li>Повторяешь на своей задаче. Урок засчитан.</li></ol>
-   ${sBotSay('palec','<b>Начни с той нейросети, что под рукой.</b> Устройство запроса у всех одно — второй курс после первого пойдёт вдвое быстрее.')}
+   ${sBotSay('ukazyvaet','<b>Начни с той нейросети, что под рукой.</b> Устройство запроса у всех одно — второй курс после первого пойдёт вдвое быстрее.')}
    ${sSub(true)}`;
 };
 
@@ -5625,8 +5637,8 @@ prepPaint=function(i){const r=_prepPaint(i);const b=$('#prep-bot');
 const _srPaint=srPaint;
 srPaint=function(q){const r=_srPaint(q);const out=$('#sr-out');
   if(out&&!out.innerHTML)out.innerHTML=q&&q.trim()
-    ?sBotSay('palec','<b>Поиск идёт по словам из уроков.</b> Попробуй одно слово вместо фразы: «таблица», «письмо», «настройки».')
-    :sBotSay('chitaet','<b>Ищу по урокам, запросам и практике.</b> Достаточно одного слова — покажу, в каком уроке оно встречается.');
+    ?sBotSay('plechi','<b>По этому слову ничего нет.</b> Попробуй одно слово вместо фразы: «таблица», «письмо», «настройки».')
+    :sBotSay('lupa','<b>Ищу по урокам, запросам и практике.</b> Достаточно одного слова — покажу, в каком уроке оно встречается.');
   return r;};
 /* Экран поиска открывался пустым: подсказку рисовал только ввод. Теперь она
    и реплика робота стоят сразу, как только экран показан. */
@@ -5646,6 +5658,24 @@ achPaint=function(){const r=_achPaint(),было=S.get('ach',{}),n=ACH.filter(a=
       ?sBotSay('raduetsya','<b>Собрано всё.</b> Отметки закончились, уроки — нет: новые выходят в ленте каждый день.')
       :sBotSay('noutbuk','<b>Отметки идут следом за делом.</b> Читаешь уроки и заходишь по дням — они появляются сами, отдельно за ними ходить не надо.'));
   return r;};
+/* Практика: робот у задания. Здесь важнее всего не подсматривать разбор —
+   об этом он и говорит, один раз, перед шагами. */
+const _exerciseOpen=exerciseOpen;
+exerciseOpen=async function(si,li){
+  const r=await _exerciseOpen(si,li);
+  const box=$('#exercise-content'),lead=box?.querySelector('.practice-lead');
+  if(lead&&!box.querySelector('.s-botsay'))
+    lead.insertAdjacentHTML('afterend',sBotSay('dumaet','<b>Сначала попробуй сам.</b> Разобранный ответ ниже — но если заглянуть в него сразу, задание не отложится в голове.'));
+  return r;};
+const _prPaint=prPaint;
+prPaint=function(...a){const r=_prPaint(...a);const box=$('#prompt-more');
+  if(box&&!box.nextElementSibling?.classList.contains('s-botsay'))
+    box.insertAdjacentHTML('afterend',sBotSay('telezhka','<b>Здесь все запросы курсов разом.</b> Копируй прямо отсюда — урок открывать не обязательно.'));
+  return r;};
+/* Документы рисуются один раз: дописываем то, что обычно ищут в оферте. */
+(()=>{const f=document.querySelector('#v-docs .foot');
+  if(f&&!f.nextElementSibling?.classList.contains('s-botsay'))
+    f.insertAdjacentHTML('afterend',sBotSay('shchit','<b>Коротко о деньгах.</b> Автосписаний нет: доступ продлевается, только когда ты сам решишь. Отписка от канала не забирает то, что уже оплачено.'));})();
 /* «Что нового» рисуется один раз при загрузке — дописываем сразу. */
 (()=>{const n=$('#news-all');
   if(n&&!n.nextElementSibling?.classList.contains('s-botsay'))
