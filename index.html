@@ -3915,6 +3915,9 @@ const датаПоста = d => {
   const [г, м, ч] = d.split('-');
   return +ч + ' ' + МЕС[+м - 1] + (+г === new Date().getFullYear() ? '' : ' ' + г);
 };
+/* Пост канала размечен для Telegram: <b>, <i>. В превью они не нужны —
+   до 21.09 теги показывались как текст: «<b>«Вы обещали вчера…». */
+const чистыйТекст = t => String(t || '').replace(/<[^>]+>/g, '');
 function chanDraw(список, свежее){
   const el = $('#chan');
   if(!el) return;
@@ -3931,7 +3934,7 @@ function chanDraw(список, свежее){
       <div class="ptx">
         <span class="when">${датаПоста(p.at)}${p.photo ? ' · с картинкой' : ''}</span>
         <b>${esc(p.title)}</b>
-        <p>${esc(p.text).slice(0, 190).replace(/\n+/g, ' ')}${p.text.length > 190 ? '…' : ''}</p>
+        <p>${esc(чистыйТекст(p.text)).slice(0, 190).replace(/\n+/g, ' ')}${чистыйТекст(p.text).length > 190 ? '…' : ''}</p>
         <a class="go2" href="${ссылкаПоста(p.id)}" rel="noopener"
            data-tg="${ссылкаПоста(p.id)}">Читать в канале →</a>
       </div>
