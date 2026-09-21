@@ -5879,7 +5879,7 @@ const _achPaint=achPaint;
 achPaint=function(){const r=_achPaint(),было=S.get('ach',{}),n=ACH.filter(a=>было[a.k]).length,foot=$('#ach-foot');
   if(foot&&!foot.nextElementSibling?.classList.contains('s-botsay'))
     foot.insertAdjacentHTML('afterend',n===ACH.length
-      ?sBotSay('raduetsya','<b>Собрано всё.</b> Отметки закончились, уроки — нет: новые выходят в ленте каждый день.')
+      ?sBotSay('raduetsya','<b>Собрано всё.</b> К урокам и практике можно вернуться с новой задачей.')
       :sBotSay('noutbuk','<b>Отметки идут следом за делом.</b> Читаешь уроки и заходишь по дням — они появляются сами, отдельно за ними ходить не надо.'));
   return r;};
 /* Практика: робот у задания. Здесь важнее всего не подсматривать разбор —
