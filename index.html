@@ -1255,6 +1255,10 @@ button:active,.item:active,.row:active,.book-course:active{transform:none!import
  --bg:var(--s-bg);--card:var(--s-card);--ink:var(--s-ink);--soft:var(--s-soft);--faint:var(--s-faint);
  --line:var(--s-line);--line2:var(--s-card2);--brand:var(--s-acc);--brand2:var(--s-acc-d);--brandS:var(--s-acc-s);
  --body:var(--s-font);--sans:var(--s-font);--mono:var(--s-mono);
+ /* Синяя кнопка прежнего облика осталась в переменной --pk-action и вылезала
+    на экранах, которые витрина не переписывала (например «Создать аккаунт»).
+    Главное действие у нас чёрное — как везде. */
+ --pk-action:var(--s-ink);
  --ok:#12A150;--okS:var(--s-green-s);--warn:#C4452C;--warnS:#FBEAE6;
  --sig:var(--s-amber);--sigInk:#7A4A08;
 }
@@ -1831,7 +1835,9 @@ html,body{overflow-x:clip}
    Растём только по вертикали — соседи в ряду стоят через отступ 8 px. */
 .s-pill,.s-me,.s-ptxt .cb,#v-lesson .pbox .cb{position:relative}
 .s-pill::after,.s-me::after,
-.s-ptxt .cb::after,#v-lesson .pbox .cb::after{content:""!important;position:absolute;left:0;right:0;top:50%;height:44px;translate:0 -50%}
+.s-ptxt .cb::after,#v-lesson .pbox .cb::after{content:""!important;position:absolute;left:0;right:0;top:50%;height:46px;translate:0 -50%}
+/* 46, а не 44: у рядов с боковой прокруткой край площадки срезает сам ряд,
+   и замер показывал 43 px. Запас в пиксель с каждой стороны это закрывает. */
 .s-fil-wrap{padding-top:3px;padding-bottom:4px}
 .s-fil button{min-height:44px;background:none;position:relative;z-index:0}
 .s-fil button::before{content:"";position:absolute;inset:5px 0;border-radius:999px;background:var(--s-card);z-index:-1;transition:background-color .25s}
@@ -1947,8 +1953,20 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-botsay .s-bot-full{width:86px;flex:none}
 .s-botsay p{margin:0;font-size:14.5px;line-height:1.5;color:var(--s-soft);text-wrap:pretty}
 .s-botsay p b{color:var(--s-ink);font-weight:600}
-/* в уроке — только голова, рядом со строкой про другие нейросети */
+/* В уроке робот стоит в полный рост: заметку в начале открывает он сам.
+   Голова осталась в коде на случай узких мест — в макете её больше нет. */
+.s-ru-note{align-items:center;gap:12px;padding:12px 14px 12px 10px}
+.s-ru-note .s-bot-full{width:62px;flex:none;align-self:center}
 .s-ru-note .s-bot{width:38px;height:38px;flex:none;margin-top:-4px;object-fit:contain}
+/* Реплика в конце урока — крупнее прочих: это последнее, что человек видит,
+   дочитав. Мятная подложка отделяет её от текста урока и от подвала. */
+.s-botsay.end{background:var(--s-acc-s);margin:26px 0 0;padding:16px 18px 16px 12px;gap:12px}
+.s-botsay.end .s-bot-full{width:102px}
+.s-botsay.end p{color:var(--s-ink2)}
+.s-botsay.end p b{color:var(--s-acc-d)}
+.s-botsay+.s-foot{margin-top:22px;border-top:0;padding-top:0}
+/* На узком экране робот не должен съедать строку под текст */
+@media(max-width:360px){.s-botsay .s-bot-full{width:72px}.s-botsay.end .s-bot-full{width:84px}}
 
 /* ── Под референс «обсидиан и мята» ──────────────────────────────────────
    На тёмной плашке главное действие — мятное, как в макете: белая кнопка
@@ -2026,6 +2044,17 @@ a.s-pill,a.s-btn{text-decoration:none}
    Теперь центр держат поля, а не проценты: ширина роли не играет. */
 #app-notice{left:16px!important;right:16px!important;width:auto!important;
  max-width:460px!important;margin:0 auto!important;transform:none!important}
+
+/* ── Остатки прежнего облика на экранах, которые витрина не переписывала ──
+   Найдены широким обходом 21.09: браузерная синяя ссылка на пустом «Канале»,
+   холодные серые подложки и надписи мельче 11 px. */
+#v-log a.go2{background:var(--s-acc-s);color:var(--s-acc);border-radius:999px;padding:10px 16px;
+ min-height:44px;display:inline-flex;align-items:center;font-size:13px;font-weight:600}
+#v-log .post .when,#v-news .nw .dt{font-size:11.5px;letter-spacing:.04em}
+.strk,#v-search .sr-hint{background:var(--s-card);border-color:var(--s-line);color:var(--s-ink2)}
+#v-search .sr-hint{border-radius:16px;padding:14px 16px;margin:0 0 14px}
+#v-search .sr-hint:empty{display:none}   /* пустая подсказка не должна оставлять серую полосу */
+#v-search .pk-eyebrow{font-size:11.5px!important;letter-spacing:.06em;color:var(--s-faint)}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2105,6 +2134,7 @@ a.s-pill,a.s-btn{text-decoration:none}
   <button class="back" data-back data-go="study">← На главную</button>
   <h1 class="s-h2">Практика</h1>
   <p class="s-lead">Задания к урокам: готовый пример, запрос и проверка результата. Попробуй на своей задаче.</p>
+  <div id="practice-bot"></div>
   <label class="s-pick">Нейросеть<select id="practice-course"></select></label>
   <p class="list-status" id="practice-count" aria-live="polite"></p>
   <div id="practice-list"></div>
@@ -2122,6 +2152,7 @@ a.s-pill,a.s-btn{text-decoration:none}
   <button class="back" data-back data-go="route">← Курсы</button>
   <h1 class="s-h2">Создать аккаунт</h1>
   <p class="s-lead">Выбери нейросеть — покажу, где зарегистрироваться, что для этого нужно и с чего начать.</p>
+  <div id="prep-bot"></div>
   <label class="s-pick">Нейросеть<select id="prep-course"></select></label>
   <div class="prose setup-steps" id="prep-content"></div>
   <details class="source-fold"><summary>Как создать почту с телефона</summary><p>Удобный вариант — Gmail. Открой приложение Gmail → фото профиля → «Добавить аккаунт» → Google → «Создать аккаунт». Заполни данные и пройди проверки Google.</p><p>Бери почту, доступ к которой не потеряешь, и добавь способ восстановления. Адрес @gmail.com подходит, но обязательного требования именно к окончанию .com нет. Если в браузере регистрация не получается, попробуй приложение на телефоне.</p><a href="https://support.google.com/accounts/answer/27441" target="_blank" rel="noopener">Инструкция Google ↗</a></details>
@@ -2176,6 +2207,7 @@ a.s-pill,a.s-btn{text-decoration:none}
   <div class="pline" hidden></div>
   <button class="s-btn buy2" data-go="pay-all">Открыть все уроки</button>
   <p class="s-foot-note">Первые три урока каждого курса открыты без оплаты.</p>
+  <div id="pay-bot"></div>
 </div>
 <!-- ВИТРИНА:pay END -->
   <!-- ===== ЧТО НОВОГО ===== -->
@@ -2241,6 +2273,7 @@ a.s-pill,a.s-btn{text-decoration:none}
     <button data-go="docs"><span class="ic" style="background:#8C8F97"><svg class="s-ic" aria-hidden="true"><use href="#i-document"/></svg></span><span><b>Документы</b><small>оферта, политика, связь</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <div class="r s-switch"><span class="ic" style="background:#14161A"><svg class="s-ic" aria-hidden="true"><use href="#i-bell"/></svg></span><span style="flex:1"><b id="sw1-t">Сообщать о новом</b><small id="sw1-note">Можно выключить в любой момент. На доступ это не влияет.</small></span><button class="sw off" id="sw1" role="switch" aria-checked="false" aria-labelledby="sw1-t"><i></i></button></div>
   </div>
+  <div id="p-bot"></div>
   <p class="s-status" id="sw-note" hidden></p>
   <p class="s-status" id="acc-foot">Полный доступ — 500 ₽ в месяц или 4 900 ₽ за год.</p>
   <span id="p-ach" hidden></span>
@@ -2287,7 +2320,7 @@ a.s-pill,a.s-btn{text-decoration:none}
     <button class="back" data-back data-go="study">← Назад</button>
     <div class="pk-small-title"><span class="pk-eyebrow">ПО ВСЕЙ БИБЛИОТЕКЕ</span><h1>Что найти?</h1><p>Урок, нейросеть или готовый запрос.</p></div>
     <div class="sr-field">
-      <input id="sr-input" type="search" aria-label="Поиск по урокам и запросам" placeholder="Что ищете? Например: настройки"
+      <input id="sr-input" type="search" aria-label="Поиск по урокам и запросам" placeholder="Что ищешь? Например: настройки"
              autocomplete="off" enterkeyhint="search">
       <button id="sr-clear" hidden aria-label="Очистить">✕</button>
     </div>
@@ -3740,9 +3773,11 @@ if($('#secs'))$('#secs').innerHTML = activeCourses().map(({s,i})=>`
 
 /* ---------- что нового: пополняется вместе с приложением ---------- */
 const NEWS = [
+ ['21 сентября','нов','Редакцию теперь видно','Выпуск ведёт нейросеть — и у неё появилось лицо. Робот-редактор встречает на главной, открывает каждый урок и провожает в конце.'],
+ ['21 сентября','прав','Свет и зелень','Новый облик: тёплый белый фон, зелёная марка, мятные отметки о пройденном. Тёмная шапка курса с кнопкой «Продолжить» и полоска недели на главной.'],
  ['18 сентября','нов','Библиотека в ленте','Промпты, гайды и разборы нейросетей в одной ленте. Открыта подписчикам канала.'],
  ['15 сентября','нов','Учиться — и сразу пробовать','48 уроков: вход и настройка, тексты, документы, поиск и личные помощники. Схемы — в уроках, запросы — в промптах, задания — в практике.'],
- ['15 сентября','прав','Твои результаты под рукой','Отмечайте выполненные шаги, сохраняйте уроки и возвращайтесь к нужному промпту. Прогресс хранится на этом устройстве.']
+ ['15 сентября','прав','Твои результаты под рукой','Отмечай пройденные шаги, сохраняй уроки и возвращайся к нужному запросу. Прогресс хранится на этом устройстве.']
 ];
 
 /* ---------- прогресс на экранах ---------- */
@@ -4918,7 +4953,7 @@ async function feedOpen(id,fresh=false){
 const S_PART=['Часть первая. Освоиться','Часть вторая. Применять в работе','Часть третья. Собрать свой результат'];
 paintNext=function(nx){
   const s=SECS[cur],j=payLes,n=s?.ls?.length||0;
-  $('#l-next').innerHTML=`<div class="s-foot"><b>Урок ${j+1} из ${n}</b><small>${esc(s?.t||'')}</small>
+  $('#l-next').innerHTML=(s&&!s.archived?sBotLesson(j,n):'')+`<div class="s-foot"><b>Урок ${j+1} из ${n}</b><small>${esc(s?.t||'')}</small>
     ${nx?`<button class="s-btn" data-nx="${nx.si}-${nx.li}">Следующий урок ${si('chev')}</button>`:`<button class="s-btn" data-go="study">К материалам</button>`}
     <button class="s-btn line" data-sec-go="${cur}">Все уроки курса</button></div>`;
 };
@@ -4937,9 +4972,23 @@ paintNext=function(nx){
 const S_ROBOT='assets/robot/';
 function sBot(){return `<img class="s-bot" src="${S_ROBOT}golova.webp" alt="" loading="lazy" decoding="async">`;}
 function sBotFull(поза='privet'){return `<img class="s-bot-full" src="${S_ROBOT}${поза}.webp" alt="" loading="lazy" decoding="async">`;}
-function sBotSay(поза,text){
-  return `<div class="s-botsay">${sBotFull(поза)}<p>${text}</p></div>`;
+function sBotSay(поза,text,вид=''){
+  return `<div class="s-botsay${вид?' '+вид:''}">${sBotFull(поза)}<p>${text}</p></div>`;
 }
+/* Робот провожает каждый урок. Поза и реплика — по месту урока в курсе:
+   в первом здоровается, в середине подсказывает, в последнем радуется.
+   Курсы одной длины (восемь уроков); если урок не восьмой, берём по остатку. */
+const S_END=[
+ ['privet','<b>Первый урок позади.</b> Дальше будет быстрее: чат уже открыт, и запросы из уроков ложатся в него подряд.'],
+ ['noutbuk','<b>Повтори на своей задаче.</b> Урок считается пройденным тогда, когда получилось у тебя, а не в примере.'],
+ ['palec','<b>Запрос можно править.</b> Меняй в нём слова под себя — схема запроса от этого не ломается.'],
+ ['chitaet','<b>Ответ стоит перечитать.</b> Нейросеть звучит уверенно и тогда, когда ошибается: сверяй числа, имена и даты.'],
+ ['kartochki','<b>Отметь урок закладкой</b>, если будешь возвращаться к запросу: значок стоит в заголовке, рядом с названием.'],
+ ['planshet','<b>Все запросы курса лежат в «Промптах».</b> Оттуда их можно скопировать, не открывая урок заново.'],
+ ['noutbuk','<b>Дальше уроки складываются в набор:</b> своя папка, свои шаблоны и проверка ответа — по одной задаче за раз.'],
+ ['raduetsya','<b>Это последний урок курса.</b> Проверь запросы на своей работе — и бери следующую нейросеть, вторая пойдёт вдвое быстрее.']
+];
+function sBotLesson(j,n){const [поза,text]=S_END[j>=n-1?S_END.length-1:j%(S_END.length-1)];return sBotSay(поза,text,'end');}
 const S_SAY={
   prompt:'Сегодня даю <b>готовый текст</b>. Скопируй и отправь — поля заполнять не надо.',
   guide:'Сегодня <b>короткий разбор</b>. Прочитаешь за пару минут и сразу попробуешь.',
@@ -5031,7 +5080,11 @@ function sRenderSec(i){
       const j=a+k,isDone=done.includes(i+'-'+j),locked=!!l.key&&!paid,isCur=j===curJ;
       const st=isDone?`<span class="s">${si('check')}прочитан</span>`:isCur?`<span class="s go">${j===0&&!done.length?'начать':'продолжить'} ${si('chev')}</span>`:locked?`<span class="s">${si('lock')}по подписке</span>`:`<span class="s">${l.min} мин</span>`;
       return `<button class="s-row${isCur?' cur':''}${isDone?' done':''}" data-les="${j}" aria-label="Урок ${j+1}: ${feedAttr(l.t)}${locked?', по подписке':''}${isDone?', прочитан':''}"><span class="n">${isDone?'✓':j+1}</span><span class="t">${esc(l.t)}</span>${st}</button>`;}).join('');}).join('');
-  $('#sec-foot').innerHTML=s.archived?'':'<p class="s-foot-note">В каждом уроке — готовый запрос, учебный пример и проверка результата.</p>';
+  /* Подвал оглавления: робот объясняет устройство урока. Когда курс пройден,
+     он уже стоит выше с поздравлением — двух подряд на экране быть не должно. */
+  $('#sec-foot').innerHTML=s.archived?''
+    :read===s.ls.length?'<p class="s-foot-note">В каждом уроке — готовый запрос, учебный пример и проверка результата.</p>'
+    :sBotSay('noutbuk','<b>В каждом уроке — одна рабочая задача:</b> короткий разбор, готовый запрос, учебный пример и проверка результата.');
   $('#sec-t').textContent=s.t;
 }
 openSec=function(i){if(!SECS[i])return;sRenderSec(i);show('sec');};
@@ -5051,6 +5104,7 @@ routePaint=function(){
      return `<button class="s-course" data-sec-go="${k+6}"><span class="cv" style="background:${g};color:${c}">${m}</span><span><b>${esc(s.t)}</b><small>${esc(s.d)}</small><small>${s.ls.length} уроков · ${s.ls.filter(l=>!l.key).length} открыто${d?' · прочитано '+d:''}${X_RU[s.slug]?' · из России':''}</small></span>${si('chev')}</button>`;}).join('')}
    <p class="s-sec">Как устроен урок</p>
    <ol class="s-how"><li>Открываешь урок и читаешь короткий разбор задачи.</li><li>Копируешь готовый запрос и пробуешь на учебном примере.</li><li>Сравниваешь ответ с разобранным и проходишь короткую проверку.</li><li>Повторяешь на своей задаче. Урок засчитан.</li></ol>
+   ${sBotSay('palec','<b>Начни с той нейросети, что под рукой.</b> Устройство запроса у всех одно — второй курс после первого пойдёт вдвое быстрее.')}
    ${sSub(true)}`;
 };
 
@@ -5101,12 +5155,16 @@ showPay=function(sec,les){
   $('#pay-lead').textContent=`${sec.t}, урок ${payLes+1}. Этот урок открывается по подписке.`;
   $('#pay-in').innerHTML=(les.in||[les.d||'Разбор по шагам на учебном примере','Готовые промпты с кнопкой копирования','Схема и разобранный результат','Практика и три вопроса для проверки']).map(t=>`<li>${si('check')}<span>${esc(t)}</span></li>`).join('');
   const b=$('#v-pay .buy2');if(b){b.textContent='Открыть все уроки';b.dataset.go='pay-all';delete b.dataset.retry;}
+  /* На этот экран приходят чаще всего с четвёртого урока курса. Робот тут
+     не продаёт, а говорит, чем платная часть отличается от открытой. */
+  $('#pay-bot').innerHTML=sBotSay('planshet','<b>Открытая часть — про то, как начать.</b> Дальше уроки про работу: чужие файлы, таблицы, проверка ответа и свой набор запросов.');
   $('#v-pay [data-back]').dataset.go=window.__lback||'sec';
   show('pay');
 };
 showTrouble=function(sec,les){
   $('#pay-t').textContent=les.t;$('#pay-lead').textContent='Не получилось загрузить урок с сервера.';
   $('#pay-in').innerHTML=['Похоже, пропала связь или сервер занят.','Твой доступ на месте, ничего не потерялось.'].map(t=>`<li>${si('refresh')}<span>${t}</span></li>`).join('');
+  $('#pay-bot').innerHTML=sBotSay('spit','<b>Это не из-за тебя.</b> Открытые уроки читаются и без сети — а этот вернётся, как только связь появится.');
   const b=$('#v-pay .buy2');if(b){b.textContent='Попробовать снова';b.dataset.retry='1';delete b.dataset.go;}
   show('pay');
 };
@@ -5125,6 +5183,11 @@ function sProfile(){
   if(stt)stt.textContent=ME?.paid?'Полный доступ открыт':'Полный доступ ко всем урокам';
   if(std)std.textContent=ME?.paid?(ME.until?'до '+ME.until.split('-').reverse().join('.'):'без срока')
     :courses.length+' '+скл(courses.length,'курс','курса','курсов')+', '+courses.reduce((a,s)=>a+s.ls.length,0)+' уроков';
+  /* Внизу профиля — единственное место, где прямо сказано, кто отвечает на письма. */
+  const pb=$('#p-bot');
+  if(pb)pb.innerHTML=sBotSay('privet',done||rec||fav
+    ?`<b>Редакция — это я.</b> Вопрос из «Написать в редакцию» придёт в бот, ответ вернётся туда же. Уроки и запросы тоже пишу я.`
+    :`<b>Выпуск ведёт нейросеть.</b> Уроки, запросы и разборы пишет она же, что ведёт канал. Начать можно с любого материала на «Сегодня».`);
 }
 const _paintMe=paintMe;
 paintMe=function(){
@@ -5140,8 +5203,13 @@ openLes=function(j,returnView='sec'){
   const r=$('#lesson-result');if(r){r.style.cssText='';$('#l-head').after(r);}
   return Promise.resolve(_openLes(j,returnView)).then(()=>{
     const s=SECS[cur],body=$('#l-body');
-    if(s&&!X_RU[s.slug]&&body&&$('#v-lesson').classList.contains('on')&&!body.querySelector('.s-ru-note'))
-      body.insertAdjacentHTML('afterbegin',`<aside class="s-ru-note">${sBot()}<p><b>Урок можно пройти и в другой нейросети.</b> Запросы из него работают в DeepSeek, Алисе AI и GigaChat — особые функции ${esc(s.t)} там устроены иначе.</p></aside>`);
+    /* Заметку открывает робот — он же ведёт выпуск и пишет уроки. Раньше она
+       была только у зарубежных нейросетей; у наших вместо неё стоит то, ради
+       чего их и выбирают: урок проходится без обхода блокировок. */
+    if(s&&!s.archived&&body&&$('#v-lesson').classList.contains('on')&&!body.querySelector('.s-ru-note'))
+      body.insertAdjacentHTML('afterbegin',`<aside class="s-ru-note">${sBotFull(X_RU[s.slug]?'palec':'privet')}<p>${X_RU[s.slug]
+        ?`<b>${esc(s.t)} открывается из России.</b> Ни зарубежной карты, ни обхода блокировок для этого урока не нужно — хватит обычного браузера.`
+        :`<b>Урок можно пройти и в другой нейросети.</b> Запросы из него работают в DeepSeek, Алисе AI и GigaChat — особые функции ${esc(s.t)} там устроены иначе.`}</p></aside>`);
   });
 };
 
@@ -5541,6 +5609,47 @@ document.addEventListener('click',e=>{const b=e.target.closest('#l-fav');if(!b)r
   };
   addEventListener('touchend',end,{passive:true});addEventListener('touchcancel',end,{passive:true});
 })();
+
+
+/* ---------- робот на экранах старого движка ----------
+   Эти экраны рисует код вне слоя облика. Перехватываем отрисовку и дописываем
+   реплику робота — так он стоит на всех экранах, где ему есть что сказать. */
+const _practicePaint=practicePaint;
+practicePaint=function(reset){const r=_practicePaint(reset);const b=$('#practice-bot');
+  if(b&&!b.innerHTML)b.innerHTML=sBotSay('noutbuk','<b>Пример в задании учебный.</b> Сначала повтори на нём, потом подставь своё — так сразу видно, где ответ разошёлся.');
+  return r;};
+const _prepPaint=prepPaint;
+prepPaint=function(i){const r=_prepPaint(i);const b=$('#prep-bot');
+  if(b&&!b.innerHTML)b.innerHTML=sBotSay('palec','<b>Регистрация занимает пять минут.</b> Если шаг выглядит не так, как описано, ищи кнопку по смыслу: названия меняются чаще, чем порядок.');
+  return r;};
+const _srPaint=srPaint;
+srPaint=function(q){const r=_srPaint(q);const out=$('#sr-out');
+  if(out&&!out.innerHTML)out.innerHTML=q&&q.trim()
+    ?sBotSay('palec','<b>Поиск идёт по словам из уроков.</b> Попробуй одно слово вместо фразы: «таблица», «письмо», «настройки».')
+    :sBotSay('chitaet','<b>Ищу по урокам, запросам и практике.</b> Достаточно одного слова — покажу, в каком уроке оно встречается.');
+  return r;};
+/* Экран поиска открывался пустым: подсказку рисовал только ввод. Теперь она
+   и реплика робота стоят сразу, как только экран показан. */
+(()=>{const _show2=show;show=function(v,back){const r=_show2(v,back);
+  if(v==='search')try{srPaint($('#sr-input')?.value||'');}catch(e){}
+  return r;};})();
+/* «Канал и разборы»: список приходит с сервера, робот дорисовывается следом. */
+const _chanDraw=chanDraw;
+chanDraw=function(список,свежее){const r=_chanDraw(список,свежее);const el=$('#chan');
+  if(el&&!el.nextElementSibling?.classList.contains('s-botsay'))
+    el.insertAdjacentHTML('afterend',sBotSay('chitaet','<b>Канал веду я.</b> Каждый день один материал: что вышло у нейросетей, что это меняет и что можно сделать сегодня.'));
+  return r;};
+const _achPaint=achPaint;
+achPaint=function(){const r=_achPaint(),было=S.get('ach',{}),n=ACH.filter(a=>было[a.k]).length,foot=$('#ach-foot');
+  if(foot&&!foot.nextElementSibling?.classList.contains('s-botsay'))
+    foot.insertAdjacentHTML('afterend',n===ACH.length
+      ?sBotSay('raduetsya','<b>Собрано всё.</b> Отметки закончились, уроки — нет: новые выходят в ленте каждый день.')
+      :sBotSay('noutbuk','<b>Отметки идут следом за делом.</b> Читаешь уроки и заходишь по дням — они появляются сами, отдельно за ними ходить не надо.'));
+  return r;};
+/* «Что нового» рисуется один раз при загрузке — дописываем сразу. */
+(()=>{const n=$('#news-all');
+  if(n&&!n.nextElementSibling?.classList.contains('s-botsay'))
+    n.insertAdjacentHTML('afterend',sBotSay('chitaet','<b>Записи веду я.</b> Что изменилось в уроках и в библиотеке, попадает сюда в тот же день.'));})();
 /* ВИТРИНА JS END */
 function show(v, back){
   // Проверяем экран до того, как спрячем текущий. Ошибка в названии перехода
