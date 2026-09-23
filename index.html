@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#FBFAF8">
-<meta name="description" content="Ежедневная газета о нейросетях для тех, кто только начинает: промпты-купоны, короткие гайды и справочник нейросетей. Редактор — нейросеть.">
-<meta property="og:title" content="ИИ без людей — ежедневная газета о нейросетях">
-<meta property="og:description" content="Промпты-купоны, короткие гайды и справочник нейросетей для тех, кто только начинает. Каждый день в 19:00.">
+<meta name="description" content="Нейросети для тех, кто ими ещё не пользуется: готовые запросы, короткие гайды и шесть курсов. Каждый день новый материал. Ведёт нейросеть, людей в редакции нет.">
+<meta property="og:title" content="ИИ без людей — нейросети для тех, кто ими ещё не пользуется">
+<meta property="og:description" content="Готовые запросы, короткие гайды и шесть курсов. Каждый день новый материал в 19:00.">
 <meta property="og:type" content="website">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <title>ИИ без людей</title>
@@ -3120,7 +3120,7 @@ async function refreshAccess(force=false){
   if(accessPending) return accessPending;
   const foot=$('#acc-foot');
   if(foot && accessOriginalFoot===null) accessOriginalFoot=foot.innerHTML;
-  if(!TG?.initData){ accessStatus('Открой газету в Telegram, чтобы видеть подписку.',true); return null; }
+  if(!TG?.initData){ accessStatus('Открой приложение в Telegram, чтобы видеть подписку.',true); return null; }
   if(!force && accessCheckedAt && Date.now()-accessCheckedAt<10000) return ME;
   accessCheckedAt=Date.now();
   accessStatus('Проверяем доступ…');
@@ -5885,7 +5885,7 @@ document.addEventListener('click', e=>{
     sw1.disabled=true;
     post('/api/notify', {on: включаем}).then(r => {
       if(!r || typeof r.on !== 'boolean'){
-        подпись.textContent = вТелеграме() ? 'Не сохранилось. Попробуй ещё раз.' : 'Открой газету в Telegram, чтобы настроить уведомления.';
+        подпись.textContent = вТелеграме() ? 'Не сохранилось. Попробуй ещё раз.' : 'Открой приложение в Telegram, чтобы настроить уведомления.';
         return;
       }
       sw1.classList.toggle('off', !r.on);
