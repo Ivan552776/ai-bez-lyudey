@@ -1295,6 +1295,9 @@ button,a{-webkit-tap-highlight-color:transparent}
 .s-access{display:flex;align-items:center;gap:11px;background:var(--s-card);border-radius:16px;padding:12px 14px;margin:0 0 14px;font-size:13.5px;line-height:1.4;color:var(--s-ink2)}
 .s-access .b{flex:none;background:var(--s-acc);color:#fff;font-size:11px;font-weight:700;letter-spacing:.06em;padding:5px 9px;border-radius:8px}
 .s-access a{color:var(--s-ink);font-weight:600;text-underline-offset:2px}
+/* Ссылка остаётся частью строки, но пальцем можно попасть во всю площадку 44 px. */
+.s-access:not(.gate) a{position:relative;display:inline-block}
+.s-access:not(.gate) a::after{content:'';position:absolute;top:50%;left:50%;width:100%;min-width:48px;height:48px;transform:translate(-50%,-50%)}
 .s-access.gate{display:block;padding:16px}
 .s-access.gate b{display:block;font-size:17px;font-weight:600;color:var(--s-ink);margin:0 0 6px}
 .s-access.gate .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
@@ -2283,6 +2286,7 @@ a.s-pill,a.s-btn{text-decoration:none}
   <div class="stack" id="fav-out"></div>
   <h2 class="s-saved-heading" id="recent-sh">Недавно открытое</h2>
   <div class="stack" id="recent"></div>
+  <div id="favs-bot"></div>
 </div>
 <!-- ВИТРИНА:favs END -->
 <!-- ВИТРИНА:prompts START -->
@@ -4730,9 +4734,23 @@ const _paintRecent=paintRecent;
 paintRecent=function(){
   _paintRecent();
   const r=recentList(),box=$('#recent');if(!box)return;
-  const sh=$('#recent-sh');if(sh)sh.hidden=!r.length;   // заголовок списка над пустотой не нужен
+  /* Заголовок второго списка держим всегда: он прятался на пустом экране,
+     и выходило, что у «Закладок» подпись есть, а у «Недавно открытого» нет. */
+  const sh=$('#recent-sh');if(sh)sh.hidden=false;
   box.innerHTML=r.length?`<div class="s-grp s-rec">${r.map((x,i)=>`<button data-rec-open="${i}"><span><small class="k">${esc(xRecKind(x))} · ${xAgo(x.t)}</small><b>${esc(x.title)}</b></span>${si('chev','ch')}</button>`).join('')}</div>`
     :'<p class="s-empty-note">Здесь появятся открытые тобой материалы.</p>';
+  /* Оба списка пусты — вместо двух серых плашек одна реплика робота:
+     он объясняет, откуда здесь вообще берутся записи. */
+  const хвост=$('#favs-bot');
+  if(хвост){
+    const пусто=!r.length&&!((typeof favList==='function'?favList():[])||[]).length;
+    хвост.innerHTML=пусто?sBotSay('kartochki','<b>Отмечай то, к чему захочешь вернуться.</b> Закладка ставится значком в заголовке урока, а открытые материалы я запомню сам.'):'';
+    /* Когда пусто и там и там, две серые плашки с заголовками — это три
+       пустых блока подряд. Оставляем одну реплику робота. */
+    const шапки=[...document.querySelectorAll('#v-favs .s-saved-heading')];
+    шапки.forEach(h=>h.hidden=пусто);
+    if(пусто){box.innerHTML='';const f=$('#fav-out');if(f)f.innerHTML='';}
+  }
 };  // первый раз список рисует старый код в конце загрузки — хранилище к тому времени готово
 /* шторка «Скопируй вручную» уезжает вниз тем же путём, каким пришла. Окно стоит в
    разметке после этого кода — поэтому слушаем на документе, а не на самом окне. */
