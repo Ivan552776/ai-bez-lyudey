@@ -1454,6 +1454,8 @@ button,a{-webkit-tap-highlight-color:transparent}
 .s-row .s{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--s-soft);white-space:nowrap;flex:none}
 .s-row .s .s-ic{width:15px;height:15px}
 .s-row .s.go{color:var(--s-acc);font-weight:600}
+/* Причина отказа: нужна не человеку, а нам — поэтому мелко и приглушённо. */
+.s-why{font-family:var(--s-mono);font-size:11.5px;line-height:1.5;color:var(--s-faint);margin:10px 0 0;word-break:break-word}
 .s-foot-note{color:var(--s-soft);font-size:14px;line-height:1.5;margin:16px 0 0}
 
 /* ── подписка ─────────────────────────────────────────────── */
@@ -4241,7 +4243,13 @@ function feedAccessError(response,id){
       <p class="s-foot-note">Отписаться можно в любой момент — доступ к тому, что уже куплено, от этого не зависит.</p>
       ${sBotSay('privet','<b>Выпуск ведёт нейросеть.</b> Каждый день она собирает один материал и проверяет его на живой задаче.')}`;
   }
+  /* Причина отказа — мелкой строкой под кнопкой. Раньше любая поломка
+     выглядела одинаково, и по жалобе «не открывается» нельзя было понять,
+     что случилось: обрыв связи, отказ сервера или сбой в самом ответе. */
+  const код=response?.status?'код '+response.status:'ответа нет';
+  const текст=[response?.error,response?.description].filter(Boolean).join(' · ').slice(0,90);
   return `<p class="s-note">Не получилось загрузить. Проверь связь и попробуй ещё раз.</p><button class="s-pill" data-feed-retry="${id}">${si('refresh')}Повторить</button>
+    <p class="s-why">${esc(id)} · ${esc(код)}${текст?' · '+esc(текст):''}</p>
     ${sBotSay('plechi','<b>Это не из-за тебя.</b> Материал лежит на сервере — открытые уроки читаются и без сети, а этот вернётся, как только связь появится.')}`;
 }
 async function feedGet(id,fresh=false){
