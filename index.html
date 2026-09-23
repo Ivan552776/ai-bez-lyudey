@@ -2029,6 +2029,14 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-path-progress{margin:0 0 18px}.s-path-progress>span{display:block;height:8px;border-radius:99px;background:#FFFFFFA6;overflow:hidden}.s-path-progress i{display:block;height:100%;border-radius:inherit;background:#0B6E4F}.s-path-progress small{display:block;margin-top:8px;font-size:12px;color:#33363D}
 .s-path-card .s-btn{width:100%;background:#14161A;color:#FFFFFF;min-height:52px}.s-path-card>.s-link{width:100%;margin:6px 0 -8px;color:inherit}
 .s-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px}.s-section-head h2{font-size:19px;font-weight:600;letter-spacing:-.025em;margin:0}.s-section-head>span{font-size:12px;color:var(--s-soft)}
+/* Ссылка в заголовке раздела. Экраны «Твой прогресс» и «Поиск» после
+   перестройки остались без единого видимого входа — возвращаем их сюда
+   и в шапку главной, не добавляя строк. Площадка под палец — 44 px. */
+.s-head-link{display:inline-flex;align-items:center;gap:1px;border:0;background:none;padding:0;
+ font-family:inherit;font-size:13px;font-weight:500;color:var(--s-soft);cursor:pointer;position:relative}
+.s-head-link .s-ic{width:15px;height:15px}
+.s-head-link::after{content:"";position:absolute;left:-10px;right:-10px;top:50%;height:44px;translate:0 -50%}
+.s-hi-acts{display:flex;align-items:center;gap:8px;flex:none}
 .s-week{background:none;padding:6px 0 24px;margin:0;border:0}.s-week .row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}.s-week .d{display:flex;align-items:center;flex-direction:column;gap:5px;background:var(--s-card);border:0;border-radius:18px;padding:10px 0 6px;min-width:0;color:var(--s-ink2)}.s-week .d.now{background:#14161A;color:#FFFFFF}.s-week .d em{font-size:11px;font-style:normal;color:inherit}.s-week .d b{font-size:17px;font-weight:550}.s-week .d i{height:13px;width:13px;border:0;background:none;color:var(--s-acc);display:block;margin:0}.s-week .d i:empty::after{display:none}.s-week .d.now i{color:#8BD4B7}.s-week .d i .s-ic{height:13px;width:13px}
 .s-home-library,.s-course-choice,.s-profile-about{border-top:1px solid var(--s-line);padding-top:8px;margin:0 0 16px}.s-home-library>summary,.s-course-choice>summary,.s-profile-about>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;font-size:16px;font-weight:550;cursor:pointer;list-style:none}.s-home-library>summary small{display:block;font-size:13px;font-weight:400;color:var(--s-soft);margin-top:5px}summary::-webkit-details-marker{display:none}.s-home-library[open]>summary{margin-bottom:14px}.s-home-library>summary .s-ic{transition:rotate .16s}.s-home-library[open]>summary .s-ic{rotate:45deg}
 .s-course-choice>summary::after,.s-profile-about>summary::after{content:'+';font-size:22px;font-weight:400}.s-course-choice[open]>summary::after,.s-profile-about[open]>summary::after{content:'−'}
@@ -2138,7 +2146,7 @@ a.s-pill,a.s-btn{text-decoration:none}
 <!-- ВИТРИНА:hello END -->
 <!-- ВИТРИНА:study START -->
 <div class="view" id="v-study">
-  <div class="s-hi"><span><small id="s-date"></small><h1 class="s-today" id="s-greeting">Привет!</h1></span><button class="s-me" data-go="me" aria-label="Профиль"><span id="s-av"><svg class="s-ic" aria-hidden="true"><use href="#i-person"/></svg></span></button></div>
+  <div class="s-hi"><span><small id="s-date"></small><h1 class="s-today" id="s-greeting">Привет!</h1></span><span class="s-hi-acts"><button class="s-me" data-go="search" aria-label="Поиск по урокам и запросам"><svg class="s-ic" aria-hidden="true"><use href="#i-search"/></svg></button><button class="s-me" data-go="me" aria-label="Профиль"><span id="s-av"><svg class="s-ic" aria-hidden="true"><use href="#i-person"/></svg></span></button></span></div>
   <div class="s-home-hello"><span id="s-welcome-bot"></span><p>Я робот-редактор.<br>Давай попробуем нейросеть в деле.</p></div>
   <div id="s-say"></div>
   <div id="s-tiles"></div>
@@ -4108,7 +4116,8 @@ function sCover(art){
     ['list','<path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>'],
     ['refresh','<path d="M20 11a8 8 0 0 0-14.3-4.9L4 8M4 3v5h5M4 13a8 8 0 0 0 14.3 4.9L20 16m0 5v-5h-5"/>'],
     ['play','<path d="M8 5.5v13a1 1 0 0 0 1.5.9l10-6.5a1 1 0 0 0 0-1.8l-10-6.5A1 1 0 0 0 8 5.5Z"/>'],
-    ['close-x','<path d="m7 7 10 10M17 7 7 17"/>']
+    ['close-x','<path d="m7 7 10 10M17 7 7 17"/>'],
+    ['plus','<path d="M12 5v14M5 12h14"/>']   /* свёрнутый блок на главной рисовал пустоту */
   ].map(([n,p])=>`<symbol id="i-${n}" viewBox="0 0 24 24">${p}</symbol>`).join(''));
 })();
 const si=(n,c='')=>`<svg class="s-ic ${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
@@ -4518,7 +4527,7 @@ function sHome(){
   const dlog=S.get('dlog',[])||[],days=['пн','вт','ср','чт','пт','сб','вс'];
   const today=new Date();today.setHours(12,0,0,0);const mon=new Date(today);mon.setDate(today.getDate()-((today.getDay()+6)%7));
   const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-  $('#s-tiles').innerHTML=`<div class="s-week"><div class="s-section-head"><h2>В своём темпе</h2><span>Эта неделя</span></div><div class="row">${days.map((n,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);const now=iso(d)===iso(today),was=dlog.includes(iso(d));return `<span class="d${now?' now':''}${was?' on':''}"${now?' aria-current="date"':''}><em>${n}</em><b>${d.getDate()}</b><i>${was?si('check'):''}</i></span>`;}).join('')}</div></div>`;
+  $('#s-tiles').innerHTML=`<div class="s-week"><div class="s-section-head"><h2>В своём темпе</h2><button class="s-head-link" data-go="ach">Отметки${si('chev')}</button></div><div class="row">${days.map((n,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);const now=iso(d)===iso(today),was=dlog.includes(iso(d));return `<span class="d${now?' now':''}${was?' on':''}"${now?' aria-current="date"':''}><em>${n}</em><b>${d.getDate()}</b><i>${was?si('check'):''}</i></span>`;}).join('')}</div></div>`;
 }
 /* Путь и карточка используют одну меру прогресса. Три части больше не спорят
    с тремя разными шапками: это последовательные участки одной линии. */
