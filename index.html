@@ -3463,7 +3463,7 @@ function favPaintList(){
       const x = списк[+el.dataset.fav];
       if(x.kind === 'tool') return openToolLesson(x.key);
       const [si, li] = x.key.split('-').map(Number);
-      openSec(si); openLes(li);
+      openSec(si); openLes(li,'favs');
     };
   });
 }
@@ -4036,12 +4036,13 @@ async function feedGet(id,fresh=false){
 async function feedCheck(button){
   if(button.disabled)return;
   const id=button.dataset.feedCheck,original=button.innerHTML;
+  const returnView=$('#v-lesson').classList.contains('on')?(window.__lback||'study'):'study';
   button.disabled=true;button.textContent='Проверяем…';
   try{
     const response=await post('/api/me',{fresh:true});
     if(!response?.ok){appNotice('Не удалось связаться с сервером. Попробуй ещё раз.');return;}
     ME=response;paintMe();feedMembership();
-    if(response.subscribed&&id)await feedDeepLink(id,true);
+    if(response.subscribed&&id)await feedDeepLink(id,true,returnView);
     else if(response.subscribed){appNotice('Открыто');if($('#v-route').classList.contains('on'))routePaint();}
     else appNotice('Подписку пока не видно. Подпишись и нажми ещё раз.');
   }finally{if(button.isConnected){button.disabled=false;button.innerHTML=original;}}
@@ -4095,20 +4096,20 @@ function feedClick(e){
   const read=e.target.closest('[data-feed-read]');if(read){feedOpen(read.dataset.feedRead);return true;}
   const visit=e.target.closest('[data-feed-visit]');if(visit){feedVisit(visit.dataset.feedVisit,visit);return true;}
   const check=e.target.closest('[data-feed-check]');if(check){feedCheck(check);return true;}
-  const retry=e.target.closest('[data-feed-retry]');if(retry){feedOpen(retry.dataset.feedRetry,true);return true;}
+  const retry=e.target.closest('[data-feed-retry]');if(retry){feedOpen(retry.dataset.feedRetry,true,$('#v-lesson').classList.contains('on')?(window.__lback||'study'):'study');return true;}
   const sg=e.target.closest('[data-s-go]');
   if(sg){const [a,b]=sg.dataset.sGo.split(':');if(a==='sec'){openSec(+b);}else if(a==='les'){const [i,j]=b.split('-').map(Number);openSec(i);openLes(j,'route');}return true;}
   const plan=e.target.closest('[data-s-plan]');if(plan){if(plan.getAttribute('aria-checked')!=='true')xHaptic('select');sPlan(plan.dataset.sPlan);return true;}
   const nk=e.target.closest('[data-s-neuro]');if(nk){sCopyForAI(nk);return true;}
   const ro=e.target.closest('[data-rec-open]');
-  if(ro){const it=recentList()[+ro.dataset.recOpen];if(it?.kind==='card'){feedDeepLink(it.key);return true;}}
+  if(ro){const it=recentList()[+ro.dataset.recOpen];if(it?.kind==='card'){feedDeepLink(it.key,false,'favs');return true;}}
   return false;
 }
-async function feedDeepLink(id,fresh=false){
+async function feedDeepLink(id,fresh=false,returnView='study'){
   const card=FEED.find(x=>x.id===id);
   if(!card){show('study');setTimeout(()=>appNotice('Такого материала нет. Открыта лента.'),0);return;}
   S.set('hello2',true);
-  await feedOpen(id,fresh);
+  await feedOpen(id,fresh,returnView);
 }
 
 /* ---------- читалка: промпт, гайд, разбор нейросети ---------- */
@@ -4146,9 +4147,9 @@ const S_STEPS=`<div class="s-steps">
   <div><i>1</i><span>Скопируй текст ниже</span></div>
   <div><i>2</i><span>Вставь в любую нейросеть и отправь</span></div>
   <div><i>3</i><span>Она сама спросит, чего ей не хватает</span></div></div>`;
-async function feedOpen(id,fresh=false){
+async function feedOpen(id,fresh=false,returnView='study'){
   const card=FEED.find(x=>x.id===id);if(!card)return;
-  window.__lback='study';favCur=null;readId=null;sReading=null;
+  window.__lback=returnView;favCur=null;readId=null;sReading=null;
   clearTimeout(readTimer);clearTimeout(shortTimer);tocSpy(null);
   const [ico,col,bg]=S_BADGE[card.type]||S_BADGE.prompt;
   $('#l-k').innerHTML=`<span class="s-who" style="margin:0"><span class="b" style="background:${bg};color:${col}">${si(ico)}</span><span><b>Редакция</b> · ${esc(sRubric(card))}</span></span>`;
@@ -5666,7 +5667,7 @@ if(rt){ openLes(payLes,window.__lback||'sec'); return; }
   if(ro){
     const x = recentList()[+ro.dataset.recOpen];
     if(x.kind==='tool') openToolLesson(x.key);
-    else { const [si,li] = x.key.split('-').map(Number); openSec(si); openLes(li); }
+    else { const [si,li] = x.key.split('-').map(Number); openSec(si); openLes(li,'favs'); }
     return;
   }
   const nx = e.target.closest('[data-nx]');
