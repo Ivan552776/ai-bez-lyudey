@@ -5737,9 +5737,22 @@ $('#hi-skip').addEventListener('click', ()=>closeHello(false));
 /* Прямая ссылка на экран: ?ekran=tools откроет каталог, ?ekran=urok — первый
    урок. Нужно, чтобы показать конкретное место человеку, у которого нет
    Telegram, и чтобы не объяснять словами «нажмите там-то». */
+/* Пришли ли по прямой ссылке на материал: из канала ведут в конкретный
+   урок или запрос, и знакомство там только мешает. */
+function прямаяСсылка(){
+  try{
+    const п = new URLSearchParams(location.search);
+    const старт = TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam');
+    return !!(п.get('urok') || п.get('zapros') || п.get('material') || старт);
+  }catch(e){ return false; }
+}
 (function(){
   let экран = null;
   try{ экран = new URLSearchParams(location.search).get('ekran'); }catch(e){}
+  /* Первый запуск без прямой ссылки — сначала знакомство. Экран был готов,
+     но его никто не открывал: на [data-hello] не ссылался ни один элемент,
+     и человек сразу попадал на главную, не понимая, куда пришёл. */
+  if(!экран && !seenHello && !прямаяСсылка()){ show('hello'); return; }
   if(!экран){ show('study'); return; }
   if(экран === 'urok'){ S.set('hello2', true); openSec(6); openLes(0); return; }
 /* premium-behavior:v1:safe-initial-routes */
