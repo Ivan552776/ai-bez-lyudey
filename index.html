@@ -4465,7 +4465,20 @@ readLesson=function(blocks,section,lesson){
   const before=(essential?.keepBeforePrompt||[]).filter(i=>blocks[i]?.[0]==='code');
   const second=essential?.showSecondPrompt?prompts[1]:undefined;
   const used=new Set([promptIndex,resultIndex,introIndex,...before]);if(second!==undefined)used.add(second);
-  const pose=lesson===0?'privet':/провер|источник|расч[её]т/i.test(l.t)?'dumaet':'ukazyvaet';
+  /* Поза робота в уроке — по тому, о чём урок: «ukazyvaet» закрывала пять
+     уроков из восьми и превращалась в штамп. Первый урок курса — знакомство,
+     последний — поздравление, между ними поза по делу. */
+  /* Короткие слова проверяем с начала слова: иначе «артефакт» ловился
+     на «факт», а «контекст» — на «текст», и поза выходила не про урок. */
+  const есть=(t,слова)=>new RegExp('(^|[^а-яёa-z])('+слова+')','i').test(t);
+  const pose=lesson===0?'privet':lesson===course.ls.length-1?'raduetsya'
+    :есть(l.t,'план|задач|проект|папк|набор|итог|дел')?'telezhka'
+    :есть(l.t,'провер|источник|факт|расч[её]т|ошибк|догадк')?'lupa'
+    :есть(l.t,'файл|документ|таблиц|конспект|регламент|выгрузк')?'chitaet'
+    :есть(l.t,'письм|текст|пост|перевод|ответ|резюме|редактор')?'planshet'
+    :есть(l.t,'картин|изображен|образ|рисун')?'raduetsya'
+    :есть(l.t,'настрой|правил|стиль|помощник|память|режим|артефакт')?'dumaet'
+    :'ukazyvaet';
   const detail=blocks.filter((b,i)=>!used.has(i));
   const access=X_RU[course.slug]?`${esc(course.t)} открывается из России.`:'Возможности файлов и поиска зависят от выбранной нейросети.';
   const prompt=(index,label)=>blk(['prompt',blocks[index][1],label||'Готовый запрос']);
