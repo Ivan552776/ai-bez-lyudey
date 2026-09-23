@@ -16,7 +16,7 @@
 
 ## Visual contract
 
-DESIGN.md records the palette, surfaces and composition. Runtime owner is the final CSS cascade in index.html, generated from curriculum/2026-09-15-premium/premium.css and visual_patch.py in the private project. No build-time token export. Only the light theme is supported by explicit user decision on 2026-09-15. Ignore old dark-mode preferences and Telegram/system theme; remove the switch. Check computed colors and 360/390/430 px after changing the cascade. The earlier library CSS remains for archived views; the new section CSS owns current surfaces.
+Действующее решение владельца от 23.09.2026: учебный путь с 3D-роботом по Learning App Interface. Источники облика — editorial/2026-09-20-svet/{svet.css,svet.js,views}, сборка inject.py в один index.html. Зелёная марка, чёрное главное действие, плоские пастельные карточки выбранного курса. Светлая и тёмная темы следуют Telegram; явная сохранённая настройка имеет приоритет. Проверять 360/390/430 px, контраст AA и физическую область нажатия от 44 px.
 
 ## Canonical UI Map
 
@@ -30,18 +30,20 @@ DESIGN.md records the palette, surfaces and composition. Runtime owner is the fi
 
 ## Navigation and responsive behavior
 
-Home is the subscriber feed: greeting, product shelf (courses, first lesson), sticky filters, access plaque, cards (prompt expands in place with {fields}; guide opens the reader with a pinned «Скопировать для нейронки»; tool card links to the service). Bottom dock: Главная · Профиль. Program, locked lesson and checkout are dark showcases.
+Главная: приветствие, одна карточка следующего доступного урока, неделя без давления серией дней, свёрнутые материалы. Нижнее меню: Сегодня · Курсы · Я. На вкладке курсов одна пастельная карточка выбранной нейросети; другие курсы в раскрываемом нейтральном списке. Оглавление состоит из трёх последовательных частей. practice/prep/news/ach/log сохранены для старых ссылок; основной путь не требует заходить в них. Новости и канал находятся внутри «О приложении» профиля.
 
 `show` is the only view owner. It validates the destination, hides inactive views, updates the Telegram BackButton and document title, focuses a visible heading and resets document scroll. `posRestore` restores a lesson synchronously after rendering: no delayed jump under the next click. Lesson/exercise back buttons are explicit. A lesson opened from prompts, search or an exercise returns to that origin, including after a failed load and retry. The native Telegram back delegates to those buttons. Filters and expanded prompts stay in memory during the visit; progress and practice checks use per-user storage. Missing deep links show the home with a notice. No history or credential query parameters are added by this change.
 
 ## Content ownership
 
-- Lessons: explanation, steps, colored diagram, collapsed sources, entry to practice.
-- Practice: sample data, complete prompt, worked result, follow-up prompt, personal exercise and three questions. Questions refer to the sample and belong here.
-- Prompts: independent searchable catalogue; two prompts per lesson. Show 12, with explicit load-more.
-- Preparation: service-specific account steps and email help. VPN and foreign-number instructions were removed on 18.09.2026 (legal risk) and must not return.
+- Урок: короткий разбор → полный запрос → разобранный результат → одна большая кнопка дальше. Остальные блоки сохраняются под «Подробнее».
+- Настройки, проекты и источники: обязательные предусловия остаются видимыми; у четырёх уроков первый шаблон сохраняется в настройках, затем отдельный запрос проверяет результат. Индексы исходных блоков и короткие инструкции — lesson-essentials.json, без закрытых тел уроков.
+- Практика по прежним ссылкам использует ту же последовательность, с роботом за ноутбуком. Авторизация выполняется заново при каждом открытии; облик получает разрешённое тело через practiceCurrent.blocks, без второго запроса.
+- «Получилось?» не экзамен. Ответ «нет» показывает одну подсказку робота, «да» — отклик. Это не влияет на зачёт по дочитыванию.
+- Запросы: сначала шесть задач, затем выдача по выбранной задаче или поиску. 96 названий вычисляются из метаданных, закрытые тексты приходят после проверки доступа. Контекст конкретного урока сохраняется через promptsFor.
+- Регистрация и первый вход доступны из «Подробнее». Инструкции обхода блокировок и иностранных номеров не возвращаются.
 
-`lessonParts` is the canonical projection of existing lesson blocks. `blk` remains the canonical renderer, `copyText` the clipboard owner, `testInit` the quiz owner. No paid body is embedded in the public site. `fetchLesson` always performs the existing server check before paid content is shown.
+`blk` остаётся владельцем разметки блоков, `copyText` — копирования. `readLesson` в svet.js собирает короткую последовательность из существующего содержимого. Учебные тесты и достижения за правильные ответы удалены. Закрытые тела не встраиваются в публичный файл.
 
 ## Flow ledger
 
@@ -51,11 +53,11 @@ Home is the subscriber feed: greeting, product shelf (courses, first lesson), st
 | Copy prompt | Button remains in place | “Скопировано” | Existing selectable-text dialog | Same button or dialog |
 | Find prompt | Immediate local filter, IME-safe | Matching cards and count | Empty state and clear | Search input |
 | Practice checks | Native checkbox | Per-user device storage | No false claim of server sync | Checkbox |
-| Finish quiz | One question at a time | Result attributed to the exercise lesson key | Explanation and retry | Next question/result |
+| Finish reading | Reading progress | Lesson marked complete at the end | Progress remains on this device | No forced navigation |
 | Back | Immediate | Explicit parent view | Invalid destination retains current view | Parent heading |
 
 ## Verification
 
-Run the premium strict static audit and project `deploy/proverka.sh`. The static auditor cannot infer delegated `data-*` click handlers: review such findings against the canonical event dispatcher and browser flows, not by adding duplicate inline handlers. Browser checks cover every lesson/exercise pair on a local fixture, production lock behavior, loading/error/stale responses, prompt search/copy, registration, four VPN devices, light-only 320/360/390/430/1180 and legacy dark-preference migration. Real payment and real regional/network changes are not test actions.
+Обязательны deploy/proverka.sh и браузерные audit/cveta/vy/palec-zamer/nav/func/swipe через невидимый Chrome cdp.mjs. Матрица 360/390/430, обе темы и reduced-motion проверяет контраст, переполнение, загрузку и отсутствие повторов поз, safe area, реальные области нажатия. Отдельно проверяются все 48 уроков/практик, серверный отказ, устаревшие ответы и копирование.
 
-Visibility never depends on animation: keyframes animate transform only, without fill-mode, so a frozen Telegram webview still shows content.
+Движение остаётся в xMove. Центрирование нижнего меню не использует translate: это свойство принадлежит параллаксу перехода. После завершения меню возвращается в центр. Видимость содержимого не зависит от проигрывания анимации. Живой сайт проверяется после пуша; платный API — отдельной авторизованной проверкой с указанным в отчёте тестовым доступом.
