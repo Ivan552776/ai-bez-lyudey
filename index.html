@@ -3276,7 +3276,12 @@ async function openLes(j, returnView='sec'){
       $('#l-next').innerHTML=''; $('#l-foot').textContent=''; /* premium-behavior:v1:nav-loading */
 window.__lback=returnView;
       show('lesson'); epoch=navEpoch;
-      const b = await fetchLesson(l.key);
+      /* Двадцать секунд молчания человек читает как «зависло». Поэтому
+         строка состояния говорит, что происходит, пока идёт ожидание. */
+      const ждём=[
+        setTimeout(()=>{const p=$('#l-body [role="status"]');if(p)p.textContent='Связь медленная — жду ответа…';},6000),
+        setTimeout(()=>{const p=$('#l-body [role="status"]');if(p)p.textContent='Всё ещё жду. Если не дождусь, покажу причину.';},13000)];
+      const b = await fetchLesson(l.key).finally(()=>ждём.forEach(clearTimeout));
       if(request !== lessonRequest || epoch !== navEpoch) return;
       if(Array.isArray(b)){ l.b = b; }
       else if(b && b.ошибка !== 'не оплачен'){ showTrouble(s, l); return; }
@@ -3708,7 +3713,12 @@ async function feedOpen(id,fresh=false,returnView='study'){
   $('#l-fav').hidden=true;$('#l-share').hidden=true;
   show('lesson');const epoch=navEpoch;
   $('#l-head').before(r);
-  const response=await feedGet(id,fresh);
+  /* Пока материал летит, строка состояния говорит, что происходит: молчание
+     дольше нескольких секунд человек читает как зависшее приложение. */
+  const ждём=[
+    setTimeout(()=>{const p=$('#l-body [role="status"]');if(p)p.textContent='Связь медленная — жду ответа…';},6000),
+    setTimeout(()=>{const p=$('#l-body [role="status"]');if(p)p.textContent='Всё ещё жду. Если не дождусь, покажу причину.';},13000)];
+  const response=await feedGet(id,fresh).finally(()=>ждём.forEach(clearTimeout));
   if(epoch!==navEpoch)return;
   if(!response?.ok){$('#l-body').innerHTML=feedAccessError(response,id);return;}
   const x=response.material;sReading=x;blk.n=0;
@@ -3920,6 +3930,7 @@ showPay=function(sec,les){
   $('#pay-lead').textContent=`${sec.t}, урок ${payLes+1}. Этот урок открывается по подписке.`;
   $('#pay-in').innerHTML=(les.in||[les.d||'Разбор по шагам на учебном примере','Готовые промпты с кнопкой копирования','Схема и разобранный результат','Практика на своей задаче']).map(t=>`<li>${si('check')}<span>${esc(t)}</span></li>`).join('');
   const b=$('#v-pay .buy2');if(b){b.textContent='Открыть все уроки';b.dataset.go='pay-all';delete b.dataset.retry;}
+  сказатьПричину('');
   /* На этот экран приходят чаще всего с четвёртого урока курса. Робот тут
      не продаёт, а говорит, чем платная часть отличается от открытой. */
   $('#pay-bot').innerHTML=sBotSay('planshet','<b>Открытая часть — про то, как начать.</b> Дальше уроки про работу: чужие файлы, таблицы, проверка ответа и свой набор запросов.');
@@ -3937,13 +3948,25 @@ showTrouble=function(sec,les){
     :d?.outcome==='network'?'связь оборвалась'
     :d?.outcome==='unavailable'?'запрос не отправлялся':'ответа нет';
   const сколько=d?.elapsedMs?' · '+Math.round(d.elapsedMs/100)/10+' с':'';
-  $('#pay-in').innerHTML=['Похоже, пропала связь или сервер занят.','Твой доступ на месте, ничего не потерялось.'].map(t=>`<li>${si('refresh')}<span>${t}</span></li>`).join('')
-    +`<li class="s-why">${esc(les.key||'урок')} · ${esc(причина)}${сколько}${d?.retried?' · после повтора':''}</li>`;
+  $('#pay-in').innerHTML=['Похоже, пропала связь или сервер занят.','Твой доступ на месте, ничего не потерялось.'].map(t=>`<li>${si('refresh')}<span>${t}</span></li>`).join('');
+  сказатьПричину(`${les.key||'урок'} · ${причина}${сколько}${d?.retried?' · после повтора':''}`);
   $('#pay-bot').innerHTML=sBotSay('spit','<b>Это не из-за тебя.</b> Открытые уроки читаются и без сети — а этот вернётся, как только связь появится.');
   const b=$('#v-pay .buy2');if(b){b.textContent='Попробовать снова';b.dataset.retry='1';delete b.dataset.go;}
   show('pay');
   сноваКогдаПоявитсяСвязь(()=>b?.click());
 };
+
+/* Причина живёт отдельной строкой под списком, а не внутри него: пункты
+   платного экрана раскладываются сеткой «значок + текст», и голая строка
+   попадала в узкую колонку значка — буквы сыпались по одной в столбик. */
+function сказатьПричину(текст){
+  let где=document.getElementById('pay-why');
+  if(!где){
+    где=document.createElement('p'); где.id='pay-why'; где.className='s-why';
+    $('#pay-in')?.after(где);
+  }
+  где.hidden=!текст; где.textContent=текст||'';
+}
 
 /* Телефон на ходу меняет сеть, и запрос в полёте обрывается. Когда связь
    возвращается, незачем заставлять человека искать кнопку — пробуем сами,
@@ -4692,10 +4715,13 @@ async function post(path, body){
   }
   const отправляем=JSON.stringify(Object.assign({initData: (TG && TG.initData) || ''}, body||{}));
   const попытка=async()=>{
-        /* Восемь секунд, а не пятнадцать: с повтором это семнадцать в худшем
-       случае вместо тридцати. Полминуты ожидания человек читает как
-       «приложение зависло», а не как «плохая связь». */
-    const ctl=new AbortController(), deadline=setTimeout(()=>ctl.abort(),8000);
+        /* Чтению даём двадцать секунд, записи — восемь. Урок весит пять килобайт,
+       но на слабой LTE рукопожатие и ответ не всегда укладываются в восемь:
+       24.09 я сократил ожидание до восьми секунд и своими руками сделал отказ
+       там, где раньше был медленный, но успешный ответ. Ждать не страшно —
+       на экране всё это время видно название урока и что именно происходит. */
+    const ctl=new AbortController(),
+      deadline=setTimeout(()=>ctl.abort(), ПОВТОРЯЕМ.includes(path)?20000:8000);
     try{
       const r = await fetch(API + path, {method:'POST', signal:ctl.signal,
         headers:{'Content-Type':'text/plain;charset=UTF-8'}, body: отправляем});
@@ -4728,10 +4754,10 @@ async function post(path, body){
        записал бы событие дважды. */
     for(const пауза of [600, 2000]){
       if(ответ!==null || !ПОВТОРЯЕМ.includes(path)) break;
-      // Но не бесконечно: после десяти секунд ожидания новая попытка уже не
-      // помощь, а испытание терпения. Дальше человеку отвечает экран с
-      // причиной и кнопкой, которая сама нажмётся, когда связь вернётся.
-      if(Date.now()-started > 10000) break;
+      /* Повторяем только быстрый обрыв — тот, что случается, когда телефон
+         на ходу меняет сеть. Истёкшее ожидание не повторяем: связь не станет
+         быстрее оттого, что мы спросили ещё раз, а человек прождёт вдвое. */
+      if(diagnostic.outcome==='timeout') break;
       diagnostic.retried=true;
       await new Promise(готово=>setTimeout(готово,пауза));
       ответ=await попытка();
