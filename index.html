@@ -21,8 +21,11 @@ addEventListener('unhandledrejection',e=>window.__сбои.push(['promise', Stri
 <!-- 20.09: шрифты свои (OFL), без Google: надёжнее из России, а шапка газеты успевает
      к первому кадру (файлы по 7–8 КБ, предзагрузка). Old Standard — fallback: не дольше
      0,1 с без текста, подмена только в первые 3 с. -->
-<link rel="preload" href="assets/fonts/old-standard-tt-700-cyrillic.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/old-standard-tt-700-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/golos-text-400-cyrillic.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/golos-text-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-<style id="x-fonts">
+<!-- Предзагрузка шрифтов убрана 24.09. На медленном мобильном интернете
+     четыре файла шрифтов забирали канал у самой страницы: она приходила за
+     8,4 секунды вместо 4,4, и всё это время человек смотрел на пустой экран.
+     Начертания подключаются ниже и включаются после первого экрана. -->
+<style id="x-fonts" media="print">
 /* cyrillic */
 @font-face {
   font-family: 'Golos Text';
@@ -2316,7 +2319,7 @@ a.s-pill,a.s-btn{text-decoration:none}
   <button class="back" data-back data-go="study">← Материалы</button>
   <h1 class="s-h2" id="prompt-title">Готовые запросы</h1>
   <div class="s-prompt-intro" id="prompt-intro">
-    <img src="assets/robot/lupa.webp" alt="" width="320" height="380" decoding="async">
+    <img src="assets/robot/lupa.webp" alt="" width="320" height="380" loading="lazy" decoding="async">
     <p>Выбери, что нужно сделать. Подберу запросы из уроков.</p>
   </div>
   <button class="quiet" id="prompt-return" hidden>← Вернуться</button>
@@ -4641,6 +4644,10 @@ function учесть(что, ключ, счёт, имя){
   const запуск = () => {
     const экран = document.querySelector('.view.on');
     if(!экран) return setTimeout(запуск, 250);
+    /* Экран появился — теперь можно и шрифты. До этого они забирали канал
+       у страницы, а человек смотрел на пустоту. */
+    const шрифты = document.getElementById('x-fonts');
+    if(шрифты) шрифты.media = 'all';
     try{ учесть('запуск', экран.id.slice(2,40), секунды(), (TG?.platform||'?')+' '+(TG?.version||'')); }catch(e){}
     слить();
   };
