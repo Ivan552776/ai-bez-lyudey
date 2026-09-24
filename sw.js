@@ -4,7 +4,7 @@
    версию, когда сеть есть, и приложение всё равно открывается в метро.
    Обратный порядок (кеш первым) заперал бы людей на старой версии — при том,
    что приложение мы правим почти каждый день. */
-const КЕШ = 'mzr-v2';
+const КЕШ = 'mzr-v3';
 // Только сама страница. Раньше в списке был и './' — если хоть один адрес
 // не загрузится, установка падает целиком, а вместе с ней и весь офлайн.
 const СВОЁ = ['./index.html'];
@@ -27,22 +27,32 @@ self.addEventListener('fetch', e => {
   // только по-настоящему, иначе можно показать закрытое из кеша
   if(url.origin !== location.origin) return;
 
-  e.respondWith(
-    fetch(req).then(ответ => {
-      if(ответ && ответ.status === 200){
-        const копия = ответ.clone();
-        e.waitUntil(caches.open(КЕШ).then(c => c.put(req, копия)).catch(() => {}));
+  // Сеть по-прежнему первая, но ждём её не дольше двух с половиной секунд.
+  // Страница весит почти мегабайт: на слабой мобильной связи ожидание
+  // превращалось в белый экран, хотя вчерашняя копия лежала рядом. Свежую
+  // всё равно докачиваем в кеш — следующий запуск будет уже новым.
+  const свежая = fetch(req).then(ответ => {
+    if(ответ && ответ.status === 200){
+      const копия = ответ.clone();
+      e.waitUntil(caches.open(КЕШ).then(c => c.put(req, копия)).catch(() => {}));
+    }
+    return ответ;
+  });
+
+  e.respondWith((async () => {
+    const копия = await caches.match(req);
+    if(!копия){
+      try { return await свежая; }
+      catch(err){
+        if(req.mode === 'navigate'){
+          const page = await caches.match('./index.html');
+          if(page) return page;
+        }
+        // Missing media must never receive an HTML page as its response.
+        return new Response('Нет сети', {status: 503, headers: {'Content-Type': 'text/plain; charset=utf-8'}});
       }
-      return ответ;
-    }).catch(async () => {
-      const cached = await caches.match(req);
-      if(cached) return cached;
-      if(req.mode === 'navigate') {
-        const page = await caches.match('./index.html');
-        if(page) return page;
-      }
-      // Missing media must never receive an HTML page as its response.
-      return new Response('Нет сети', {status: 503, headers: {'Content-Type': 'text/plain; charset=utf-8'}});
-    })
-  );
+    }
+    const подождать = new Promise(готово => setTimeout(() => готово(null), 2500));
+    return (await Promise.race([свежая.catch(() => null), подождать])) || копия;
+  })());
 });

@@ -3750,8 +3750,13 @@ async function openLes(j, returnView='sec'){
     if(API && l.key){
       favCur=null; readId=null; clearTimeout(readTimer); clearTimeout(shortTimer); tocSpy(null);
       $('#l-head').style.background=s.g; $('#l-k').textContent=s.t; $('#l-t').textContent=l.t;
-      $('#l-min').textContent=l.min+' минут'; $('#lesson-result').innerHTML='';
-      $('#l-body').innerHTML='<p role="status">Загружаем урок…</p>'; $('#l-toc').hidden=true;
+      $('#l-min').textContent=l.min+' минут';
+      /* Не белый экран: название, обещанный итог и робот приложение знает без
+         сервера. С сервера приходит только тело урока. */
+      $('#lesson-result').innerHTML=`<span>В результате</span><p>${esc(l.d||'Разберёшься, для каких задач подходит инструмент, и попробуешь запрос из урока.')}</p>`;
+      $('#l-body').innerHTML=(typeof sBotSay==='function'
+        ? sBotSay('chitaet','<b>Забираю урок с сервера.</b> Тела платных уроков лежат там, а не в приложении: иначе их читал бы и тот, кто не оплачивал.')
+        : '')+'<p role="status">Загружаем урок…</p>'; $('#l-toc').hidden=true;
       $('#l-next').innerHTML=''; $('#l-foot').textContent=''; /* premium-behavior:v1:nav-loading */
 window.__lback=returnView;
       show('lesson'); epoch=navEpoch;
@@ -4406,7 +4411,17 @@ showPay=function(sec,les){
 };
 showTrouble=function(sec,les){
   $('#pay-t').textContent=les.t;$('#pay-lead').textContent='Не получилось загрузить урок с сервера.';
-  $('#pay-in').innerHTML=['Похоже, пропала связь или сервер занят.','Твой доступ на месте, ничего не потерялось.'].map(t=>`<li>${si('refresh')}<span>${t}</span></li>`).join('');
+  /* Причина мелкой строкой — как у ленты. Без неё жалоба «не грузится»
+     неразличима: обрыв связи, долгое ожидание и отказ сервера выглядят
+     одинаково, а чинятся по-разному. */
+  const d=typeof postDiagnostic==='function'?postDiagnostic('/api/lesson'):null;
+  const причина=d?.outcome==='timeout'?'время ожидания истекло'
+    :d?.httpStatus?'код '+d.httpStatus
+    :d?.outcome==='network'?'связь оборвалась'
+    :d?.outcome==='unavailable'?'запрос не отправлялся':'ответа нет';
+  const сколько=d?.elapsedMs?' · '+Math.round(d.elapsedMs/100)/10+' с':'';
+  $('#pay-in').innerHTML=['Похоже, пропала связь или сервер занят.','Твой доступ на месте, ничего не потерялось.'].map(t=>`<li>${si('refresh')}<span>${t}</span></li>`).join('')
+    +`<li class="s-why">${esc(les.key||'урок')} · ${esc(причина)}${сколько}${d?.retried?' · после повтора':''}</li>`;
   $('#pay-bot').innerHTML=sBotSay('spit','<b>Это не из-за тебя.</b> Открытые уроки читаются и без сети — а этот вернётся, как только связь появится.');
   const b=$('#v-pay .buy2');if(b){b.textContent='Попробовать снова';b.dataset.retry='1';delete b.dataset.go;}
   show('pay');
@@ -5115,7 +5130,10 @@ async function post(path, body){
   }
   const отправляем=JSON.stringify(Object.assign({initData: (TG && TG.initData) || ''}, body||{}));
   const попытка=async()=>{
-    const ctl=new AbortController(), deadline=setTimeout(()=>ctl.abort(),15000);
+        /* Восемь секунд, а не пятнадцать: с повтором это семнадцать в худшем
+       случае вместо тридцати. Полминуты ожидания человек читает как
+       «приложение зависло», а не как «плохая связь». */
+    const ctl=new AbortController(), deadline=setTimeout(()=>ctl.abort(),8000);
     try{
       const r = await fetch(API + path, {method:'POST', signal:ctl.signal,
         headers:{'Content-Type':'text/plain;charset=UTF-8'}, body: отправляем});
