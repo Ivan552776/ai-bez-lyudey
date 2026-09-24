@@ -2595,6 +2595,13 @@ async function refreshAccess(force=false){
         return null;
       }
       ME=response;
+      /* Купленное живёт на устройстве, пока доступ есть. Доступ кончился —
+         склад стираем: обещание «платно» должно быть честным в обе стороны. */
+      if(!ME.paid) СКЛАД.забыть('lesson');
+      if(!ME.paid && !ME.subscribed) СКЛАД.забыть('material');
+      /* Пока человек читает первый урок, остальные тихо приезжают в фоне —
+         после этого связь ему не нужна вовсе. */
+      setTimeout(пополнитьЗапас, 4000);
       if(!ME.paid && foot && accessOriginalFoot!==null) foot.innerHTML=accessOriginalFoot;
       paintMe(); paintProgress(); paintPromptAccess(); feedMembership();
       if(!ME.paid) closeUnavailablePrompts();
@@ -3576,8 +3583,21 @@ function feedAccessError(response,id){
 }
 async function feedGet(id,fresh=false){
   if(!fresh&&FEED_STATE.bodies.has(id))return {ok:true,material:FEED_STATE.bodies.get(id)};
+  /* Материал, который человек уже открывал, показываем сразу и без сети,
+     а свежую версию подтягиваем следом, молча. */
+  if(!fresh){
+    const своё=СКЛАД.взять('material',id);
+    if(своё){
+      FEED_STATE.bodies.set(id,своё);
+      post('/api/material',{id}).then(r=>{if(r?.ok&&r.material){СКЛАД.положить('material',id,r.material);FEED_STATE.bodies.set(id,r.material);}}).catch(()=>{});
+      return {ok:true,material:своё};
+    }
+  }
   const response=await post('/api/material',{id,fresh});
-  if(response?.ok&&response.material)FEED_STATE.bodies.set(id,response.material);
+  if(response?.ok&&response.material){
+    FEED_STATE.bodies.set(id,response.material);
+    СКЛАД.положить('material',id,response.material);
+  }
   return response;
 }
 async function feedCheck(button){
@@ -4768,8 +4788,79 @@ async function post(path, body){
     postDiagnostic(path,diagnostic);
   }
 }
+/* ---------- купленное лежит на устройстве ----------
+   Человек, который заплатил, не должен каждый раз зависеть от связи: урок
+   у него уже есть. Тела платных уроков и материалов ленты после первой
+   удачной загрузки остаются на устройстве, и дальше открываются мгновенно,
+   хоть в метро, хоть при одной палке LTE.
+
+   Это не отменяет прежнего решения «тела платных уроков не лежат в
+   index.html»: всем подряд они по-прежнему не раздаются, сервер их отдаёт
+   только тому, у кого есть доступ. Здесь они остаются у того, кто их уже
+   прочитал. Пропал доступ — склад стирается.
+
+   Сорок шесть уроков и двадцать шесть материалов — около трёхсот килобайт,
+   в хранилище устройства это помещается свободно. */
+const СКЛАД = {
+  ключ: вид => 'sklad-' + вид,
+  всё(вид){ return S.get(СКЛАД.ключ(вид), {}) || {}; },
+  взять(вид, id){ const в = СКЛАД.всё(вид); return в[id] || null; },
+  положить(вид, id, тело){
+    if(!тело) return;
+    const в = СКЛАД.всё(вид); в[id] = тело;
+    try{ S.set(СКЛАД.ключ(вид), в); }
+    catch(e){ /* место кончилось — храним хотя бы последнее */ try{ S.set(СКЛАД.ключ(вид), {[id]: тело}); }catch(e2){} }
+  },
+  забыть(вид){ try{ S.set(СКЛАД.ключ(вид), {}); }catch(e){} },
+  сколько(вид){ return Object.keys(СКЛАД.всё(вид)).length; },
+};
+
+/* Тихо докачиваем то, что человеку уже открыто: пока он читает первый урок,
+   остальные приезжают в фоне по одному. Дальше связь ему не нужна вовсе. */
+let запасИдёт = false;
+async function пополнитьЗапас(){
+  if(запасИдёт || !API || !TG?.initData) return;
+  запасИдёт = true;
+  try{
+    const уроки = [], материалы = [];
+    if(ME?.paid){
+      const есть = СКЛАД.всё('lesson');
+      SECS.forEach(s => s.archived || s.ls.forEach(l => { if(l.key && !есть[l.key]) уроки.push(['lesson', l.key]); }));
+    }
+    if(ME?.subscribed || ME?.paid){
+      const есть = СКЛАД.всё('material');
+      FEED.forEach(x => { if(!есть[x.id]) материалы.push(['material', x.id]); });
+    }
+    /* Вперемешку: сорок шесть уроков подряд занимают минуту, и материалы всё
+       это время стояли бы в хвосте. Человек может открыть любое из двух. */
+    const дела = [];
+    for(let i = 0; i < Math.max(уроки.length, материалы.length); i++){
+      if(уроки[i]) дела.push(уроки[i]);
+      if(материалы[i]) дела.push(материалы[i]);
+    }
+    let подряд = 0;
+    for(const [вид, id] of дела){
+      if(document.hidden) break;                     // человек ушёл — не мешаем
+      const r = await post(вид === 'lesson' ? '/api/lesson' : '/api/material', {id});
+      const тело = вид === 'lesson' ? (Array.isArray(r?.b) ? r.b : null) : (r?.ok ? r.material : null);
+      if(тело){ СКЛАД.положить(вид, id, тело); подряд = 0; }
+      else if(++подряд >= 3) break;                  // связь не тянет — докачаем в другой раз
+      await new Promise(готово => setTimeout(готово, 250));
+    }
+  }catch(e){}
+  finally{ запасИдёт = false; }
+}
+
 async function fetchLesson(key){
+  /* Сначала склад: урок, который человек уже открывал, показываем мгновенно
+     и без сети, а свежую версию подтягиваем следом, молча. */
+  const своё = СКЛАД.взять('lesson', key);
+  if(своё){
+    post('/api/lesson', {id:key}).then(r => { if(Array.isArray(r?.b)) СКЛАД.положить('lesson', key, r.b); }).catch(()=>{});
+    return своё;
+  }
   const r = await post('/api/lesson', {id:key});
+  if(Array.isArray(r?.b)) СКЛАД.положить('lesson', key, r.b);
   // null — сервер не ответил (сеть, сбой). Отличаем от честного отказа:
   // показывать «купите доступ» тому, кто уже заплатил, — обман.
   if(r === null) return {ошибка:'нет связи'};        // сеть не ответила вовсе
