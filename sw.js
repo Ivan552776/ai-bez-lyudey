@@ -52,7 +52,11 @@ self.addEventListener('fetch', e => {
         return new Response('Нет сети', {status: 503, headers: {'Content-Type': 'text/plain; charset=utf-8'}});
       }
     }
-    const подождать = new Promise(готово => setTimeout(() => готово(null), 2500));
+    // Самой странице даём сети больше времени: показать вчерашнюю сборку
+    // приложения хуже, чем подождать секунду-другую. Картинкам и шрифтам
+    // хватает и двух с половиной секунд — они между версиями не меняются.
+    const окно = req.mode === 'navigate' ? 6000 : 2500;
+    const подождать = new Promise(готово => setTimeout(() => готово(null), окно));
     return (await Promise.race([свежая.catch(() => null), подождать])) || копия;
   })());
 });
