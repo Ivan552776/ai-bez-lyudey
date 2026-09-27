@@ -3583,21 +3583,8 @@ function feedAccessError(response,id){
 }
 async function feedGet(id,fresh=false){
   if(!fresh&&FEED_STATE.bodies.has(id))return {ok:true,material:FEED_STATE.bodies.get(id)};
-  /* Материал, который человек уже открывал, показываем сразу и без сети,
-     а свежую версию подтягиваем следом, молча. */
-  if(!fresh){
-    const своё=СКЛАД.взять('material',id);
-    if(своё){
-      FEED_STATE.bodies.set(id,своё);
-      post('/api/material',{id}).then(r=>{if(r?.ok&&r.material){СКЛАД.положить('material',id,r.material);FEED_STATE.bodies.set(id,r.material);}}).catch(()=>{});
-      return {ok:true,material:своё};
-    }
-  }
   const response=await post('/api/material',{id,fresh});
-  if(response?.ok&&response.material){
-    FEED_STATE.bodies.set(id,response.material);
-    СКЛАД.положить('material',id,response.material);
-  }
+  if(response?.ok&&response.material)FEED_STATE.bodies.set(id,response.material);
   return response;
 }
 async function feedCheck(button){
@@ -3829,17 +3816,36 @@ readLesson=function(blocks,section,lesson){
     :есть(l.t,'картин|изображен|образ|рисун')?'raduetsya'
     :есть(l.t,'настрой|правил|стиль|помощник|память|режим|артефакт')?'dumaet'
     :'ukazyvaet';
-  // Как в коротком уроке Mimo: объяснение, готовое действие и результат на виду.
-  // Повторные инструкции регистрации живут в общем разделе помощи.
-  const prompt=(index,label)=>blk(['prompt',blocks[index][1],label||'Готовый запрос']);
-  return `<div class="s-lesson-intro">${sBotFull(pose)}<p>${esc(data?.tip||l.d)}</p></div>`+
-    (essential?`<p class="s-lesson-prerequisite">${esc(essential.beforePrompt)}</p>`:introIndex>=0?blk(blocks[introIndex]):'')+
-    before.map(i=>blk(blocks[i])).join('')+
-    (promptIndex>=0?`<section class="s-main-prompt"><h4>${second!==undefined?'Сохрани настройки':'Попробуй запрос'}</h4>${prompt(promptIndex,essential?.firstLabel)}
-      ${second!==undefined?`<h4 class="s-second-prompt">Теперь проверь</h4>${prompt(second,essential.secondLabel)}`:''}
-      <a class="s-link" href="${feedAttr(course.url)}" data-site="${feedAttr(course.url)}">Открыть ${esc(course.t)} ${si('link')}</a><p class="s-send-step">Вставь запрос в чат, отправь и вернись сюда сравнить ответ.</p></section>`:'')+
-    (resultIndex>=0?`<section class="s-expected"><h4>Что должно получиться</h4>${blk(blocks[resultIndex])}</section>`:`<p>${esc(l.d)}</p>`)+sCoach(section,lesson)+
-    `<p class="s-service-note"><button data-prep="${section}">Помощь со входом ${si('chev')}</button></p>`;
+  // Урок показывается целиком, в порядке автора. До 25.09 здесь оставались
+  // только первый абзац, первый запрос и первый «что должно получиться», а
+  // всё остальное — заголовки, разборы, примеры диалогов, ошибки и практика —
+  // молча отбрасывалось. В файле урока было 2811 знаков, человек видел тысячу,
+  // и за 500 рублей в месяц это выглядело как три строчки. Простота первого
+  // шага осталась: сверху робот, одна фраза и готовый запрос, дальше разбор.
+  const части=[`<div class="s-lesson-intro">${sBotFull(pose)}<p>${esc(data?.tip||l.d)}</p></div>`];
+  if(essential) части.push(`<p class="s-lesson-prerequisite">${esc(essential.beforePrompt)}</p>`);
+  let первыйЗапрос=true, первыйИтог=true;
+  blocks.forEach((b,i)=>{
+    const k=b[0];
+    if(k==='guide') return;
+    if(k==='p' && String(b[1]).includes('<a ')) return части.push(`<details class="source-fold"><summary>Источники и дата проверки</summary>${blk(b)}</details>`);
+    if(k==='tip') return части.push(`<details class="source-fold"><summary>Если интерфейс отличается</summary><p>${b[1]}</p></details>`);
+    if(k==='prompt'){
+      const заголовок=первыйЗапрос?`<h4>${second!==undefined?'Сохрани настройки':'Попробуй запрос'}</h4>`:'';
+      const хвост=первыйЗапрос?`<a class="s-link" href="${feedAttr(course.url)}" data-site="${feedAttr(course.url)}">Открыть ${esc(course.t)} ${si('link')}</a><p class="s-send-step">Вставь запрос в чат, отправь и вернись сюда сравнить ответ.</p>`:'';
+      первыйЗапрос=false;
+      return части.push(`<section class="s-main-prompt">${заголовок}${blk(['prompt',b[1],b[2]||(i===promptIndex?essential?.firstLabel:null)||'Готовый запрос'])}${хвост}</section>`);
+    }
+    if(k==='result'){
+      const обёртка=первыйИтог?'<h4>Что должно получиться</h4>':'';
+      первыйИтог=false;
+      return части.push(`<section class="s-expected">${обёртка}${blk(b)}</section>`);
+    }
+    части.push(blk(b));
+  });
+  части.push(sCoach(section,lesson));
+  части.push(`<p class="s-service-note"><button data-prep="${section}">Помощь со входом ${si('chev')}</button></p>`);
+  return части.join('');
 };
 
 /* Первый шаг не требует выбирать из шести незнакомых названий. При возвращении
