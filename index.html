@@ -2146,6 +2146,34 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-brand b{font-size:15px;font-weight:650;letter-spacing:-.02em;color:var(--s-ink)}
 .s-brand-note{font-size:12.5px;color:var(--s-soft);margin-left:auto}
 :root[data-n="1"] .s-brand-mark{background:var(--s-acc);color:#0E2420}
+
+/* Сравнение и показанный диалог остались от прежнего оформления: их никто не
+   видел, потому что слой облика выбрасывал эти блоки из урока. С 25.09 урок
+   показывается целиком — приводим их к палитре «Свет» и к читаемым размерам.
+   Было: заголовки колонок 9,5 px, подпись диалога 9 px, сиреневый фон и
+   градиент в облачке — ничего этого в палитре нет. */
+.fig.cmp{background:var(--s-white);border:1px solid var(--s-line);border-radius:var(--s-r);padding:14px}
+.fig.cmp .col{border-radius:14px;padding:12px 13px}
+.fig.cmp .col .hd{font-family:var(--s-font);font-size:11.5px;letter-spacing:.06em;font-weight:650;margin-bottom:7px;display:block}
+.fig.cmp .col span{font-size:14px;line-height:1.45;color:var(--s-ink2);display:block;margin-top:5px}
+.fig.cmp .col.bad{background:var(--s-amber-s);border:1px solid color-mix(in srgb,var(--s-amber) 22%,transparent)}
+.fig.cmp .col.bad .hd{color:#7A4A08}
+.fig.cmp .col.good{background:var(--s-green-s);border:1px solid color-mix(in srgb,var(--s-acc) 22%,transparent)}
+.fig.cmp .col.good .hd{color:var(--s-acc-d)}
+
+.shot{border:1px solid var(--s-line);border-radius:var(--s-r);background:var(--s-white);box-shadow:none}
+.shot .bar{background:var(--s-card);border-bottom:1px solid var(--s-line);font-family:var(--s-font);font-size:12.5px;color:var(--s-soft)}
+.shot .win{background:var(--s-white);gap:10px}
+.shot .shot-note{font-family:var(--s-font);font-size:11.5px;letter-spacing:.04em;text-transform:none;color:var(--s-soft)}
+.shot .shot-note i{width:18px;height:18px;font-size:11px;background:var(--s-acc-s);color:var(--s-acc)}
+.shot .bub{font-size:14.5px;line-height:1.45}
+.shot .bub.me{background:var(--s-dark);color:#fff;box-shadow:none}
+.shot .bub.ai{background:var(--s-card);border:1px solid var(--s-line);color:var(--s-ink2)}
+.shot .mark{border:1px solid color-mix(in srgb,var(--s-amber) 30%,transparent);background:var(--s-amber-s);
+ border-radius:12px;font-size:13.5px;line-height:1.45;color:var(--s-ink2)}
+.shot .mark b{font-family:var(--s-font);font-size:12px;letter-spacing:.03em;text-transform:none;color:#7A4A08;font-weight:650}
+:root[data-n="1"] .fig.cmp,:root[data-n="1"] .shot{background:var(--s-white);border-color:var(--s-line)}
+:root[data-n="1"] .shot .bub.me{background:var(--s-acc);color:#0E2420}
 /* ВИТРИНА END */
 </style>
 </head>
