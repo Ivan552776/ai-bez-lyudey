@@ -1394,7 +1394,8 @@ button,a{-webkit-tap-highlight-color:transparent}
 .s-ptxt pre,#v-lesson .pbox pre,#v-lesson .prose pre{background:none!important;border:0!important;padding:0!important;margin:0!important;box-shadow:none!important;white-space:pre-wrap!important;font-family:var(--s-font)!important;font-size:15.5px!important;line-height:1.55!important;color:var(--s-ink)!important}
 .s-note{background:var(--s-amber-s);border-radius:16px;padding:13px 15px;margin:0 0 16px;font-size:14.5px;line-height:1.5;color:#6A4409}
 .s-note b{font-weight:600}
-.s-margin{background:var(--s-acc-s);border-radius:16px;padding:14px 16px;margin:20px 0}
+/* «Запомни» была сплошной мятной заливкой — третьим зелёным блоком подряд на экране материала. Стала белой карточкой: мята осталась только в значке. */
+.s-margin{background:var(--s-white);border:1px solid var(--s-line);border-left:3px solid var(--s-acc);border-radius:16px;padding:14px 16px;margin:20px 0}
 .s-margin b{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--s-acc);margin:0 0 6px}
 .s-margin p{margin:0!important;font-size:16px;line-height:1.5;color:var(--s-ink)}
 .s-learned{background:var(--s-white);border:1px solid var(--s-line);border-radius:18px;padding:16px;margin:24px 0 8px}
@@ -3382,7 +3383,7 @@ const S_IND='#0B6E4F',S_IND2='#5FD5A2',S_AMB='#E8912A',S_GRN='#0B6E4F',S_INK='#1
 const sd=(d,c=S_INK,w=2.2)=>`fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" ${d||''}`;
 const sLines=(x,y,ws,gap=13,c='#D9DAE6')=>ws.map((w,i)=>`<rect x="${x}" y="${y+i*gap}" width="${w}" height="6" rx="3" fill="${c}"/>`).join('');
 const S_ART={
-  document:['#E4F3EC',`
+  document:['#F3F2EE',`
     <g transform="rotate(-6 120 104)"><rect x="60" y="34" width="106" height="134" rx="14" fill="${S_W}"/>${sLines(78,60,[70,58,66,44,62])}</g>
     <g transform="rotate(5 206 100)"><rect x="150" y="30" width="114" height="132" rx="14" fill="${S_W}"/>
       <rect x="166" y="48" width="66" height="10" rx="5" fill="${S_IND}"/>${sLines(166,74,[80,70],14)}
@@ -3404,11 +3405,11 @@ const S_ART={
     <g transform="rotate(4 236 144)"><rect x="180" y="110" width="112" height="72" rx="14" fill="${S_W}"/>
       <circle cx="205" cy="146" r="15" fill="${S_GRN}"/><path d="M198 146l5 5 9-10" ${sd('',S_W,2.8)}/>
       ${sLines(228,138,[46,34],13,'#E2E4EE')}</g>`],
-  steps:['#E4F3EC',`
+  steps:['#F3F2EE',`
     ${[[44,140,44],[104,112,72],[164,84,100],[224,56,128]].map(([x,y,h],i)=>`<rect x="${x}" y="${y}" width="56" height="${h}" rx="14" fill="${i===3?S_IND:S_W}"/><text x="${x+28}" y="${y+28}" text-anchor="middle" font-family="Golos Text,system-ui" font-weight="700" font-size="17" fill="${i===3?S_W:S_IND}">${i+1}</text>`).join('')}
     <path d="M58 128C100 92 150 66 236 44" ${sd('stroke-dasharray="1 8"',S_IND2,2.6)}/>
     <path d="M252 52V22" ${sd('',S_INK,2.6)}/><path d="M254 23h32l-9 9 9 9h-32z" fill="${S_AMB}"/>`],
-  table:['#E9F7F0',`
+  table:['#F3F2EE',`
     <rect x="44" y="34" width="196" height="140" rx="18" fill="${S_W}"/>
     <rect x="58" y="50" width="52" height="8" rx="4" fill="#CFE6DA"/><rect x="128" y="50" width="42" height="8" rx="4" fill="#CFE6DA"/><rect x="186" y="50" width="40" height="8" rx="4" fill="#CFE6DA"/>
     <rect x="50" y="88" width="184" height="26" rx="8" fill="#E7F6EE"/>
@@ -3434,7 +3435,7 @@ const S_ART={
     <circle cx="196" cy="104" r="42" fill="${S_W}" fill-opacity=".55" ${sd('',S_IND,3)}/>
     <path d="M226 134l34 34" ${sd('',S_IND,9)}/>
     <circle cx="272" cy="52" r="19" fill="${S_GRN}"/><path d="M263 52l6 6 12-13" ${sd('',S_W,3.4)}/>`],
-  voice:['#E9F7F0',`
+  voice:['#F3F2EE',`
     <path d="M20 44h96a12 12 0 0 1 12 12v44a12 12 0 0 1-12 12H62l-18 15v-15H20a12 12 0 0 1-12-12V56a12 12 0 0 1 12-12z" fill="${S_W}"/>
     <path d="M26 66c9-7 15 7 24 0s15 7 24 0 13 6 21 0M26 84c11-6 15 6 26 0s13 7 21 1M26 100c7-5 13 5 20 0" ${sd('opacity=".8"','#A9CFBC',2.4)}/>
     <rect x="146" y="36" width="44" height="76" rx="22" fill="#D8F0E3" stroke="${S_GRN}" stroke-width="2.6"/>
@@ -3774,7 +3775,15 @@ async function feedOpen(id,fresh=false,returnView='study'){
       $('#l-next').innerHTML=`<div class="s-sticky"><div><button class="s-btn" data-s-neuro="1">${si('copy')}Скопировать гайд для нейросети</button></div></div>`;
     }
   }
-  $('#l-body').innerHTML=html;
+  /* Поза по виду материала: запрос — с планшетом, гайд — с лупой, разбор
+     нейросети — приветствие. На этот экран попадают из канала первым делом. */
+  const поза=card.type==='prompt'?'planshet':card.type==='tool'?'privet':'lupa';
+  const слово=card.type==='prompt'
+    ?'<b>Это готовый запрос.</b> Скопируй его целиком и отправь в любую нейросеть — она сама спросит, чего ей не хватает.'
+    :card.type==='tool'
+    ?'<b>Это разбор нейросети.</b> Что умеет, сколько стоит и как войти — проверено на дату внизу страницы.'
+    :'<b>Это короткий гайд.</b> Разберём на одном примере и покажем, как проверить результат.';
+  $('#l-body').innerHTML=sBotSay(поза,слово)+html;
   remember('card',id,card.title);
   учесть('card',id,0,card.type);
 }
