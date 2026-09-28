@@ -1414,6 +1414,10 @@ button,a{-webkit-tap-highlight-color:transparent}
 .s-ptxt .ph span::before{display:none!important}
 .s-ptxt .cb,#v-lesson .pbox .cb{min-height:36px;padding:0 13px;border:0!important;border-radius:999px!important;background:var(--s-white)!important;color:var(--s-acc)!important;font-family:var(--s-font)!important;font-weight:600!important;font-size:13.5px!important;box-shadow:none!important}
 .s-ptxt pre,#v-lesson .pbox pre,#v-lesson .prose pre{background:none!important;border:0!important;padding:0!important;margin:0!important;box-shadow:none!important;white-space:pre-wrap!important;font-family:var(--s-font)!important;font-size:15.5px!important;line-height:1.55!important;color:var(--s-ink)!important}
+/* Учебный пример (.cw): отступы у него живут на самом тексте, а правило выше
+   их снимает — текст прилипал к левому краю карточки во всех уроках (с 20.09).
+   Возвращаем, ровно по подписи «Учебный пример» (она стоит в 18px от края). */
+#v-lesson .prose .cw pre,#v-exercise .prose .cw pre{padding:0 18px 20px!important}
 .s-note{background:var(--s-amber-s);border-radius:16px;padding:13px 15px;margin:0 0 16px;font-size:14.5px;line-height:1.5;color:#6A4409}
 .s-note b{font-weight:600}
 /* «Запомни» была сплошной мятной заливкой — третьим зелёным блоком подряд на экране материала. Стала белой карточкой: мята осталась только в значке. */
@@ -3606,7 +3610,7 @@ const X_TAG={work:'для работы',other:'для себя'};
 const X_TYPE={prompt:'Промпт',guide:'Гайд',tool:'Нейросеть'};
 const S_BADGE={prompt:['pen','var(--s-acc)','var(--s-acc-s)'],guide:['book','#C2571E','var(--s-amber-s)'],tool:['bot','var(--s-green)','var(--s-green-s)']};
 const sRubric=x=>X_TYPE[x.type]+(x.tags.find(t=>X_TAG[t])?' · '+X_TAG[x.tags.find(t=>X_TAG[t])]:'')
-  +(x.type==='guide'&&x.minutes?' · '+x.minutes+' мин':x.type==='prompt'?' · 30 секунд':'');
+  +(x.type==='guide'&&x.minutes?' · '+x.minutes+'\u00a0мин':x.type==='prompt'?' · 30\u00a0секунд':'');  // число не отрывается от «мин»
 const sIsNew=x=>x.added&&(Date.now()-Date.parse(x.added+'T00:00:00+03:00'))<3*864e5;
 
 /* ---------- выпуск ---------- */
