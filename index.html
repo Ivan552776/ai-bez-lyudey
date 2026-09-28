@@ -2255,6 +2255,17 @@ a.s-pill,a.s-btn{text-decoration:none}
 :root[data-n="1"] .s-course-chip i{background:#FFFFFF26}
 .s-course-chip .s-path-mark{display:grid;place-items:center;height:30px;min-width:30px;padding:0 6px;border-radius:10px;background:#FFFFFF;font-size:13px;font-weight:650;color:var(--chip-col)}
 :root[data-n="1"] .s-course-chip .s-path-mark{background:#FFFFFF1F;color:var(--s-ink)}
+
+/* ---------- «Материалы»: запросы по задачам (28.09) ---------- */
+.s-collections{margin:4px 0 18px}
+.s-coll-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.s-coll{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:96px;padding:14px;border:0;border-radius:18px;background:var(--s-card);color:var(--s-ink);font-family:var(--s-font);text-align:left;cursor:pointer;transition:scale .2s}
+.s-coll:active{scale:.97}
+.s-coll-ic{display:grid;place-items:center;width:34px;height:34px;margin-bottom:4px;border-radius:11px;background:var(--s-white);color:var(--s-acc)}
+.s-coll-ic .s-ic{width:18px;height:18px}
+.s-coll b{font-size:14.5px;line-height:1.25;font-weight:600;letter-spacing:-.01em}
+.s-coll small{font-size:12px;color:var(--s-soft)}
+.s-collections .s-resource-link{margin-top:6px}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2291,7 +2302,11 @@ a.s-pill,a.s-btn{text-decoration:none}
   <div class="s-brand"><span class="s-brand-mark">ии</span><b>ИИ без людей</b><span class="s-brand-note">ведёт нейросеть</span></div>
   <div class="s-hi"><h1 class="s-today">Материалы</h1><button class="s-me" data-go="search" aria-label="Поиск по урокам и запросам"><svg class="s-ic" aria-hidden="true"><use href="#i-search"/></svg></button></div>
   <p class="s-lead">Готовые запросы и короткие разборы.</p>
-  <button class="s-resource-link" data-go="prompts"><span>Запросы из уроков</span><svg class="s-ic" aria-hidden="true"><use href="#i-chev"/></svg></button>
+  <section class="s-collections" aria-label="Запросы по задачам">
+    <h2 class="s-row-h">Запросы по задачам<span id="s-coll-count"></span></h2>
+    <div class="s-coll-grid" id="s-coll-grid"></div>
+    <button class="s-resource-link" data-go="prompts"><span>Все запросы из уроков</span><svg class="s-ic" aria-hidden="true"><use href="#i-chev"/></svg></button>
+  </section>
   <div class="s-access" id="feed-membership"></div>
   <div class="s-fil-wrap">
     <nav class="s-fil" id="x-filters" aria-label="Рубрики">
@@ -3665,7 +3680,8 @@ function sCover(art){
     ['close-x','<path d="m7 7 10 10M17 7 7 17"/>'],
     ['plus','<path d="M12 5v14M5 12h14"/>'],  /* свёрнутый блок на главной рисовал пустоту */
     ['moon','<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/>'],
-    ['send','<path d="M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5 21 3Z"/>']
+    ['send','<path d="M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5 21 3Z"/>'],
+    ['table','<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 10h18M3 15h18M10 4v16"/>']
   ].map(([n,p])=>`<symbol id="i-${n}" viewBox="0 0 24 24">${p}</symbol>`).join(''));
 })();
 const si=(n,c='')=>`<svg class="s-ic ${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
@@ -4851,6 +4867,24 @@ const S_PROMPT_TASK_MAP={
  deepseek:['plan','setup','write','count','plan','find','read','plan']
 };
 let sPromptTask=null;
+/* Подборки запросов на вкладке «Материалы» (28.09). Задачи были и раньше, но
+   прятались за строкой «Запросы из уроков» — со вкладки их никто не видел.
+   Карточка открывает экран запросов и выбирает задачу тем же нажатием, что
+   и строка на самом экране: поведение одно. */
+const S_TASK_ICON={write:'pen',read:'document',find:'search',plan:'list',count:'table',setup:'tools'};
+function sCollections(){
+  const box=$('#s-coll-grid');if(!box)return;
+  const n={};let all=0;
+  activeCourses().forEach(({s})=>s.ls.forEach((l,li)=>{const k=(S_PROMPT_TASK_MAP[s.slug]||[])[li]||'read',c=l.promptTitles?.length||0;n[k]=(n[k]||0)+c;all+=c;}));
+  box.innerHTML=S_PROMPT_TASKS.map(t=>`<button class="s-coll" data-collection="${t.id}"><span class="s-coll-ic">${si(S_TASK_ICON[t.id]||'list')}</span><b>${esc(t.title)}</b><small>${n[t.id]||0} ${скл(n[t.id]||0,'запрос','запроса','запросов')}</small></button>`).join('');
+  const c=$('#s-coll-count');if(c)c.textContent=all+' '+скл(all,'запрос','запроса','запросов');
+}
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-collection]');if(!c)return;
+  show('prompts');
+  requestAnimationFrame(()=>$('#prompt-tasks [data-prompt-task="'+c.dataset.collection+'"]')?.click());
+});
+sCollections();
 function sPromptTaskFor(item){
  return S_PROMPT_TASK_MAP[SECS[item.si]?.slug]?.[item.li]||'read';
 }
