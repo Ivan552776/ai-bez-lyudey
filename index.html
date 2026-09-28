@@ -2302,6 +2302,25 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-term h3{margin:0 0 4px;font-size:17px;line-height:1.3;font-weight:650;letter-spacing:-.01em;color:var(--s-ink)}
 .s-term p{margin:0;font-size:15px;line-height:1.5;color:var(--s-ink2)}
 .s-collections .s-resource-link+.s-resource-link{margin-top:0}
+
+/* ---------- отметки в профиле (29.09) ---------- */
+.s-achs{margin:0 0 18px}
+.s-ach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.s-ach{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border-radius:16px;background:var(--s-card);text-align:center;min-width:0}
+.s-ach-ic{display:grid;place-items:center;width:40px;height:40px;margin-bottom:2px;border-radius:50%;background:var(--s-white);color:var(--s-faint)}
+.s-ach-ic .s-ic{width:20px;height:20px}
+.s-ach b{font-size:13px;line-height:1.2;font-weight:600;color:var(--s-soft)}
+.s-ach small{font-size:11.5px;line-height:1.3;color:var(--s-soft)}
+.s-ach.on{background:var(--s-acc-s)}
+.s-ach.on .s-ach-ic{background:var(--s-acc);color:#fff}
+.s-ach.on b{color:var(--s-ink)}
+:root[data-n="1"] .s-ach.on .s-ach-ic{color:#14161A}
+
+/* ---------- слова из словаря в тексте (29.09) ---------- */
+.s-gl{display:inline;min-height:0;margin:0;padding:0;border:0;background:none;font:inherit;color:inherit;letter-spacing:inherit;text-transform:none;text-align:inherit;cursor:pointer;text-decoration:underline dotted;text-decoration-color:var(--s-acc);text-decoration-thickness:1.5px;text-underline-offset:3px;-webkit-tap-highlight-color:transparent}
+.s-gl:active{background:var(--s-acc-s);border-radius:4px}
+.s-gl-t{margin:0 0 4px;font-size:22px;line-height:1.2;font-weight:650;letter-spacing:-.02em;color:var(--s-ink)}
+.s-ai-dlg .s-daily-k{margin-bottom:6px}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2454,6 +2473,7 @@ a.s-pill,a.s-btn{text-decoration:none}
     <span><b id="p-name">Гость</b><small id="p-sub"></small></span>
     <span class="tag" id="p-tag">ГОСТЬ</span>
   </section>
+  <section class="s-achs" id="p-achs" aria-label="Отметки"></section>
   <div class="s-grp">
     <button id="p-status" data-go="pay-all"><span class="ic" style="background:#0B6E4F"><svg class="s-ic" aria-hidden="true"><use href="#i-layers"/></svg></span><span><b id="p-st-t">Полный доступ</b><small id="p-st-d">6 курсов, 48 уроков</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-go="favs"><span class="ic"><svg class="s-ic" aria-hidden="true"><use href="#i-star"/></svg></span><span><b>Мои материалы</b><small>Закладки и недавно открытое</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
@@ -4045,6 +4065,7 @@ async function feedOpen(id,fresh=false,returnView='study'){
     ?'<b>Это разбор нейросети.</b> Что умеет, сколько стоит и как войти — проверено на дату внизу страницы.'
     :'<b>Это короткий гайд.</b> Разберём на одном примере и покажем, как проверить результат.';
   $('#l-body').innerHTML=sBotSay(поза,слово)+html;
+  sGlossify($('#l-body'));
   remember('card',id,card.title);
   учесть('card',id,0,card.type);
 }
@@ -4377,6 +4398,62 @@ function sSlovarPaint(){
 $('#slovar-q')?.addEventListener('input',sSlovarPaint);
 sSlovarPaint();
 
+/* ---------- слова из словаря прямо в тексте (29.09) ----------
+   Новичок спотыкается на «контексте» и «галлюцинации» посреди урока. Первое
+   упоминание подчёркнуто пунктиром, нажатие показывает объяснение — уходить
+   из урока не нужно. Не больше шести слов на урок, только в обычном тексте:
+   готовые запросы, примеры, заголовки и кнопки не трогаем. Сочетания стоят
+   раньше отдельных слов («окно контекста» раньше «контекста»). Границу слова
+   ищем без просмотра назад: старые iPhone его не понимают. */
+const S_GL=[['Окно контекста','окн\\S* контекст'],['Режим рассуждений','режим\\S* рассуждени'],['Дата среза знаний','срез\\S* знани'],
+  ['Открытая модель','открыт\\S* модел'],['Постоянные инструкции','постоянн\\S* инструкци'],['Уточняющие вопросы','уточняющ\\S* вопрос'],
+  ['Голосовой режим','голосов\\S* режим'],['Новый чат','нов\\S* чат'],['Галлюцинация','галлюцинаци'],['Контекст','контекст'],['Токен','токен'],
+  ['Запрос (промпт)','промпт'],['Мультимодальность','мультимодальн'],['Агент','агент(?!ств)'],['Генерация','генераци|сгенериру'],
+  ['Распознавание','распозна'],['Бесплатный лимит','лимит'],['Краткий пересказ','пересказ'],['LLM','LLM'],['API','API']];
+const S_GL_SKIP='pre,code,a,button,h1,h2,h3,h4,h5,summary,blockquote,.pbox,.cw,.s-botsay,.s-gl,.worked-result,.s-lesson-intro';
+function sGlossify(root){
+  if(!root)return;
+  let left=6;
+  for(const [term,stem] of S_GL){
+    if(!left)break;
+    if(!S_SLOVAR.some(([t])=>t===term))continue;
+    let re;try{re=new RegExp('(^|[^а-яёa-z0-9])((?:'+stem+')[а-яёa-z]*)','i');}catch(e){continue;}
+    const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement?.closest(S_GL_SKIP)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+    let n;
+    while((n=w.nextNode())){
+      const m=re.exec(n.nodeValue);if(!m)continue;
+      const at=m.index+m[1].length,word=m[2];
+      const tail=n.splitText(at);tail.nodeValue=tail.nodeValue.slice(word.length);
+      const b=document.createElement('button');b.type='button';b.className='s-gl';b.dataset.gl=term;b.textContent=word;
+      tail.before(b);left--;break;
+    }
+  }
+}
+function sGlOpen(term){
+  const x=S_SLOVAR.find(([t])=>t===term);if(!x)return;
+  let d=$('#s-gl-sheet');
+  if(!d){d=document.createElement('dialog');d.id='s-gl-sheet';d.className='s-cert-dlg s-ai-dlg';d.tabIndex=-1;document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d)d.close();});}
+  d.innerHTML=`<p class="s-daily-k">${si('book')}Словарь</p><h2 class="s-gl-t">${esc(x[0])}</h2><p class="s-ai-what">${esc(x[1])}</p>`
+    +`<div class="s-cert-acts"><button class="s-btn" data-gl-close>Понятно</button><button class="s-link" data-gl-all="${feedAttr(x[0])}">Весь словарь${si('chev')}</button></div>`;
+  if(!d.open){d.showModal();d.focus();}
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('.s-gl');if(g){e.preventDefault();sGlOpen(g.dataset.gl);return;}
+  if(e.target.closest('[data-gl-close]')){$('#s-gl-sheet')?.close();return;}
+  const all=e.target.closest('[data-gl-all]');
+  if(all){
+    $('#s-gl-sheet')?.close();
+    const back=$('#v-slovar [data-back]'),from=document.querySelector('.view.on')?.id.slice(2)||'study';
+    if(back)back.dataset.go=from;
+    const q=$('#slovar-q');if(q)q.value=all.dataset.glAll.split(' (')[0];
+    sSlovarPaint();show('slovar');return;
+  }
+  // в словарь из «Материалов» — назад в «Материалы», а поиск чистый
+  if(e.target.closest('#v-study [data-go="slovar"]')){const back=$('#v-slovar [data-back]');if(back)back.dataset.go='study';const q=$('#slovar-q');if(q&&q.value){q.value='';sSlovarPaint();}}
+},true);
+const _buildToc=buildToc;
+buildToc=function(bodyId,tocId){const r=_buildToc(bodyId,tocId);if(!bodyId)sGlossify($('#l-body'));return r;};
+
 /* ---------- грамота за пройденный курс (28.09) ----------
    Картинка рисуется на телефоне, на сервер ничего не уходит. Пол человека
    нам неизвестен, поэтому «Курс пройден», а не «прошёл/прошла». Поделиться
@@ -4592,12 +4669,31 @@ function sProfile(){
   if(std)std.textContent=ME?.paid?(ME.until?'до '+ME.until.split('-').reverse().join('.'):'без срока')
     :courses.length+' '+скл(courses.length,'курс','курса','курсов')+', '+courses.reduce((a,s)=>a+s.ls.length,0)+' уроков';
   sNightPaint();
+  sAchPaint();
   /* Внизу профиля — единственное место, где прямо сказано, кто отвечает на письма. */
   const pb=$('#p-bot');
   if(pb)pb.innerHTML=sBotSay('privet',done||rec||fav
     ?`<b>Редакция — это я.</b> Вопрос из «Написать в редакцию» придёт в бот, ответ вернётся туда же. Уроки и запросы тоже пишу я.`
     :`<b>Выпуск ведёт нейросеть.</b> Уроки, запросы и разборы пишет она же, что ведёт канал. Начать можно с ближайшего урока на вкладке «Учиться».`);
 }
+/* ---------- отметки в профиле (29.09) ----------
+   Шесть отметок приложение считало давно, но экран с ними убрали при
+   упрощении, и человек их не видел. Полученные — цветные, с датой;
+   остальные — бледные, с подсказкой, как получить. */
+const S_ACH_ICON={start:'check',three:'fire',sec:'layers',d3:'clock',d7:'star',all:'spark'};
+function sAchPaint(){
+  const box=$('#p-achs');if(!box)return;
+  const got=S.get('ach',{})||{},n=ACH.filter(a=>got[a.k]).length;
+  box.innerHTML=`<h2 class="s-row-h">Отметки<span>${n} из ${ACH.length}</span></h2><div class="s-ach-grid">`
+    +ACH.map(a=>{const d=got[a.k];return `<div class="s-ach${d?' on':''}"><span class="s-ach-ic">${si(S_ACH_ICON[a.k]||'star')}</span><b>${esc(a.t)}</b><small>${d?'получена '+sDate(d):esc(a.d)}</small></div>`;}).join('')+`</div>`;
+}
+const _checkAch=checkAch;
+checkAch=function(){
+  const n=_checkAch();
+  if(n?.length){try{appNotice('Новая отметка: «'+n[0].t+'». Все отметки — в профиле.');}catch(e){}
+    if($('#v-me')?.classList.contains('on'))sAchPaint();}
+  return n;
+};
 const _paintMe=paintMe;
 paintMe=function(){
   _paintMe();
