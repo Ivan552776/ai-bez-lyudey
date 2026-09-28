@@ -2325,7 +2325,7 @@ a.s-pill,a.s-btn{text-decoration:none}
   </div>
   <div id="p-bot"></div>
   <p class="s-status" id="sw-note" hidden></p>
-  <p class="s-status" id="acc-foot">Полный доступ — 500 ₽ в месяц или 4 900 ₽ за год.</p>
+  <p class="s-status" id="acc-foot">Полный доступ — 300 ⭐ в месяц или 3 000 ⭐ за год, звёздами Telegram.</p>
   <span id="p-ach" hidden></span><span id="p-rec" hidden></span><span id="p-fav" hidden></span>
 </div>
 <!-- ВИТРИНА:me END -->
@@ -2471,7 +2471,7 @@ const DOCS = [
   ['p','Продавец предоставляет доступ к обучающим материалам приложения на срок оплаченного периода. В течение оплаченного периода доступны все материалы, включая добавленные после оплаты, без дополнительной платы. Материалы носят информационный характер, образовательной лицензии не требуют и документов об образовании не дают.'],
   ['p','Продавец не гарантирует достижения покупателем какого-либо результата, включая получение дохода.'],
   ['h','3. Стоимость и оплата'],
-  ['p','500 ₽ за 30 дней либо 4 900 ₽ за 365 дней — на выбор покупателя. Оплата оформляется в боте @ai_bez_lyudey_bot: бот сообщает, как оплатить, и открывает доступ после поступления оплаты. Автоматических списаний нет: продление возможно только новым платежом покупателя. По окончании оплаченного периода доступ к закрытым материалам прекращается.'],
+  ['p','300 звёзд Telegram (Stars) за 30 дней либо 3 000 звёзд за 365 дней — на выбор покупателя. Оплата — звёздами Telegram в боте @ai_bez_lyudey_bot: бот выставляет счёт и открывает доступ сразу после оплаты. Автоматических списаний нет: продление возможно только новым платежом покупателя. По окончании оплаченного периода доступ к закрытым материалам прекращается.'],
   ['h','4. Возврат'],
   ['p','В течение 7 календарных дней с даты оплаты — полный возврат без объяснения причин, по сообщению в бот @ai_bez_lyudey_bot. Возврат тем же способом, которым была оплата, до 10 рабочих дней.'],
   ['h','5. Права на материалы'],
@@ -4040,7 +4040,7 @@ let sPlanSel='month';
 function sPlan(p){
   sPlanSel=p;
   document.querySelectorAll('[data-s-plan]').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.sPlan===p)));
-  document.querySelectorAll('.s-buy').forEach(btn=>btn.textContent=p==='year'?'Оформить год за 4 900 ₽':'Оформить месяц за 500 ₽');
+  document.querySelectorAll('.s-buy').forEach(btn=>btn.textContent=p==='year'?'Оформить год за 3 000 ⭐':'Оформить месяц за 300 ⭐');
 }
 function sSub(short){
   const paid=!!ME?.paid,until=ME?.until?ME.until.split('-').reverse().join('.'):'';
@@ -4048,11 +4048,11 @@ function sSub(short){
     <p>Все ${SECS.slice(6).length} ${скл(SECS.slice(6).length,'курс','курса','курсов')} и новые уроки, пока действует доступ. Без автосписаний.</p>
     ${paid?`<div class="s-plan" aria-checked="true"><span class="box"></span><span><b>Доступ оформлен</b><small>${until?'действует до '+until:'без срока'}</small></span></div>`:`
     <div role="radiogroup" aria-label="Срок подписки">
-     <button class="s-plan" role="radio" data-s-plan="month" aria-checked="${sPlanSel==='month'}"><span class="box"></span><span><b>На месяц</b><small>можно начать с месяца<br>дальше — как решишь</small></span><strong>500 ₽</strong></button>
-     <button class="s-plan" role="radio" data-s-plan="year" aria-checked="${sPlanSel==='year'}"><span class="box"></span><span><b>На год</b><small>одним платежом<br>два месяца в подарок</small></span><strong>4 900 ₽</strong></button>
+     <button class="s-plan" role="radio" data-s-plan="month" aria-checked="${sPlanSel==='month'}"><span class="box"></span><span><b>На месяц</b><small>можно начать с месяца<br>дальше — как решишь</small></span><strong>300 ⭐</strong></button>
+     <button class="s-plan" role="radio" data-s-plan="year" aria-checked="${sPlanSel==='year'}"><span class="box"></span><span><b>На год</b><small>одним платежом<br>два месяца в подарок</small></span><strong>3 000 ⭐</strong></button>
     </div>`}
-    ${short?`<button class="s-btn" data-go="pay-all" style="margin-top:14px">${paid?'Подробнее о доступе':'Открыть все уроки'}</button>`:`<button class="s-btn s-buy" data-write="pay" style="margin-top:14px">${paid?'Продлить в боте':(sPlanSel==='year'?'Оформить год за 4 900 ₽':'Оформить месяц за 500 ₽')}</button>
-    <p class="s-honest">Продолжишь в боте: там тебе пришлют реквизиты. Уроки откроются после подтверждения оплаты. <button data-doc="oferta">Публичная оферта</button></p>`}
+    ${short?`<button class="s-btn" data-go="pay-all" style="margin-top:14px">${paid?'Подробнее о доступе':'Открыть все уроки'}</button>`:`<button class="s-btn s-buy" data-write="pay" style="margin-top:14px">${paid?'Продлить в боте':(sPlanSel==='year'?'Оформить год за 3 000 ⭐':'Оформить месяц за 300 ⭐')}</button>
+    <p class="s-honest">Продолжишь в боте: он пришлёт счёт в звёздах Telegram, уроки откроются сразу после оплаты. Звёзды покупаются в самом Telegram: Настройки → Мои звёзды. <button data-doc="oferta">Публичная оферта</button></p>`}
   </div>`;
 }
 function sWhat(){
