@@ -2278,6 +2278,21 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-cert-acts{display:flex;flex-direction:column;gap:8px;margin-top:14px}
 .s-cert-acts .s-link{justify-content:center}
 .s-cert-hint{margin:0;font-size:13.5px;line-height:1.45;color:var(--s-soft);text-align:center}
+
+/* ---------- «Работают из России» (28.09) ---------- */
+.s-ai{margin:0 0 20px}
+.s-ai-chip{flex-basis:148px;min-height:128px}
+.s-ai-chip small{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.s-ai-dlg{padding:22px 18px 16px}
+.s-ai-head{display:flex;align-items:center;gap:12px;margin:0 0 12px}
+.s-ai-head .s-path-mark{display:grid;place-items:center;height:48px;min-width:48px;padding:0 8px;border-radius:14px;background:var(--chip-bg);color:var(--chip-col);font-size:17px;font-weight:700}
+.s-ai-head h2{margin:0;font-size:22px;line-height:1.2;font-weight:650;letter-spacing:-.02em;color:var(--s-ink)}
+.s-ai-head p{margin:2px 0 0;font-size:13.5px;color:var(--s-soft)}
+.s-ai-what{margin:12px 0 8px;font-size:16px;line-height:1.45;color:var(--s-ink)}
+.s-ai-facts{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.s-ai-facts li{display:flex;align-items:center;gap:8px;font-size:14.5px;color:var(--s-ink2)}
+.s-ai-facts .s-ic{width:16px;height:16px;color:var(--s-acc);flex:none}
+.s-ai-dlg .s-btn .s-ic{width:17px;height:17px}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2318,6 +2333,10 @@ a.s-pill,a.s-btn{text-decoration:none}
     <h2 class="s-row-h">Запросы по задачам<span id="s-coll-count"></span></h2>
     <div class="s-coll-grid" id="s-coll-grid"></div>
     <button class="s-resource-link" data-go="prompts"><span>Все запросы из уроков</span><svg class="s-ic" aria-hidden="true"><use href="#i-chev"/></svg></button>
+  </section>
+  <section class="s-courses s-ai" aria-label="Нейросети, которые работают из России">
+    <h2 class="s-row-h">Работают из России<span id="s-ai-count"></span></h2>
+    <div class="s-courses-row" id="s-ai-row"></div>
   </section>
   <div class="s-access" id="feed-membership"></div>
   <div class="s-fil-wrap">
@@ -4242,6 +4261,51 @@ document.addEventListener('click',e=>{
   const more=e.target.closest('[data-daily-more]');
   if(more){more.closest('.s-daily-card')?.classList.add('open');more.hidden=true;}
 });
+/* ---------- нейросети, которые работают из России (28.09) ----------
+   Только те, что открываются напрямую: отрицательных пометок нет по решению
+   Ivan'а (18.09), и про обходные пути мы не пишем. Открываемость проверена
+   запросом с нашего сервера в России 28.09 (Perplexity отвечает роботам 403,
+   для людей он открыт — сверено 18.09). Условия — по сайтам на ту же дату.
+   Меняются часто: перед правкой списка проверить заново. */
+const S_AI_RU=[
+  {id:'gigachat',t:'GigaChat',maker:'Сбер',what:'Тексты, файлы и картинки',facts:['Бесплатно','Вход через Сбер ID'],url:'https://giga.chat/',material:'tool-gigachat',c:['G','#0B6E4F','#D6F2E4'],checked:'2026-09-28'},
+  {id:'alice',t:'Алиса AI',maker:'Яндекс',what:'Отвечает на вопросы и помогает с текстом',facts:['Текстовый чат бесплатный','Вход через Яндекс ID'],url:'https://alice.yandex.ru/',material:'tool-alice',c:['А','#C2571E','#FBEDE3'],checked:'2026-09-28'},
+  {id:'deepseek',t:'DeepSeek',maker:'DeepSeek, Китай',what:'Тексты и задачи с рассуждением',facts:['Чат бесплатный','Вход по почте или номеру'],url:'https://chat.deepseek.com/',material:'tool-deepseek',course:'deepseek',c:['DS','#2F6BFF','#E8EFFF'],checked:'2026-09-28'},
+  {id:'perplexity',t:'Perplexity',maker:'Perplexity, США',what:'Поиск в интернете со ссылками на источники',facts:['Есть бесплатный режим','Вход по почте, через Google или Apple'],url:'https://www.perplexity.ai/',course:'perplexity',c:['Px','#0E8C93','#E2F5F5'],checked:'2026-09-18'},
+  {id:'shedevrum',t:'Шедеврум',maker:'Яндекс',what:'Картинки по описанию',facts:['Бесплатно','Вход через Яндекс ID'],url:'https://shedevrum.ai/',material:'tool-shedevrum',c:['Ш','#C2571E','#FBEDE3'],checked:'2026-09-28'},
+  {id:'qwen',t:'Qwen',maker:'Alibaba, Китай',what:'Чат и картинки по описанию',facts:['Бесплатно','Вход по почте или через Google'],url:'https://chat.qwen.ai/',c:['Q','#B07A0B','#FDF3DC'],checked:'2026-09-28'},
+  {id:'kimi',t:'Kimi',maker:'Moonshot AI, Китай',what:'Длинные документы целиком: договор, отчёт, книга',facts:['Бесплатно','Вход через Google или Apple'],url:'https://www.kimi.com/',c:['K','#0E8C93','#E2F5F5'],checked:'2026-09-28'},
+  {id:'zai',t:'Z.ai',maker:'Zhipu, Китай',what:'Чат, помощь с кодом и простыми сайтами',facts:['Бесплатно','Можно начать без регистрации'],url:'https://chat.z.ai/',c:['Z','#0B6E4F','#D6F2E4'],checked:'2026-09-28'}
+];
+const sDate=d=>new Date(d+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'long'});
+function sAiRow(){
+  const box=$('#s-ai-row');if(!box)return;
+  const last=S_AI_RU.map(x=>x.checked).sort().pop();
+  $('#s-ai-count').textContent=S_AI_RU.length+' · проверено '+sDate(last);
+  box.innerHTML=S_AI_RU.map(x=>`<button class="s-course-chip s-ai-chip" data-ai="${x.id}" style="--chip-bg:${x.c[2]};--chip-col:${x.c[1]}"><span class="s-path-mark">${x.c[0]}</span><b>${esc(x.t)}</b><small>${esc(x.what)}</small></button>`).join('');
+}
+function sAiOpen(id){
+  const x=S_AI_RU.find(a=>a.id===id);if(!x)return;
+  let d=$('#s-ai-sheet');
+  if(!d){d=document.createElement('dialog');d.id='s-ai-sheet';d.className='s-cert-dlg s-ai-dlg';d.tabIndex=-1;document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d)d.close();});}
+  const ci=SECS.findIndex(s=>s.slug===x.course&&!s.archived);
+  d.innerHTML=`<div class="s-ai-head" style="--chip-bg:${x.c[2]};--chip-col:${x.c[1]}"><span class="s-path-mark">${x.c[0]}</span><div><h2>${esc(x.t)}</h2><p>${esc(x.maker)}</p></div></div>`
+    +`<span class="s-ru">${si('check')}Работает из России · проверено ${sDate(x.checked)}</span>`
+    +`<p class="s-ai-what">${esc(x.what)}</p><ul class="s-ai-facts">${x.facts.map(f=>`<li>${si('check')}${esc(f)}</li>`).join('')}</ul>`
+    +`<div class="s-cert-acts"><button class="s-btn" data-site="${feedAttr(x.url)}">Открыть ${esc(x.t)}${si('link')}</button>`
+    +(x.material?`<button class="s-btn line" data-ai-review="${x.material}">Подробный разбор</button>`:'')
+    +(ci>=0?`<button class="s-btn line" data-ai-course="${ci}">Курс: ${SECS[ci].ls.length} ${скл(SECS[ci].ls.length,'урок','урока','уроков')}</button>`:'')
+    +`<button class="s-link" data-ai-close>Закрыть</button></div>`;
+  if(!d.open){d.showModal();d.focus();}
+}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-ai]');if(a){sAiOpen(a.dataset.ai);return;}
+  if(e.target.closest('[data-ai-close]')){$('#s-ai-sheet')?.close();return;}
+  const r=e.target.closest('[data-ai-review]');if(r){$('#s-ai-sheet')?.close();feedOpen(r.dataset.aiReview);return;}
+  const c=e.target.closest('[data-ai-course]');if(c){$('#s-ai-sheet')?.close();openSec(+c.dataset.aiCourse);return;}
+});
+sAiRow();
+
 /* ---------- грамота за пройденный курс (28.09) ----------
    Картинка рисуется на телефоне, на сервер ничего не уходит. Пол человека
    нам неизвестен, поэтому «Курс пройден», а не «прошёл/прошла». Поделиться
