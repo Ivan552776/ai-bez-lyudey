@@ -3912,6 +3912,7 @@ document.addEventListener('click',e=>{
   const button=e.target.closest('[data-feedback-answer]');if(!button)return;
   const box=button.closest('[data-feedback]'),[section,lesson]=box.dataset.feedback.split('-').map(Number),data=sCoachData(section,lesson);
   const yes=button.dataset.feedbackAnswer==='yes',reply=box.querySelector('.s-feedback-reply');
+  шаг(yes?'получилось':'не-получилось');  // путь человека: дошёл до практики
   box.querySelectorAll('[data-feedback-answer]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
   reply.hidden=false;
   reply.innerHTML=sBotSay(yes?'palec':'plechi',yes?'Теперь повтори на своей задаче. Схема запроса уже у тебя.':'Попробуем уточнить. Отправь этот текст в тот же чат:')+(yes?'':`<blockquote>${esc(data.retry)}</blockquote><button class="s-link cb" data-copy="${enc(data.retry)}">${si('copy')}Скопировать подсказку</button>`);
@@ -4077,6 +4078,7 @@ function xCheckout(){$('#s-checkout').innerHTML=sSub(false)+(ME?.paid?'':sWhat()
 
 /* ---------- закрытый урок ---------- */
 showPay=function(sec,les){
+  шаг('закрыт');  // путь человека: упёрся в платный урок (прежняя showPay здесь не вызывается)
   $('#pay-k').textContent=sec.t;$('#pay-t').textContent=les.t;
   $('#pay-lead').textContent=`${sec.t}, урок ${payLes+1}. Этот урок открывается по подписке.`;
   $('#pay-in').innerHTML=(les.in||[les.d||'Разбор по шагам на учебном примере','Готовые промпты с кнопкой копирования','Схема и разобранный результат','Практика на своей задаче']).map(t=>`<li>${si('check')}<span>${esc(t)}</span></li>`).join('');
@@ -4293,7 +4295,7 @@ const xScrollKey=v=>v==='route'?'route'+cur:v;  // у каждого курса 
 const _show=show;
 show=function(v,back){
   v=({sec:'route',recent:'favs',practice:'route',exercise:'route',ach:'route',news:'me',log:'me',tools:'route'})[v]||v;
-  if(v==='pay-all')xCheckout();
+  if(v==='pay-all'){xCheckout();шаг('доступ');}
   if(v==='me')sProfile();
   try{if(вТелеграме()&&TG.isVersionAtLeast?.('6.1')){const bg=document.documentElement.getAttribute('data-n')==='1'?'#14161A':'#FBFAF8';TG.setHeaderColor?.(bg);TG.setBackgroundColor?.(bg);}}catch(e){}
   xTrans?.finish();
@@ -4818,6 +4820,26 @@ const API = 'https://abstract-tolerant-ember.ruweb.place';
 function учесть(что, ключ, счёт, имя){
   try{ post('/api/stat', {что, ключ: ключ || '', счёт: счёт || 0, имя: имя || ''}); }catch(e){}
 }
+/* Путь человека (28.09.2026): знакомство → урок → дочитал → «Получилось?» →
+   закрытый урок → экран доступа → «оплатить». Сервер считает, сколько разных
+   людей дошло до каждого шага, — без этого после первой рекламы не видно,
+   где люди отваливаются. Названия шагов сервер сверяет со своим списком. */
+function шаг(имя){ учесть('шаг', имя); }
+/* Откуда пришёл: ссылка из поста канала, метка рекламы или без метки.
+   Метку рекламы ставят в ссылку на приложение: …/kurs?startapp=src_<имя>. */
+function источникЗапуска(){
+  try{
+    const п = new URLSearchParams(location.search);
+    const старт = String(TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam') || '');
+    if(старт.startsWith('src_')) return старт.slice(0, 40);
+    if(старт.startsWith('card_')) return 'материал из канала';
+    if(/^(lesson|exercise)_/.test(старт)) return 'урок из канала';
+    if(старт) return 'другая метка';
+    if(п.get('material')) return 'материал по ссылке';
+    if(п.get('urok') || п.get('exercise')) return 'урок по ссылке';
+  }catch(e){}
+  return 'без метки';
+}
 
 /* ---------- жалоба «долго грузится и падает» ----------
    С телефона журнал не посмотришь, а по описанию поломка неотличима от
@@ -5073,7 +5095,7 @@ function paintMe(){
 }
 document.getElementById('subbar-go').addEventListener('click', openChannel);
 /* premium-behavior:v1:access-startup */
-(async function(){ await refreshAccess(); учесть('open'); })();
+(async function(){ await refreshAccess(); учесть('open', источникЗапуска()); })();
 const S = {
   k: n => 'mzr:' + UID + ':' + n,
   get(n, def){ try{ const v = localStorage.getItem(S.k(n)); return v===null ? def : JSON.parse(v); }catch(e){ return def; } },
@@ -5099,6 +5121,7 @@ function markDone(id){
   const d = doneList();
   if(!d.includes(id)){
     d.push(id); S.set('done', d);
+    шаг('дочитал');
     заДень(true); checkAch(); paintStreak();
   }
 }
@@ -5317,6 +5340,7 @@ function showTrouble(sec, les){
 
 /* ---------- экран закрытого урока ---------- */
 function showPay(sec, les){
+  шаг('закрыт');
   const строка = $('#v-pay .pline');
   if(строка) строка.hidden = false;
   const кнопка = $('#v-pay .buy2');
@@ -5387,7 +5411,9 @@ function прямаяСсылка(){
   try{
     const п = new URLSearchParams(location.search);
     const старт = TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam');
-    return !!(п.get('urok') || п.get('exercise') || п.get('zapros') || п.get('material') || старт);
+    // метка рекламы (src_…) — не адрес материала: новичку нужно знакомство
+    const адрес = старт && !String(старт).startsWith('src_');
+    return !!(п.get('urok') || п.get('exercise') || п.get('zapros') || п.get('material') || адрес);
   }catch(e){ return false; }
 }
 (function(){
@@ -5396,7 +5422,7 @@ function прямаяСсылка(){
   /* Первый запуск без прямой ссылки — сначала знакомство. Экран был готов,
      но его никто не открывал: на [data-hello] не ссылался ни один элемент,
      и человек сразу попадал на главную, не понимая, куда пришёл. */
-  if(!экран && !seenHello && !прямаяСсылка()){ show('hello'); return; }
+  if(!экран && !seenHello && !прямаяСсылка()){ show('hello'); шаг('знакомство'); return; }
   if(!экран){ show('route'); return; }
   if(экран === 'urok'){ S.set('hello2', true); openSec(6); openLes(0); return; }
 /* premium-behavior:v1:safe-initial-routes */
@@ -5543,6 +5569,7 @@ document.addEventListener('click', e=>{
 if(rt){ openLes(payLes,window.__lback||'sec'); return; }
   const тг = e.target.closest('[data-tg]');
   if(тг){
+    if(тг.dataset.tg === CHANNEL_LINK) шаг('канал');
     // отменяем переход по ссылке, только если увели сами: иначе в браузере
     // не произойдёт вообще ничего
     if(tgGo(тг.dataset.tg)) e.preventDefault();
@@ -5573,7 +5600,7 @@ if(rt){ openLes(payLes,window.__lback||'sec'); return; }
     const метка = wr.dataset.write === 'pay' ? (sPlanSel==='year'?'pay_year':'pay_month') : 'help';
     const ссылка = 'https://t.me/ai_bez_lyudey_bot?start=' + метка;
 /* premium-behavior:v1:write-fallback */
-    if(wr.dataset.write==='pay') accessReturnPending=true;
+    if(wr.dataset.write==='pay'){ accessReturnPending=true; шаг('оплата'); }
     перейти(ссылка);
     return;
   }
