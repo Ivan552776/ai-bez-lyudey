@@ -17,6 +17,28 @@ addEventListener('error',e=>window.__сбои.push([((e.filename||'').split('/')
 addEventListener('unhandledrejection',e=>window.__сбои.push(['promise', String(e.reason&&e.reason.message||e.reason||'').slice(0,60)]));
 </script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+/* Робот первого экрана качается сразу, вместе со страницей (28.09).
+   Раньше картинку знакомства качали все, хотя видят её только новички, а
+   робота материала из канала — только когда страница уже нарисована: на
+   медленной связи он приезжал на четыре секунды позже текста. Правило то же,
+   что у запуска ниже (прямаяСсылка, seenHello): знакомство — первый запуск
+   без прямой ссылки; материал из канала — поза по виду материала, как в
+   feedOpen. Ошибиться здесь не страшно: картинка просто приедет позже. */
+(function(){try{
+  var d=(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initDataUnsafe)||{},
+      п=new URLSearchParams(location.search),
+      старт=String(d.start_param||п.get('tgWebAppStartParam')||''),
+      карточка=п.get('material')||(старт.indexOf('card_')===0?старт.slice(5):''),
+      прямая=п.get('urok')||п.get('exercise')||п.get('zapros')||п.get('ekran')||(старт&&старт.indexOf('src_')!==0),
+      видел=localStorage.getItem('mzr:'+((d.user&&d.user.id)||'guest')+':hello2')==='true',
+      вид=карточка.split('-')[0],
+      поза=карточка?(вид==='prompt'?'planshet':вид==='tool'?'privet':'lupa'):(!прямая&&!видел?'planshet':'');
+  if(!поза)return;
+  var l=document.createElement('link');l.rel='preload';l.as='image';l.href='assets/robot/'+поза+'.webp';
+  document.head.appendChild(l);
+}catch(e){}})();
+</script>
 <title>ИИ без людей</title>
 <!-- 20.09: шрифты свои (OFL), без Google: надёжнее из России, а шапка газеты успевает
      к первому кадру (файлы по 7–8 КБ, предзагрузка). Old Standard — fallback: не дольше
@@ -1475,6 +1497,8 @@ button,a{-webkit-tap-highlight-color:transparent}
 .s-plan strong{margin-left:auto;font-size:18px;font-weight:700;letter-spacing:-.02em;white-space:nowrap}
 .s-honest{font-size:13.5px;line-height:1.5;color:var(--s-soft);margin:14px 0 0}
 .s-honest button{border:0;background:none;padding:0;font:inherit;color:var(--s-acc);font-weight:600;cursor:pointer}
+/* строка об оплате под кнопкой: это ответ на действие человека, а не подсказка */
+#s-pay-note{color:var(--s-acc);font-weight:600;margin-top:10px}
 /* закрытый урок */
 .s-locked{background:var(--s-white);border:1px solid var(--s-line);border-radius:var(--s-r);padding:18px;margin:0 0 16px}
 .s-locked ul{list-style:none;padding:0;margin:14px 0 0}
@@ -2197,7 +2221,7 @@ a.s-pill,a.s-btn{text-decoration:none}
   <!-- ===== ПРИВЕТСТВИЕ ===== -->
 <!-- ВИТРИНА:hello START -->
 <div class="view hello" id="v-hello">
-  <div class="s-welcome-art"><img src="assets/robot/planshet.webp" alt="Робот с планшетом" width="320" height="397"><span class="s-welcome-note">Готовый запрос</span><span class="s-welcome-question">Твой результат</span></div>
+  <div class="s-welcome-art"><img src="assets/robot/planshet.webp" alt="Робот с планшетом" width="320" height="397" loading="lazy" decoding="async"><span class="s-welcome-note">Готовый запрос</span><span class="s-welcome-question">Твой результат</span></div>
   <h1 id="hi-t">Привет!</h1>
   <p class="s-welcome-title">Попробуй нейросеть<br><mark>в деле</mark></p>
   <p class="s-welcome-copy">Одна задача, готовый запрос и понятный результат.</p>
@@ -4051,8 +4075,8 @@ function sSub(short){
      <button class="s-plan" role="radio" data-s-plan="month" aria-checked="${sPlanSel==='month'}"><span class="box"></span><span><b>На месяц</b><small>можно начать с месяца<br>дальше — как решишь</small></span><strong>300 ⭐</strong></button>
      <button class="s-plan" role="radio" data-s-plan="year" aria-checked="${sPlanSel==='year'}"><span class="box"></span><span><b>На год</b><small>одним платежом<br>два месяца в подарок</small></span><strong>3 000 ⭐</strong></button>
     </div>`}
-    ${short?`<button class="s-btn" data-go="pay-all" style="margin-top:14px">${paid?'Подробнее о доступе':'Открыть все уроки'}</button>`:`<button class="s-btn s-buy" data-write="pay" style="margin-top:14px">${paid?'Продлить в боте':(sPlanSel==='year'?'Оформить год за 3 000 ⭐':'Оформить месяц за 300 ⭐')}</button>
-    <p class="s-honest">Продолжишь в боте: он пришлёт счёт в звёздах Telegram, уроки откроются сразу после оплаты. Звёзды покупаются в самом Telegram: Настройки → Мои звёзды. <button data-doc="oferta">Публичная оферта</button></p>`}
+    ${short?`<button class="s-btn" data-go="pay-all" style="margin-top:14px">${paid?'Подробнее о доступе':'Открыть все уроки'}</button>`:`<button class="s-btn s-buy" data-write="pay" style="margin-top:14px">${paid?(sPlanSel==='year'?'Продлить на год за 3 000 ⭐':'Продлить на месяц за 300 ⭐'):(sPlanSel==='year'?'Оформить год за 3 000 ⭐':'Оформить месяц за 300 ⭐')}</button>
+    <p class="s-honest">${счётЗдесь()?'Счёт в звёздах Telegram откроется прямо здесь, уроки откроются сразу после оплаты.':'Продолжишь в боте: он пришлёт счёт в звёздах Telegram, уроки откроются сразу после оплаты.'} Звёзды покупаются в самом Telegram: Настройки → Мои звёзды или бот @PremiumBot. <button data-doc="oferta">Публичная оферта</button></p>`}
   </div>`;
 }
 function sWhat(){
@@ -4071,7 +4095,7 @@ function sWhat(){
   <p class="s-sec">Уже открыто бесплатно</p>
   <p class="s-lead" style="margin:0 0 6px">${free} ${скл(free,'урок','урока','уроков')} — по три в каждом курсе, и каждый день новый материал в ленте: промпт, гайд или разбор нейросети.
   Полный доступ добавляет остальные ${all-free} уроков.</p>
-  <p class="s-foot-note">Не подойдёт — вернём деньги в течение 7 дней, объяснять причину не нужно.</p>
+  <p class="s-foot-note">Не подойдёт — вернём звёзды в течение 7 дней, объяснять причину не нужно.</p>
   ${sBotSay('planshet','<b>Всё это собирает нейросеть.</b> Уроки, запросы и разборы пишет она же, что ведёт канал. Людей в редакции нет.')}`;
 }
 function xCheckout(){$('#s-checkout').innerHTML=sSub(false)+(ME?.paid?'':sWhat());}
@@ -4873,7 +4897,7 @@ function источникЗапуска(){
 
 function postDiagnostic(path, value){
   // Только известный путь и итог запроса: подпись, тело и адреса сюда не попадают.
-  if(!['/api/me','/api/material','/api/lesson','/api/notify','/api/stat'].includes(path))return null;
+  if(!['/api/me','/api/material','/api/lesson','/api/notify','/api/stat','/api/invoice'].includes(path))return null;
   const latest=postDiagnostic.latest||(postDiagnostic.latest=Object.create(null));
   if(value)latest[path]=Object.freeze({...value});
   return latest[path]||null;
@@ -4884,7 +4908,7 @@ function postDiagnostic(path, value){
    после разрешённого OPTIONS так и не уходила: в журнале nginx за 24.09
    видно «OPTIONS /api/material 204» и ни одного POST следом. Сервер читает
    тело через json.loads и на заголовок не смотрит. */
-const ПОВТОРЯЕМ=['/api/me','/api/material','/api/lesson'];
+const ПОВТОРЯЕМ=['/api/me','/api/material','/api/lesson','/api/invoice'];  // лишний счёт ничего не стоит
 async function post(path, body){
   const started=Date.now(), diagnostic={outcome:'unavailable',httpStatus:null,contentType:'',elapsedMs:0,json:'not-read',failure:null,retried:false};
   if(!API||!TG?.initData){
@@ -5065,6 +5089,61 @@ function перейти(ссылка){
   if(!w) location.href = ссылка;   // окно не открылось — уходим в той же вкладке
 }
 function openChannel(){ перейти(CHANNEL_LINK); }
+
+/* Счёт в звёздах открывается прямо поверх приложения (28.09). Раньше кнопка
+   уводила в бота: там человек жал «Старт», читал сообщение и только потом
+   «Оплатить» — два лишних шага, и на каждом часть покупателей уходит.
+   Бот остаётся запасным путём: вне Telegram, на клиенте старше 6.1 и когда
+   сервер не выдал счёт. Доступ открывает не приложение, а бот, получив
+   оплату, — приложение потом только спрашивает сервер, открылся ли он. */
+function счётЗдесь(){
+  return вТелеграме() && !!TG?.initData && typeof TG.openInvoice==='function'
+    && (!TG.isVersionAtLeast || TG.isVersionAtLeast('6.1'));
+}
+let счётГотовится=false;
+async function оплатитьЗдесь(кнопка, срок){
+  if(счётГотовится) return true;
+  счётГотовится=true;
+  const подпись=кнопка.textContent;
+  кнопка.disabled=true; кнопка.textContent='Готовлю счёт…';
+  try{
+    const r=await post('/api/invoice',{plan:срок});
+    if(!r?.ok || !r.link) return false;
+    const было=ME?.paid ? (ME.until||'') : null;
+    TG.openInvoice(r.link, статус=>{
+      if(статус==='paid'){ шаг('оплачено'); ждатьДоступ(было); }
+      else if(статус==='pending') ждатьДоступ(было);
+    });
+    return true;
+  }catch(e){ return false; }
+  finally{ счётГотовится=false; кнопка.disabled=false; кнопка.textContent=подпись; }
+}
+/* Строка под кнопкой оплаты. Экран перерисовывается при каждой проверке
+   доступа, поэтому строку ставим заново после каждой. */
+function сказатьОплата(текст){
+  const кнопка=$('#s-checkout .s-buy'); if(!кнопка) return;
+  let p=$('#s-pay-note');
+  if(!p){ p=document.createElement('p'); p.id='s-pay-note'; p.className='s-honest'; p.setAttribute('role','status'); }
+  p.textContent=текст; кнопка.after(p);
+}
+/* Telegram говорит «оплачено» сразу, а бот получает подтверждение через
+   секунду-другую и только тогда пишет доступ. Спрашиваем сервер с растущими
+   паузами. Продление узнаём по новому сроку: доступ был и до оплаты. */
+async function ждатьДоступ(было){
+  сказатьОплата('Оплата прошла. Открываю доступ…');
+  for(const пауза of [700, 1500, 2500, 4000, 6000, 9000]){
+    await new Promise(готово=>setTimeout(готово,пауза));
+    const me=await refreshAccess(true);
+    if(me?.paid && (было===null || (me.until||'')!==было)){
+      try{ TG.HapticFeedback?.notificationOccurred('success'); }catch(e){}
+      const до=me.until ? ' до '+me.until.split('-').reverse().join('.') : '';
+      сказатьОплата('Готово: доступ открыт'+до+'. Все уроки твои.');
+      return;
+    }
+    сказатьОплата('Оплата прошла. Открываю доступ…');
+  }
+  сказатьОплата('Оплата прошла, но доступ ещё не открылся. Обычно это минута. Если уроки так и останутся закрыты, напиши в бот /paysupport — откроем вручную.');
+}
 function paintMe(){
   const bar = document.getElementById('subbar');
   if(!ME || !ME.ok){ bar.hidden = true; return; }
@@ -5600,7 +5679,16 @@ if(rt){ openLes(payLes,window.__lback||'sec'); return; }
     const метка = wr.dataset.write === 'pay' ? (sPlanSel==='year'?'pay_year':'pay_month') : 'help';
     const ссылка = 'https://t.me/ai_bez_lyudey_bot?start=' + метка;
 /* premium-behavior:v1:write-fallback */
-    if(wr.dataset.write==='pay'){ accessReturnPending=true; шаг('оплата'); }
+    if(wr.dataset.write==='pay'){
+      шаг('оплата');
+      if(счётЗдесь()){
+        оплатитьЗдесь(wr, sPlanSel==='year'?'year':'month').then(ок=>{
+          if(!ок){ accessReturnPending=true; перейти(ссылка); }
+        });
+        return;
+      }
+      accessReturnPending=true;
+    }
     перейти(ссылка);
     return;
   }
