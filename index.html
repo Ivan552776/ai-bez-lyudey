@@ -2165,6 +2165,11 @@ a.s-pill,a.s-btn{text-decoration:none}
 #v-prep #prep-content h3{font-size:20px;line-height:1.3;margin:26px 0 12px}
 .feed-dock button{min-height:44px;padding:0 12px;font-size:13px}
 @media(max-width:359px){.feed-dock button{padding:0 9px;gap:5px}.feed-dock button .s-ic{width:17px;height:17px}.s-path-heading h1{font-size:25px}}
+/* Узкие телефоны (360 — частая ширина Android): кнопки вкладок не ужимались,
+   и «Профиль» вылезал за край панели и экрана (замер 28.09: 361 при ширине 360,
+   331 при 320). Панель шире, кнопки плотнее и умеют делить место. */
+@media(max-width:400px){.feed-dock{max-width:calc(100% - 16px);gap:2px;padding:5px}.feed-dock button{flex:0 1 auto;min-width:0;padding:0 10px;gap:5px;font-size:12.5px}.feed-dock button .s-ic,.feed-dock button .ui-icon,.feed-dock button .x-ic{width:17px;height:17px}}
+@media(max-width:340px){.feed-dock button{padding:0 7px;gap:4px;font-size:12px}}
 /* Видимая лента проверяется и ночью: полоса рубрик не должна оставаться белой. */
 :root[data-n="1"] .s-fil-wrap{background:#14161AED}
 .s-pill.acc{background:var(--s-action);color:var(--s-action-text)}
@@ -2214,6 +2219,42 @@ a.s-pill,a.s-btn{text-decoration:none}
 .shot .mark b{font-family:var(--s-font);font-size:12px;letter-spacing:.03em;text-transform:none;color:#7A4A08;font-weight:650}
 :root[data-n="1"] .fig.cmp,:root[data-n="1"] .shot{background:var(--s-white);border-color:var(--s-line)}
 :root[data-n="1"] .shot .bub.me{background:var(--s-acc);color:#0E2420}
+
+/* ---------- главная: прогресс, запрос дня, все курсы (28.09) ---------- */
+.s-day-row{display:flex;gap:8px;margin:-8px 0 16px}
+.s-day-row>div{flex:1;min-width:0;background:var(--s-card);border-radius:16px;padding:11px 12px}
+.s-day-row b{display:block;font-size:22px;line-height:1.1;font-weight:700;letter-spacing:-.02em;color:var(--s-ink);font-variant-numeric:tabular-nums}
+.s-day-row span{display:block;margin-top:3px;font-size:12px;line-height:1.3;color:var(--s-soft)}
+.s-daily-card{background:var(--s-white);border:1px solid var(--s-line);border-radius:24px;padding:20px;margin:0 0 24px}
+.s-daily-k{display:flex;align-items:center;gap:6px;margin:0 0 8px;font-size:12.5px;font-weight:600;color:var(--s-acc)}
+.s-daily-k .s-ic{width:16px;height:16px}
+.s-daily-card h2{font-size:20px;line-height:1.25;font-weight:650;letter-spacing:-.02em;margin:0 0 12px;color:var(--s-ink);text-wrap:pretty}
+.s-daily-text{white-space:pre-wrap;margin:0;padding:14px 16px;border-radius:16px;background:var(--s-card);color:var(--s-ink2);font-family:var(--s-font);font-size:14.5px;line-height:1.5;max-height:9em;overflow:hidden;-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)}
+.s-daily-card.open .s-daily-text{max-height:none;-webkit-mask-image:none;mask-image:none}
+.s-daily-more{margin:2px 0 0}
+.s-daily-acts{display:flex;flex-direction:column;align-items:stretch;gap:4px;margin-top:12px}
+.s-daily-acts .s-link{justify-content:center;text-align:center}
+.s-daily-acts .s-link .s-ic{width:16px;height:16px;flex:none}
+/* кнопка копирования носит .cb ради общего обработчика — снимаем старый вид .cb */
+.s-daily-card .cb.s-daily-copy{font-family:var(--s-font);font-size:16px;font-weight:600;letter-spacing:0;text-transform:none;border:0;border-radius:16px;min-height:52px;width:100%;padding:0 20px;justify-content:center;background:var(--s-action);color:var(--s-action-text)}
+.s-daily-card .cb.s-daily-copy:disabled{opacity:.5}
+.s-courses{margin:0 0 6px}
+.s-row-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 10px;font-size:18px;line-height:1.3;font-weight:600;letter-spacing:-.02em;color:var(--s-ink)}
+.s-row-h span{font-size:13px;font-weight:500;letter-spacing:0;color:var(--s-soft)}
+.s-courses-row{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:2px 16px 6px;scroll-padding:0 16px;scrollbar-width:none}
+.s-courses-row::-webkit-scrollbar{display:none}
+.s-course-chip{flex:0 0 136px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-height:124px;padding:14px;border:0;border-radius:20px;background:var(--chip-bg);color:#14161A;font-family:var(--s-font);text-align:left;cursor:pointer;transition:scale .2s}
+.s-course-chip:active{scale:.97}
+.s-course-chip[aria-current="true"]{box-shadow:inset 0 0 0 2px var(--chip-col)}
+.s-course-chip b{font-size:15px;line-height:1.2;font-weight:650;letter-spacing:-.01em}
+.s-course-chip small{font-size:12px;line-height:1.3;color:#33363D}
+.s-course-chip i{display:block;align-self:stretch;height:5px;margin-top:auto;border-radius:99px;background:#FFFFFFA6;overflow:hidden}
+.s-course-chip em{display:block;height:100%;border-radius:inherit;background:var(--chip-col)}
+:root[data-n="1"] .s-course-chip{background:color-mix(in srgb,var(--chip-bg) 17%,#14161A);color:var(--s-ink)}
+:root[data-n="1"] .s-course-chip small{color:var(--s-soft)}
+:root[data-n="1"] .s-course-chip i{background:#FFFFFF26}
+.s-course-chip .s-path-mark{display:grid;place-items:center;height:30px;min-width:30px;padding:0 6px;border-radius:10px;background:#FFFFFF;font-size:13px;font-weight:650;color:var(--chip-col)}
+:root[data-n="1"] .s-course-chip .s-path-mark{background:#FFFFFF1F;color:var(--s-ink)}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2286,7 +2327,10 @@ a.s-pill,a.s-btn{text-decoration:none}
 <div class="view" id="v-route">
   <div class="s-brand"><span class="s-brand-mark">ии</span><b>ИИ без людей</b><span class="s-brand-note">ведёт нейросеть</span></div>
   <div id="s-prod"></div>
+  <div id="s-day-stats"></div>
   <div id="sec-head"></div>
+  <div id="s-daily"></div>
+  <div id="s-courses"></div>
   <div id="sec-list"></div>
   <div id="sec-overview" hidden></div><div id="sec-now" hidden></div><div id="sec-foot" hidden></div>
   <span id="sec-k" hidden></span><span id="sec-t" hidden></span>
@@ -3808,7 +3852,7 @@ async function sCopyPrompt(button){
   button.disabled=true;
   try{
     const text=sReading.prompt||'';
-    try{await sWrite(text);sCopied(button,'Скопировано ✓');xHaptic('success');учесть('cut',sReading.id,0,'prompt');}
+    try{await sWrite(text);sCopied(button,'Скопировано ✓');xHaptic('success');учесть('cut',sReading.id,0,'prompt');sCountCopy();}
     catch(e){xFallback(text);}
   }finally{button.disabled=false;}
 }
@@ -4089,11 +4133,90 @@ function sRenderSec(i){
     ${finished?`<button class="s-btn" data-les="0">Повторить первый урок ${si('chev')}</button>`:next>=0?`<button class="s-btn" data-les="${next}">${read?'Продолжить':'Начать урок'} ${si('chev')}</button>`:`<button class="s-btn" data-go="pay-all">Открыть оставшиеся уроки ${si('chev')}</button>`}
     </section>`;
   $('#sec-overview').innerHTML='';$('#sec-now').innerHTML='';$('#sec-foot').innerHTML='';
+  const st=$('#s-day-stats');if(st)st.innerHTML=sDayStats();
+  const cr=$('#s-courses');if(cr)cr.innerHTML=sCoursesRow(i);
+  sDailyFill();
   const parts=s.archived?[[0,s.ls.length,'Уроки']]:[[0,3,S_PART[0]],[3,7,S_PART[1]],[7,s.ls.length,S_PART[2]]];
   $('#sec-list').innerHTML=parts.map(([a,b,name],part)=>`<section class="s-path-stage"><h2><span>${part+1}</span>${name}</h2><div>${s.ls.slice(a,b).map((l,k)=>{const j=a+k,isDone=done.includes(i+'-'+j),locked=!!l.key&&!paid;return `<button class="s-path-lesson${isDone?' done':''}${j===next?' current':''}" data-les="${j}"${j===next?' aria-current="step"':''}><span class="s-path-node">${isDone?si('check'):locked?si('lock'):j+1}</span><span><b>${esc(l.t)}</b><small>${locked?'По подписке':isDone?'Прочитан':l.min+' мин'}</small></span>${si('chev')}</button>`;}).join('')}</div></section>`).join('');
   $('#sec-t').textContent=s.t;
 }
 openSec=function(i){if(!SECS[i])return;sRenderSec(i);show('route');};
+
+/* ---------- главная: прогресс, все курсы, запрос дня (28.09) ----------
+   Ivan: «как-то мало наполнено». Всё это внутри уже было — серия дней,
+   прочитанные уроки, 148 запросов, шесть курсов, — а на главной виден был
+   один курс списком: пять других прятались в выпадающем списке. Экранов
+   не добавляем, показываем то, что есть. */
+function sDayStats(){
+  const days=currentStreak().streak||0;
+  const read=doneList().filter(k=>{const c=SECS[+String(k).split('-')[0]];return c&&!c.archived;}).length;
+  const copied=S.get('copied',0)||0;
+  if(!days&&!read&&!copied)return '';   // новичку пустые нули ни к чему
+  const cell=(n,one,few,many)=>`<div><b>${n}</b><span>${скл(n,one,few,many)}</span></div>`;
+  return `<div class="s-day-row" aria-label="Твой прогресс">`
+    +(days?cell(days,'день подряд','дня подряд','дней подряд'):'')
+    +cell(read,'урок прочитан','урока прочитано','уроков прочитано')
+    +cell(copied,'запрос скопирован','запроса скопировано','запросов скопировано')+`</div>`;
+}
+function sCoursesRow(current){
+  const done=doneList(),list=activeCourses();
+  return `<section class="s-courses" aria-label="Все курсы"><h2 class="s-row-h">Все нейросети<span>${list.length} ${скл(list.length,'курс','курса','курсов')}</span></h2><div class="s-courses-row">`
+    +list.map(({s,i})=>{
+      const [mono,col,bg]=S_COURSE[s.slug]||['?','#0B6E4F','#E2F3EA'];
+      const read=s.ls.filter((l,j)=>done.includes(i+'-'+j)).length,pct=Math.round(read/s.ls.length*100);
+      return `<button class="s-course-chip" data-course-pick="${i}"${i===current?' aria-current="true"':''} style="--chip-bg:${bg};--chip-col:${col}"><span class="s-path-mark">${mono}</span><b>${esc(s.t)}</b><small>${read?read+' из '+s.ls.length+' прочитано':s.ls.length+' '+скл(s.ls.length,'урок','урока','уроков')}</small><i aria-hidden="true"><em style="width:${pct}%"></em></i></button>`;
+    }).join('')+`</div></section>`;
+}
+/* Запрос дня — основной запрос одного урока, каждый день другой. Новичку —
+   из бесплатных уроков, с полным доступом — из всех. Шаг 7 взаимно прост с
+   числом уроков, поэтому подряд идут разные нейросети, а не один курс. */
+let sDailyCache=null;
+function sDailyPick(){
+  const pool=[];
+  activeCourses().forEach(({s,i})=>s.ls.forEach((l,li)=>{if((!l.key||ME?.paid)&&l.promptTitles?.length)pool.push({si:i,li});}));
+  if(!pool.length)return null;
+  const day=Math.floor(Date.parse(сегодня()+'T12:00:00')/864e5);
+  let n=(day*7)%pool.length;if(n<0)n+=pool.length;
+  return pool[n];
+}
+async function sDailyFill(){
+  const box=$('#s-daily');if(!box)return;
+  const x=sDailyPick();if(!x){box.innerHTML='';return;}
+  const c=SECS[x.si],l=c.ls[x.li],key=сегодня()+':'+x.si+'-'+x.li;
+  const name=(l.promptTitles[0]||l.t).split(' — ')[0];
+  const text=sDailyCache?.key===key?sDailyCache.text:'';
+  box.innerHTML=`<section class="s-daily-card" aria-label="Запрос дня"><p class="s-daily-k">${si('spark')}Запрос дня · ${esc(c.t)}</p><h2>${esc(name)}</h2>`
+    +`<pre class="s-daily-text" data-daily-text>${text?esc(text):'Загружаем запрос…'}</pre>`
+    +`<button class="s-link s-daily-more" data-daily-more hidden>Показать целиком</button>`
+    +`<div class="s-daily-acts"><button class="s-btn cb s-daily-copy" data-copy="${text?enc(text):''}"${text?'':' disabled'}>Скопировать запрос</button>`
+    +`<button class="s-link" data-daily-open="${x.si}-${x.li}" aria-label="Открыть урок «${esc(l.t)}»">Открыть урок${si('chev')}</button></div></section>`;
+  const paint=t=>{
+    const card=box.querySelector('.s-daily-card');if(!card)return;
+    card.querySelector('[data-daily-text]').textContent=t;
+    const b=card.querySelector('.s-daily-copy');b.dataset.copy=enc(t);b.disabled=false;
+    const pre=card.querySelector('[data-daily-text]');
+    card.querySelector('[data-daily-more]').hidden=pre.scrollHeight<=pre.clientHeight+4;
+  };
+  if(text){paint(text);return;}
+  let blocks=l.b;
+  if(!l.key&&!blocks){await бесплатныеТела();blocks=l.b;}
+  else if(l.key){blocks=await fetchLesson(l.key);}
+  const b=Array.isArray(blocks)?blocks.filter(q=>q[0]==='prompt')[0]:null;
+  if(!b){box.innerHTML='';return;}
+  sDailyCache={key,text:b[1]};
+  if(box.querySelector('.s-daily-card'))paint(b[1]);
+}
+document.addEventListener('click',e=>{
+  const pick=e.target.closest('[data-course-pick]');
+  if(pick){sRenderSec(+pick.dataset.coursePick);window.scrollTo({top:0,behavior:'instant'});return;}
+  const open=e.target.closest('[data-daily-open]');
+  if(open){const [i,j]=open.dataset.dailyOpen.split('-').map(Number);openSec(i);openLes(j,'route');return;}
+  const more=e.target.closest('[data-daily-more]');
+  if(more){more.closest('.s-daily-card')?.classList.add('open');more.hidden=true;}
+});
+/* Сколько запросов человек скопировал — для прогресса на главной. Учебный
+   пример (.cw) не запрос, его не считаем. */
+function sCountCopy(){S.set('copied',(S.get('copied',0)||0)+1);}
 routePaint=function(){
   if(sSelectedCourse===null)sSelectedCourse=S.get('s-course',null);
   const next=sNextLesson(),i=sSelectedCourse!==null&&SECS[sSelectedCourse]?Number(sSelectedCourse):next.i;
@@ -4565,7 +4688,7 @@ function xBacks(root=document){root.querySelectorAll('button.back:not(.s-back)')
 xBacks();
 /* скопировал промпт — короткий «успех» в руке, как у «Вырезать» */
 const _copyText=copyText;
-copyText=async function(b){const r=await _copyText(b);if(b?.classList.contains('done'))xHaptic('success');return r;};
+copyText=async function(b){const r=await _copyText(b);if(b?.classList.contains('done')){xHaptic('success');if(!b.closest('.cw'))sCountCopy();}return r;};
 /* «Недавно открытое» как в газете: рубрика с типом и днём, заголовок гарнитурой номера.
    Раньше всё из номера подписывалось «урок», даже гайды и промпты. */
 function xAgo(t){if(!t)return '';const d0=new Date();d0.setHours(0,0,0,0);const d=Math.floor((d0-new Date(t).setHours(0,0,0,0))/864e5);
