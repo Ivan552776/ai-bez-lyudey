@@ -39,6 +39,18 @@ self.addEventListener('fetch', e => {
     return ответ;
   });
 
+  /* Картинки и шрифты — сразу из памяти телефона, свежую копию докачиваем
+     в фоне (28.09). Раньше и они ждали сеть до двух с половиной секунд: на
+     слабой связи робот вернувшегося человека приезжал позже текста, хотя
+     лежал рядом. Между версиями приложения они не меняются, а если сменятся —
+     новая придёт со следующим запуском. */
+  if(req.destination === 'image' || req.destination === 'font'){
+    e.waitUntil(свежая.catch(() => {}));
+    e.respondWith(caches.match(req).then(копия => копия || свежая.catch(() =>
+      new Response('Нет сети', {status: 503, headers: {'Content-Type': 'text/plain; charset=utf-8'}}))));
+    return;
+  }
+
   e.respondWith((async () => {
     const копия = await caches.match(req);
     if(!копия){

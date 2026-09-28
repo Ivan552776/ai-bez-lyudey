@@ -1499,6 +1499,17 @@ button,a{-webkit-tap-highlight-color:transparent}
 .s-plan b{display:block;font-size:16px;font-weight:600}
 .s-plan small{display:block;font-size:13px;color:var(--s-soft);margin-top:2px}
 .s-plan strong{margin-left:auto;font-size:18px;font-weight:700;letter-spacing:-.02em;white-space:nowrap}
+/* рубли под ценой в звёздах: большинство не знает, сколько стоит звезда */
+.s-plan strong{text-align:right}
+.s-plan strong small{display:block;margin-top:3px;font-size:12px;font-weight:500;letter-spacing:0;color:var(--s-soft)}
+/* закрытый урок: под кнопкой оплаты — ссылка на год и что входит */
+.s-pay-more{display:flex;width:100%;justify-content:center;margin:4px 0 0}
+.s-pay-more .s-ic{width:16px;height:16px}
+/* ссылки на документы под подсказкой — своей строкой: у каждой площадка
+   под палец 44px, и в строке текста они разрывали её пустотами */
+.s-doc-links{display:flex;flex-wrap:wrap;column-gap:20px;margin-top:2px}
+/* «Отправить урок» после «Получилось» */
+.s-share-lesson{margin-top:6px}
 .s-honest{font-size:13.5px;line-height:1.5;color:var(--s-soft);margin:14px 0 0}
 .s-honest button{border:0;background:none;padding:0;font:inherit;color:var(--s-acc);font-weight:600;cursor:pointer}
 /* строка об оплате под кнопкой: это ответ на действие человека, а не подсказка */
@@ -2313,8 +2324,9 @@ a.s-pill,a.s-btn{text-decoration:none}
     <ul id="pay-in"></ul>
   </div>
   <div class="pline" hidden></div>
-  <button class="s-btn buy2" data-go="pay-all">Открыть все уроки</button>
-  <p class="s-foot-note">Первые три урока каждого курса открыты без оплаты.</p>
+  <button class="s-btn buy2" data-write="pay">Оформить месяц за 300 ⭐</button>
+  <button class="s-link s-pay-more" id="pay-more" data-go="pay-all">Год за 3 000 ⭐ и что входит<svg class="s-ic" aria-hidden="true"><use href="#i-chev"/></svg></button>
+  <p class="s-foot-note">Примерно 500–650 ₽ в месяц, без автосписаний. Первые три урока каждого курса открыты без оплаты.</p>
   <div id="pay-bot"></div>
 </div>
 <!-- ВИТРИНА:pay END -->
@@ -2521,6 +2533,16 @@ const DOCS = [
   ['p','Оплачивая доступ, вы даёте согласие на обработку перечисленных данных в целях предоставления доступа и выполнения налоговых обязанностей.'],
   ['p','Согласие даётся на срок действия доступа и отзывается сообщением в бот @ai_bez_lyudey_bot. Отзыв согласия влечёт прекращение доступа, поскольку без обработки данных предоставить его невозможно.'],
   ['p','Согласие на получение рекламных сообщений даётся отдельно и на доступ к оплаченному не влияет — его можно отозвать переключателем в профиле.']
+ ]},
+ {id:'zvezdy', t:'Как купить звёзды', d:'Сколько это в рублях и что делать, если оплата не проходит', b:[
+  ['p','Звёзды — деньги внутри Telegram. Цифровое в ботах и мини-приложениях продаётся только за них: так требуют правила Telegram.'],
+  ['h','Сколько это в рублях'],
+  ['p','Месяц — 300 звёзд, примерно 500–650 ₽. Год — 3 000 звёзд, примерно 5 000–6 500 ₽. Точная цена звезды зависит от того, где их покупать.'],
+  ['h','Где купить'],
+  ['ul','В самом Telegram: Настройки → «Мои звёзды» → «Купить»|В официальном боте Telegram @PremiumBot'],
+  ['h','Если оплата не проходит'],
+  ['p','Из России покупка через App Store и Google Play иногда не проходит — это ограничение магазинов, а не наше. Попробуй через @PremiumBot. Не вышло — напиши в бот @ai_bez_lyudey_bot команду /paysupport, разберёмся.'],
+  ['p','Автосписаний нет: каждое продление — отдельная оплата. Семь дней на возврат без объяснения причин.']
  ]}
 ];
 // 19.09: ФИО, ИНН и статус появятся после оформления самозанятости — до тех пор только настоящие контакты
@@ -3008,10 +3030,19 @@ if('serviceWorker' in navigator){
    Самый дешёвый рост, который у нас есть: человек отправляет другу ссылку
    прямо из Telegram, и тот попадает сразу в приложение. */
 const SHARE_URL = 'https://t.me/ai_bez_lyudey_bot/kurs';
-function share(текст){
-  const ссылка = 'https://t.me/share/url?url=' + encodeURIComponent(SHARE_URL) +
+function share(текст, адрес=SHARE_URL){
+  const ссылка = 'https://t.me/share/url?url=' + encodeURIComponent(адрес) +
                  '&text=' + encodeURIComponent(текст);
   перейти(ссылка);
+}
+/* Поделиться уроком (28.09): до этого ссылка вела на первый экран приложения,
+   и друг не видел того, чем с ним поделились. Теперь — прямо в урок, с меткой
+   drug_: запуск открывает урок, а источник записывается «от друга». */
+function поделитьсяУроком(si, li){
+  const l = SECS[si]?.ls[li]; if(!l) return;
+  шаг('поделился');
+  share('Урок «' + l.t + '»: одна задача, готовый запрос и разбор ответа. Первые уроки бесплатно.',
+        SHARE_URL + '?startapp=drug_' + si + '_' + li);
 }
 
 /* ---------- закладки ----------
@@ -3589,7 +3620,8 @@ function sCover(art){
     ['play','<path d="M8 5.5v13a1 1 0 0 0 1.5.9l10-6.5a1 1 0 0 0 0-1.8l-10-6.5A1 1 0 0 0 8 5.5Z"/>'],
     ['close-x','<path d="m7 7 10 10M17 7 7 17"/>'],
     ['plus','<path d="M12 5v14M5 12h14"/>'],  /* свёрнутый блок на главной рисовал пустоту */
-    ['moon','<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/>']
+    ['moon','<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/>'],
+    ['send','<path d="M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5 21 3Z"/>']
   ].map(([n,p])=>`<symbol id="i-${n}" viewBox="0 0 24 24">${p}</symbol>`).join(''));
 })();
 const si=(n,c='')=>`<svg class="s-ic ${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
@@ -3943,8 +3975,15 @@ document.addEventListener('click',e=>{
   шаг(yes?'получилось':'не-получилось');  // путь человека: дошёл до практики
   box.querySelectorAll('[data-feedback-answer]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
   reply.hidden=false;
-  reply.innerHTML=sBotSay(yes?'palec':'plechi',yes?'Теперь повтори на своей задаче. Схема запроса уже у тебя.':'Попробуем уточнить. Отправь этот текст в тот же чат:')+(yes?'':`<blockquote>${esc(data.retry)}</blockquote><button class="s-link cb" data-copy="${enc(data.retry)}">${si('copy')}Скопировать подсказку</button>`);
+  /* «Получилось» — лучший момент попросить поделиться: человек только что
+     увидел пользу сам. Ссылка ведёт друга прямо в этот урок (поделитьсяУроком). */
+  reply.innerHTML=sBotSay(yes?'palec':'plechi',yes?'Теперь повтори на своей задаче. Схема запроса уже у тебя.':'Попробуем уточнить. Отправь этот текст в тот же чат:')+(yes?`<button class="s-link s-share-lesson" data-share-lesson="${section}-${lesson}">${si('send')}Отправить урок тому, кому пригодится</button>`:`<blockquote>${esc(data.retry)}</blockquote><button class="s-link cb" data-copy="${enc(data.retry)}">${si('copy')}Скопировать подсказку</button>`);
   xHaptic(yes?'success':'select');
+});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-share-lesson]');if(!b)return;
+  const [section,lesson]=b.dataset.shareLesson.split('-').map(Number);
+  поделитьсяУроком(section,lesson);
 });
 /* Полный запрос уже содержит учебные данные. Отдельный блок с исходником
    оставляем в подробностях, чтобы первая кнопка копировала пригодный запрос. */
@@ -4065,10 +4104,11 @@ document.addEventListener('change',e=>{if(e.target.id!=='s-course-select')return
 
 /* ---------- подписка ---------- */
 let sPlanSel='month';
+const sBuyText=(p=sPlanSel)=>p==='year'?'Оформить год за 3 000 ⭐':'Оформить месяц за 300 ⭐';
 function sPlan(p){
   sPlanSel=p;
   document.querySelectorAll('[data-s-plan]').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.sPlan===p)));
-  document.querySelectorAll('.s-buy').forEach(btn=>btn.textContent=p==='year'?'Оформить год за 3 000 ⭐':'Оформить месяц за 300 ⭐');
+  document.querySelectorAll('.s-buy').forEach(btn=>btn.textContent=sBuyText(p));
 }
 function sSub(short){
   const paid=!!ME?.paid,until=ME?.until?ME.until.split('-').reverse().join('.'):'';
@@ -4076,11 +4116,11 @@ function sSub(short){
     <p>Все ${SECS.slice(6).length} ${скл(SECS.slice(6).length,'курс','курса','курсов')} и новые уроки, пока действует доступ. Без автосписаний.</p>
     ${paid?`<div class="s-plan" aria-checked="true"><span class="box"></span><span><b>Доступ оформлен</b><small>${until?'действует до '+until:'без срока'}</small></span></div>`:`
     <div role="radiogroup" aria-label="Срок подписки">
-     <button class="s-plan" role="radio" data-s-plan="month" aria-checked="${sPlanSel==='month'}"><span class="box"></span><span><b>На месяц</b><small>можно начать с месяца<br>дальше — как решишь</small></span><strong>300 ⭐</strong></button>
-     <button class="s-plan" role="radio" data-s-plan="year" aria-checked="${sPlanSel==='year'}"><span class="box"></span><span><b>На год</b><small>одним платежом<br>два месяца в подарок</small></span><strong>3 000 ⭐</strong></button>
+     <button class="s-plan" role="radio" data-s-plan="month" aria-checked="${sPlanSel==='month'}"><span class="box"></span><span><b>На месяц</b><small>можно начать с месяца<br>дальше — как решишь</small></span><strong>300 ⭐<small>≈ 500–650 ₽</small></strong></button>
+     <button class="s-plan" role="radio" data-s-plan="year" aria-checked="${sPlanSel==='year'}"><span class="box"></span><span><b>На год</b><small>одним платежом<br>два месяца в подарок</small></span><strong>3 000 ⭐<small>≈ 5 000–6 500 ₽</small></strong></button>
     </div>`}
-    ${short?`<button class="s-btn" data-go="pay-all" style="margin-top:14px">${paid?'Подробнее о доступе':'Открыть все уроки'}</button>`:`<button class="s-btn s-buy" data-write="pay" style="margin-top:14px">${paid?(sPlanSel==='year'?'Продлить на год за 3 000 ⭐':'Продлить на месяц за 300 ⭐'):(sPlanSel==='year'?'Оформить год за 3 000 ⭐':'Оформить месяц за 300 ⭐')}</button>
-    <p class="s-honest">${счётЗдесь()?'Счёт в звёздах Telegram откроется прямо здесь, уроки откроются сразу после оплаты.':'Продолжишь в боте: он пришлёт счёт в звёздах Telegram, уроки откроются сразу после оплаты.'} Звёзды покупаются в самом Telegram: Настройки → Мои звёзды или бот @PremiumBot. <button data-doc="oferta">Публичная оферта</button></p>`}
+    ${short?`<button class="s-btn" data-go="pay-all" style="margin-top:14px">${paid?'Подробнее о доступе':'Открыть все уроки'}</button>`:`<button class="s-btn s-buy" data-write="pay" style="margin-top:14px">${paid?(sPlanSel==='year'?'Продлить на год за 3 000 ⭐':'Продлить на месяц за 300 ⭐'):sBuyText()}</button>
+    <p class="s-honest">${счётЗдесь()?'Счёт в звёздах Telegram откроется прямо здесь, уроки откроются сразу после оплаты.':'Продолжишь в боте: он пришлёт счёт в звёздах Telegram, уроки откроются сразу после оплаты.'}<span class="s-doc-links"><button data-doc="zvezdy">Как купить звёзды</button><button data-doc="oferta">Публичная оферта</button></span></p>`}
   </div>`;
 }
 function sWhat(){
@@ -4110,7 +4150,10 @@ showPay=function(sec,les){
   $('#pay-k').textContent=sec.t;$('#pay-t').textContent=les.t;
   $('#pay-lead').textContent=`${sec.t}, урок ${payLes+1}. Этот урок открывается по подписке.`;
   $('#pay-in').innerHTML=(les.in||[les.d||'Разбор по шагам на учебном примере','Готовые промпты с кнопкой копирования','Схема и разобранный результат','Практика на своей задаче']).map(t=>`<li>${si('check')}<span>${esc(t)}</span></li>`).join('');
-  const b=$('#v-pay .buy2');if(b){b.textContent='Открыть все уроки';b.dataset.go='pay-all';delete b.dataset.retry;}
+  /* Кнопка сразу открывает счёт (28.09): раньше между закрытым уроком и
+     оплатой был ещё экран доступа. Сравнить с годом — ссылкой ниже. */
+  const b=$('#v-pay .buy2');if(b){b.textContent=sBuyText();b.dataset.write='pay';delete b.dataset.go;delete b.dataset.retry;}
+  const more=$('#pay-more');if(more)more.hidden=false;
   сказатьПричину('');
   /* На этот экран приходят чаще всего с четвёртого урока курса. Робот тут
      не продаёт, а говорит, чем платная часть отличается от открытой. */
@@ -4118,6 +4161,9 @@ showPay=function(sec,les){
   $('#v-pay [data-back]').dataset.go=window.__lback||'route';
   show('pay');
 };
+/* Оплатил с экрана закрытого урока — сразу открываем этот урок: человек
+   платил, чтобы читать дальше. Зовёт ждатьДоступ, когда доступ подтвердился. */
+function открытьОплаченный(){ if($('#v-pay')?.classList.contains('on')) openLes(payLes,window.__lback||'route'); }
 showTrouble=function(sec,les){
   $('#pay-t').textContent=les.t;$('#pay-lead').textContent='Не получилось загрузить урок с сервера.';
   /* Причина мелкой строкой — как у ленты. Без неё жалоба «не грузится»
@@ -4132,7 +4178,8 @@ showTrouble=function(sec,les){
   $('#pay-in').innerHTML=['Похоже, пропала связь или сервер занят.','Твой доступ на месте, ничего не потерялось.'].map(t=>`<li>${si('refresh')}<span>${t}</span></li>`).join('');
   сказатьПричину(`${les.key||'урок'} · ${причина}${сколько}${d?.retried?' · после повтора':''}`);
   $('#pay-bot').innerHTML=sBotSay('spit','<b>Это не из-за тебя.</b> Открытые уроки читаются и без сети — а этот вернётся, как только связь появится.');
-  const b=$('#v-pay .buy2');if(b){b.textContent='Попробовать снова';b.dataset.retry='1';delete b.dataset.go;}
+  const b=$('#v-pay .buy2');if(b){b.textContent='Попробовать снова';b.dataset.retry='1';delete b.dataset.go;delete b.dataset.write;}
+  const more=$('#pay-more');if(more)more.hidden=true;
   show('pay');
   сноваКогдаПоявитсяСвязь(()=>b?.click());
 };
@@ -4406,6 +4453,10 @@ const xNav=(()=>{
     requestAnimationFrame(()=>{if(document.querySelector('.view.on')===v){fill(v);sync();}});
   }
   function sync(){
+    /* Экран перерисовал заголовок (главная делает это сразу после показа):
+       прежний выпал из страницы, его место читается как 0 — «уехал за верх»,
+       и панель с тем же «Учиться» висела над крупным заголовком. Берём новый. */
+    if(head&&!head.isConnected){const v=document.querySelector('.view.on');if(v)fill(v);}
     const h=bar.offsetHeight||50;
     const now=head?head.getBoundingClientRect().bottom<h-2:scrollY>h;
     if(now!==on){on=now;bar.classList.toggle('on',on);}
@@ -4861,6 +4912,7 @@ function источникЗапуска(){
     const старт = String(TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam') || '');
     if(старт.startsWith('src_')) return старт.slice(0, 40);
     if(старт.startsWith('card_')) return 'материал из канала';
+    if(старт.startsWith('drug_')) return 'от друга';
     if(/^(lesson|exercise)_/.test(старт)) return 'урок из канала';
     if(старт) return 'другая метка';
     if(п.get('material')) return 'материал по ссылке';
@@ -5125,7 +5177,7 @@ async function оплатитьЗдесь(кнопка, срок){
 /* Строка под кнопкой оплаты. Экран перерисовывается при каждой проверке
    доступа, поэтому строку ставим заново после каждой. */
 function сказатьОплата(текст){
-  const кнопка=$('#s-checkout .s-buy'); if(!кнопка) return;
+  const кнопка=$('.view.on [data-write="pay"]'); if(!кнопка) return;
   let p=$('#s-pay-note');
   if(!p){ p=document.createElement('p'); p.id='s-pay-note'; p.className='s-honest'; p.setAttribute('role','status'); }
   p.textContent=текст; кнопка.after(p);
@@ -5142,6 +5194,7 @@ async function ждатьДоступ(было){
       try{ TG.HapticFeedback?.notificationOccurred('success'); }catch(e){}
       const до=me.until ? ' до '+me.until.split('-').reverse().join('.') : '';
       сказатьОплата('Готово: доступ открыт'+до+'. Все уроки твои.');
+      открытьОплаченный();  // платил с закрытого урока — сразу в него
       return;
     }
     сказатьОплата('Оплата прошла. Открываю доступ…');
@@ -5479,6 +5532,7 @@ $('#hi-go').addEventListener('click', ()=>closeHello(true));
 $('#l-fav').addEventListener('click', favToggle);
 $('#l-share').addEventListener('click', () => {
   if(!favCur) return;
+  if(favCur.kind === 'lesson'){ const [si, li] = favCur.key.split('-').map(Number); поделитьсяУроком(si, li); return; }
   share(favCur.kind === 'tool'
     ? 'Разбор нейросети «' + favCur.title + '» — в приложении «ИИ без людей»'
     : 'Урок «' + favCur.title + '» — в приложении «ИИ без людей»');
@@ -5530,7 +5584,7 @@ function прямаяСсылка(){
     const старт = TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam');
     const cardId=п.get('material')||(typeof старт==='string'&&старт.startsWith('card_')?старт.slice(5):null);
     if(cardId){feedDeepLink(cardId);return;}
-    const адрес = typeof старт === 'string' && /^(?:lesson|exercise)_(\d+)_(\d+)$/.exec(старт);
+    const адрес = typeof старт === 'string' && /^(?:lesson|exercise|drug)_(\d+)_(\d+)$/.exec(старт);
     if(адрес){ урок = адрес[1] + '-' + адрес[2]; запрос = null; }
   }catch(e){}
   const потерялось = что => {
