@@ -2345,6 +2345,43 @@ a.s-pill,a.s-btn{text-decoration:none}
 :root[data-big="1"] .s-daily-text{font-size:16.5px}
 :root[data-big="1"] .s-ai-what,:root[data-big="1"] .s-ai-facts li{font-size:17.5px}
 .s-plan strong small+small{margin-top:1px}
+
+/* ---------- главная: неделя кружками, «Что нового», первая неделя (29.09) ---------- */
+.s-week-dots{display:flex;justify-content:space-between;gap:4px;margin:-8px 0 18px;padding:10px 12px;border-radius:16px;background:var(--s-card)}
+.s-week-dots span{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11.5px;color:var(--s-soft)}
+.s-week-dots i{display:block;width:14px;height:14px;border-radius:50%;background:var(--s-line)}
+.s-week-dots .on i{background:var(--s-acc)}
+.s-week-dots .now{color:var(--s-ink);font-weight:600}
+.s-week-dots .now i{outline:2px solid var(--s-acc);outline-offset:2px}
+.s-news{margin:-8px 0 18px;padding:16px 18px 6px;border-radius:20px;background:var(--s-acc-s)}
+.s-news ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.s-news li{display:flex;align-items:flex-start;gap:8px;font-size:14.5px;line-height:1.4;color:var(--s-ink)}
+.s-news li .s-ic{width:16px;height:16px;flex:none;margin-top:2px;color:var(--s-acc)}
+.s-plan-week{margin:0 0 24px;padding:20px;border-radius:24px;background:var(--s-white);border:1px solid var(--s-line)}
+.s-plan-top{display:flex;align-items:center;justify-content:space-between}
+.s-plan-top span{font-size:13px;color:var(--s-soft);font-variant-numeric:tabular-nums}
+.s-plan-week h2{margin:0;font-size:20px;line-height:1.25;font-weight:650;letter-spacing:-.02em;color:var(--s-ink)}
+.s-plan-sub{margin:4px 0 14px;font-size:14px;line-height:1.45;color:var(--s-soft)}
+.s-plan-steps{display:flex;gap:8px;margin:0 0 16px}
+.s-plan-steps span{display:grid;place-items:center;flex:1;height:34px;border-radius:10px;background:var(--s-card);font-size:13px;font-weight:600;color:var(--s-soft)}
+.s-plan-steps .on{background:var(--s-acc);color:#fff}
+.s-plan-steps .now{box-shadow:inset 0 0 0 2px var(--s-acc);color:var(--s-ink)}
+.s-plan-steps .s-ic{width:16px;height:16px}
+.s-plan-week .s-btn{justify-content:space-between;text-align:left}
+.s-plan-week .s-btn .s-ic{width:18px;height:18px;flex:none}
+:root[data-n="1"] .s-plan-steps .on{color:#14161A}
+
+/* ---------- отзыв после третьего урока (29.09) ---------- */
+.s-otzyv{margin:0 0 20px;padding:18px;border-radius:22px;background:var(--s-card)}
+.s-otzyv>p{margin:0 0 12px;font-size:15px;line-height:1.45;color:var(--s-ink2)}
+.s-otzyv>p b{color:var(--s-ink)}
+.s-otzyv-marks{display:flex;gap:8px}
+.s-otzyv-marks button{flex:1;min-height:48px;border:0;border-radius:14px;background:var(--s-white);color:var(--s-ink);font-family:var(--s-font);font-size:18px;font-weight:650;cursor:pointer}
+.s-otzyv-marks button[aria-checked="true"]{background:var(--s-acc);color:#fff}
+.s-otzyv-more{margin-top:12px;display:grid;gap:10px}
+.s-otzyv-more textarea{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid var(--s-line);border-radius:14px;background:var(--s-white);color:var(--s-ink);font-family:var(--s-font);font-size:16px;line-height:1.45;resize:vertical}
+.s-otzyv .s-link{margin-top:4px}
+:root[data-n="1"] .s-otzyv-marks button[aria-checked="true"]{color:#14161A}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2428,6 +2465,7 @@ a.s-pill,a.s-btn{text-decoration:none}
   <div id="s-prod"></div>
   <div id="s-day-stats"></div>
   <div id="sec-head"></div>
+  <div id="s-plan"></div>
   <div id="s-daily"></div>
   <div id="s-courses"></div>
   <div id="sec-list"></div>
@@ -2503,6 +2541,7 @@ a.s-pill,a.s-btn{text-decoration:none}
     <button data-invite="1"><span class="ic" style="background:#0E8C93"><svg class="s-ic" aria-hidden="true"><use href="#i-send"/></svg></span><span><b>Пригласить друга</b><small>За нового человека по твоей ссылке — неделя доступа в подарок</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-go="favs"><span class="ic"><svg class="s-ic" aria-hidden="true"><use href="#i-star"/></svg></span><span><b>Мои материалы</b><small>Закладки и недавно открытое</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-prep="11"><span class="ic"><svg class="s-ic" aria-hidden="true"><use href="#i-link"/></svg></span><span><b>Первый вход в нейросеть</b><small>Регистрация и помощь со входом</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
+    <button data-faq="1"><span class="ic" style="background:#B07A0B"><svg class="s-ic" aria-hidden="true"><use href="#i-message"/></svg></span><span><b>Вопросы и ответы</b><small>Оплата, возврат, доступ, подарок за друга</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-write="1"><span class="ic" style="background:#6E7179"><svg class="s-ic" aria-hidden="true"><use href="#i-mail"/></svg></span><span><b>Написать в редакцию</b><small>вопрос уйдёт в бот, ответ придёт туда же</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-go="docs"><span class="ic" style="background:#8C8F97"><svg class="s-ic" aria-hidden="true"><use href="#i-document"/></svg></span><span><b>Документы</b><small>оферта, политика, связь</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <div class="r s-switch"><span class="ic" style="background:#2F6BFF"><svg class="s-ic" aria-hidden="true"><use href="#i-document"/></svg></span><span style="flex:1"><b id="sw4-t">Крупный текст</b><small id="sw4-note">Уроки, гайды и словарь крупнее — легче читать с телефона.</small></span><button class="sw off" id="sw4" role="switch" aria-checked="false" aria-labelledby="sw4-t"><i></i></button></div>
@@ -2702,6 +2741,28 @@ const DOCS = [
   ['h','Если оплата не проходит'],
   ['p','Из России покупка через App Store и Google Play иногда не проходит — это ограничение магазинов, а не наше. Попробуй через @PremiumBot. Не вышло — напиши в бот @ai_bez_lyudey_bot команду /paysupport, разберёмся.'],
   ['p','Автосписаний нет: каждое продление — отдельная оплата. Семь дней на возврат без объяснения причин.']
+ ]},
+ {id:'faq', t:'Вопросы и ответы', d:'Оплата, возврат, доступ, серия, подарок за друга', b:[
+  ['h','Что здесь бесплатно'],
+  ['p','Первые три урока каждого курса — всего 18, словарь, подборки запросов и список нейросетей, которые работают из России. Лента материалов открыта, пока ты подписан на канал.'],
+  ['h','Сколько стоит полный доступ'],
+  ['p','300 звёзд Telegram за месяц или 3 000 за год — примерно 500–650 ₽ в месяц. Автосписаний нет: продление — только новой оплатой.'],
+  ['h','Как оплатить'],
+  ['p','Нажми «Оформить месяц» на экране «Полный доступ» или на закрытом уроке. Счёт в звёздах откроется прямо в приложении, уроки откроются сразу после оплаты. Где взять звёзды — в «Как купить звёзды» здесь же, в документах.'],
+  ['h','Оплатил, а уроки закрыты'],
+  ['p','Подожди минуту и открой приложение заново: бот получает подтверждение от Telegram не мгновенно. Не помогло — напиши в бот @ai_bez_lyudey_bot команду /paysupport.'],
+  ['h','Как вернуть звёзды'],
+  ['p','В течение семи дней после оплаты — без объяснения причин. Напиши в бот команду /paysupport, звёзды вернутся на твой счёт в Telegram.'],
+  ['h','Урок не открывается'],
+  ['p','Бесплатные уроки читаются и без сети. Платным нужен интернет: проверь связь и нажми «Попробовать снова». Если не выходит — «Написать в редакцию» в профиле, с названием урока.'],
+  ['h','Нейросеть из урока не открывается'],
+  ['p','Во вкладке «Материалы» есть «Работают из России» — там нейросети, которые открываются напрямую, и что в каждой бесплатно. Запросы из уроков подходят и для них.'],
+  ['h','Что такое серия и отметки'],
+  ['p','Серия — сколько дней подряд ты открываешь урок. Отметки — за первые уроки, серию и пройденные курсы, они в профиле. Напомнить о серии бот может вечером — включается там же.'],
+  ['h','Как получить неделю в подарок'],
+  ['p','Отправь другу урок — кнопкой после «Получилось?» или «Пригласить друга» в профиле. Когда он впервые откроет урок по твоей ссылке, тебе добавится неделя полного доступа. До пяти недель в месяц.'],
+  ['h','Кто пишет уроки'],
+  ['p','Нейросеть — людей в редакции нет. Вопрос можно задать через «Написать в редакцию» в профиле: он придёт в бот, ответ вернётся туда же.']
  ]}
 ];
 // 19.09: ФИО, ИНН и статус появятся после оформления самозанятости — до тех пор только настоящие контакты
@@ -4250,7 +4311,8 @@ function sRenderSec(i){
     ${finished?`<button class="s-btn" data-les="0">Повторить первый урок ${si('chev')}</button><button class="s-link" data-cert="${i}">${si('star')}Грамота за курс</button>`:next>=0?`<button class="s-btn" data-les="${next}">${read?'Продолжить':'Начать урок'} ${si('chev')}</button>`:`<button class="s-btn" data-go="pay-all">Открыть оставшиеся уроки ${si('chev')}</button>`}
     </section>`;
   $('#sec-overview').innerHTML='';$('#sec-now').innerHTML='';$('#sec-foot').innerHTML='';
-  const st=$('#s-day-stats');if(st)st.innerHTML=sDayStats();
+  const st=$('#s-day-stats');if(st)st.innerHTML=sNewsCard()+sDayStats()+sWeekDots();
+  const pl=$('#s-plan');if(pl)pl.innerHTML=sPlanWeek();
   const cr=$('#s-courses');if(cr)cr.innerHTML=sCoursesRow(i);
   sDailyFill();
   const parts=s.archived?[[0,s.ls.length,'Уроки']]:[[0,3,S_PART[0]],[3,7,S_PART[1]],[7,s.ls.length,S_PART[2]]];
@@ -4275,6 +4337,47 @@ function sDayStats(){
     +cell(read,'урок прочитан','урока прочитано','уроков прочитано')
     +cell(copied,'запрос скопирован','запроса скопировано','запросов скопировано')+`</div>`;
 }
+/* ---------- неделя кружками (29.09) ----------
+   Семь последних дней: закрашены те, где был урок (журнал dlog ведёт touchDay).
+   Показываем рядом с прогрессом, то есть только тем, у кого он уже есть. */
+function sWeekDots(){
+  const log=S.get('dlog',[])||[];if(!log.length)return '';
+  const букв=['вс','пн','вт','ср','чт','пт','сб'],t=сегодня();
+  let out='';
+  for(let k=6;k>=0;k--){const d=сдвиг(t,-k),wd=new Date(d+'T12:00:00').getDay();
+    out+=`<span class="${log.includes(d)?'on':''}${k===0?' now':''}"><i></i>${букв[wd]}</span>`;}
+  return `<div class="s-week-dots" aria-label="Уроки за последние семь дней">${out}</div>`;
+}
+/* ---------- «Что нового» (29.09) ----------
+   Вернувшийся человек иначе не узнает о новом. Одна карточка до «Понятно»;
+   новичку не показываем — для него всё новое. Меняется версия — покажется снова. */
+const S_NEWS={v:'2026-09-29',items:['Грамота за пройденный курс','Словарь и подсказки к словам прямо в уроках','Неделя доступа в подарок за друга','Крупный текст и напоминание о серии — в профиле']};
+function sNewsCard(){
+  if(S.get('news-seen','')===S_NEWS.v)return '';
+  if(!doneList().length&&!(S.get('dlog',[])||[]).length)return '';
+  return `<section class="s-news" aria-label="Что нового"><p class="s-daily-k">${si('spark')}Что нового</p><ul>${S_NEWS.items.map(t=>`<li>${si('check')}${esc(t)}</li>`).join('')}</ul><button class="s-link" data-news-ok>Понятно</button></section>`;
+}
+/* ---------- первая неделя (29.09) ----------
+   Шесть бесплатных уроков нейросетей, которые открываются из России (DeepSeek
+   и Perplexity), через раз. Новичку — понятный план вместо выбора из шести
+   курсов. Пройдено всё или человек уже прочитал десять уроков — не показываем. */
+function sPlanWeek(){
+  const ds=SECS.findIndex(c=>c.slug==='deepseek'&&!c.archived),px=SECS.findIndex(c=>c.slug==='perplexity'&&!c.archived);
+  if(ds<0||px<0)return '';
+  const plan=[[ds,0],[px,0],[ds,1],[px,1],[ds,2],[px,2]],done=doneList();
+  const got=plan.filter(([i,j])=>done.includes(i+'-'+j)).length;
+  if(got===plan.length||done.length>=10)return '';
+  const nx=plan.find(([i,j])=>!done.includes(i+'-'+j)),c=SECS[nx[0]],l=c.ls[nx[1]];
+  return `<section class="s-plan-week" aria-label="Первая неделя"><div class="s-plan-top"><p class="s-daily-k">${si('fire')}Первая неделя</p><span>${got} из ${plan.length}</span></div>`
+    +`<h2>Шесть уроков по ${l.min||12} минут</h2><p class="s-plan-sub">DeepSeek и Perplexity — работают из России. По уроку в день.</p>`
+    +`<div class="s-plan-steps">${plan.map(([i,j],n)=>`<span class="${done.includes(i+'-'+j)?'on':''}${i===nx[0]&&j===nx[1]?' now':''}">${done.includes(i+'-'+j)?si('check'):n+1}</span>`).join('')}</div>`
+    +`<button class="s-btn" data-plan-open="${nx[0]}-${nx[1]}">Шаг ${got+1}: ${esc(l.t)}${si('chev')}</button></section>`;
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-news-ok]')){S.set('news-seen',S_NEWS.v);e.target.closest('.s-news')?.remove();return;}
+  const p=e.target.closest('[data-plan-open]');
+  if(p){const [i,j]=p.dataset.planOpen.split('-').map(Number);openSec(i);openLes(j,'route');}
+});
 function sCoursesRow(current){
   const done=doneList(),list=activeCourses();
   return `<section class="s-courses" aria-label="Все курсы"><h2 class="s-row-h">Все нейросети<span>${list.length} ${скл(list.length,'курс','курса','курсов')}</span></h2><div class="s-courses-row">`
@@ -4290,7 +4393,8 @@ function sCoursesRow(current){
 let sDailyCache=null;
 function sDailyPick(){
   const pool=[];
-  activeCourses().forEach(({s,i})=>s.ls.forEach((l,li)=>{if((!l.key||ME?.paid)&&l.promptTitles?.length)pool.push({si:i,li});}));
+  // NotebookLM не берём: его запросы работают только с загруженными туда источниками
+  activeCourses().forEach(({s,i})=>s.slug!=='notebook'&&s.ls.forEach((l,li)=>{if((!l.key||ME?.paid)&&l.promptTitles?.length)pool.push({si:i,li});}));
   if(!pool.length)return null;
   const day=Math.floor(Date.parse(сегодня()+'T12:00:00')/864e5);
   let n=(day*7)%pool.length;if(n<0)n+=pool.length;
@@ -4481,6 +4585,34 @@ document.addEventListener('click',e=>{
 },true);
 const _buildToc=buildToc;
 buildToc=function(bodyId,tocId){const r=_buildToc(bodyId,tocId);if(!bodyId){sGlossify($('#l-body'));sPromptShareButtons($('#l-body'));}return r;};
+
+/* ---------- отзыв после третьего урока (29.09) ----------
+   Один раз: оценка 1–5 и, если хочется, пара слов. Сервер записывает, бот
+   пересылает Ivan'у. Блок появляется, только если сервер умеет принимать
+   отзывы (в /api/me есть otzyv) и человек ещё не оставлял и не отказывался. */
+function sOtzyvCheck(){
+  if(typeof ME?.otzyv!=='boolean'||ME.otzyv||S.get('otzyv-asked',false))return;
+  if(doneList().length<3||!$('#v-lesson')?.classList.contains('on'))return;
+  const host=$('#l-next');if(!host||host.querySelector('.s-otzyv'))return;
+  host.insertAdjacentHTML('afterbegin',`<section class="s-otzyv" aria-label="Отзыв"><p><b>Как тебе уроки?</b> Оцени — это десять секунд. Отзыв прочитает редакция.</p>`
+    +`<div class="s-otzyv-marks" role="radiogroup" aria-label="Оценка от 1 до 5">${[1,2,3,4,5].map(n=>`<button role="radio" aria-checked="false" data-otzyv-mark="${n}">${n}</button>`).join('')}</div>`
+    +`<div class="s-otzyv-more" hidden><textarea id="s-otzyv-text" maxlength="600" rows="3" placeholder="Что улучшить? Можно пропустить"></textarea><button class="s-btn" data-otzyv-send>Отправить</button></div>`
+    +`<button class="s-link" data-otzyv-later>Не сейчас</button></section>`);
+}
+document.addEventListener('click',e=>{
+  const box=e.target.closest('.s-otzyv');if(!box)return;
+  const m=e.target.closest('[data-otzyv-mark]');
+  if(m){box.querySelectorAll('[data-otzyv-mark]').forEach(b=>b.setAttribute('aria-checked',String(b===m)));box.dataset.mark=m.dataset.otzyvMark;box.querySelector('.s-otzyv-more').hidden=false;xHaptic('select');return;}
+  if(e.target.closest('[data-otzyv-later]')){S.set('otzyv-asked',true);box.remove();return;}
+  const send=e.target.closest('[data-otzyv-send]');
+  if(send&&!send.disabled){
+    send.disabled=true;send.textContent='Отправляю…';
+    post('/api/otzyv',{оценка:+box.dataset.mark||0,текст:$('#s-otzyv-text')?.value||''}).then(r=>{
+      if(r?.ok){if(ME)ME.otzyv=true;S.set('otzyv-asked',true);box.innerHTML=sBotSay('raduetsya','<b>Спасибо!</b> Отзыв уже у редакции. Каждое слово пригодится.');}
+      else{send.disabled=false;send.textContent='Отправить';appNotice('Не отправилось. Проверь связь и попробуй ещё раз.');}
+    });
+  }
+});
 
 /* ---------- грамота за пройденный курс (28.09) ----------
    Картинка рисуется на телефоне, на сервер ничего не уходит. Пол человека
@@ -4811,6 +4943,13 @@ document.addEventListener('click',e=>{
     share('«ИИ без людей» — нейросети с нуля: '+c.ls.length+' уроков на живых задачах, готовые запросы. Первые уроки бесплатно.',sDrugLink(next.i,0));
   }
 });
+/* «Вопросы и ответы» (29.09) — документ faq; из профиля «назад» ведёт в
+   профиль, из списка документов — в документы. */
+document.addEventListener('click',e=>{
+  const back=$('#v-doc [data-back]');if(!back)return;
+  if(e.target.closest('[data-faq]')){back.dataset.go='me';back.textContent='← Профиль';openDoc('faq');return;}
+  if(e.target.closest('#docs [data-doc]')){back.dataset.go='docs';back.textContent='← Документы';}
+},true);
 const _checkAch=checkAch;
 checkAch=function(){
   const n=_checkAch();
@@ -5138,7 +5277,7 @@ document.addEventListener('click',e=>{
   new MutationObserver(()=>{if(!sw.disabled&&sw.classList.contains('x-flip'))sw.classList.remove('x-flip');}).observe(sw,{attributes:true,attributeFilter:['disabled']});})();
 /* прочитанный урок — короткий «успех» */
 const _markDone=markDone;
-markDone=function(id){const was=doneList().includes(id);const r=_markDone(id);if(!was){xHaptic('success');sCertCheck(id);}return r;};
+markDone=function(id){const was=doneList().includes(id);const r=_markDone(id);if(!was){xHaptic('success');sCertCheck(id);sOtzyvCheck();}return r;};
 /* раскрывашки («Текст промпта целиком», «Источники», «Если интерфейс отличается»)
    открываются и закрываются плавно, а не рывком. У «Источников» содержимое без
    обёртки — оборачиваем при первом нажатии: движется обёртка, а не каждый абзац. */
@@ -5584,7 +5723,7 @@ function источникЗапуска(){
 
 function postDiagnostic(path, value){
   // Только известный путь и итог запроса: подпись, тело и адреса сюда не попадают.
-  if(!['/api/me','/api/material','/api/lesson','/api/notify','/api/stat','/api/invoice'].includes(path))return null;
+  if(!['/api/me','/api/material','/api/lesson','/api/notify','/api/stat','/api/invoice','/api/otzyv'].includes(path))return null;
   const latest=postDiagnostic.latest||(postDiagnostic.latest=Object.create(null));
   if(value)latest[path]=Object.freeze({...value});
   return latest[path]||null;
