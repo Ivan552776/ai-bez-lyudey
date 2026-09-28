@@ -2321,6 +2321,13 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-gl:active{background:var(--s-acc-s);border-radius:4px}
 .s-gl-t{margin:0 0 4px;font-size:22px;line-height:1.2;font-weight:650;letter-spacing:-.02em;color:var(--s-ink)}
 .s-ai-dlg .s-daily-k{margin-bottom:6px}
+
+/* ---------- запрос картинкой (29.09) ---------- */
+.pbox .ph .s-pshare{position:relative;display:grid;place-items:center;flex:none;width:40px;height:36px;margin-left:6px;padding:0;border:0;border-radius:999px;background:var(--s-white);color:var(--s-acc);cursor:pointer}
+.pbox .ph .s-pshare::after{content:'';position:absolute;inset:-4px -2px}
+.pbox .ph .s-pshare .s-ic{width:17px;height:17px}
+.pbox .ph>span{flex:1;min-width:0}
+.s-daily-acts .s-link .s-ic:first-child{margin-right:2px}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -4279,7 +4286,8 @@ async function sDailyFill(){
     +`<pre class="s-daily-text" data-daily-text>${text?esc(text):'Загружаем запрос…'}</pre>`
     +`<button class="s-link s-daily-more" data-daily-more hidden>Показать целиком</button>`
     +`<div class="s-daily-acts"><button class="s-btn cb s-daily-copy" data-copy="${text?enc(text):''}"${text?'':' disabled'}>Скопировать запрос</button>`
-    +`<button class="s-link" data-daily-open="${x.si}-${x.li}" aria-label="Открыть урок «${esc(l.t)}»">Открыть урок${si('chev')}</button></div></section>`;
+    +`<button class="s-link" data-daily-open="${x.si}-${x.li}" aria-label="Открыть урок «${esc(l.t)}»">Открыть урок${si('chev')}</button>`
+    +(l.key?'':`<button class="s-link" data-pshare="${x.si}-${x.li}">${si('send')}Поделиться картинкой</button>`)+`</div></section>`;
   const paint=t=>{
     const card=box.querySelector('.s-daily-card');if(!card)return;
     card.querySelector('[data-daily-text]').textContent=t;
@@ -4452,7 +4460,7 @@ document.addEventListener('click',e=>{
   if(e.target.closest('#v-study [data-go="slovar"]')){const back=$('#v-slovar [data-back]');if(back)back.dataset.go='study';const q=$('#slovar-q');if(q&&q.value){q.value='';sSlovarPaint();}}
 },true);
 const _buildToc=buildToc;
-buildToc=function(bodyId,tocId){const r=_buildToc(bodyId,tocId);if(!bodyId)sGlossify($('#l-body'));return r;};
+buildToc=function(bodyId,tocId){const r=_buildToc(bodyId,tocId);if(!bodyId){sGlossify($('#l-body'));sPromptShareButtons($('#l-body'));}return r;};
 
 /* ---------- грамота за пройденный курс (28.09) ----------
    Картинка рисуется на телефоне, на сервер ничего не уходит. Пол человека
@@ -4499,41 +4507,102 @@ async function sCertImage(i){
   g.fillStyle=col;g.font='400 28px '+F;g.fillText('t.me/ai_bez_lyudey_bot/kurs',120,H-158);
   return await new Promise(ok=>cv.toBlob(ok,'image/png'));
 }
-let sCertBlob=null,sCertUrl='',sCertCourse=null;
-async function sCertOpen(i){
+/* Окно с картинкой — общее для грамоты и карточки запроса: картинка,
+   «Поделиться» (своё у каждого) и «Сохранить». */
+let sSheet=null;
+async function sImgOpen({alt,label,file,make,share}){
   let d=$('#s-cert');
   if(!d){
     d=document.createElement('dialog');d.id='s-cert';d.className='s-cert-dlg';
     d.tabIndex=-1;   // фокус на окно, а не рамкой на первую кнопку
-    d.innerHTML=`<img alt="" id="s-cert-img"><div class="s-cert-acts"><button class="s-btn" data-cert-share>${si('send')}Поделиться курсом с друзьями</button><button class="s-btn line" data-cert-save>Сохранить картинку</button><p class="s-cert-hint" id="s-cert-hint" hidden></p><button class="s-link" data-cert-close>Закрыть</button></div>`;
+    d.innerHTML=`<img alt="" id="s-cert-img"><div class="s-cert-acts"><button class="s-btn" data-cert-share></button><button class="s-btn line" data-cert-save>Сохранить картинку</button><p class="s-cert-hint" id="s-cert-hint" hidden></p><button class="s-link" data-cert-close>Закрыть</button></div>`;
     document.body.appendChild(d);
     d.addEventListener('click',e=>{if(e.target===d)d.close();});
   }
-  sCertCourse=i;$('#s-cert-hint').hidden=true;
-  const img=$('#s-cert-img');img.alt='Грамота: курс «'+SECS[i].t+'» пройден';img.removeAttribute('src');
+  d.querySelector('[data-cert-share]').innerHTML=si('send')+esc(label);
+  $('#s-cert-hint').hidden=true;
+  const img=$('#s-cert-img');img.alt=alt;img.removeAttribute('src');
   if(!d.open){d.showModal();d.focus();}
-  sCertBlob=await sCertImage(i);
-  if(sCertUrl)URL.revokeObjectURL(sCertUrl);
-  sCertUrl=sCertBlob?URL.createObjectURL(sCertBlob):'';
-  if(sCertUrl)img.src=sCertUrl;
+  const blob=await make();
+  if(sSheet?.url)URL.revokeObjectURL(sSheet.url);
+  sSheet={blob,url:blob?URL.createObjectURL(blob):'',file,share};
+  if(sSheet.url)img.src=sSheet.url;
+}
+function sCertOpen(i){
+  const c=SECS[i];if(!c)return;
+  sImgOpen({alt:'Грамота: курс «'+c.t+'» пройден',label:'Поделиться курсом с друзьями',file:'gramota-'+(c.slug||'kurs')+'.png',
+    make:()=>sCertImage(i),
+    share:()=>{шаг('поделился');share('Пройден курс «'+c.t+'» в «ИИ без людей»: '+c.ls.length+' '+скл(c.ls.length,'урок','урока','уроков')+' на живых задачах. Первые уроки бесплатно.',sDrugLink(i,0));}});
 }
 async function sCertSave(){
-  const hint=$('#s-cert-hint');if(!sCertBlob)return;
-  const file=new File([sCertBlob],'gramota-'+(SECS[sCertCourse]?.slug||'kurs')+'.png',{type:'image/png'});
+  const hint=$('#s-cert-hint');if(!sSheet?.blob)return;
+  const file=new File([sSheet.blob],sSheet.file,{type:'image/png'});
   try{
     if(navigator.canShare?.({files:[file]})){await navigator.share({files:[file]});return;}
   }catch(e){if(e?.name==='AbortError')return;}
-  try{const a=document.createElement('a');a.href=sCertUrl;a.download=file.name;document.body.appendChild(a);a.click();a.remove();}catch(e){}
+  try{const a=document.createElement('a');a.href=sSheet.url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();}catch(e){}
   hint.textContent='Если картинка не сохранилась, нажми на неё и подержи — телефон предложит сохранить.';hint.hidden=false;
+}
+/* ---------- запрос картинкой (29.09) ----------
+   Только из бесплатных уроков: платное не должно расходиться картинками. */
+async function sPromptImage(title,text,course){
+  const W=1080,H=1350,cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
+  const F='"Golos Text",-apple-system,system-ui,sans-serif';
+  try{await Promise.all(['700 52px','600 34px','400 30px'].map(f=>document.fonts.load(f+' "Golos Text"')));}catch(e){}
+  const robot=await new Promise(ok=>{const im=new Image();im.onload=()=>ok(im);im.onerror=()=>ok(null);im.src=S_ROBOT+'planshet.webp';});
+  g.fillStyle='#D6F2E4';g.fillRect(0,0,W,H);
+  g.fillStyle='#FFFFFF';sRound(g,60,60,W-120,H-120,56);g.fill();
+  g.fillStyle='#0E2420';sRound(g,120,120,76,76,20);g.fill();
+  g.fillStyle='#FFFFFF';g.font='700 32px '+F;g.textAlign='center';g.textBaseline='middle';g.fillText('ии',158,160);
+  g.textAlign='left';g.fillStyle='#14161A';g.font='600 34px '+F;g.fillText('ИИ без людей',218,160);
+  g.textBaseline='alphabetic';
+  g.fillStyle='#0B6E4F';g.font='700 30px '+F;g.fillText('ГОТОВЫЙ ЗАПРОС'+(course?' · '+course.toUpperCase():''),120,300);
+  g.fillStyle='#14161A';g.font='700 52px '+F;
+  let y=372;for(const line of sWrap(g,title,840).slice(0,2)){g.fillText(line,120,y);y+=62;}
+  // текст запроса в серой плашке; не влез — многоточие и «весь запрос в приложении»
+  const top=y+14,boxH=H-120-top-250;
+  g.fillStyle='#F3F2EE';sRound(g,120,top,W-240,boxH,32);g.fill();
+  g.fillStyle='#2A2D33';g.font='400 30px '+F;
+  // на картинке важнее сама задача, чем учебные данные: показываем её первой
+  const full=String(text),at=full.search(/(^|\n)Задача:/);
+  const body=at>=0?full.slice(at).trim():full;
+  const lines=[];for(const para of body.split('\n')){if(!para.trim()){lines.push('');continue;}lines.push(...sWrap(g,para,W-240-80));}
+  const max=Math.floor((boxH-60)/44);let shown=lines.slice(0,max);
+  if(lines.length>max){while(shown.length&&!shown[shown.length-1].trim())shown.pop();shown[shown.length-1]=shown[shown.length-1].replace(/\s*\S*$/,'')+' …';}
+  let ty=top+62;for(const line of shown){g.fillText(line,160,ty);ty+=44;}
+  if(robot){const h=300,w=Math.round(robot.width*h/robot.height);g.drawImage(robot,W-120-w+10,H-120-h-10,w,h);}
+  g.fillStyle='#14161A';g.font='600 32px '+F;g.fillText('Скопируй и отправь в любую нейросеть',120,H-200);
+  g.fillStyle='#0B6E4F';g.font='400 28px '+F;g.fillText('Весь запрос — t.me/ai_bez_lyudey_bot/kurs',120,H-156);
+  return await new Promise(ok=>cv.toBlob(ok,'image/png'));
+}
+function sPromptShare(si_,li,text){
+  const c=SECS[si_],l=c?.ls[li];if(!l||l.key)return;
+  sImgOpen({alt:'Запрос из урока «'+l.t+'»',label:'Отправить урок другу',file:'zapros-'+(c.slug||'urok')+'-'+(li+1)+'.png',
+    make:()=>sPromptImage(l.t,text,c.t),
+    share:()=>{шаг('поделился');share('Готовый запрос из урока «'+l.t+'»: скопируй, отправь в нейросеть — и получишь результат. Первые уроки бесплатно.',sDrugLink(si_,li));}});
+}
+/* ссылка «от друга» на урок; пункт 5 добавит сюда того, кто пригласил */
+function sDrugLink(si_,li){return SHARE_URL+'?startapp=drug_'+si_+'_'+li;}
+/* кнопка «картинкой» у запросов бесплатного урока */
+function sPromptShareButtons(root){
+  const last=S.get('xlast',null);if(!root||!Array.isArray(last))return;
+  const [si_,li]=last.map(Number),l=SECS[si_]?.ls[li];if(!l||l.key)return;
+  root.querySelectorAll('.pbox').forEach(box=>{
+    if(box.querySelector('.s-pshare'))return;
+    const ph=box.querySelector('.ph'),pre=box.querySelector('pre');if(!ph||!pre)return;
+    ph.insertAdjacentHTML('beforeend',`<button type="button" class="s-pshare" data-pshare="${si_}-${li}" aria-label="Поделиться запросом картинкой">${si('send')}</button>`);
+  });
 }
 document.addEventListener('click',e=>{
   const c=e.target.closest('[data-cert]');if(c){sCertOpen(+c.dataset.cert);return;}
   if(e.target.closest('[data-cert-close]')){$('#s-cert')?.close();return;}
   if(e.target.closest('[data-cert-save]')){sCertSave();return;}
-  if(e.target.closest('[data-cert-share]')){
-    const i=sCertCourse,c=SECS[i];if(!c)return;
-    шаг('поделился');
-    share('Пройден курс «'+c.t+'» в «ИИ без людей»: '+c.ls.length+' '+скл(c.ls.length,'урок','урока','уроков')+' на живых задачах. Первые уроки бесплатно.',SHARE_URL+'?startapp=drug_'+i+'_0');
+  if(e.target.closest('[data-cert-share]')){sSheet?.share?.();return;}
+  const p=e.target.closest('[data-pshare]');
+  if(p){
+    const [si_,li]=p.dataset.pshare.split('-').map(Number);
+    const text=p.closest('.pbox')?.querySelector('pre')?.textContent||p.closest('.s-daily-card')?.querySelector('[data-daily-text]')?.textContent||'';
+    if(text&&!/^Загружаем/.test(text))sPromptShare(si_,li,text);
   }
 });
 /* Сколько запросов человек скопировал — для прогресса на главной. Учебный
