@@ -2328,6 +2328,9 @@ a.s-pill,a.s-btn{text-decoration:none}
 .pbox .ph .s-pshare .s-ic{width:17px;height:17px}
 .pbox .ph>span{flex:1;min-width:0}
 .s-daily-acts .s-link .s-ic:first-child{margin-right:2px}
+
+/* ---------- «приведи друга» (29.09) ---------- */
+.s-gift-note{margin:2px 0 0;font-size:13px;line-height:1.45;color:var(--s-soft)}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2483,11 +2486,13 @@ a.s-pill,a.s-btn{text-decoration:none}
   <section class="s-achs" id="p-achs" aria-label="Отметки"></section>
   <div class="s-grp">
     <button id="p-status" data-go="pay-all"><span class="ic" style="background:#0B6E4F"><svg class="s-ic" aria-hidden="true"><use href="#i-layers"/></svg></span><span><b id="p-st-t">Полный доступ</b><small id="p-st-d">6 курсов, 48 уроков</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
+    <button data-invite="1"><span class="ic" style="background:#0E8C93"><svg class="s-ic" aria-hidden="true"><use href="#i-send"/></svg></span><span><b>Пригласить друга</b><small>За нового человека по твоей ссылке — неделя доступа в подарок</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-go="favs"><span class="ic"><svg class="s-ic" aria-hidden="true"><use href="#i-star"/></svg></span><span><b>Мои материалы</b><small>Закладки и недавно открытое</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-prep="11"><span class="ic"><svg class="s-ic" aria-hidden="true"><use href="#i-link"/></svg></span><span><b>Первый вход в нейросеть</b><small>Регистрация и помощь со входом</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-write="1"><span class="ic" style="background:#6E7179"><svg class="s-ic" aria-hidden="true"><use href="#i-mail"/></svg></span><span><b>Написать в редакцию</b><small>вопрос уйдёт в бот, ответ придёт туда же</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-go="docs"><span class="ic" style="background:#8C8F97"><svg class="s-ic" aria-hidden="true"><use href="#i-document"/></svg></span><span><b>Документы</b><small>оферта, политика, связь</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <div class="r s-switch"><span class="ic" style="background:#0E2420"><svg class="s-ic" aria-hidden="true"><use href="#i-moon"/></svg></span><span style="flex:1"><b id="sw2-t">Ночная тема</b><small>Тёмный фон для чтения вечером. По умолчанию приложение светлое.</small></span><button class="sw off" id="sw2" role="switch" aria-checked="false" aria-labelledby="sw2-t"><i></i></button></div>
+    <div class="r s-switch"><span class="ic" style="background:#C2571E"><svg class="s-ic" aria-hidden="true"><use href="#i-fire"/></svg></span><span style="flex:1"><b id="sw3-t">Напоминать о серии</b><small id="sw3-note">Вечером, если серия два дня и больше, а урока ещё не было. Не чаще раза в день.</small></span><button class="sw off" id="sw3" role="switch" aria-checked="false" aria-labelledby="sw3-t"><i></i></button></div>
     <div class="r s-switch"><span class="ic" style="background:#14161A"><svg class="s-ic" aria-hidden="true"><use href="#i-bell"/></svg></span><span style="flex:1"><b id="sw1-t">Сообщать о новом</b><small id="sw1-note">Можно выключить в любой момент. На доступ это не влияет.</small></span><button class="sw off" id="sw1" role="switch" aria-checked="false" aria-labelledby="sw1-t"><i></i></button></div>
   </div>
   <div id="p-bot"></div>
@@ -3181,7 +3186,7 @@ function поделитьсяУроком(si, li){
   const l = SECS[si]?.ls[li]; if(!l) return;
   шаг('поделился');
   share('Урок «' + l.t + '»: одна задача, готовый запрос и разбор ответа. Первые уроки бесплатно.',
-        SHARE_URL + '?startapp=drug_' + si + '_' + li);
+        sDrugLink(si, li));   // с номером пригласившего — за нового человека неделя в подарок
 }
 
 /* ---------- закладки ----------
@@ -4118,7 +4123,7 @@ document.addEventListener('click',e=>{
   reply.hidden=false;
   /* «Получилось» — лучший момент попросить поделиться: человек только что
      увидел пользу сам. Ссылка ведёт друга прямо в этот урок (поделитьсяУроком). */
-  reply.innerHTML=sBotSay(yes?'palec':'plechi',yes?'Теперь повтори на своей задаче. Схема запроса уже у тебя.':'Попробуем уточнить. Отправь этот текст в тот же чат:')+(yes?`<button class="s-link s-share-lesson" data-share-lesson="${section}-${lesson}">${si('send')}Отправить урок тому, кому пригодится</button>`:`<blockquote>${esc(data.retry)}</blockquote><button class="s-link cb" data-copy="${enc(data.retry)}">${si('copy')}Скопировать подсказку</button>`);
+  reply.innerHTML=sBotSay(yes?'palec':'plechi',yes?'Теперь повтори на своей задаче. Схема запроса уже у тебя.':'Попробуем уточнить. Отправь этот текст в тот же чат:')+(yes?`<button class="s-link s-share-lesson" data-share-lesson="${section}-${lesson}">${si('send')}Отправить урок тому, кому пригодится</button>${sMyId()?`<p class="s-gift-note">${S_GIFT}</p>`:''}`:`<blockquote>${esc(data.retry)}</blockquote><button class="s-link cb" data-copy="${enc(data.retry)}">${si('copy')}Скопировать подсказку</button>`);
   xHaptic(yes?'success':'select');
 });
 document.addEventListener('click',e=>{
@@ -4581,8 +4586,11 @@ function sPromptShare(si_,li,text){
     make:()=>sPromptImage(l.t,text,c.t),
     share:()=>{шаг('поделился');share('Готовый запрос из урока «'+l.t+'»: скопируй, отправь в нейросеть — и получишь результат. Первые уроки бесплатно.',sDrugLink(si_,li));}});
 }
-/* ссылка «от друга» на урок; пункт 5 добавит сюда того, кто пригласил */
-function sDrugLink(si_,li){return SHARE_URL+'?startapp=drug_'+si_+'_'+li;}
+/* ссылка «от друга» на урок; в конце — кто пригласил: за нового человека
+   по его ссылке бот дарит неделю полного доступа (29.09) */
+const sMyId=()=>{const id=TG?.initDataUnsafe?.user?.id;return id&&/^\d{3,15}$/.test(String(id))?String(id):'';};
+function sDrugLink(si_,li){const me=sMyId();return SHARE_URL+'?startapp=drug_'+si_+'_'+li+(me?'_'+me:'');}
+const S_GIFT='Если друг впервые откроет урок по твоей ссылке, тебе — неделя полного доступа в подарок.';
 /* кнопка «картинкой» у запросов бесплатного урока */
 function sPromptShareButtons(root){
   const last=S.get('xlast',null);if(!root||!Array.isArray(last))return;
@@ -4739,6 +4747,7 @@ function sProfile(){
     :courses.length+' '+скл(courses.length,'курс','курса','курсов')+', '+courses.reduce((a,s)=>a+s.ls.length,0)+' уроков';
   sNightPaint();
   sAchPaint();
+  sSeriyaPaint();
   /* Внизу профиля — единственное место, где прямо сказано, кто отвечает на письма. */
   const pb=$('#p-bot');
   if(pb)pb.innerHTML=sBotSay('privet',done||rec||fav
@@ -4756,6 +4765,36 @@ function sAchPaint(){
   box.innerHTML=`<h2 class="s-row-h">Отметки<span>${n} из ${ACH.length}</span></h2><div class="s-ach-grid">`
     +ACH.map(a=>{const d=got[a.k];return `<div class="s-ach${d?' on':''}"><span class="s-ach-ic">${si(S_ACH_ICON[a.k]||'star')}</span><b>${esc(a.t)}</b><small>${d?'получена '+sDate(d):esc(a.d)}</small></div>`;}).join('')+`</div>`;
 }
+/* ---------- напоминание о серии (29.09) ----------
+   Только по согласию и не чаще раза в день: бот пишет вечером, если серия
+   два дня и больше, а сегодня урока ещё не было. */
+function sSeriyaPaint(){
+  const sw=$('#sw3');if(!sw)return;
+  /* Переключатель — только когда сервер знает это согласие (в ответе есть
+     seriya). Прежний сервер принял бы его за «Сообщать о новом». */
+  const row=sw.closest('.s-switch');if(row)row.hidden=typeof ME?.seriya!=='boolean';
+  const on=typeof ME?.seriya==='boolean'?ME.seriya:!!S.get('seriya',false);
+  sw.classList.toggle('off',!on);sw.setAttribute('aria-checked',String(on));
+}
+document.addEventListener('click',e=>{
+  const sw=e.target.closest('#sw3');
+  if(sw){
+    if(sw.disabled)return;
+    const on=sw.classList.contains('off'),note=$('#sw3-note');sw.disabled=true;
+    post('/api/notify',{on,kind:'seriya'}).then(r=>{
+      if(!r||typeof r.on!=='boolean'){note.textContent=вТелеграме()?'Не сохранилось. Попробуй ещё раз.':'Открой приложение в Telegram, чтобы настроить.';return;}
+      sw.classList.toggle('off',!r.on);sw.setAttribute('aria-checked',String(r.on));
+      S.set('seriya',r.on);if(ME)ME.seriya=r.on;xHaptic('light');
+      note.textContent=r.on?'Вечером напомню в боте, если серия два дня и больше, а урока ещё не было.':'Выключено. Можно включить в любой момент.';
+    }).finally(()=>{sw.disabled=false;});
+    return;
+  }
+  if(e.target.closest('[data-invite]')){
+    const next=sNextLesson(),c=SECS[next.i];if(!c)return;
+    шаг('поделился');
+    share('«ИИ без людей» — нейросети с нуля: '+c.ls.length+' уроков на живых задачах, готовые запросы. Первые уроки бесплатно.',sDrugLink(next.i,0));
+  }
+});
 const _checkAch=checkAch;
 checkAch=function(){
   const n=_checkAch();
@@ -5782,7 +5821,18 @@ function paintMe(){
 }
 document.getElementById('subbar-go').addEventListener('click', openChannel);
 /* premium-behavior:v1:access-startup */
-(async function(){ await refreshAccess(); учесть('open', источникЗапуска()); })();
+(async function(){ await refreshAccess(); учесть('open', источникЗапуска()); отметитьДруга(); })();
+/* Пришёл по ссылке друга — сообщаем серверу, кто пригласил (29.09). Сервер
+   засчитает, только если человек у нас впервые, а бот подарит пригласившему
+   неделю доступа. Номер пригласившего — последняя часть drug_<курс>_<урок>_<id>. */
+function отметитьДруга(){
+  try{
+    const п=new URLSearchParams(location.search);
+    const старт=String(TG?.initDataUnsafe?.start_param||п.get('tgWebAppStartParam')||'');
+    const m=/^drug_\d+_\d+_(\d{3,15})$/.exec(старт);
+    if(m && String(TG?.initDataUnsafe?.user?.id||'')!==m[1]) учесть('друг', m[1]);
+  }catch(e){}
+}
 const S = {
   k: n => 'mzr:' + UID + ':' + n,
   get(n, def){ try{ const v = localStorage.getItem(S.k(n)); return v===null ? def : JSON.parse(v); }catch(e){ return def; } },
@@ -6135,7 +6185,7 @@ function прямаяСсылка(){
     const старт = TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam');
     const cardId=п.get('material')||(typeof старт==='string'&&старт.startsWith('card_')?старт.slice(5):null);
     if(cardId){feedDeepLink(cardId);return;}
-    const адрес = typeof старт === 'string' && /^(?:lesson|exercise|drug)_(\d+)_(\d+)$/.exec(старт);
+    const адрес = typeof старт === 'string' && /^(?:lesson|exercise|drug)_(\d+)_(\d+)(?:_\d+)?$/.exec(старт);
     if(адрес){ урок = адрес[1] + '-' + адрес[2]; запрос = null; }
   }catch(e){}
   const потерялось = что => {
