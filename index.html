@@ -25,6 +25,8 @@ addEventListener('unhandledrejection',e=>window.__сбои.push(['promise', Stri
    что у запуска ниже (прямаяСсылка, seenHello): знакомство — первый запуск
    без прямой ссылки; материал из канала — поза по виду материала, как в
    feedOpen. Ошибиться здесь не страшно: картинка просто приедет позже. */
+/* «Крупный текст» (29.09) — ставим до первой отрисовки, чтобы текст не прыгал */
+try{if(localStorage.getItem('mzr-big')==='1')document.documentElement.setAttribute('data-big','1');}catch(e){}
 (function(){try{
   var d=(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initDataUnsafe)||{},
       п=new URLSearchParams(location.search),
@@ -2331,6 +2333,18 @@ a.s-pill,a.s-btn{text-decoration:none}
 
 /* ---------- «приведи друга» (29.09) ---------- */
 .s-gift-note{margin:2px 0 0;font-size:13px;line-height:1.45;color:var(--s-soft)}
+
+/* ---------- «Крупный текст» (29.09) — примерно на 18 % крупнее ---------- */
+:root[data-big="1"] #l-body p,:root[data-big="1"] #l-body li{font-size:19.5px!important;line-height:1.6!important}
+:root[data-big="1"] #l-body h4{font-size:23.5px!important}
+:root[data-big="1"] #v-lesson .prose pre,:root[data-big="1"] #v-lesson .pbox pre,:root[data-big="1"] #v-lesson .prose .cw pre{font-size:17.5px!important;line-height:1.6!important}
+:root[data-big="1"] #l-body .worked-result p{font-size:17.5px!important}
+:root[data-big="1"] #l-body .s-botsay p,:root[data-big="1"] .s-botsay p{font-size:16.5px!important}
+:root[data-big="1"] .s-term p{font-size:17.5px}
+:root[data-big="1"] .s-term h3{font-size:19.5px}
+:root[data-big="1"] .s-daily-text{font-size:16.5px}
+:root[data-big="1"] .s-ai-what,:root[data-big="1"] .s-ai-facts li{font-size:17.5px}
+.s-plan strong small+small{margin-top:1px}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2455,7 +2469,7 @@ a.s-pill,a.s-btn{text-decoration:none}
   <div class="pline" hidden></div>
   <button class="s-btn buy2" data-write="pay">Оформить месяц за 300 ⭐</button>
   <button class="s-link s-pay-more" id="pay-more" data-go="pay-all">Год за 3 000 ⭐ и что входит<svg class="s-ic" aria-hidden="true"><use href="#i-chev"/></svg></button>
-  <p class="s-foot-note">Примерно 500–650 ₽ в месяц, без автосписаний. Первые три урока каждого курса открыты без оплаты.</p>
+  <p class="s-foot-note">Примерно 500–650 ₽ в месяц — до 22 ₽ в день, без автосписаний. Первые три урока каждого курса открыты без оплаты.</p>
   <div id="pay-bot"></div>
 </div>
 <!-- ВИТРИНА:pay END -->
@@ -2491,6 +2505,7 @@ a.s-pill,a.s-btn{text-decoration:none}
     <button data-prep="11"><span class="ic"><svg class="s-ic" aria-hidden="true"><use href="#i-link"/></svg></span><span><b>Первый вход в нейросеть</b><small>Регистрация и помощь со входом</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-write="1"><span class="ic" style="background:#6E7179"><svg class="s-ic" aria-hidden="true"><use href="#i-mail"/></svg></span><span><b>Написать в редакцию</b><small>вопрос уйдёт в бот, ответ придёт туда же</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-go="docs"><span class="ic" style="background:#8C8F97"><svg class="s-ic" aria-hidden="true"><use href="#i-document"/></svg></span><span><b>Документы</b><small>оферта, политика, связь</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
+    <div class="r s-switch"><span class="ic" style="background:#2F6BFF"><svg class="s-ic" aria-hidden="true"><use href="#i-document"/></svg></span><span style="flex:1"><b id="sw4-t">Крупный текст</b><small id="sw4-note">Уроки, гайды и словарь крупнее — легче читать с телефона.</small></span><button class="sw off" id="sw4" role="switch" aria-checked="false" aria-labelledby="sw4-t"><i></i></button></div>
     <div class="r s-switch"><span class="ic" style="background:#0E2420"><svg class="s-ic" aria-hidden="true"><use href="#i-moon"/></svg></span><span style="flex:1"><b id="sw2-t">Ночная тема</b><small>Тёмный фон для чтения вечером. По умолчанию приложение светлое.</small></span><button class="sw off" id="sw2" role="switch" aria-checked="false" aria-labelledby="sw2-t"><i></i></button></div>
     <div class="r s-switch"><span class="ic" style="background:#C2571E"><svg class="s-ic" aria-hidden="true"><use href="#i-fire"/></svg></span><span style="flex:1"><b id="sw3-t">Напоминать о серии</b><small id="sw3-note">Вечером, если серия два дня и больше, а урока ещё не было. Не чаще раза в день.</small></span><button class="sw off" id="sw3" role="switch" aria-checked="false" aria-labelledby="sw3-t"><i></i></button></div>
     <div class="r s-switch"><span class="ic" style="background:#14161A"><svg class="s-ic" aria-hidden="true"><use href="#i-bell"/></svg></span><span style="flex:1"><b id="sw1-t">Сообщать о новом</b><small id="sw1-note">Можно выключить в любой момент. На доступ это не влияет.</small></span><button class="sw off" id="sw1" role="switch" aria-checked="false" aria-labelledby="sw1-t"><i></i></button></div>
@@ -3364,7 +3379,7 @@ function srPaint(q){
   const найдено = srFind(q);
   $('#sr-clear').hidden = !q;
   if(!q.trim()){
-    hint.textContent = 'Ищет уроки, промпты, практику и инструкции. Попробуй: настройки, письмо, таблица.';
+    hint.textContent = 'Ищет уроки, запросы, материалы ленты, словарь и нейросети. Попробуй: письмо, таблица, картинки.';
     out.innerHTML = ''; return;
   }
   if(!найдено.length){
@@ -4638,8 +4653,8 @@ function sSub(short){
     <p>Все ${SECS.slice(6).length} ${скл(SECS.slice(6).length,'курс','курса','курсов')} и новые уроки, пока действует доступ. Без автосписаний.</p>
     ${paid?`<div class="s-plan" aria-checked="true"><span class="box"></span><span><b>Доступ оформлен</b><small>${until?'действует до '+until:'без срока'}</small></span></div>`:`
     <div role="radiogroup" aria-label="Срок подписки">
-     <button class="s-plan" role="radio" data-s-plan="month" aria-checked="${sPlanSel==='month'}"><span class="box"></span><span><b>На месяц</b><small>можно начать с месяца<br>дальше — как решишь</small></span><strong>300 ⭐<small>≈ 500–650 ₽</small></strong></button>
-     <button class="s-plan" role="radio" data-s-plan="year" aria-checked="${sPlanSel==='year'}"><span class="box"></span><span><b>На год</b><small>одним платежом<br>два месяца в подарок</small></span><strong>3 000 ⭐<small>≈ 5 000–6 500 ₽</small></strong></button>
+     <button class="s-plan" role="radio" data-s-plan="month" aria-checked="${sPlanSel==='month'}"><span class="box"></span><span><b>На месяц</b><small>можно начать с месяца<br>дальше — как решишь</small></span><strong>300 ⭐<small>≈ 500–650 ₽</small><small>до 22 ₽ в день</small></strong></button>
+     <button class="s-plan" role="radio" data-s-plan="year" aria-checked="${sPlanSel==='year'}"><span class="box"></span><span><b>На год</b><small>одним платежом<br>два месяца в подарок</small></span><strong>3 000 ⭐<small>≈ 5 000–6 500 ₽</small><small>до 18 ₽ в день</small></strong></button>
     </div>`}
     ${short?`<button class="s-btn" data-go="pay-all" style="margin-top:14px">${paid?'Подробнее о доступе':'Открыть все уроки'}</button>`:`<button class="s-btn s-buy" data-write="pay" style="margin-top:14px">${paid?(sPlanSel==='year'?'Продлить на год за 3 000 ⭐':'Продлить на месяц за 300 ⭐'):sBuyText()}</button>
     <p class="s-honest">${счётЗдесь()?'Счёт в звёздах Telegram откроется прямо здесь, уроки откроются сразу после оплаты.':'Продолжишь в боте: он пришлёт счёт в звёздах Telegram, уроки откроются сразу после оплаты.'}<span class="s-doc-links"><button data-doc="zvezdy">Как купить звёзды</button><button data-doc="oferta">Публичная оферта</button></span></p>`}
@@ -4746,6 +4761,7 @@ function sProfile(){
   if(std)std.textContent=ME?.paid?(ME.until?'до '+ME.until.split('-').reverse().join('.'):'без срока')
     :courses.length+' '+скл(courses.length,'курс','курса','курсов')+', '+courses.reduce((a,s)=>a+s.ls.length,0)+' уроков';
   sNightPaint();
+  sBigPaint();
   sAchPaint();
   sSeriyaPaint();
   /* Внизу профиля — единственное место, где прямо сказано, кто отвечает на письма. */
@@ -5089,6 +5105,18 @@ function xRise(list){
    обложки канала; кому нужно читать вечером, включает тёмное здесь, и выбор
    помнится. Спрашивать сервер не о чем, поэтому отвечает сразу. */
 function sNight(){try{return localStorage.getItem('mzr-theme')==='dark';}catch(e){return document.documentElement.getAttribute('data-n')==='1';}}
+/* «Крупный текст» (29.09): наша аудитория — 30–50 лет, мелкий текст с
+   телефона многим читать тяжело. Настройка телефона, а не человека —
+   как и ночная тема. Размеры — в svet.css под :root[data-big]. */
+const sBig=()=>document.documentElement.getAttribute('data-big')==='1';
+function sBigPaint(){const sw=$('#sw4');if(!sw)return;sw.classList.toggle('off',!sBig());sw.setAttribute('aria-checked',String(sBig()));}
+document.addEventListener('click',e=>{
+  const sw=e.target.closest('#sw4');if(!sw)return;
+  const on=!sBig();
+  if(on)document.documentElement.setAttribute('data-big','1');else document.documentElement.removeAttribute('data-big');
+  try{localStorage.setItem('mzr-big',on?'1':'0');}catch(err){}
+  sBigPaint();xHaptic('select');
+});
 function sNightPaint(){
   const sw=$('#sw2');if(!sw)return;
   const on=sNight();
@@ -5263,11 +5291,24 @@ const _prepPaint=prepPaint;
 prepPaint=function(i){const r=_prepPaint(i);const b=$('#prep-bot');
   if(b&&!b.innerHTML)b.innerHTML=sBotSay('palec','<b>Начни со входа в нейросеть.</b> Если шаг выглядит не так, как описано, ищи кнопку по смыслу: названия меняются чаще, чем порядок.');
   return r;};
+/* Поиск по всему (29.09): раньше он знал только уроки и запросы — 38
+   материалов ленты, словарь и «Работают из России» в нём не находились. */
+const _srBuild=srBuild;
+srBuild=function(){
+  if(SRIDX)return SRIDX;
+  const idx=_srBuild();
+  FEED.forEach(x=>idx.push({вид:(X_TYPE[x.type]||'Материал').toLowerCase(),знак:'✦',имя:x.title,где:'материалы',
+    текст:[x.summary,x.teaser,x.title].filter(Boolean).join(' '),открыть:()=>feedOpen(x.id)}));
+  S_AI_RU.forEach(x=>idx.push({вид:'нейросеть',знак:'⚒',имя:x.t,где:'работают из России',
+    текст:[x.maker,x.what,...x.facts].join(' '),открыть:()=>sAiOpen(x.id)}));
+  S_SLOVAR.forEach(([t,d])=>idx.push({вид:'словарь',знак:'А',имя:t,где:'словарь',текст:d,открыть:()=>sGlOpen(t)}));
+  return idx;
+};
 const _srPaint=srPaint;
 srPaint=function(q){const r=_srPaint(q);const out=$('#sr-out');
   if(out&&!out.innerHTML)out.innerHTML=q&&q.trim()
     ?sBotSay('plechi','<b>По этому слову ничего нет.</b> Попробуй одно слово вместо фразы: «таблица», «письмо», «настройки».')
-    :sBotSay('lupa','<b>Ищу по урокам и запросам.</b> Достаточно одного слова — покажу, в каком уроке оно встречается.');
+    :sBotSay('lupa','<b>Ищу по урокам, запросам, материалам и словарю.</b> Достаточно одного слова: «картинки», «письмо», «таблица».');
   return r;};
 /* Экран поиска открывался пустым: подсказку рисовал только ввод. Теперь она
    и реплика робота стоят сразу, как только экран показан. */
