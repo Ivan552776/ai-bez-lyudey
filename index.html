@@ -2382,6 +2382,27 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-otzyv-more textarea{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid var(--s-line);border-radius:14px;background:var(--s-white);color:var(--s-ink);font-family:var(--s-font);font-size:16px;line-height:1.45;resize:vertical}
 .s-otzyv .s-link{margin-top:4px}
 :root[data-n="1"] .s-otzyv-marks button[aria-checked="true"]{color:#14161A}
+
+/* ---------- «Из канала» (30.09) ---------- */
+.s-posts{margin:0 0 20px}
+.s-post-card{flex:0 0 210px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-height:118px;padding:14px;border:1px solid var(--s-line);border-radius:20px;background:var(--s-white);color:var(--s-ink);font-family:var(--s-font);text-align:left;cursor:pointer;transition:scale .2s}
+.s-post-card:active{scale:.97}
+.s-post-card small{font-size:12px;color:var(--s-acc);font-weight:600}
+.s-post-card b{font-size:15px;line-height:1.3;font-weight:650;letter-spacing:-.01em;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.s-post-dlg{max-height:88vh}
+.s-post-text p{margin:0 0 12px;font-size:16px;line-height:1.55;color:var(--s-ink2)}
+.s-post-text b{color:var(--s-ink)}
+:root[data-big="1"] .s-post-text p{font-size:18.5px}
+
+/* ---------- «Какую выбрать» (30.09) ---------- */
+.s-ai .s-resource-link{margin-top:4px}
+.s-ai-tasks{display:grid;gap:14px;margin:6px 0 4px}
+.s-ai-tasks section{padding:0 0 12px;border-bottom:1px solid var(--s-line)}
+.s-ai-tasks b{display:block;font-size:16px;line-height:1.3;font-weight:650;color:var(--s-ink)}
+.s-ai-tasks small{display:block;margin:2px 0 8px;font-size:13px;line-height:1.4;color:var(--s-soft)}
+.s-ai-tasks section>div{display:flex;flex-wrap:wrap;gap:6px}
+.s-ai-tag{min-height:36px;padding:0 14px;border:0;border-radius:999px;background:var(--chip-bg);color:var(--chip-col);font-family:var(--s-font);font-size:14px;font-weight:650;cursor:pointer}
+:root[data-n="1"] .s-ai-tag{background:color-mix(in srgb,var(--chip-bg) 17%,#14161A);color:var(--s-ink)}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2427,6 +2448,11 @@ a.s-pill,a.s-btn{text-decoration:none}
   <section class="s-courses s-ai" aria-label="Нейросети, которые работают из России">
     <h2 class="s-row-h">Работают из России<span id="s-ai-count"></span></h2>
     <div class="s-courses-row" id="s-ai-row"></div>
+    <button class="s-resource-link" data-ai-pick="1"><span>Какую выбрать под задачу</span><svg class="s-ic" aria-hidden="true"><use href="#i-chev"/></svg></button>
+  </section>
+  <section class="s-courses s-posts" id="s-posts" aria-label="Из канала" hidden>
+    <h2 class="s-row-h">Из канала<span id="s-posts-count"></span></h2>
+    <div class="s-courses-row" id="s-posts-row"></div>
   </section>
   <div class="s-access" id="feed-membership"></div>
   <div class="s-fil-wrap">
@@ -4459,6 +4485,30 @@ function sAiRow(){
   $('#s-ai-count').textContent=S_AI_RU.length+' · проверено '+sDate(last);
   box.innerHTML=S_AI_RU.map(x=>`<button class="s-course-chip s-ai-chip" data-ai="${x.id}" style="--chip-bg:${x.c[2]};--chip-col:${x.c[1]}"><span class="s-path-mark">${x.c[0]}</span><b>${esc(x.t)}</b><small>${esc(x.what)}</small></button>`).join('');
 }
+/* «Какую выбрать» (30.09): не таблица «умеет/не умеет» — половину клеток не
+   проверить, а неправда в таблице хуже её отсутствия. Задача → 1–3 нейросети,
+   про которые это точно известно (сверено 28–30.09). */
+const S_AI_TASKS=[
+  ['Написать или переписать текст','Письмо, пост, объявление, ответ клиенту',['deepseek','gigachat','alice']],
+  ['Найти в интернете со ссылками','Свежие факты, цены, расписания — с источниками',['perplexity','alice']],
+  ['Нарисовать картинку','Открытка, обложка, иллюстрация по описанию',['shedevrum','gigachat','qwen']],
+  ['Разобрать длинный документ','Договор, отчёт, инструкция — главное и вопросы к тексту',['kimi','deepseek','qwen']],
+  ['Посчитать и рассудить','Расчёт, план, задача, где важен ход мысли',['deepseek']],
+  ['Попробовать без регистрации','Открыл — и сразу пишешь',['zai']],
+  ['Помочь с кодом или простым сайтом','Таблица с формулами, страничка, небольшой скрипт',['zai','deepseek']]
+];
+function sAiPick(){
+  let d=$('#s-ai-sheet');
+  if(!d){d=document.createElement('dialog');d.id='s-ai-sheet';d.className='s-cert-dlg s-ai-dlg';d.tabIndex=-1;document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d)d.close();});}
+  const name=id=>S_AI_RU.find(x=>x.id===id);
+  d.innerHTML=`<p class="s-daily-k">${si('search')}Какую выбрать</p><h2 class="s-gl-t">Под задачу</h2>`
+    +`<p class="s-ai-what">Все — открываются из России и работают бесплатно. Нажми на нейросеть, чтобы узнать, как войти.</p>`
+    +`<div class="s-ai-tasks">${S_AI_TASKS.map(([t,d2,ids])=>`<section><b>${esc(t)}</b><small>${esc(d2)}</small><div>${ids.map(id=>{const x=name(id);return x?`<button class="s-ai-tag" data-ai="${id}" style="--chip-bg:${x.c[2]};--chip-col:${x.c[1]}">${esc(x.t)}</button>`:'';}).join('')}</div></section>`).join('')}</div>`
+    +`<div class="s-cert-acts"><button class="s-link" data-ai-close>Закрыть</button></div>`;
+  if(!d.open){d.showModal();d.focus();}
+  d.scrollTop=0;
+}
+document.addEventListener('click',e=>{if(e.target.closest('[data-ai-pick]'))sAiPick();});
 function sAiOpen(id){
   const x=S_AI_RU.find(a=>a.id===id);if(!x)return;
   let d=$('#s-ai-sheet');
@@ -4480,6 +4530,59 @@ document.addEventListener('click',e=>{
   const c=e.target.closest('[data-ai-course]');if(c){$('#s-ai-sheet')?.close();openSec(+c.dataset.aiCourse);return;}
 });
 sAiRow();
+
+/* ---------- «Из канала» (30.09) ----------
+   Посты канала — новости, «Разбор ловушки», рубрики — в приложении не было
+   видно вовсе. Берём вышедшие из /api/posts (открытый адрес, тот же список,
+   что публикует издатель) и показываем рядом в «Материалах». Текст поста —
+   только жирный и курсив, остальные теги снимаем. */
+let sPosts=null,sPostsCh='ai_bez_lyudey';
+async function sPostsLoad(){
+  if(sPosts)return sPosts;
+  try{
+    const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),15000);
+    const r=await fetch(API+'/api/posts',{cache:'no-store',signal:ctl.signal});clearTimeout(t);
+    const d=await r.json();sPosts=Array.isArray(d.posts)?d.posts:[];if(d.channel)sPostsCh=d.channel;
+  }catch(e){sPosts=null;return [];}
+  return sPosts;
+}
+// своё экранирование: общее esc не трогает «>», и теги не узнавались
+const sPostHTML=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/&lt;(\/?)(b|i|strong|em)&gt;/g,'<$1$2>').replace(/&lt;[^&]*?&gt;/g,'')
+  .split(/\n{2,}/).map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+const sPostPlain=t=>String(t||'').replace(/<[^>]+>/g,'');
+async function sPostsRow(){
+  const box=$('#s-posts-row'),sec=$('#s-posts');if(!box||!sec)return;
+  const list=await sPostsLoad();
+  sec.hidden=!list.length;if(!list.length)return;
+  $('#s-posts-count').textContent=list.length+' '+скл(list.length,'пост','поста','постов')+' · каждый день в 19:00';
+  box.innerHTML=list.slice(0,12).map((p,n)=>`<button class="s-post-card" data-post="${n}"><small>${esc(sDate(p.at))}${p.rubric?' · '+esc(p.rubric):''}</small><b>${esc(sPostPlain(p.title))}</b></button>`).join('');
+}
+function sPostOpen(n){
+  const p=sPosts?.[n];if(!p)return;
+  let d=$('#s-post-sheet');
+  if(!d){d=document.createElement('dialog');d.id='s-post-sheet';d.className='s-cert-dlg s-ai-dlg s-post-dlg';d.tabIndex=-1;document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d)d.close();});}
+  const link=String(p.link||''),m=/startapp=([A-Za-z0-9_-]+)/.exec(link),старт=m?m[1]:'';
+  const карточка=старт.startsWith('card_')&&FEED.some(x=>x.id===старт.slice(5))?старт.slice(5):'';
+  const урок=/^(?:lesson|exercise|drug)_(\d+)_(\d+)/.exec(старт);
+  const обрезан=(p.text||'').length>=600&&(p.text||'').length<610;   // прежний сервер отдавал 600 знаков
+  d.innerHTML=`<p class="s-daily-k">${si('message')}Из канала · ${esc(sDate(p.at))}${p.rubric?' · '+esc(p.rubric):''}</p>`
+    +`<div class="s-post-text">${sPostHTML(p.text||'')}${обрезан?'<p>…</p>':''}</div>`
+    +`<div class="s-cert-acts">`
+    +(карточка?`<button class="s-btn" data-post-card="${карточка}">Открыть материал${si('chev')}</button>`:'')
+    +(урок?`<button class="s-btn" data-post-les="${урок[1]}-${урок[2]}">Открыть урок${si('chev')}</button>`:'')
+    +`<button class="s-btn line" data-tg="https://t.me/${esc(sPostsCh)}/${+p.id}">${обрезан?'Читать целиком в канале':'Пост в канале'}</button>`
+    +`<button class="s-link" data-post-close>Закрыть</button></div>`;
+  if(!d.open){d.showModal();d.focus();}
+  d.scrollTop=0;
+}
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-post]');if(c){sPostOpen(+c.dataset.post);return;}
+  if(e.target.closest('[data-post-close]')){$('#s-post-sheet')?.close();return;}
+  const m=e.target.closest('[data-post-card]');if(m){$('#s-post-sheet')?.close();feedOpen(m.dataset.postCard);return;}
+  const l=e.target.closest('[data-post-les]');if(l){$('#s-post-sheet')?.close();const [i,j]=l.dataset.postLes.split('-').map(Number);openSec(i);openLes(j,'study');return;}
+  if(e.target.closest('[data-tg]')&&e.target.closest('#s-post-sheet'))$('#s-post-sheet')?.close();
+});
+(()=>{const _show3=show;show=function(v,back){const r=_show3(v,back);if(v==='study')sPostsRow();return r;};})();
 
 /* ---------- словарь (28.09) ----------
    Слова, на которых новичок спотыкается в уроках. Простым языком, на «ты»,
