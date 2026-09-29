@@ -2429,6 +2429,22 @@ a.s-pill,a.s-btn{text-decoration:none}
 #s-ai-sheet .pbox .ph span::before{display:none!important}
 #s-ai-sheet .pbox .cb{min-height:34px;padding:0 12px;border:0!important;border-radius:999px!important;background:var(--s-white)!important;color:var(--s-acc)!important;font-family:var(--s-font)!important;font-weight:600!important;font-size:13px!important;text-transform:none!important;letter-spacing:0!important;box-shadow:none!important}
 #s-ai-sheet .pbox pre{margin:0!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;white-space:pre-wrap!important;font-family:var(--s-font)!important;font-size:14.5px!important;line-height:1.5!important;color:var(--s-ink)!important}
+
+/* ---------- шпаргалка курса (30.09) ---------- */
+.s-path-card .s-cheat-link{width:100%;margin:-8px 0 8px;justify-content:center;color:inherit}
+.s-path-card .s-cheat-link .s-ic{width:17px;height:17px}
+
+/* ---------- «Моя история» (30.09) ---------- */
+.s-hist-row{margin:0 0 8px}
+#s-hist-sheet .s-week-dots{margin:6px 0 4px}
+.s-hist-courses{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.s-hist-courses li{display:grid;grid-template-columns:118px 1fr auto;align-items:center;gap:10px;font-size:14px;color:var(--s-ink)}
+.s-hist-courses i{display:block;height:6px;border-radius:99px;background:var(--s-card);overflow:hidden}
+.s-hist-courses em{display:block;height:100%;border-radius:inherit;background:var(--chip-col)}
+.s-hist-courses small{font-size:12.5px;color:var(--s-soft);font-variant-numeric:tabular-nums}
+.s-hist-recent{display:grid}
+.s-hist-recent .s-link{justify-content:space-between;text-align:left;font-size:14.5px}
+.s-hist-recent .s-link .s-ic{width:16px;height:16px;flex:none}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2596,6 +2612,7 @@ a.s-pill,a.s-btn{text-decoration:none}
   <div class="s-grp">
     <button id="p-status" data-go="pay-all"><span class="ic" style="background:#0B6E4F"><svg class="s-ic" aria-hidden="true"><use href="#i-layers"/></svg></span><span><b id="p-st-t">Полный доступ</b><small id="p-st-d">7 курсов, 56 уроков</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-invite="1"><span class="ic" style="background:#0E8C93"><svg class="s-ic" aria-hidden="true"><use href="#i-send"/></svg></span><span><b>Пригласить друга</b><small>За нового человека по твоей ссылке — неделя доступа в подарок</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
+    <button data-history="1"><span class="ic" style="background:#2F6BFF"><svg class="s-ic" aria-hidden="true"><use href="#i-clock"/></svg></span><span><b>Моя история</b><small>Минуты, уроки, серия и прогресс по курсам</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-go="favs"><span class="ic"><svg class="s-ic" aria-hidden="true"><use href="#i-star"/></svg></span><span><b>Мои материалы</b><small>Закладки и недавно открытое</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-prep="11"><span class="ic"><svg class="s-ic" aria-hidden="true"><use href="#i-link"/></svg></span><span><b>Первый вход в нейросеть</b><small>Регистрация и помощь со входом</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-faq="1"><span class="ic" style="background:#B07A0B"><svg class="s-ic" aria-hidden="true"><use href="#i-message"/></svg></span><span><b>Вопросы и ответы</b><small>Оплата, возврат, доступ, подарок за друга</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
@@ -4367,6 +4384,7 @@ function sRenderSec(i){
     <div class="s-path-chips"><span class="s-path-mark">${mono}</span><span>${esc(s.t)}</span>${next>=0?`<span>${s.ls[next].min} мин</span>`:''}</div>
     <div class="s-path-card-body"><div><p class="s-path-eyebrow">${finished?'Путь пройден':read?'Продолжим':'Твой первый шаг'}</p><h2>${esc(finished?'Можно повторить на своей задаче':next>=0?s.ls[next].t:'Продолжить обучение')}</h2></div>${sBotFull(finished?'raduetsya':S_POSE[s.slug]||'ukazyvaet')}</div>
     ${sCourseProgress(i)}
+    ${S_COACH[s.slug+'-1']?`<button class="s-link s-cheat-link" data-cheat="${i}">${si('list')}Шпаргалка курса</button>`:''}
     ${finished?`<button class="s-btn" data-les="0">Повторить первый урок ${si('chev')}</button><button class="s-link" data-cert="${i}">${si('star')}Грамота за курс</button>`:next>=0?`<button class="s-btn" data-les="${next}">${read?'Продолжить':'Начать урок'} ${si('chev')}</button>`:`<button class="s-btn" data-go="pay-all">Открыть оставшиеся уроки ${si('chev')}</button>`}
     </section>`;
   $('#sec-overview').innerHTML='';$('#sec-now').innerHTML='';$('#sec-foot').innerHTML='';
@@ -4955,6 +4973,48 @@ async function sImgOpen({alt,label,file,make,share}){
   sSheet={blob,url:blob?URL.createObjectURL(blob):'',file,share};
   if(sSheet.url)img.src=sSheet.url;
 }
+/* ---------- шпаргалка курса (30.09) ----------
+   Картинка под экран телефона: по правилу на каждый урок курса — те же
+   короткие подсказки робота, что после «Получилось?» (S_COACH, публичные).
+   Сохранить в телефон и держать под рукой. */
+async function sCheatImage(i){
+  const c=SECS[i],[mono,col,bg]=S_COURSE[c.slug]||['?','#0B6E4F','#D6F2E4'];
+  const F='"Golos Text",-apple-system,system-ui,sans-serif';
+  try{await Promise.all(['700 64px','600 32px','400 28px'].map(f=>document.fonts.load(f+' "Golos Text"')));}catch(e){}
+  // сначала раскладка — по ней высота картинки: подвал всегда ниже текста
+  const W=1080,m=document.createElement('canvas').getContext('2d'),items=[];
+  let y=450;
+  c.ls.forEach((l,j)=>{
+    m.font='600 30px '+F;const t=sWrap(m,l.t,800).slice(0,2);
+    m.font='400 26px '+F;const tip=sWrap(m,S_COACH[c.slug+'-'+(j+1)]?.tip||l.d||'',810).slice(0,3);
+    items.push({y,t,tip});y+=30+t.length*40+tip.length*36+22;
+  });
+  const H=Math.max(1920,y+230),cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
+  g.fillStyle=bg;g.fillRect(0,0,W,H);
+  g.fillStyle='#FFFFFF';sRound(g,50,50,W-100,H-100,56);g.fill();
+  g.fillStyle='#0E2420';sRound(g,110,110,72,72,20);g.fill();
+  g.fillStyle='#FFFFFF';g.font='700 30px '+F;g.textAlign='center';g.textBaseline='middle';g.fillText('ии',146,148);
+  g.textAlign='left';g.fillStyle='#14161A';g.font='600 32px '+F;g.fillText('ИИ без людей',204,148);
+  g.textBaseline='alphabetic';
+  g.fillStyle=col;g.font='700 30px '+F;g.fillText('ШПАРГАЛКА · '+c.t.toUpperCase(),110,290);
+  g.fillStyle='#14161A';g.font='700 60px '+F;g.fillText(c.ls.length+' '+скл(c.ls.length,'правило','правила','правил')+' курса',110,370);
+  items.forEach((it,j)=>{
+    let ty=it.y+30;
+    g.fillStyle=col;g.font='700 30px '+F;g.fillText(String(j+1),110,ty);
+    g.fillStyle='#14161A';g.font='600 30px '+F;for(const line of it.t){g.fillText(line,160,ty);ty+=40;}
+    g.fillStyle='#4A4F58';g.font='400 26px '+F;for(const line of it.tip){g.fillText(line,160,ty);ty+=36;}
+  });
+  g.fillStyle='#14161A';g.font='600 30px '+F;g.fillText('Нейросети с нуля',110,H-150);
+  g.fillStyle=col;g.font='400 27px '+F;g.fillText('t.me/ai_bez_lyudey_bot/kurs',110,H-108);
+  return await new Promise(ok=>cv.toBlob(ok,'image/png'));
+}
+function sCheatOpen(i){
+  const c=SECS[i];if(!c)return;
+  sImgOpen({alt:'Шпаргалка курса «'+c.t+'»',label:'Отправить курс другу',file:'shpargalka-'+(c.slug||'kurs')+'.png',
+    make:()=>sCheatImage(i),
+    share:()=>{шаг('поделился');share('Шпаргалка и курс «'+c.t+'» в «ИИ без людей»: '+c.ls.length+' '+скл(c.ls.length,'урок','урока','уроков')+' на живых задачах. Первые уроки бесплатно.',sDrugLink(i,0));}});
+}
+document.addEventListener('click',e=>{const c=e.target.closest('[data-cheat]');if(c)sCheatOpen(+c.dataset.cheat);});
 function sCertOpen(i){
   const c=SECS[i];if(!c)return;
   sImgOpen({alt:'Грамота: курс «'+c.t+'» пройден',label:'Поделиться курсом с друзьями',file:'gramota-'+(c.slug||'kurs')+'.png',
@@ -5225,6 +5285,36 @@ document.addEventListener('click',e=>{
   if(e.target.closest('[data-faq]')){back.dataset.go='me';back.textContent='← Профиль';openDoc('faq');return;}
   if(e.target.closest('#docs [data-doc]')){back.dataset.go='docs';back.textContent='← Документы';}
 },true);
+/* ---------- «Моя история» (30.09) ----------
+   Всё, что человек сделал, одним окном: минуты, уроки, серия, дни, прогресс
+   по курсам, последние дни и недавние уроки. Всё считается на телефоне. */
+function sHistoryOpen(){
+  const done=doneList(),days=currentStreak(),log=S.get('dlog',[])||[];
+  let минут=0;done.forEach(k=>{const [i,j]=String(k).split('-').map(Number);const l=SECS[i]?.ls?.[j];if(l&&!SECS[i].archived)минут+=l.min||0;});
+  const уроков=done.filter(k=>{const c=SECS[+String(k).split('-')[0]];return c&&!c.archived;}).length;
+  const cell=(n,label)=>`<div><b>${n}</b><span>${label}</span></div>`;
+  const курсы=activeCourses().map(({s:c,i})=>{const [mono,col,bg]=S_COURSE[c.slug]||['?','#0B6E4F','#E2F3EA'];
+    const r=c.ls.filter((l,j)=>done.includes(i+'-'+j)).length;
+    return `<li><span>${esc(c.t)}</span><i style="--chip-col:${col}"><em style="width:${Math.round(r/c.ls.length*100)}%"></em></i><small>${r} из ${c.ls.length}</small></li>`;}).join('');
+  const недавние=recentList().filter(x=>x.kind==='lesson').slice(0,5);
+  let d=$('#s-hist-sheet');
+  if(!d){d=document.createElement('dialog');d.id='s-hist-sheet';d.className='s-cert-dlg s-ai-dlg';d.tabIndex=-1;document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d)d.close();});}
+  d.innerHTML=`<p class="s-daily-k">${si('clock')}Моя история</p><h2 class="s-gl-t">${уроков?'Уже пройдено':'Всё впереди'}</h2>`
+    +`<div class="s-day-row s-hist-row">${cell(минут,скл(минут,'минута учёбы','минуты учёбы','минут учёбы'))}${cell(уроков,скл(уроков,'урок прочитан','урока прочитано','уроков прочитано'))}</div>`
+    +`<div class="s-day-row s-hist-row">${cell(days.streak||0,скл(days.streak||0,'день подряд сейчас','дня подряд сейчас','дней подряд сейчас'))}${cell(days.best||0,скл(days.best||0,'день','дня','дней')+' — лучшая серия')}${cell(log.length,скл(log.length,'день с уроком','дня с уроками','дней с уроками'))}</div>`
+    +(log.length?sWeekDots():'')
+    +`<h3 class="s-ai-sub">По курсам</h3><ul class="s-hist-courses">${курсы}</ul>`
+    +(недавние.length?`<h3 class="s-ai-sub">Недавно открытые уроки</h3><div class="s-hist-recent">${недавние.map(x=>`<button class="s-link" data-hist-les="${esc(x.key)}">${esc(x.title||'Урок')}${si('chev')}</button>`).join('')}</div>`:'')
+    +`<div class="s-cert-acts"><button class="s-link" data-hist-close>Закрыть</button></div>`;
+  if(!d.open){d.showModal();d.focus();}
+  d.scrollTop=0;
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-history]')){sHistoryOpen();return;}
+  if(e.target.closest('[data-hist-close]')){$('#s-hist-sheet')?.close();return;}
+  const h=e.target.closest('[data-hist-les]');
+  if(h){$('#s-hist-sheet')?.close();const [i,j]=h.dataset.histLes.split('-').map(Number);if(SECS[i]?.ls?.[j]){openSec(i);openLes(j,'me');}}
+});
 const _checkAch=checkAch;
 checkAch=function(){
   const n=_checkAch();
