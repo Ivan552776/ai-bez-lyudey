@@ -2418,6 +2418,17 @@ a.s-pill,a.s-btn{text-decoration:none}
 #v-doc .tip{margin:0 0 16px;padding:13px 15px;border:0!important;border-radius:16px;background:var(--s-amber-s)!important;color:#6A4409;font-size:15px;line-height:1.5}
 :root[data-n="1"] #v-doc .tip{color:#F0D9B5}
 #v-doc #doc-b .s-botsay{margin:0 0 18px}
+
+/* ---------- подробные карточки нейросетей (30.09) ---------- */
+.s-ai-sub{margin:18px 0 8px;font-size:15px;font-weight:650;color:var(--s-ink)}
+.s-ai-steps{margin:0;padding-left:22px;display:grid;gap:4px;font-size:15px;line-height:1.45;color:var(--s-ink2)}
+.s-ai-best{margin:0;font-size:14.5px;line-height:1.5;color:var(--s-ink2)}
+#s-ai-sheet .pbox{position:relative;background:var(--s-card)!important;border:0!important;border-radius:16px!important;padding:12px 14px!important;margin:0 0 10px!important;box-shadow:none!important}
+#s-ai-sheet .pbox .ph{display:flex!important;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px!important;padding:0!important;background:none!important;border:0!important}
+#s-ai-sheet .pbox .ph span{font-size:11px!important;font-weight:700!important;letter-spacing:.06em!important;text-transform:uppercase!important;color:var(--s-soft)!important}
+#s-ai-sheet .pbox .ph span::before{display:none!important}
+#s-ai-sheet .pbox .cb{min-height:34px;padding:0 12px;border:0!important;border-radius:999px!important;background:var(--s-white)!important;color:var(--s-acc)!important;font-family:var(--s-font)!important;font-weight:600!important;font-size:13px!important;text-transform:none!important;letter-spacing:0!important;box-shadow:none!important}
+#s-ai-sheet .pbox pre{margin:0!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;white-space:pre-wrap!important;font-family:var(--s-font)!important;font-size:14.5px!important;line-height:1.5!important;color:var(--s-ink)!important}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2457,6 +2468,7 @@ a.s-pill,a.s-btn{text-decoration:none}
   <section class="s-collections" aria-label="Запросы по задачам">
     <h2 class="s-row-h">Запросы по задачам<span id="s-coll-count"></span></h2>
     <div class="s-coll-grid" id="s-coll-grid"></div>
+    <button class="s-resource-link" data-quick="1"><span>Быстрые запросы на каждый день</span><svg class="s-ic" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button class="s-resource-link" data-go="prompts"><span>Все запросы из уроков</span><svg class="s-ic" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button class="s-resource-link" data-go="slovar"><span>Словарь: слова о нейросетях простым языком</span><svg class="s-ic" aria-hidden="true"><use href="#i-chev"/></svg></button>
   </section>
@@ -4491,7 +4503,7 @@ document.addEventListener('click',e=>{
    для людей он открыт — сверено 18.09). Условия — по сайтам на ту же дату.
    Меняются часто: перед правкой списка проверить заново. */
 const S_AI_RU=[
-  {id:'gigachat',t:'GigaChat',maker:'Сбер',what:'Тексты, файлы и картинки',facts:['Бесплатно','Вход через Сбер ID'],url:'https://giga.chat/',material:'tool-gigachat',c:['G','#0B6E4F','#D6F2E4'],checked:'2026-09-28'},
+  {id:'gigachat',t:'GigaChat',maker:'Сбер',what:'Тексты, файлы и картинки',facts:['Бесплатно','Вход по номеру телефона или Сбер ID'],url:'https://giga.chat/',material:'tool-gigachat',course:'gigachat',c:['G','#0B6E4F','#D6F2E4'],checked:'2026-09-30'},
   {id:'alice',t:'Алиса AI',maker:'Яндекс',what:'Отвечает на вопросы и помогает с текстом',facts:['Текстовый чат бесплатный','Вход через Яндекс ID'],url:'https://alice.yandex.ru/',material:'tool-alice',c:['А','#C2571E','#FBEDE3'],checked:'2026-09-28'},
   {id:'deepseek',t:'DeepSeek',maker:'DeepSeek, Китай',what:'Тексты и задачи с рассуждением',facts:['Чат бесплатный','Вход по почте или номеру'],url:'https://chat.deepseek.com/',material:'tool-deepseek',course:'deepseek',c:['DS','#2F6BFF','#E8EFFF'],checked:'2026-09-28'},
   {id:'perplexity',t:'Perplexity',maker:'Perplexity, США',what:'Поиск в интернете со ссылками на источники',facts:['Есть бесплатный режим','Вход по почте, через Google или Apple'],url:'https://www.perplexity.ai/',course:'perplexity',c:['Px','#0E8C93','#E2F5F5'],checked:'2026-09-18'},
@@ -4500,6 +4512,28 @@ const S_AI_RU=[
   {id:'kimi',t:'Kimi',maker:'Moonshot AI, Китай',what:'Длинные документы целиком: договор, отчёт, книга',facts:['Бесплатно','Вход через Google или Apple'],url:'https://www.kimi.com/',c:['K','#0E8C93','#E2F5F5'],checked:'2026-09-28'},
   {id:'zai',t:'Z.ai',maker:'Zhipu, Китай',what:'Чат, помощь с кодом и простыми сайтами',facts:['Бесплатно','Можно начать без регистрации'],url:'https://chat.z.ai/',c:['Z','#0B6E4F','#D6F2E4'],checked:'2026-09-28'}
 ];
+/* Подробности карточки (30.09): как войти и два запроса под сильную сторону.
+   Вход — только то, что сверено (у GigaChat — по справке giga.chat/help,
+   у остальных — по разборам ленты и сайтам 28.09). Ограничения бесплатных
+   версий не пишем: меняются часто, проверить все на дату нельзя. */
+const S_AI_MORE={
+  gigachat:{вход:['Открой giga.chat','Войди по номеру телефона и коду из СМС или по Сбер ID','Нажми «Новый чат»'],
+    запросы:['Используй только эти факты: [факты]. Напиши сообщение в чат до 50 слов. Чего нет — напиши «сообщим позже».','Нарисуй акварельную открытку: [что], [где], светлые тона. Без надписей и букв.']},
+  alice:{вход:['Открой alice.yandex.ru или приложение','Войди с Яндекс ID — тем же, что для Почты или Такси','Напиши вопрос в поле чата'],
+    запросы:['Найди в интернете: [вопрос]. Ответь в 3–5 пунктах, к каждому — ссылка на источник.','Перепиши простыми словами, сохранив все числа и даты: [текст]']},
+  deepseek:{вход:['Открой chat.deepseek.com','Войди по почте или номеру телефона','Создай новый чат'],
+    запросы:['Реши задачу по шагам, а в конце проверь каждое условие отдельной строкой: [задача]','Посчитай [что]: покажи каждую строку и сумму после неё. Итог — без округлений.']},
+  perplexity:{вход:['Открой perplexity.ai','Войди по почте, через Google или Apple','Задай вопрос — ответ придёт со ссылками'],
+    запросы:['Найди официальный источник: [вопрос]. К каждому факту — ссылка и дата. Если свежих данных нет, так и скажи.','Сравни [А] и [Б] по цене и условиям. К каждому пункту — ссылка на источник.']},
+  shedevrum:{вход:['Открой shedevrum.ai или приложение','Войди с Яндекс ID','Опиши картинку словами'],
+    запросы:['Уютная иллюстрация: [что], [где], мягкий свет, пастельные цвета, без надписей.','Фото в стиле ретро: [сцена], тёплые тона, плёночное зерно, без текста.']},
+  qwen:{вход:['Открой chat.qwen.ai','Зарегистрируйся по почте или войди через Google','Напиши задачу в поле чата'],
+    запросы:['Прочитай текст и выпиши сроки, суммы и обязанности. Отдельно — чего в тексте нет: [текст]','Нарисуй простую плоскую иллюстрацию: [сцена], спокойные цвета, без надписей.']},
+  kimi:{вход:['Открой kimi.com','Войди через Google или Apple','Вставь длинный текст или прикрепи документ'],
+    запросы:['Прочитай документ целиком и сделай выжимку на одну страницу: главное, цифры, риски. Указывай разделы: [текст]','Найди в тексте все сроки и выпиши таблицей: дата, что происходит, где в тексте.']},
+  zai:{вход:['Открой chat.z.ai','Можно писать сразу, без регистрации','Напиши задачу в поле чата'],
+    запросы:['Сделай простую страницу-визитку: [кто ты, чем занимаешься, контакты]. Один файл HTML, без внешних библиотек.','Объясни простыми словами, что делает эта формула, и предложи проще: [формула]']}
+};
 const sDate=d=>new Date(d+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'long'});
 function sAiRow(){
   const box=$('#s-ai-row');if(!box)return;
@@ -4539,6 +4573,11 @@ function sAiOpen(id){
   d.innerHTML=`<div class="s-ai-head" style="--chip-bg:${x.c[2]};--chip-col:${x.c[1]}"><span class="s-path-mark">${x.c[0]}</span><div><h2>${esc(x.t)}</h2><p>${esc(x.maker)}</p></div></div>`
     +`<span class="s-ru">${si('check')}Работает из России · проверено ${sDate(x.checked)}</span>`
     +`<p class="s-ai-what">${esc(x.what)}</p><ul class="s-ai-facts">${x.facts.map(f=>`<li>${si('check')}${esc(f)}</li>`).join('')}</ul>`
+    +(()=>{const m=S_AI_MORE[x.id];if(!m)return '';
+      const задачи=S_AI_TASKS.filter(t=>t[2].includes(x.id)).map(t=>t[0]);
+      return `<h3 class="s-ai-sub">Как войти</h3><ol class="s-ai-steps">${m.вход.map(t=>`<li>${esc(t)}</li>`).join('')}</ol>`
+        +(задачи.length?`<h3 class="s-ai-sub">Лучше всего</h3><p class="s-ai-best">${задачи.map(esc).join(' · ')}</p>`:'')
+        +`<h3 class="s-ai-sub">Попробуй</h3>`+m.запросы.map((q,n)=>`<div class="pbox"><div class="ph"><span>Запрос ${n+1} · замени [скобки]</span><button class="cb" data-copy="${enc(q)}">Копировать</button></div><pre>${esc(q)}</pre></div>`).join('');})()
     +`<div class="s-cert-acts"><button class="s-btn" data-site="${feedAttr(x.url)}">Открыть ${esc(x.t)}${si('link')}</button>`
     +(x.material?`<button class="s-btn line" data-ai-review="${x.material}">Подробный разбор</button>`:'')
     +(ci>=0?`<button class="s-btn line" data-ai-course="${ci}">Курс: ${SECS[ci].ls.length} ${скл(SECS[ci].ls.length,'урок','урока','уроков')}</button>`:'')
@@ -4657,6 +4696,51 @@ const S_SAFE=[
   ['tip','Не уверен — не пересылай. Подделку распространяют как раз те, кто «просто поделился».']
  ]}
 ];
+/* ---------- быстрые запросы на каждый день (30.09) ----------
+   Однострочные запросы с [местами для данных] — первое, что можно
+   попробовать за минуту в любой нейросети. Где есть риск выдумки, в самом
+   запросе стоит запрет. Читаются тем же экраном, что гайды (v-doc). */
+const S_QUICK=[
+ ['Дом и семья',[
+  ['Меню на неделю','Составь меню на неделю для семьи из [сколько] человек: завтрак, обед, ужин. Бюджет — [сумма] ₽. Одно блюдо — не чаще двух раз. В конце — общий список покупок.'],
+  ['Ужин из того, что есть','У меня есть: [продукты]. Предложи 3 блюда, для которых ничего не нужно докупать. Готовить — не больше [сколько] минут.'],
+  ['План уборки','Составь план уборки квартиры из [сколько] комнат: по 30 минут в день на неделю. С чего начать и что можно пропустить.'],
+  ['Подарок','Помоги выбрать подарок: [кому], [возраст], увлечения — [какие], бюджет до [сумма] ₽. 5 вариантов, к каждому — почему подойдёт.'],
+  ['Поздравление','Напиши поздравление для [кого] с [повод], до 40 слов. Используй только эти детали: [детали]. Без пафоса и стихов.'],
+  ['Поездка на выходные','Составь план поездки в [город] на [сколько] дня: по 3–4 места в день с перерывами на еду. Часы работы не выдумывай — отметь, что их нужно проверить.']]],
+ ['Работа',[
+  ['Ответ на письмо','Помоги ответить на письмо: [текст письма]. Что хочу сказать: [мой ответ]. Вежливо, до 80 слов, без обещаний, которых я не давал.'],
+  ['Вежливый отказ','Напиши вежливый отказ на просьбу: [просьба]. Причина: [причина]. До 50 слов, без извинений в каждом предложении.'],
+  ['План дня','Мои задачи на сегодня: [список с примерным временем]. Работаю с [время] до [время]. Составь план с перерывами. Если всё не помещается — скажи, что перенести.'],
+  ['Сократить текст','Сократи текст до [N] слов. Сохрани все числа, даты и имена: [текст]'],
+  ['Итоги встречи','Вот заметки со встречи: [заметки]. Раздели на «решено», «предложено» и «не решено». Ничего не добавляй от себя.'],
+  ['Понять таблицу','Вот данные: [таблица или список]. Опиши простыми словами главное — 3–5 пунктов. Все числа бери только из данных.']]],
+ ['Общение',[
+  ['Извиниться','Помоги извиниться перед [кем] за [что]. Искренне, без оправданий, до 60 слов.'],
+  ['Сообщение в чат дома','Напиши сообщение в чат дома: [повод и факты]. По-дружески, до 50 слов. Чего нет в фактах — не придумывай.'],
+  ['Ответ на отзыв','Ответь на отзыв клиента: [отзыв]. Спокойно и по делу, до 70 слов. Не обещай скидок и компенсаций, которых нет.'],
+  ['Проверить текст','Проверь орфографию и пунктуацию, исправь ошибки и покажи списком, что поменял: [текст]'],
+  ['Перевести','Переведи на [язык] простыми словами, как сказал бы носитель языка: [текст]. После перевода — два слова, которые стоит запомнить.'],
+  ['Трудный разговор','Мне нужно поговорить с [кем] о [теме]. Подскажи, с чего начать, и 3 фразы, которые помогут не поссориться.']]],
+ ['Учёба и дети',[
+  ['Объяснить ребёнку','Объясни ребёнку [возраст] лет, [что такое или почему]. До 5 предложений, с примером из жизни.'],
+  ['Проверить решение','Вот задача и решение моего ребёнка: [задача и решение]. Проверь по шагам и подскажи, где искать ошибку, но не решай за него.'],
+  ['Письмо учителю','Напиши сообщение классному руководителю: [повод]. Вежливо, до 60 слов, только эти факты: [факты].'],
+  ['Карточки для запоминания','Сделай 10 карточек «вопрос — ответ» по теме [тема] для [класс или уровень]. Ответы короткие, дат и цифр не выдумывай.'],
+  ['План подготовки','Составь план подготовки к [экзамен или контрольная] за [сколько] дней, по 30 минут в день: какие темы в какой день.'],
+  ['Непонятный текст','Объясни простыми словами, что здесь написано, как для человека без специальных знаний: [текст]. Не добавляй того, чего нет в тексте.']]]
+];
+const S_QUICK_N=S_QUICK.reduce((a,[,l])=>a+l.length,0);
+function sQuickOpen(){
+  $('#doc-t').textContent='Быстрые запросы';$('#doc-d').textContent=S_QUICK_N+' запроса на каждый день · замени [скобки] своим';
+  blk.n=0;
+  $('#doc-b').innerHTML=sBotSay('planshet','<b>Скопируй и замени [скобки].</b> Эти запросы работают в любой нейросети — в GigaChat, DeepSeek, Алисе.')
+    +S_QUICK.map(([h,l])=>blk(['h',h])+l.map(([t,q])=>blk(['prompt',q,t])).join('')).join('');
+  buildToc('#doc-b','#doc-toc');
+  const back=$('#v-doc [data-back]');if(back){back.dataset.go='study';back.textContent='← Материалы';}
+  show('doc');scrollTo(0,0);
+}
+document.addEventListener('click',e=>{if(e.target.closest('[data-quick]'))sQuickOpen();});
 function sSafeRow(){
   const box=$('#s-safe-row');if(!box)return;
   box.innerHTML=S_SAFE.map(g=>`<button class="s-post-card s-safe-card" data-safe="${g.id}"><small>${g.min} мин</small><b>${esc(g.t)}</b><span>${esc(g.d)}</span></button>`).join('');
@@ -5632,6 +5716,7 @@ srBuild=function(){
   S_AI_RU.forEach(x=>idx.push({вид:'нейросеть',знак:'⚒',имя:x.t,где:'работают из России',
     текст:[x.maker,x.what,...x.facts].join(' '),открыть:()=>sAiOpen(x.id)}));
   S_SLOVAR.forEach(([t,d])=>idx.push({вид:'словарь',знак:'А',имя:t,где:'словарь',текст:d,открыть:()=>sGlOpen(t)}));
+  S_QUICK.forEach(([h,l])=>l.forEach(([t,q])=>idx.push({вид:'быстрый запрос',знак:'⌘',имя:t,где:h,текст:q,открыть:()=>sQuickOpen()})));
   S_SAFE.forEach(g=>idx.push({вид:'безопасность',знак:'!',имя:g.t,где:'безопасность',текст:g.d+' '+g.b.map(b=>typeof b[1]==='string'?b[1]:'').join(' '),открыть:()=>sSafeOpen(g.id)}));
   return idx;
 };
