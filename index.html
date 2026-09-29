@@ -2403,6 +2403,21 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-ai-tasks section>div{display:flex;flex-wrap:wrap;gap:6px}
 .s-ai-tag{min-height:36px;padding:0 14px;border:0;border-radius:999px;background:var(--chip-bg);color:var(--chip-col);font-family:var(--s-font);font-size:14px;font-weight:650;cursor:pointer}
 :root[data-n="1"] .s-ai-tag{background:color-mix(in srgb,var(--chip-bg) 17%,#14161A);color:var(--s-ink)}
+
+/* ---------- безопасность (30.09) ---------- */
+.s-safe{margin:0 0 20px}
+.s-safe-card{flex-basis:220px;min-height:140px;background:var(--s-amber-s);border-color:transparent}
+.s-safe-card small{color:var(--s-soft)}
+.s-safe-card span{font-size:13px;line-height:1.4;color:var(--s-soft);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+/* готовый запрос и подсказка внутри гайда — как в уроке */
+#v-doc .pbox{position:relative;background:var(--s-card)!important;border:0!important;border-radius:18px!important;padding:14px!important;margin:0 0 16px!important;box-shadow:none!important}
+#v-doc .pbox .ph{display:flex!important;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px!important;padding:0!important;background:none!important;border:0!important}
+#v-doc .pbox .ph span{font-size:11.5px!important;font-weight:700!important;letter-spacing:.07em!important;text-transform:uppercase!important;color:var(--s-soft)!important}
+#v-doc .pbox .cb{min-height:36px;padding:0 13px;border:0!important;border-radius:999px!important;background:var(--s-white)!important;color:var(--s-acc)!important;font-family:var(--s-font)!important;font-weight:600!important;font-size:13.5px!important;text-transform:none!important;letter-spacing:0!important}
+#v-doc .pbox pre{background:none!important;border:0!important;padding:0!important;margin:0!important;white-space:pre-wrap!important;font-family:var(--s-font)!important;font-size:15.5px!important;line-height:1.55!important;color:var(--s-ink)!important}
+#v-doc .tip{margin:0 0 16px;padding:13px 15px;border:0!important;border-radius:16px;background:var(--s-amber-s)!important;color:#6A4409;font-size:15px;line-height:1.5}
+:root[data-n="1"] #v-doc .tip{color:#F0D9B5}
+#v-doc #doc-b .s-botsay{margin:0 0 18px}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2449,6 +2464,10 @@ a.s-pill,a.s-btn{text-decoration:none}
     <h2 class="s-row-h">Работают из России<span id="s-ai-count"></span></h2>
     <div class="s-courses-row" id="s-ai-row"></div>
     <button class="s-resource-link" data-ai-pick="1"><span>Какую выбрать под задачу</span><svg class="s-ic" aria-hidden="true"><use href="#i-chev"/></svg></button>
+  </section>
+  <section class="s-courses s-safe" aria-label="Безопасность с нейросетями">
+    <h2 class="s-row-h">Безопасность<span>5 коротких гайдов</span></h2>
+    <div class="s-courses-row" id="s-safe-row"></div>
   </section>
   <section class="s-courses s-posts" id="s-posts" aria-label="Из канала" hidden>
     <h2 class="s-row-h">Из канала<span id="s-posts-count"></span></h2>
@@ -4584,6 +4603,72 @@ document.addEventListener('click',e=>{
 });
 (()=>{const _show3=show;show=function(v,back){const r=_show3(v,back);if(v==='study')sPostsRow();return r;};})();
 
+/* ---------- безопасность с нейросетями (30.09) ----------
+   Открыто всем, без подписки: про безопасность не прячем за оплатой. Только
+   общие проверенные советы — без обещаний про настройки конкретных сервисов:
+   они меняются, а неправда здесь опаснее, чем в любом другом разделе.
+   Читаются в том же экране, что и документы (v-doc), «назад» — в «Материалы». */
+const S_SAFE=[
+ {id:'safe-data',t:'Что нельзя отправлять в чат',d:'Паспорт, карты, пароли, чужие данные — и как спросить без них',min:3,b:[
+  ['p','Всё, что ты отправляешь нейросети, уходит на сервер компании и может там храниться. Поэтому правило простое: в чат — только то, что не страшно показать постороннему.'],
+  ['h','Никогда не отправляй'],
+  ['ul','Паспорт, СНИЛС, ИНН — ни номером, ни фотографией|Номер карты, срок действия, код с обратной стороны|Пароли и коды из СМС — их не просит ни один честный сервис|Данные клиентов и коллег: имена, телефоны, адреса, суммы договоров|Медицинские документы с фамилией и датой рождения'],
+  ['h','Как спросить без лишнего'],
+  ['p','Замени личное на метки ещё до отправки: «Иван Петров» → «Клиент А», номер договора → «договор №…», точную сумму → «около 100 тысяч». Нейросети этого хватает, чтобы помочь с письмом или разбором.'],
+  ['tip','Сначала вычеркни личное сам, потом отправляй. Просить нейросеть «обезличь этот текст» поздно — текст с данными к тому моменту уже у неё.'],
+  ['h','Если уже отправил'],
+  ['p','Удали этот чат в истории. Если в чат попали данные карты — позвони в банк по номеру с обратной стороны карты и попроси её перевыпустить.']
+ ]},
+ {id:'safe-voice',t:'Звонит «родственник» чужим голосом',d:'Как не попасться на поддельный голос и что сказать семье',min:3,b:[
+  ['p','Нейросети умеют подделывать голос по короткой записи — например, из видео в соцсетях. Мошенники звонят «от сына» или «от начальника» и просят срочно перевести деньги.'],
+  ['h','Признаки обмана'],
+  ['ul','Очень срочно: «прямо сейчас, иначе беда»|Деньги: перевести, отдать курьеру, продиктовать код|Новый номер: «телефон сломался, звоню с чужого»|Секрет: «никому не говори, особенно маме»'],
+  ['h','Что делать'],
+  ['p','Положи трубку и сам перезвони человеку на номер, который давно знаешь. Если не отвечает — позвони тому, кто рядом с ним. Настоящий родственник подождёт пять минут.'],
+  ['tip','Договоритесь в семье о кодовом слове — таком, которого нет в соцсетях. Нет слова — нет перевода.'],
+  ['h','Если деньги уже ушли'],
+  ['p','Сразу звони в свой банк по номеру с карты и проси остановить перевод, затем в полицию: 102 с мобильного.']
+ ]},
+ {id:'safe-fake-bots',t:'Поддельные «ChatGPT» в Telegram',d:'Боты и каналы, которые выдают себя за известные нейросети',min:2,b:[
+  ['p','В Telegram много ботов и каналов с названиями вроде «ChatGPT официальный» или «GPT без ограничений». Часть из них просто перепродаёт чужой доступ, часть собирает деньги и данные.'],
+  ['h','Насторожись, если'],
+  ['ul','Просят оплатить «доступ к ChatGPT» переводом на карту человека|Просят номер телефона и код из СМС «для входа»|Обещают «безлимит навсегда» за небольшую сумму|Требуют подписаться на десяток каналов, прежде чем ответить'],
+  ['h','Как проверить'],
+  ['p','Заходи в нейросети через их официальные сайты и приложения. Список тех, что открываются из России напрямую, — в «Материалах», раздел «Работают из России»: у каждой там официальный адрес.'],
+  ['tip','Код из СМС не нужен никакому чат-боту. Попросили код — закрывай чат.']
+ ]},
+ {id:'safe-check',t:'Нейросеть уверенно ошиблась',d:'Как проверить цифры, даты и ссылки за две минуты',min:3,b:[
+  ['p','Нейросеть не знает, а угадывает самый вероятный ответ. Поэтому она может спокойно назвать несуществующий закон, неверную цену или ссылку на пустую страницу — тем же уверенным тоном, что и правду.'],
+  ['h','Проверяй всегда'],
+  ['ul','Цифры и суммы — пересчитай сам или попроси показать расчёт|Даты, сроки, часы работы — на официальном сайте|Законы и статьи — по названию и номеру в официальном источнике|Ссылки — открой: страница должна говорить то же, что ответ|Советы о здоровье и деньгах — только как повод спросить специалиста'],
+  ['h','Готовый запрос для проверки'],
+  ['prompt','Раздели свой прошлый ответ на отдельные утверждения. Для каждого напиши: откуда это известно, насколько ты уверен (высоко, средне, низко) и как я могу проверить это сам. Если какого-то факта ты не знаешь точно, так и скажи.','Запрос · в тот же чат'],
+  ['tip','Если нейросеть сама пишет «низкая уверенность» — не используй этот кусок, пока не проверишь.']
+ ]},
+ {id:'safe-deepfake',t:'Поддельные фото и видео',d:'Признаки подделки и как не разнести её дальше',min:2,b:[
+  ['p','Нейросети рисуют фотографии и видео, которые трудно отличить от настоящих. Ими пугают, выманивают деньги и разгоняют слухи.'],
+  ['h','На что смотреть'],
+  ['ul','Руки и пальцы: лишние, слипшиеся, странно согнутые|Текст на вывесках и документах — кривые буквы, бессмыслица|Края лица и волос размыты или «плывут» при движении|Губы не совпадают со словами, моргание неестественное|Слишком гладкая кожа и одинаковый свет со всех сторон'],
+  ['h','Как проверить'],
+  ['p','Найди первоисточник: кто первым выложил, есть ли новость у крупных изданий. Поиск по картинке в Яндексе покажет, где фото появлялось раньше и не было ли оно другим.'],
+  ['tip','Не уверен — не пересылай. Подделку распространяют как раз те, кто «просто поделился».']
+ ]}
+];
+function sSafeRow(){
+  const box=$('#s-safe-row');if(!box)return;
+  box.innerHTML=S_SAFE.map(g=>`<button class="s-post-card s-safe-card" data-safe="${g.id}"><small>${g.min} мин</small><b>${esc(g.t)}</b><span>${esc(g.d)}</span></button>`).join('');
+}
+function sSafeOpen(id){
+  const g=S_SAFE.find(x=>x.id===id);if(!g)return;
+  $('#doc-t').textContent=g.t;$('#doc-d').textContent='Безопасность · '+g.min+' мин';
+  blk.n=0;$('#doc-b').innerHTML=sBotSay('shchit','<b>Коротко и по делу.</b> Советы общие: они работают с любой нейросетью.')+g.b.map(blk).join('');
+  buildToc('#doc-b','#doc-toc');
+  const back=$('#v-doc [data-back]');if(back){back.dataset.go='study';back.textContent='← Материалы';}
+  show('doc');scrollTo(0,0);
+}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-safe]');if(g)sSafeOpen(g.dataset.safe);});
+sSafeRow();
+
 /* ---------- словарь (28.09) ----------
    Слова, на которых новичок спотыкается в уроках. Простым языком, на «ты»,
    без обещаний: где нейросеть ошибается — так и сказано. */
@@ -5544,6 +5629,7 @@ srBuild=function(){
   S_AI_RU.forEach(x=>idx.push({вид:'нейросеть',знак:'⚒',имя:x.t,где:'работают из России',
     текст:[x.maker,x.what,...x.facts].join(' '),открыть:()=>sAiOpen(x.id)}));
   S_SLOVAR.forEach(([t,d])=>idx.push({вид:'словарь',знак:'А',имя:t,где:'словарь',текст:d,открыть:()=>sGlOpen(t)}));
+  S_SAFE.forEach(g=>idx.push({вид:'безопасность',знак:'!',имя:g.t,где:'безопасность',текст:g.d+' '+g.b.map(b=>typeof b[1]==='string'?b[1]:'').join(' '),открыть:()=>sSafeOpen(g.id)}));
   return idx;
 };
 const _srPaint=srPaint;
