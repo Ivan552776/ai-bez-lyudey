@@ -2445,6 +2445,10 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-hist-recent{display:grid}
 .s-hist-recent .s-link{justify-content:space-between;text-align:left;font-size:14.5px}
 .s-hist-recent .s-link .s-ic{width:16px;height:16px;flex:none}
+
+/* ---------- подарить доступ (30.09) ---------- */
+.s-gift-open{width:100%;justify-content:center;margin:8px 0 -6px}
+.s-gift-open .s-ic{width:17px;height:17px}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2833,6 +2837,8 @@ const DOCS = [
   ['p','Во вкладке «Материалы» есть «Работают из России» — там нейросети, которые открываются напрямую, и что в каждой бесплатно. Запросы из уроков подходят и для них.'],
   ['h','Что такое серия и отметки'],
   ['p','Серия — сколько дней подряд ты открываешь урок. Отметки — за первые уроки, серию и пройденные курсы, они в профиле. Напомнить о серии бот может вечером — включается там же.'],
+  ['h','Как подарить доступ'],
+  ['p','На экране «Полный доступ» — «Подарить доступ другу». Оплатишь звёздами — бот пришлёт ссылку. Перешли её: доступ откроется у того, кто нажмёт «Старт». Ссылка работает один раз. Возврат — так же, в течение семи дней, командой /paysupport в боте.'],
   ['h','Как получить неделю в подарок'],
   ['p','Отправь другу урок — кнопкой после «Получилось?» или «Пригласить друга» в профиле. Когда он впервые откроет урок по твоей ссылке, тебе добавится неделя полного доступа. До пяти недель в месяц.'],
   ['h','Кто пишет уроки'],
@@ -5008,6 +5014,38 @@ async function sCheatImage(i){
   g.fillStyle=col;g.font='400 27px '+F;g.fillText('t.me/ai_bez_lyudey_bot/kurs',110,H-108);
   return await new Promise(ok=>cv.toBlob(ok,'image/png'));
 }
+/* ---------- подарить доступ (30.09) ----------
+   Счёт-подарок: доступ получит не плательщик, а тот, кому он перешлёт
+   ссылку от бота. Кнопка видна, только если сервер умеет подарки
+   (в /api/me есть gifts) — прежний сервер выставил бы обычный месяц себе. */
+function sGiftOpen(){
+  let d=$('#s-gift-sheet');
+  if(!d){d=document.createElement('dialog');d.id='s-gift-sheet';d.className='s-cert-dlg s-ai-dlg';d.tabIndex=-1;document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d)d.close();});}
+  d.innerHTML=`<p class="s-daily-k">${si('send')}Подарок</p><h2 class="s-gl-t">Подарить доступ другу</h2>`
+    +`<p class="s-ai-what">Оплатишь звёздами — бот пришлёт тебе ссылку. Перешли её другу: доступ откроется у того, кто нажмёт «Старт». Ссылка работает один раз.</p>`
+    +`<div class="s-cert-acts"><button class="s-btn" data-gift="gift_month">Месяц — 300 ⭐</button><button class="s-btn line" data-gift="gift_year">Год — 3 000 ⭐</button>`
+    +`<p class="s-cert-hint" id="s-gift-note" hidden></p><button class="s-link" data-gift-close>Закрыть</button></div>`;
+  if(!d.open){d.showModal();d.focus();}
+}
+async function sGiftPay(plan,btn){
+  const note=$('#s-gift-note'),bot='https://t.me/ai_bez_lyudey_bot?start='+plan;
+  if(!счётЗдесь()){перейти(bot);return;}
+  const было=btn.textContent;btn.disabled=true;btn.textContent='Готовлю счёт…';
+  try{
+    const r=await post('/api/invoice',{plan});
+    if(!r?.ok||!r.link){перейти(bot);return;}
+    TG.openInvoice(r.link,st=>{
+      if(st==='paid'){try{TG.HapticFeedback?.notificationOccurred('success');}catch(e){}
+        note.textContent='Подарок оплачен! Бот прислал тебе ссылку — перешли её другу.';note.hidden=false;}
+    });
+  }catch(e){перейти(bot);}
+  finally{btn.disabled=false;btn.textContent=было;}
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-gift-open]')){sGiftOpen();return;}
+  if(e.target.closest('[data-gift-close]')){$('#s-gift-sheet')?.close();return;}
+  const g=e.target.closest('[data-gift]');if(g)sGiftPay(g.dataset.gift,g);
+});
 function sCheatOpen(i){
   const c=SECS[i];if(!c)return;
   sImgOpen({alt:'Шпаргалка курса «'+c.t+'»',label:'Отправить курс другу',file:'shpargalka-'+(c.slug||'kurs')+'.png',
@@ -5124,7 +5162,7 @@ function sSub(short){
      <button class="s-plan" role="radio" data-s-plan="year" aria-checked="${sPlanSel==='year'}"><span class="box"></span><span><b>На год</b><small>одним платежом<br>два месяца в подарок</small></span><strong>3 000 ⭐<small>≈ 5 000–6 500 ₽</small><small>до 18 ₽ в день</small></strong></button>
     </div>`}
     ${short?`<button class="s-btn" data-go="pay-all" style="margin-top:14px">${paid?'Подробнее о доступе':'Открыть все уроки'}</button>`:`<button class="s-btn s-buy" data-write="pay" style="margin-top:14px">${paid?(sPlanSel==='year'?'Продлить на год за 3 000 ⭐':'Продлить на месяц за 300 ⭐'):sBuyText()}</button>
-    <p class="s-honest">${счётЗдесь()?'Счёт в звёздах Telegram откроется прямо здесь, уроки откроются сразу после оплаты.':'Продолжишь в боте: он пришлёт счёт в звёздах Telegram, уроки откроются сразу после оплаты.'}<span class="s-doc-links"><button data-doc="zvezdy">Как купить звёзды</button><button data-doc="oferta">Публичная оферта</button></span></p>`}
+    <p class="s-honest">${счётЗдесь()?'Счёт в звёздах Telegram откроется прямо здесь, уроки откроются сразу после оплаты.':'Продолжишь в боте: он пришлёт счёт в звёздах Telegram, уроки откроются сразу после оплаты.'}<span class="s-doc-links"><button data-doc="zvezdy">Как купить звёзды</button><button data-doc="oferta">Публичная оферта</button></span></p>${ME?.gifts===true?`<button class="s-link s-gift-open" data-gift-open>${si('send')}Подарить доступ другу</button>`:''}`}
   </div>`;
 }
 function sWhat(){
