@@ -4942,6 +4942,8 @@ async function sGiftPay(plan,btn){
     TG.openInvoice(r.link,st=>{
       if(st==='paid'){try{TG.HapticFeedback?.notificationOccurred('success');}catch(e){}
         note.textContent='Подарок оплачен! Бот прислал тебе ссылку — перешли её другу.';note.hidden=false;}
+      else if(st==='cancelled'||st==='failed'){шаг('счёт-закрыт');   // как у своей оплаты: см. звёздыНеХватило()
+        note.innerHTML='Не хватило звёзд? Купи пакет не меньше '+(plan==='gift_year'?'3 000':'300')+' в <button class="s-link" data-stars-buy>@PremiumBot</button> и нажми ещё раз. Ничего не списано.';note.hidden=false;}
     });
   }catch(e){перейти(bot);}
   finally{btn.disabled=false;btn.textContent=было;}
@@ -6250,11 +6252,33 @@ async function оплатитьЗдесь(кнопка, срок){
     TG.openInvoice(r.link, статус=>{
       if(статус==='paid'){ шаг('оплачено'); ждатьДоступ(было); }
       else if(статус==='pending') ждатьДоступ(было);
+      else if(статус==='cancelled' || статус==='failed'){ шаг('счёт-закрыт'); звёздыНеХватило(статус, срок); }
     });
     return true;
   }catch(e){ return false; }
   finally{ счётГотовится=false; кнопка.disabled=false; кнопка.textContent=подпись; }
 }
+/* Счёт закрыт без оплаты (30.09). Чаще всего звёзд нет: Telegram предлагает
+   купить их прямо в счёте, покупка через магазин приложений из России часто
+   не проходит, и человек закрывает окно — так было и у Ivan'а 28.09. Раньше
+   приложение молчало. Теперь — три шага и путь в @PremiumBot. */
+function звёздыНеХватило(статус, срок){
+  const год=срок==='year', сбой=статус==='failed';
+  let d=$('#s-stars-sheet');
+  if(!d){d=document.createElement('dialog');d.id='s-stars-sheet';d.className='s-cert-dlg s-ai-dlg';d.tabIndex=-1;document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d)d.close();});}
+  d.innerHTML=`<p class="s-daily-k">${si('star')}Оплата звёздами</p><h2 class="s-gl-t">${сбой?'Оплата не прошла':'Не хватило звёзд?'}</h2>`
+    +`<p class="s-ai-what">${сбой?'Ничего не списано. Чаще всего не хватает звёзд или магазин приложений не пропустил покупку из России.':'Ничего не списано. Звёзды покупаются в самом Telegram — это пара минут.'}</p>`
+    +`<ol class="s-ai-steps"><li>Открой @PremiumBot — официальный бот Telegram.</li><li>Купи пакет не меньше ${год?'3 000 звёзд — столько стоит год':'300 звёзд — столько стоит месяц'}.</li><li>Вернись сюда и нажми «Оплатить ещё раз».</li></ol>`
+    +(сбой?`<p class="s-ai-what">Звёзды есть, а оплата не проходит — напиши в бот @ai_bez_lyudey_bot команду /paysupport.</p>`:'')
+    +`<div class="s-cert-acts"><button class="s-btn" data-stars-buy>Купить звёзды</button><button class="s-btn line" data-write="pay">Оплатить ещё раз</button>`
+    +`<button class="s-link" data-doc="zvezdy">Как купить звёзды${si('chev')}</button></div>`;
+  if(!d.open){d.showModal();d.focus();}
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-stars-buy]')){ $('#s-stars-sheet')?.close(); перейти('https://t.me/PremiumBot'); return; }
+  // «Оплатить ещё раз» и «Как купить звёзды» делают своё дело в общих обработчиках — окно только закрываем
+  if(e.target.closest('#s-stars-sheet [data-write], #s-stars-sheet [data-doc]')) $('#s-stars-sheet')?.close();
+});
 /* Строка под кнопкой оплаты. Экран перерисовывается при каждой проверке
    доступа, поэтому строку ставим заново после каждой. */
 function сказатьОплата(текст){
