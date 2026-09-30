@@ -2449,6 +2449,16 @@ a.s-pill,a.s-btn{text-decoration:none}
 /* ---------- подарить доступ (30.09) ---------- */
 .s-gift-open{width:100%;justify-content:center;margin:8px 0 -6px}
 .s-gift-open .s-ic{width:17px;height:17px}
+/* поля для [скобок] в запросе (30.09): шрифт полей 16px — меньше iOS увеличивает страницу при вводе */
+.s-fill-open{display:inline-flex;align-items:center;gap:6px;margin:12px 0 0;min-height:44px;padding:0 14px;border-radius:12px;background:var(--s-white);color:var(--s-acc);font-family:var(--s-font);font-size:14px;font-weight:600}
+.s-fill-open .s-ic{width:16px;height:16px}
+.s-fill{display:grid;gap:10px;margin:0 0 12px}
+.s-fill label{display:grid;gap:4px}
+.s-fill span{font-family:var(--s-font);font-size:12.5px;font-weight:600;color:var(--s-soft)}
+.s-fill textarea{box-sizing:border-box;width:100%;min-height:44px;resize:none;overflow:hidden;border:1px solid var(--s-line);border-radius:12px;background:var(--s-white);padding:11px 12px;font-family:var(--s-font);font-size:16px;line-height:1.4;color:var(--s-ink)}
+.s-fill textarea:focus{outline:2px solid var(--s-acc);outline-offset:-1px}
+mark.s-fill-v{background:var(--s-acc-s);color:var(--s-acc-d);border-radius:4px;padding:0 2px}
+.s-fill-gap{background:var(--s-amber-s);border-radius:4px}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -3030,6 +3040,41 @@ function paintLab(i=0){
   $('#lab-result').textContent=item.result;
   $('#lab-copy').dataset.copy=enc(item.text);
 }
+/* Места для своих данных в запросе — [в скобках] (30.09). Новичку на телефоне
+   трудно править скобки в чужом чате, поэтому «Вписать своё» раскрывает поле на
+   каждую скобку: запрос пересобирается на глазах, «Копировать» берёт уже
+   заполненный. Незаполненная скобка остаётся как была. Исходник — в
+   data-orig: картинкой делимся им, а не тем, что человек вписал о себе.
+   Выражения прямо в функциях: blk зовут и до объявления констант ниже. */
+function кнопкаСкобок(текст){
+  return /\[[^\[\]\n]{1,120}\]/.test(текст)
+    ? '<button type="button" class="s-fill-open" data-fill-open><svg class="s-ic" aria-hidden="true"><use href="#i-pen"/></svg>Вписать своё</button>' : '';
+}
+function скобкиОткрыть(кнопка){
+  const box=кнопка.closest('.pbox'), cb=box?.querySelector('.cb'), pre=box?.querySelector('pre');
+  if(!cb || !pre) return;
+  let исходный; try{ исходный=box.dataset.orig || decodeURIComponent(cb.dataset.copy); }catch(e){ return; }
+  box.dataset.orig=исходный;
+  const поля=[...new Set([...исходный.matchAll(/\[([^\[\]\n]{1,120})\]/g)].map(m=>m[1]))];
+  const форма=document.createElement('div'); форма.className='s-fill';
+  форма.innerHTML=поля.map(п=>`<label><span>${esc(п)}</span><textarea rows="1" data-fill="${enc(п)}" placeholder="${esc(п).replace(/"/g,'&quot;')}"></textarea></label>`).join('');
+  pre.before(форма); кнопка.hidden=true;
+  const первое=форма.querySelector('textarea'); скобкиСобрать(первое); первое.focus();
+}
+function скобкиСобрать(поле){
+  поле.style.height='auto'; поле.style.height=поле.scrollHeight+'px';
+  const box=поле.closest('.pbox'), исходный=box?.dataset.orig; if(!исходный) return;
+  const знач={};
+  box.querySelectorAll('[data-fill]').forEach(t=>{ знач[decodeURIComponent(t.dataset.fill)]=t.value.trim(); });
+  box.querySelector('.cb').dataset.copy=enc(исходный.replace(/\[([^\[\]\n]{1,120})\]/g,(m,п)=>знач[п]||m));
+  box.querySelector('pre').innerHTML=исходный.split(/(\[[^\[\]\n]{1,120}\])/).map(ч=>{
+    const п=/^\[(.+)\]$/.exec(ч)?.[1];
+    if(п===undefined || !(п in знач)) return esc(ч);
+    return знач[п] ? `<mark class="s-fill-v">${esc(знач[п])}</mark>` : `<span class="s-fill-gap">${esc(ч)}</span>`;
+  }).join('');
+}
+document.addEventListener('click',e=>{ const fo=e.target.closest('[data-fill-open]'); if(fo) скобкиОткрыть(fo); });
+document.addEventListener('input',e=>{ const t=e.target.closest?.('[data-fill]'); if(t) скобкиСобрать(t); });
 async function copyText(button){
   const original=button.textContent;
   let text; try{ text=decodeURIComponent(button.dataset.copy); }catch(e){ return; }
@@ -3061,7 +3106,7 @@ function blk(b){
       const [q,a] = pair.split('|');
       return `<div class="fx"><div class="q"><b>Проблема</b>${q}</div><div class="a"><b>Решение</b>${a}</div></div>`;
     }).join('')}</div>`;
-  if(k==='prompt') return `<div class="pbox"><div class="ph"><span>${b[2] ? esc(b[2]) : 'Запрос · вставь в нейросеть'}</span><button class="cb" data-copy="${enc(v)}">Копировать</button></div><pre>${esc(v)}</pre></div>`;
+  if(k==='prompt') return `<div class="pbox"><div class="ph"><span>${b[2] ? esc(b[2]) : 'Запрос · вставь в нейросеть'}</span><button class="cb" data-copy="${enc(v)}">Копировать</button></div><pre>${esc(v)}</pre>${кнопкаСкобок(v)}</div>`;
   // Видео временно не показываем: ролики будут пересняты в конце, данные в уроках
   // остаются нетронутыми — вернуть показ можно этой же строкой.
   if(k==='vid') return '';
@@ -4611,7 +4656,7 @@ function sAiOpen(id){
       const задачи=S_AI_TASKS.filter(t=>t[2].includes(x.id)).map(t=>t[0]);
       return `<h3 class="s-ai-sub">Как войти</h3><ol class="s-ai-steps">${m.вход.map(t=>`<li>${esc(t)}</li>`).join('')}</ol>`
         +(задачи.length?`<h3 class="s-ai-sub">Лучше всего</h3><p class="s-ai-best">${задачи.map(esc).join(' · ')}</p>`:'')
-        +`<h3 class="s-ai-sub">Попробуй</h3>`+m.запросы.map((q,n)=>`<div class="pbox"><div class="ph"><span>Запрос ${n+1} · замени [скобки]</span><button class="cb" data-copy="${enc(q)}">Копировать</button></div><pre>${esc(q)}</pre></div>`).join('');})()
+        +`<h3 class="s-ai-sub">Попробуй</h3>`+m.запросы.map((q,n)=>`<div class="pbox"><div class="ph"><span>Запрос ${n+1} · замени [скобки]</span><button class="cb" data-copy="${enc(q)}">Копировать</button></div><pre>${esc(q)}</pre>${кнопкаСкобок(q)}</div>`).join('');})()
     +`<div class="s-cert-acts"><button class="s-btn" data-site="${feedAttr(x.url)}">Открыть ${esc(x.t)}${si('link')}</button>`
     +(x.material?`<button class="s-btn line" data-ai-review="${x.material}">Подробный разбор</button>`:'')
     +(ci>=0?`<button class="s-btn line" data-ai-course="${ci}">Курс: ${SECS[ci].ls.length} ${скл(SECS[ci].ls.length,'урок','урока','уроков')}</button>`:'')
@@ -5036,7 +5081,7 @@ document.addEventListener('click',e=>{
   const p=e.target.closest('[data-pshare]');
   if(p){
     const [si_,li]=p.dataset.pshare.split('-').map(Number);
-    const text=p.closest('.pbox')?.querySelector('pre')?.textContent||p.closest('.s-daily-card')?.querySelector('[data-daily-text]')?.textContent||'';
+    const text=p.closest('.pbox')?.dataset.orig||p.closest('.pbox')?.querySelector('pre')?.textContent||p.closest('.s-daily-card')?.querySelector('[data-daily-text]')?.textContent||'';
     if(text&&!/^Загружаем/.test(text))sPromptShare(si_,li,text);
   }
 });
