@@ -6410,6 +6410,102 @@ const S = {
   S.set('moved', true);
 })();
 
+/* ---------- прогресс на всех устройствах (30.09) ----------
+   Раньше прочитанное, закладки и серия жили в памяти одного устройства:
+   открыл приложение на компьютере — всё с нуля. Облако Telegram (CloudStorage,
+   с версии 6.9) хранит их у самого человека, до 4 КБ на ключ. Первый экран
+   рисуется из памяти устройства, облако подтягивается следом и склеивается по
+   правилу ключа; добавилось новое — экран перерисовывается. Писать в облако
+   начинаем только после чтения: иначе новое устройство затёрло бы облачное
+   своим пустым. Вне Telegram и на старых клиентах всё как раньше.
+   Правило — как склеить своё (a) с облачным (b); null — побеждает последняя запись. */
+const ОБЛАКО = {
+  done: (a,b)=>[...new Set([...(b||[]), ...(a||[])])],
+  dlog: (a,b)=>[...new Set([...(b||[]), ...(a||[])])].sort().slice(-40),
+  ach: (a,b)=>({...(b||{}), ...(a||{})}),
+  'practice-v2': (a,b)=>({...(b||{}), ...(a||{})}),
+  // серия: дни с обоих устройств (dlog уже склеен — он раньше в списке) подряд
+  // до последнего дня; четыре дня на компьютере и сегодня на телефоне — это пять
+  days: (a,b)=>{
+    if(!a || !b) return a || b;
+    const [x, y] = (b.last||'') > (a.last||'') ? [b, a] : (a.last||'') > (b.last||'') ? [a, b] : ((b.streak||0) > (a.streak||0) ? [b, a] : [a, b]);
+    const дни = new Set(S.get('dlog', []));
+    let подряд = 0;
+    for(const d = new Date(x.last + 'T12:00'); дни.has(день(d)); d.setDate(d.getDate() - 1)) подряд++;
+    const стык = y.last && x.last ? разница(y.last, x.last) : -1;
+    const серия = Math.max(x.streak||0, подряд, стык === 1 ? (y.streak||0) + 1 : 0, стык === 0 ? (y.streak||0) : 0);
+    return {...x, streak: серия, best: Math.max(a.best||0, b.best||0, серия)};
+  },
+  dayBest: (a,b)=>Math.max(a||0, b||0),
+  copied: (a,b)=>Math.max(a||0, b||0),
+  hello2: (a,b)=>!!(a || b),
+  'otzyv-asked': (a,b)=>!!(a || b),
+  fav: null, xlast: null, 's-course': null, 'news-seen': null,
+};
+const облако = () => {
+  try{ return вТелеграме() && TG.CloudStorage?.getItems && (!TG.isVersionAtLeast || TG.isVersionAtLeast('6.9')) ? TG.CloudStorage : null; }
+  catch(e){ return null; }
+};
+const облакоЖдёт = new Set();
+let облакоПрочитано = false, облакоТаймер = 0;
+const _S_set = S.set;
+S.set = function(n, v){
+  _S_set.call(S, n, v);
+  if(!(n in ОБЛАКО) || !облако()) return;
+  // до чтения облака время не ставим: запись при первом показе (курс по умолчанию)
+  // старше облачной и не должна перебить выбор с другого устройства
+  if(облакоПрочитано){ const t = S.get('sync-t', {}); t[n] = Date.now(); _S_set.call(S, 'sync-t', t); }
+  облакоЖдёт.add(n);
+  clearTimeout(облакоТаймер); облакоТаймер = setTimeout(облакоОтправить, 1500);
+};
+function облакоОтправить(){
+  const c = облако(); if(!c || !облакоПрочитано) return;
+  const t = S.get('sync-t', {});
+  for(const n of облакоЖдёт){
+    const знач = JSON.stringify({v: S.get(n, null), t: t[n] || Date.now()});
+    if(знач.length <= 4096) try{ c.setItem(n, знач); }catch(e){}
+  }
+  облакоЖдёт.clear();
+}
+function облакоПодтянуть(){
+  const c = облако(); if(!c) return;
+  const ключи = Object.keys(ОБЛАКО);
+  try{ c.getItems(ключи, (ошибка, данные) => {
+    облакоПрочитано = true;
+    if(ошибка || !данные){ облакоОтправить(); return; }
+    const t = S.get('sync-t', {}), изменились = [];
+    for(const n of ключи){
+      let из = null; try{ из = данные[n] ? JSON.parse(данные[n]) : null; }catch(e){}
+      const своё = S.get(n, undefined), склей = ОБЛАКО[n];
+      let итог = своё;
+      if(из && своё === undefined) итог = из.v;
+      else if(из && склей) итог = склей(своё, из.v);
+      else if(из && (из.t || 0) > (t[n] || 0)) итог = из.v;
+      if(итог === undefined || итог === null) continue;
+      if(JSON.stringify(итог) !== JSON.stringify(своё)){
+        _S_set.call(S, n, итог); изменились.push(n);
+        if(из && JSON.stringify(итог) === JSON.stringify(из.v)) t[n] = из.t || t[n];
+      }
+      if(!из || JSON.stringify(итог) !== JSON.stringify(из.v)){ облакоЖдёт.add(n); t[n] = t[n] || Date.now(); }
+    }
+    _S_set.call(S, 'sync-t', t);
+    облакоОтправить();
+    if(изменились.length) облакоПерерисовать(изменились);
+  }); }catch(e){ облакоПрочитано = true; }
+}
+function облакоПерерисовать(ключи){
+  try{
+    if(ключи.includes('s-course')) sSelectedCourse = null;
+    const экран = document.querySelector('.view.on')?.id;
+    if(экран === 'v-hello' && S.get('hello2', false)) closeHello(false);
+    if(typeof routePaint === 'function') routePaint();
+    paintStreak(); favPaintList(); checkAch();
+    if(document.querySelector('.view.on')?.id === 'v-me') sProfile();
+  }catch(e){}
+}
+addEventListener('visibilitychange', () => { if(document.hidden) облакоОтправить(); });
+addEventListener('pagehide', облакоОтправить);
+
 function recentList(){ return S.get('rec', []); }
 
 /* ---------- прогресс чтения ---------- */
@@ -6937,6 +7033,7 @@ if(rt){ openLes(payLes,window.__lback||'sec'); return; }
 });
 $('#l-back').addEventListener('click', ()=>show(window.__lback||'sec', true));
 paintRecent();
+облакоПодтянуть();   // прогресс с других устройств — после первого экрана
 
 </script>
 <script>
