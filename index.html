@@ -4910,23 +4910,37 @@ async function sCertImage(i){
 /* Окно с картинкой — общее для грамоты и карточки запроса: картинка,
    «Поделиться» (своё у каждого) и «Сохранить». */
 let sSheet=null;
-async function sImgOpen({alt,label,file,make,share}){
+async function sImgOpen({alt,label,file,make,share,story}){
   let d=$('#s-cert');
   if(!d){
     d=document.createElement('dialog');d.id='s-cert';d.className='s-cert-dlg';
     d.tabIndex=-1;   // фокус на окно, а не рамкой на первую кнопку
-    d.innerHTML=`<img alt="" id="s-cert-img"><div class="s-cert-acts"><button class="s-btn" data-cert-share></button><button class="s-btn line" data-cert-save>Сохранить картинку</button><p class="s-cert-hint" id="s-cert-hint" hidden></p><button class="s-link" data-cert-close>Закрыть</button></div>`;
+    d.innerHTML=`<img alt="" id="s-cert-img"><div class="s-cert-acts"><button class="s-btn" data-cert-share></button><button class="s-btn line" data-cert-story hidden>В историю</button><button class="s-btn line" data-cert-save>Сохранить картинку</button><p class="s-cert-hint" id="s-cert-hint" hidden></p><button class="s-link" data-cert-close>Закрыть</button></div>`;
     document.body.appendChild(d);
     d.addEventListener('click',e=>{if(e.target===d)d.close();});
   }
   d.querySelector('[data-cert-share]').innerHTML=si('send')+esc(label);
   $('#s-cert-hint').hidden=true;
+  const кнопкаИстории=d.querySelector('[data-cert-story]');кнопкаИстории.hidden=true;
   const img=$('#s-cert-img');img.alt=alt;img.removeAttribute('src');
   if(!d.open){d.showModal();d.focus();}
   const blob=await make();
   if(sSheet?.url)URL.revokeObjectURL(sSheet.url);
-  sSheet={blob,url:blob?URL.createObjectURL(blob):'',file,share};
+  sSheet={blob,url:blob?URL.createObjectURL(blob):'',file,share,story};
   if(sSheet.url)img.src=sSheet.url;
+  // кнопка «В историю» — только когда картинка для истории лежит на сайте
+  if(story&&sStoryOk())fetch(story.url,{method:'HEAD'}).then(r=>{if(r.ok&&sSheet?.story===story)кнопкаИстории.hidden=false;}).catch(()=>{});
+}
+/* История Telegram (30.09): shareToStory с версии 7.8 берёт картинку только по
+   открытой ссылке, а наши рисуются на телефоне. Поэтому в историю идут
+   картинки, одинаковые для всех, — шпаргалки курсов, заранее собранные в
+   site/assets/story/ (editorial/2026-09-30-istorii/sdelat.mjs). Кнопка
+   появляется, только если картинка на месте. Ссылка-виджет — только у Premium,
+   остальным ссылка в подписи. */
+const sStoryOk=()=>{try{return вТелеграме()&&typeof TG?.shareToStory==='function'&&(!TG.isVersionAtLeast||TG.isVersionAtLeast('7.8'));}catch(e){return false;}};
+function sStory({url,text,link,name}){
+  шаг('поделился');
+  try{TG.shareToStory(url,{text:text.slice(0,200),...(TG.initDataUnsafe?.user?.is_premium?{widget_link:{url:link,name}}:{})});}catch(e){}
 }
 /* ---------- шпаргалка курса (30.09) ----------
    Картинка под экран телефона: по правилу на каждый урок курса — те же
@@ -5002,7 +5016,9 @@ function sCheatOpen(i){
   const c=SECS[i];if(!c)return;
   sImgOpen({alt:'Шпаргалка курса «'+c.t+'»',label:'Отправить курс другу',file:'shpargalka-'+(c.slug||'kurs')+'.png',
     make:()=>sCheatImage(i),
-    share:()=>{шаг('поделился');share('Шпаргалка и курс «'+c.t+'» в «ИИ без людей»: '+c.ls.length+' '+скл(c.ls.length,'урок','урока','уроков')+' на живых задачах. Первые уроки бесплатно.',sDrugLink(i,0));}});
+    share:()=>{шаг('поделился');share('Шпаргалка и курс «'+c.t+'» в «ИИ без людей»: '+c.ls.length+' '+скл(c.ls.length,'урок','урока','уроков')+' на живых задачах. Первые уроки бесплатно.',sDrugLink(i,0));},
+    story:{url:new URL('assets/story/shpargalka-'+c.slug+'.jpg',location.href).href,link:sDrugLink(i,0),name:'Открыть курс',
+      text:'Шпаргалка по '+c.t+' — '+c.ls.length+' '+скл(c.ls.length,'урок','урока','уроков')+' в «ИИ без людей». Первые бесплатно: t.me/ai_bez_lyudey_bot/kurs'}});
 }
 document.addEventListener('click',e=>{const c=e.target.closest('[data-cheat]');if(c)sCheatOpen(+c.dataset.cheat);});
 function sCertOpen(i){
@@ -5078,6 +5094,7 @@ document.addEventListener('click',e=>{
   if(e.target.closest('[data-cert-close]')){$('#s-cert')?.close();return;}
   if(e.target.closest('[data-cert-save]')){sCertSave();return;}
   if(e.target.closest('[data-cert-share]')){sSheet?.share?.();return;}
+  if(e.target.closest('[data-cert-story]')){if(sSheet?.story)sStory(sSheet.story);return;}
   const p=e.target.closest('[data-pshare]');
   if(p){
     const [si_,li]=p.dataset.pshare.split('-').map(Number);
