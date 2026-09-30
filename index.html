@@ -2459,6 +2459,9 @@ a.s-pill,a.s-btn{text-decoration:none}
 .s-fill textarea:focus{outline:2px solid var(--s-acc);outline-offset:-1px}
 mark.s-fill-v{background:var(--s-acc-s);color:var(--s-acc-d);border-radius:4px;padding:0 2px}
 .s-fill-gap{background:var(--s-amber-s);border-radius:4px}
+/* на экран телефона (30.09) — карточка в стиле «Что нового» */
+.s-home-t{margin:0 0 12px;font-size:14.5px;line-height:1.45;color:var(--s-ink)}
+.s-home-acts{display:grid;gap:2px;padding-bottom:8px}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2631,6 +2634,7 @@ mark.s-fill-v{background:var(--s-acc-s);color:var(--s-acc-d);border-radius:4px;p
     <button data-prep="11"><span class="ic"><svg class="s-ic" aria-hidden="true"><use href="#i-link"/></svg></span><span><b>Первый вход в нейросеть</b><small>Регистрация и помощь со входом</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-faq="1"><span class="ic" style="background:#B07A0B"><svg class="s-ic" aria-hidden="true"><use href="#i-message"/></svg></span><span><b>Вопросы и ответы</b><small>Оплата, возврат, доступ, подарок за друга</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-write="1"><span class="ic" style="background:#6E7179"><svg class="s-ic" aria-hidden="true"><use href="#i-mail"/></svg></span><span><b>Написать в редакцию</b><small>вопрос уйдёт в бот, ответ придёт туда же</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
+    <button id="p-home" data-home-add hidden><span class="ic" style="background:#0B6E4F"><svg class="s-ic" aria-hidden="true"><use href="#i-home"/></svg></span><span><b>На экран телефона</b><small>Иконка рядом с другими приложениями — открыть в одно касание</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <button data-go="docs"><span class="ic" style="background:#8C8F97"><svg class="s-ic" aria-hidden="true"><use href="#i-document"/></svg></span><span><b>Документы</b><small>оферта, политика, связь</small></span><svg class="s-ic ch" aria-hidden="true"><use href="#i-chev"/></svg></button>
     <div class="r s-switch"><span class="ic" style="background:#2F6BFF"><svg class="s-ic" aria-hidden="true"><use href="#i-document"/></svg></span><span style="flex:1"><b id="sw4-t">Крупный текст</b><small id="sw4-note">Уроки, гайды и словарь крупнее — легче читать с телефона.</small></span><button class="sw off" id="sw4" role="switch" aria-checked="false" aria-labelledby="sw4-t"><i></i></button></div>
     <div class="r s-switch"><span class="ic" style="background:#0E2420"><svg class="s-ic" aria-hidden="true"><use href="#i-moon"/></svg></span><span style="flex:1"><b id="sw2-t">Ночная тема</b><small>Тёмный фон для чтения вечером. По умолчанию приложение светлое.</small></span><button class="sw off" id="sw2" role="switch" aria-checked="false" aria-labelledby="sw2-t"><i></i></button></div>
@@ -4472,7 +4476,7 @@ function sRenderSec(i){
     ${finished?`<button class="s-btn" data-les="0">Повторить первый урок ${si('chev')}</button><button class="s-link" data-cert="${i}">${si('star')}Грамота за курс</button>`:next>=0?`<button class="s-btn" data-les="${next}">${read?'Продолжить':'Начать урок'} ${si('chev')}</button>`:`<button class="s-btn" data-go="pay-all">Открыть оставшиеся уроки ${si('chev')}</button>`}
     </section>`;
   $('#sec-overview').innerHTML='';$('#sec-now').innerHTML='';$('#sec-foot').innerHTML='';
-  const st=$('#s-day-stats');if(st)st.innerHTML=sNewsCard()+sDayStats()+sWeekDots();
+  const st=$('#s-day-stats');if(st)st.innerHTML=sHomeCard()+sNewsCard()+sDayStats()+sWeekDots();
   const pl=$('#s-plan');if(pl)pl.innerHTML=sPlanWeek();
   const cr=$('#s-courses');if(cr)cr.innerHTML=sCoursesRow(i);
   sDailyFill();
@@ -4513,6 +4517,38 @@ function sWeekDots(){
    Вернувшийся человек иначе не узнает о новом. Одна карточка до «Понятно»;
    новичку не показываем — для него всё новое. Меняется версия — покажется снова. */
 const S_NEWS={v:'2026-09-30',items:['Новый курс: GigaChat — работает из России, вход по номеру телефона','«Безопасность»: как не попасться на поддельный голос и фальшивых ботов','Посты канала и «Какую нейросеть выбрать» — во вкладке «Материалы»','Грамота за курс, словарь в уроках, неделя в подарок за друга']};
+/* ---------- на экран телефона (30.09) ----------
+   Telegram 8.0 ставит иконку мини-приложения на экран телефона: вернуться в одно
+   касание, не искать бота в чатах. Предлагаем один раз на главной — после двух
+   прочитанных уроков, когда польза уже видна; дальше — строка в профиле.
+   Статус спрашиваем у Telegram: 'missed' — можно предложить, 'added' — уже стоит,
+   'unknown' — не знает (карточку не показываем, строку в профиле — да). */
+let sHomeStatus='';
+const sHomeOk=()=>{try{return вТелеграме()&&typeof TG?.addToHomeScreen==='function'&&(!TG.isVersionAtLeast||TG.isVersionAtLeast('8.0'));}catch(e){return false;}};
+function sHomeCard(){
+  if(sHomeStatus!=='missed'||S.get('home-asked',false)||doneList().length<2)return '';
+  return `<section class="s-news s-home" aria-label="На экран телефона"><p class="s-daily-k">${si('home')}На экран телефона</p>`
+    +`<p class="s-home-t">Поставь иконку приложения рядом с другими — уроки откроются в одно касание, без поиска бота в чатах.</p>`
+    +`<div class="s-home-acts"><button class="s-btn" data-home-add>Добавить на экран</button><button class="s-link" data-home-later>Не сейчас</button></div></section>`;
+}
+function sHomePaint(){
+  const row=$('#p-home');if(row)row.hidden=!(sHomeStatus==='missed'||sHomeStatus==='unknown');
+  const st=$('#s-day-stats');if(!st)return;
+  st.querySelector('.s-home')?.remove();
+  const html=sHomeCard();if(html)st.insertAdjacentHTML('afterbegin',html);
+}
+// зовётся в конце главного скрипта: TG и вТелеграме объявлены ниже этого места
+function sHomeInit(){
+  if(!sHomeOk())return;
+  try{
+    TG.onEvent?.('homeScreenAdded',()=>{sHomeStatus='added';S.set('home-asked',true);шаг('на-экран');sHomePaint();});
+    TG.checkHomeScreenStatus?.(st=>{sHomeStatus=st||'';sHomePaint();});
+  }catch(e){}
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-home-add]')){try{TG.addToHomeScreen();}catch(err){}S.set('home-asked',true);e.target.closest('.s-home')?.remove();return;}
+  if(e.target.closest('[data-home-later]')){S.set('home-asked',true);e.target.closest('.s-home')?.remove();}
+});
 function sNewsCard(){
   if(S.get('news-seen','')===S_NEWS.v)return '';
   if(!doneList().length&&!(S.get('dlog',[])||[]).length)return '';
@@ -7051,6 +7087,7 @@ if(rt){ openLes(payLes,window.__lback||'sec'); return; }
 $('#l-back').addEventListener('click', ()=>show(window.__lback||'sec', true));
 paintRecent();
 облакоПодтянуть();   // прогресс с других устройств — после первого экрана
+sHomeInit();         // «На экран телефона» — Telegram 8.0
 
 </script>
 <script>
