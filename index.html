@@ -1992,6 +1992,20 @@ mark.s-fill-v{background:var(--s-acc-s);color:var(--s-acc-d);border-radius:4px;p
 .s-proba-note{margin:8px 0 0;text-align:center}
 .s-proba-now{display:flex;gap:8px;align-items:flex-start;margin:0 0 12px;padding:12px 14px;border-radius:14px;background:var(--s-amber-s);color:var(--s-ink);font-size:14.5px;line-height:1.4}
 .s-proba-now .s-ic{flex:none;width:18px;height:18px;margin-top:1px;color:var(--s-amber)}
+/* подборки по задачам (01.10): ряд на главной — как курсы, внутри — список уроков */
+.s-paths{margin-top:18px}
+.s-path-chip .s-path-mark .s-ic{width:18px;height:18px}
+.s-path-list{display:grid;gap:10px;margin:18px 0 8px}
+.s-path-item{display:flex;align-items:flex-start;gap:12px;width:100%;padding:14px;border:0;border-radius:18px;background:var(--s-card);color:var(--s-ink);font-family:var(--s-font);text-align:left;cursor:pointer}
+.s-path-n{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--chip-bg);color:var(--chip-col);font-weight:650;font-size:14px}
+.s-path-item.is-done .s-path-n{background:var(--s-acc);color:#FFFFFF}
+.s-path-body{flex:1;display:grid;gap:2px;min-width:0}
+.s-path-body small{font-size:12.5px;color:var(--s-soft)}
+.s-path-body b{font-size:16px;line-height:1.3;font-weight:650}
+.s-path-body span{font-size:14px;line-height:1.4;color:var(--s-soft)}
+.s-path-st{flex:none;display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:12.5px;color:var(--s-soft);white-space:nowrap}
+.s-path-st .s-ic{width:14px;height:14px}
+:root[data-n="1"] .s-path-n{background:#FFFFFF1F;color:var(--s-ink)}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2089,6 +2103,7 @@ mark.s-fill-v{background:var(--s-acc-s);color:var(--s-acc-d);border-radius:4px;p
   <div id="s-plan"></div>
   <div id="s-daily"></div>
   <div id="s-courses"></div>
+  <div id="s-paths"></div>
   <div id="sec-list"></div>
   <div id="sec-overview" hidden></div><div id="sec-now" hidden></div><div id="sec-foot" hidden></div>
   <span id="sec-k" hidden></span><span id="sec-t" hidden></span>
@@ -3868,7 +3883,9 @@ paintNext=function(nx){
 const S_ROBOT='assets/robot/';
 const S_ROBOT_HEIGHT={privet:397,planshet:397,chitaet:425,kartochki:469,noutbuk:313,palec:450,raduetsya:378,spit:540,ukazyvaet:365,lupa:380,plechi:357,dumaet:505,shchit:409,telezhka:267};
 function sBot(){return `<img class="s-bot" src="${S_ROBOT}golova.webp" alt="" loading="lazy" decoding="async">`;}
-function sBotFull(поза='privet'){return `<img class="s-bot-full" src="${S_ROBOT}${поза}.webp" alt="" width="320" height="${S_ROBOT_HEIGHT[поза]||397}" loading="lazy" decoding="async">`;}
+/* сразу=true — робот первого экрана (карточка курса на главной): грузится без
+   «ленивой» очереди и раньше прочих картинок (01.10), остальные — лениво. */
+function sBotFull(поза='privet',сразу=false){return `<img class="s-bot-full" src="${S_ROBOT}${поза}.webp" alt="" width="320" height="${S_ROBOT_HEIGHT[поза]||397}" ${сразу?'fetchpriority="high"':'loading="lazy"'} decoding="async">`;}
 function sBotSay(поза,text,вид=''){
   return `<div class="s-botsay${вид?' '+вид:''}">${sBotFull(поза)}<p>${text}</p></div>`;
 }
@@ -4005,7 +4022,7 @@ function sRenderSec(i){
   // после первого экрана (хвостДанные), а кнопка на нём видна сразу.
   $('#sec-head').innerHTML=`<section class="s-path-card s-course-overview" style="--path-bg:${bg}">
     <div class="s-path-chips"><span class="s-path-mark">${mono}</span><span>${esc(s.t)}</span>${next>=0?`<span>${s.ls[next].min} мин</span>`:''}</div>
-    <div class="s-path-card-body"><div><p class="s-path-eyebrow">${finished?'Путь пройден':read?'Продолжим':'Твой первый шаг'}</p><h2>${esc(finished?'Можно повторить на своей задаче':next>=0?s.ls[next].t:'Продолжить обучение')}</h2></div>${sBotFull(finished?'raduetsya':S_POSE[s.slug]||'ukazyvaet')}</div>
+    <div class="s-path-card-body"><div><p class="s-path-eyebrow">${finished?'Путь пройден':read?'Продолжим':'Твой первый шаг'}</p><h2>${esc(finished?'Можно повторить на своей задаче':next>=0?s.ls[next].t:'Продолжить обучение')}</h2></div>${sBotFull(finished?'raduetsya':S_POSE[s.slug]||'ukazyvaet',true)}</div>
     ${sCourseProgress(i)}
     ${!s.archived?`<button class="s-link s-cheat-link" data-cheat="${i}">${si('list')}Шпаргалка курса</button>`:''}
     ${finished?`<button class="s-btn" data-les="0">Повторить первый урок ${si('chev')}</button><button class="s-link" data-cert="${i}">${si('star')}Грамота за курс</button>`:next>=0?`<button class="s-btn" data-les="${next}">${read?'Продолжить':'Начать урок'} ${si('chev')}</button>`:`<button class="s-btn" data-go="pay-all">Открыть оставшиеся уроки ${si('chev')}</button>`}
@@ -4014,6 +4031,7 @@ function sRenderSec(i){
   const st=$('#s-day-stats');if(st)st.innerHTML=sHomeCard()+sNewsCard()+sDayStats()+sWeekDots();
   const pl=$('#s-plan');if(pl)pl.innerHTML=sPlanWeek();
   const cr=$('#s-courses');if(cr)cr.innerHTML=sCoursesRow(i);
+  const pt=$('#s-paths');if(pt)pt.innerHTML=sPathsRow();
   sDailyFill();
   const parts=s.archived?[[0,s.ls.length,'Уроки']]:[[0,3,S_PART[0]],[3,7,S_PART[1]],[7,s.ls.length,S_PART[2]]];
   $('#sec-list').innerHTML=parts.map(([a,b,name],part)=>`<section class="s-path-stage"><h2><span>${part+1}</span>${name}</h2><div>${s.ls.slice(a,b).map((l,k)=>{const j=a+k,isDone=done.includes(i+'-'+j),locked=!!l.key&&!paid;return `<button class="s-path-lesson${isDone?' done':''}${j===next?' current':''}" data-les="${j}"${j===next?' aria-current="step"':''}><span class="s-path-node">${isDone?si('check'):locked?si('lock'):j+1}</span><span><b>${esc(l.t)}</b><small>${locked?'По подписке':isDone?'Прочитан':l.min+' мин'}</small></span>${si('chev')}</button>`;}).join('')}</div></section>`).join('');
@@ -4120,6 +4138,51 @@ function sCoursesRow(current){
       return `<button class="s-course-chip" data-course-pick="${i}"${i===current?' aria-current="true"':''} style="--chip-bg:${bg};--chip-col:${col}"><span class="s-path-mark">${mono}</span><b>${esc(s.t)}</b><small>${read?read+' из '+s.ls.length+' прочитано':s.ls.length+' '+скл(s.ls.length,'урок','урока','уроков')}</small><i aria-hidden="true"><em style="width:${pct}%"></em></i></button>`;
     }).join('')+`</div></section>`;
 }
+/* ---------- подборки по жизненным задачам (01.10) ----------
+   Новичок думает задачей, а не нейросетью: «написать в чат класса», «разобрать
+   договор», а не «выучить GigaChat». Подборка — маршрут из уроков разных
+   курсов, только тех нейросетей, что открываются из России; бесплатные —
+   первыми. Новых уроков не нужно: ключи — «курс-номер», как у content/. */
+const S_PATHS=[
+ {id:'roditeli',t:'Родителям школьников',d:'чат класса, памятки из школы, собрания и запись в школу',ic:'book',c:['#2F6BFF','#E8EFFF'],ls:['gigachat-1','alice-2','gigachat-3','alice-5','alice-4','gigachat-6']},
+ {id:'dokumenty',t:'Документы и письма',d:'договоры, инструкции, заявления и протоколы — без выдуманных законов',ic:'document',c:['#B07A0B','#FDF3DC'],ls:['gigachat-2','alice-2','deepseek-3','gigachat-5','deepseek-7','gigachat-6']},
+ {id:'dengi',t:'Деньги и расчёты',d:'бюджет, чеки, поездки и выбор по условиям',ic:'table',c:['#0B6E4F','#E2F3EA'],ls:['alice-1','gigachat-4','deepseek-4','alice-6','deepseek-5','perplexity-5']},
+ {id:'delo',t:'Своё дело и подработка',d:'объявления, картинки, текст об услуге и проверка правил',ic:'spark',c:['#C2571E','#FBEDE3'],ls:['alice-3','deepseek-3','perplexity-1','gigachat-7','alice-7','gigachat-8']},
+];
+function sPathLs(p){
+  return p.ls.map(k=>{const m=/^(.+)-(\d+)$/.exec(k),ci=SECS.findIndex(c=>c.slug===m[1]&&!c.archived),li=+m[2]-1;
+    return {ci,li,s:SECS[ci],l:SECS[ci]?.ls[li]};}).filter(x=>x.l);
+}
+function sPathsRow(){
+  const done=doneList();
+  return `<section class="s-courses s-paths" aria-label="По задачам"><h2 class="s-row-h">По задачам<span>уроки из разных курсов</span></h2><div class="s-courses-row">`
+    +S_PATHS.map(p=>{
+      const ls=sPathLs(p),read=ls.filter(x=>done.includes(x.ci+'-'+x.li)).length,free=ls.filter(x=>!x.l.key).length;
+      return `<button class="s-course-chip s-path-chip" data-path="${p.id}" style="--chip-bg:${p.c[1]};--chip-col:${p.c[0]}"><span class="s-path-mark">${si(p.ic)}</span><b>${esc(p.t)}</b>`
+        +`<small>${read?read+' из '+ls.length+' прочитано':ls.length+' '+скл(ls.length,'урок','урока','уроков')+(free?' · '+free+' бесплатно':'')}</small></button>`;
+    }).join('')+`</div></section>`;
+}
+function sPathOpen(id){
+  const p=S_PATHS.find(x=>x.id===id);if(!p)return;
+  const ls=sPathLs(p),done=doneList(),paid=!!ME?.paid;
+  const free=ls.filter(x=>!x.l.key).length;
+  $('#doc-t').textContent=p.t;$('#doc-d').textContent=ls.length+' '+скл(ls.length,'урок','урока','уроков')+(free?' · '+free+' бесплатно':'');
+  blk.n=0;
+  $('#doc-b').innerHTML=sBotSay('ukazyvaet','<b>'+esc(p.d[0].toUpperCase()+p.d.slice(1))+'.</b> Уроки из разных курсов, все нейросети открываются из России. Иди по порядку'+(free?' — первые уроки бесплатные.':'.'))
+    +`<div class="s-path-list">`+ls.map(({ci,li,s,l},n)=>{
+      const [mono,col,bg]=S_COURSE[s.slug]||['?','#0B6E4F','#E2F3EA'],ok=done.includes(ci+'-'+li);
+      const st=ok?si('check')+'прочитан':!l.key?'бесплатно':paid?'открыт':si('lock')+'по подписке';
+      return `<button class="s-path-item${ok?' is-done':''}" data-path-les="${ci}-${li}" style="--chip-bg:${bg};--chip-col:${col}"><span class="s-path-n">${n+1}</span>`
+        +`<span class="s-path-body"><small>${esc(s.t)} · ${mono}</small><b>${esc(l.t)}</b><span>${esc(l.d||'')}</span></span><span class="s-path-st">${st}</span></button>`;
+    }).join('')+`</div>`;
+  buildToc('#doc-b','#doc-toc');
+  const back=$('#v-doc [data-back]');if(back){back.dataset.go='route';back.textContent='← Учиться';}
+  show('doc');scrollTo(0,0);
+}
+document.addEventListener('click',e=>{
+  const p=e.target.closest('[data-path]');if(p){sPathOpen(p.dataset.path);return;}
+  const l=e.target.closest('[data-path-les]');if(l){const [i,j]=l.dataset.pathLes.split('-').map(Number);openSec(i);openLes(j,'doc');}
+});
 /* Запрос дня — основной запрос одного урока, каждый день другой. Новичку —
    из бесплатных уроков, с полным доступом — из всех. Шаг 7 взаимно прост с
    числом уроков, поэтому подряд идут разные нейросети, а не один курс. */
