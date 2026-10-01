@@ -22,7 +22,7 @@ a{color:var(--acc)}
 .top{display:flex;align-items:center;gap:10px;margin-bottom:22px;font-weight:700;text-decoration:none;color:var(--ink)}
 .mark-ii{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#0E2420;color:#fff;font-size:14px}
 .crumbs{font-size:14px;color:var(--soft);margin:0 0 8px}.crumbs a{color:var(--soft)}
-h1{font-size:32px;line-height:1.15;margin:0 0 12px;letter-spacing:-.01em}
+h1{font-size:32px;line-height:1.15;margin:0 0 12px;letter-spacing:-.01em;text-wrap:balance}
 h2{font-size:23px;line-height:1.25;margin:38px 0 12px}
 .lead{font-size:19px;color:var(--soft);margin:0 0 6px}.meta{font-size:14px;color:var(--soft);margin:0 0 18px}
 .cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0 26px}
@@ -37,7 +37,7 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;font:inherit;font-size:
 .result p,.remember p,.mark p{margin:6px 0 0}
 .compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}.compare figcaption{grid-column:1/-1}
 .compare>div{border-radius:16px;padding:14px;background:var(--white);border:1px solid var(--line)}.compare .strong{background:var(--acc-s);border-color:transparent}
-.compare ul{margin:8px 0 0;padding-left:18px;font-size:15px}
+.compare ul{margin:8px 0 0;padding-left:18px;font-size:15px}.compare.even .strong{background:var(--white);border-color:var(--line)}
 .steps ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
 .steps li{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:15px}.steps b{display:block}.steps span{color:var(--soft)}
 .shot{background:var(--card);border-radius:18px;padding:14px}.msg{border-radius:14px;padding:10px 12px;margin:8px 0;max-width:92%;font-size:16px}
@@ -52,6 +52,18 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;font:inherit;font-size:
 .course{margin-top:34px}.course h2{margin:0 0 4px}.course p{margin:0 0 12px;color:var(--soft)}
 .list{list-style:none;padding:0;margin:0;display:grid;gap:10px}.list a{display:block;background:var(--white);border:1px solid var(--line);border-radius:16px;padding:14px 16px;text-decoration:none;color:var(--ink)}
 .list b{display:block}.list span{color:var(--soft);font-size:15px}.list .n{color:var(--acc-c);font-weight:700;font-size:13px}
+.tbl>div{overflow-x:auto}.tbl table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.45;background:var(--white);border-radius:16px}
+.tbl th,.tbl td{text-align:left;vertical-align:top;padding:10px 10px;border-bottom:1px solid var(--line)}.tbl thead th{font-size:13px;color:var(--soft)}
+.tbl tbody th{font-weight:600}.tbl tr:last-child>*{border-bottom:0}
+.faq h3{font-size:18px;margin:22px 0 6px}.faq p{margin:0}
+.ai-card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:16px 18px;margin:16px 0;scroll-margin-top:12px}
+.ai-head{display:flex;gap:12px;align-items:center}.ai-head h3{margin:0;font-size:22px}.ai-head p{margin:0;color:var(--soft);font-size:15px;line-height:1.4}
+.ai-mark{display:inline-grid;place-items:center;flex:none;width:44px;height:44px;border-radius:12px;background:var(--chip-bg);color:var(--chip-col);font-weight:700}
+.ru{display:inline-block;font-size:13px;font-weight:600;color:var(--acc);background:var(--acc-s);border-radius:8px;padding:3px 9px;margin:12px 0 2px}
+.ai-card h4{font-size:15px;margin:14px 0 4px}.ai-card ol,.ai-card ul{margin:4px 0;padding-left:22px}.ai-card .prompt{margin:14px 0 0}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.btn.line{background:var(--acc-s);color:var(--acc)}
+.tasks{list-style:none;padding:0;margin:0;display:grid;gap:10px}.tasks li{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:12px 16px}
+.tasks b{display:block}.tasks small{display:block;color:var(--soft);font-size:14px;margin-bottom:4px}.tasks a{font-weight:600;margin-right:10px}
 footer{margin-top:48px;font-size:14px;color:var(--soft)}
 @media(max-width:520px){h1{font-size:27px}.compare{grid-template-columns:1fr}}</style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Письмо клиенту без выдуманных обещаний", "description": "Напишешь вежливый ответ о задержке и сохранишь только подтверждённые факты.", "inLanguage": "ru", "isAccessibleForFree": true, "url": "https://ivan552776.github.io/ai-bez-lyudey/uroki/chatgpt-3/", "isPartOf": {"@type": "Course", "name": "ChatGPT", "description": "Для писем, повседневных задач и таблиц. От первого чата до своего рабочего проекта."}, "publisher": {"@type": "Organization", "name": "ИИ без людей", "url": "https://t.me/ai_bez_lyudey"}}</script>
