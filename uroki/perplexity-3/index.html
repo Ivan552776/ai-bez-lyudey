@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Проверь происхождение новости — урок по Perplexity для начинающих | ИИ без людей</title>
+<meta name="description" content="Отличишь независимые основания от перепечаток. Бесплатный урок курса «Perplexity»: готовые запросы, разбор ответа и практика. 12 минут.">
+<link rel="canonical" href="https://ivan552776.github.io/ai-bez-lyudey/uroki/perplexity-3/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Проверь происхождение новости — урок по Perplexity для начинающих | ИИ без людей">
+<meta property="og:description" content="Отличишь независимые основания от перепечаток. Бесплатный урок курса «Perplexity»: готовые запросы, разбор ответа и практика. 12 минут.">
+<meta property="og:url" content="https://ivan552776.github.io/ai-bez-lyudey/uroki/perplexity-3/">
+<meta property="og:locale" content="ru_RU">
+<style>@font-face{font-family:'Golos Text';font-weight:400;font-display:swap;src:url(../../assets/fonts/golos-text-400-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Golos Text';font-weight:600;font-display:swap;src:url(../../assets/fonts/golos-text-600-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Golos Text';font-weight:700;font-display:swap;src:url(../../assets/fonts/golos-text-700-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+:root{--bg:#FBFAF8;--card:#F3F2EE;--white:#fff;--ink:#14161A;--soft:#62666E;--line:#E9E7E1;--acc:#0B6E4F;--acc-s:#E2F3EA;--amb-s:#FDF0DE;--acc-c:#146267}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Golos Text',-apple-system,system-ui,sans-serif;font-size:17px;line-height:1.6}
+.wrap{max-width:720px;margin:0 auto;padding:20px 18px 64px}
+a{color:var(--acc)}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:22px;font-weight:700;text-decoration:none;color:var(--ink)}
+.mark-ii{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#0E2420;color:#fff;font-size:14px}
+.crumbs{font-size:14px;color:var(--soft);margin:0 0 8px}.crumbs a{color:var(--soft)}
+h1{font-size:32px;line-height:1.15;margin:0 0 12px;letter-spacing:-.01em}
+h2{font-size:23px;line-height:1.25;margin:38px 0 12px}
+.lead{font-size:19px;color:var(--soft);margin:0 0 6px}.meta{font-size:14px;color:var(--soft);margin:0 0 18px}
+.cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0 26px}
+.btn{display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:14px;background:var(--ink);color:#fff;font-weight:600;text-decoration:none}
+.cta small{color:var(--soft);font-size:14px}
+figure{margin:20px 0}figcaption{font-size:13px;font-weight:600;color:var(--soft);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;font:inherit;font-size:16px;line-height:1.55}
+.data pre{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.prompt{background:var(--card);border-radius:18px;padding:14px 16px}.prompt figcaption{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.prompt button{font:inherit;font-size:14px;font-weight:600;text-transform:none;letter-spacing:0;color:var(--acc);background:var(--white);border:0;border-radius:10px;min-height:40px;padding:0 14px;cursor:pointer}
+.result,.remember,.mark{border-radius:16px;padding:14px 16px;margin:18px 0}.result{background:var(--acc-s)}.remember{background:var(--white);border-left:4px solid var(--acc)}
+.result p,.remember p,.mark p{margin:6px 0 0}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}.compare figcaption{grid-column:1/-1}
+.compare>div{border-radius:16px;padding:14px;background:var(--white);border:1px solid var(--line)}.compare .strong{background:var(--acc-s);border-color:transparent}
+.compare ul{margin:8px 0 0;padding-left:18px;font-size:15px}
+.steps ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.steps li{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:15px}.steps b{display:block}.steps span{color:var(--soft)}
+.shot{background:var(--card);border-radius:18px;padding:14px}.msg{border-radius:14px;padding:10px 12px;margin:8px 0;max-width:92%;font-size:16px}
+.msg small{display:block;font-size:12px;color:var(--soft)}.msg.me{background:var(--white);margin-left:auto}.msg.ai{background:var(--white);border:1px solid var(--line)}
+.mark{background:var(--amb-s)}
+.fix dt{font-weight:600;margin-top:12px}.fix dd{margin:4px 0 0;color:var(--ink)}
+.learned{padding-left:20px}.practice{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:4px 18px 10px;margin-top:30px}
+.practice h2{margin-top:16px}
+.tip{font-size:14px;color:var(--soft)}
+.guide{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:12px 16px;margin:20px 0}.guide summary{font-weight:600;cursor:pointer}
+.next{background:var(--acc-s);border-radius:20px;padding:18px;margin-top:36px}.next h2{margin:0 0 8px;font-size:21px}
+.course{margin-top:34px}.course h2{margin:0 0 4px}.course p{margin:0 0 12px;color:var(--soft)}
+.list{list-style:none;padding:0;margin:0;display:grid;gap:10px}.list a{display:block;background:var(--white);border:1px solid var(--line);border-radius:16px;padding:14px 16px;text-decoration:none;color:var(--ink)}
+.list b{display:block}.list span{color:var(--soft);font-size:15px}.list .n{color:var(--acc-c);font-weight:700;font-size:13px}
+footer{margin-top:48px;font-size:14px;color:var(--soft)}
+@media(max-width:520px){h1{font-size:27px}.compare{grid-template-columns:1fr}}</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Проверь происхождение новости", "description": "Отличишь независимые основания от перепечаток.", "inLanguage": "ru", "isAccessibleForFree": true, "url": "https://ivan552776.github.io/ai-bez-lyudey/uroki/perplexity-3/", "isPartOf": {"@type": "Course", "name": "Perplexity", "description": "Поиск с источниками. Находи факты и собирай исследования."}, "publisher": {"@type": "Organization", "name": "ИИ без людей", "url": "https://t.me/ai_bez_lyudey"}}</script>
+</head>
+<body><div class="wrap">
+<a class="top" href="../"><span class="mark-ii">ии</span>ИИ без людей</a><p class="crumbs"><a href="../">Бесплатные уроки</a> · Perplexity</p><h1>Проверь происхождение новости</h1><p class="lead">Отличишь независимые основания от перепечаток.</p><p class="meta">Урок 3 из 8 · курс «Perplexity» · 12 минут вместе с практикой</p><div class="cta"><a class="btn" href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=lesson_8_2">Открыть урок в Telegram</a><small>бесплатно · отметки, серия и следующий урок — там</small></div><p>Новость о нейросетях часто приходит сразу из пяти каналов, и кажется: раз все пишут, значит, правда. Но пять ссылок могут пересказывать одно-единственное сообщение, а по дороге ещё и исказить его. Здесь учимся считать не ссылки, а независимые основания — и находить место, где новость поменялась.</p><h2>Почему три ссылки — не три доказательства</h2><p>Поиск показывает, что нашёл, а не откуда это взялось. Если сайт B пересказал блог A, а канал C — сайт B, у тебя три ссылки и одно основание. Нейросеть легко посчитает их тремя: для неё это три разные страницы. Хуже того, при пересказе детали расплываются — «тест на части аккаунтов» становится «запустили для всех». Поэтому цепочку строят явно: кто на кого ссылается и что добавил.</p><figure class="compare"><figcaption>Две просьбы об одном и том же</figcaption><div class="weak"><b>Так она додумает</b><ul><li>Правда ли, что функцию запустили?</li><li>Много ли где об этом пишут</li><li>Подтверди новость</li></ul></div><div class="strong"><b>Так проверишь за минуту</b><ul><li>Построй цепочку: кто на кого ссылается</li><li>Посчитай независимые основания отдельно</li><li>Покажи, где изменились детали</li></ul></div></figure><h2>Открой и попробуй</h2><ul><li>Начни новый разговор и вставь учебный набор вместе с запросом.</li><li>Попроси не искать условные публикации в интернете: буквы — это учебный пример.</li><li>Проследи цепочку пересказов по ответу.</li><li>В настоящей новости открывай первоисточник и смотри, на кого ссылается он сам.</li></ul><figure class="steps"><figcaption>От исходника к результату</figcaption><ol><li><b>A</b><span>Объявление</span></li><li><b>B и C</b><span>Перепечатки</span></li><li><b>D</b><span>Отдельная проверка</span></li><li><b>Вывод</b><span>Ограниченный охват</span></li></ol></figure><h2>Случай первый: объявили тест функции</h2><p>Четыре публикации об одной функции. Три похожи друг на друга, одна стоит особняком. Живой поиск здесь не нужен: буквами обозначены учебные публикации, и задача — разобраться в их связях.</p><figure class="data"><figcaption>Учебные данные</figcaption><pre>A: официальный блог объявил тест функции.
+B: пересказал A без проверки.
+C: пересказал B.
+D: автор проверил функцию на одном аккаунте.</pre></figure><p>Кнопка копирует и данные, и задачу. Отправь всё одним сообщением.</p><figure class="prompt"><figcaption><span>Полный запрос</span><button type="button" data-copy>Копировать</button></figcaption><pre>Учебные данные:
+A: официальный блог объявил тест функции.
+B: пересказал A без проверки.
+C: пересказал B.
+D: автор проверил функцию на одном аккаунте.
+
+Задача:
+Построй цепочку происхождения сведений. Посчитай отдельно исходное объявление, перепечатки и независимую проверку. Доказывает ли набор, что функция доступна всем? Не ищи эти условные страницы.</pre></figure><aside class="result"><b>На что должен быть похож результат</b><p>A → B → C — одна цепочка: одно объявление и две перепечатки. D — отдельное наблюдение на одном аккаунте. Что функция доступна всем, не доказано.</p></aside><h2>Как выглядит ответ с подвохом</h2><figure class="shot"><figcaption>Учебный пример</figcaption><div class="msg me"><small>Ты</small>Доступна ли функция всем? Про неё написали официальный блог, два новостных сайта и автор, который её проверил.</div><div class="msg ai"><small>Нейросеть</small>Да, функция доступна всем: об этом сообщают сразу четыре независимых источника, включая официальный блог и личную проверку.</div><aside class="mark"><b>Что проверить</b><p>«Четыре независимых источника» — это одно объявление, две его перепечатки и один аккаунт. А «тест функции» по дороге превратился в «доступна всем».</p></aside></figure><p>Нейросеть посчитала страницы, а не основания, и сложила из них вывод, которого нет ни в одной. Блог объявил тест — значит, у части пользователей и, возможно, ненадолго. Автор D видел функцию у себя — это одно наблюдение. «Доступна всем» не следует ни из того, ни из другого, сколько бы раз это ни пересказали.</p><h2>Что пошло не так и как поправить</h2><dl class="fix"><dt>Перепечатки посчитаны независимыми</dt><dd>Напиши: «Если источник пересказывает другой, это одно основание. Посчитай заново».</dd><dt>Тест превратился в запуск</dt><dd>Скажи: «В объявлении сказано „тест“. Не заменяй это на „запуск“ или „доступно всем“».</dd><dt>Одно наблюдение выдано за правило</dt><dd>Попроси: «D проверил один аккаунт. Не обобщай на всех».</dd></dl><h2>Доведи ответ до нужного вида</h2><p>Цепочка построена — теперь перепиши новость честно. Отправь в тот же разговор.</p><figure class="prompt"><figcaption><span>Уточнение в том же чате</span><button type="button" data-copy>Копировать</button></figcaption><pre>Перепиши новость в два предложения без преувеличения. Назови два условия доступности, которые ещё надо проверить.</pre></figure><aside class="result"><b>Что должно получиться</b><p>Например: «Компания объявила тест новой функции. Один автор проверил её на своём аккаунте». И два условия: для каких аккаунтов идёт тест и в каких странах.</p></aside><p>Сравни с первым вариантом ответа: там было «доступна всем», здесь — «тест» и «один аккаунт». Честная новость короче и скучнее, зато её не придётся опровергать.</p><h2>Случай второй: где исказилось число</h2><p>Во втором наборе цепочка похожая, но по дороге поменялось число. Такие искажения самые живучие: цифру цитируют, не заглядывая в первоисточник.</p><figure class="data"><figcaption>Учебные данные</figcaption><pre>E: пресс-релиз компании: функция доступна в 12 странах.
+F: новостной сайт пересказал E и написал «в 20 странах».
+G: блогер сослался на F.
+H: независимый обзор проверил функцию в двух странах из списка E.</pre></figure><figure class="prompt"><figcaption><span>Второй случай</span><button type="button" data-copy>Копировать</button></figcaption><pre>Учебные данные:
+E: пресс-релиз компании: функция доступна в 12 странах.
+F: новостной сайт пересказал E и написал «в 20 странах».
+G: блогер сослался на F.
+H: независимый обзор проверил функцию в двух странах из списка E.
+
+Задача:
+Построй цепочку происхождения. Найди, на каком шаге изменилось число стран. Посчитай независимые основания. Что можно утверждать уверенно? Не ищи эти условные страницы.</pre></figure><aside class="result"><b>На что должен быть похож результат</b><p>E → F → G — одна цепочка; число исказилось на шаге F: было 12, стало 20, и G повторил ошибку. H — независимая проверка, но в двух странах. Уверенно: компания заявила 12 стран, работу функции независимо видели в двух.</p></aside><p>Главный вывод здесь не «F соврал», а «20 стран не подтверждены ничем». Если нейросеть написала «по разным данным, от 12 до 20 стран», она уравняла первоисточник и его искажённый пересказ. Число берут у того, кто его произвёл, — в этом наборе это компания в E.</p><h2>Перенеси на свою задачу</h2><figure class="steps"><figcaption>Что заменить в запросе</figcaption><ol><li><b>Ссылки</b><span>Все публикации, которые нашёл</span></li><li><b>Цепочка</b><span>Кто на кого ссылается</span></li><li><b>Основания</b><span>Сколько независимых, а не сколько страниц</span></li><li><b>Детали</b><span>Где изменились числа и слова вроде «тест»</span></li></ol></figure><aside class="remember"><b>Запомни</b><p>Считай не ссылки, а независимые основания. Число и оговорки бери у первоисточника, а не у пересказа.</p></aside><h2>Итоги</h2><ul class="learned"><li>Строить цепочку «кто на кого ссылается»</li><li>Считать перепечатку и оригинал одним основанием</li><li>Искать шаг, на котором изменились детали</li><li>Не обобщать одно наблюдение на всех</li></ul><section class="practice"><h2>Теперь твоя очередь</h2><p>Возьми одну настоящую новость о нейросетях. Проследи две ссылки до первоисточника и сравни, что сказано там и что — в пересказе.</p><ul><li>Оригинал найден</li><li>Перепечатки не посчитаны независимыми</li><li>Охват не преувеличен</li><li>Числа сверены с первоисточником</li></ul></section><p class="tip">Урок рассчитан на веб-версию Perplexity. Названия пунктов могут отличаться на телефоне и при обновлениях. Если функция недоступна на твоём аккаунте, используй вариант внутри урока. Подписка на наше обучение не включает платные тарифы нейросетей.</p><p><a href="https://www.perplexity.ai/help-center/en/articles/10738684-what-is-research-mode" target="_blank" rel="noopener">Официальная справка по функции</a> · сверено 15 сентября 2026. Примеры и задания — авторские, все имена и суммы учебные.</p><section class="next"><h2>Что дальше</h2><p>Дальше в курсе ещё 5 уроков, первый — «Актуальность: дата события и статьи». Они открываются в приложении в Telegram: там же отметки прочитанного, серия и практика.</p><a class="btn" href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=lesson_8_3">Открыть следующий урок в Telegram</a></section>
+<footer>Материалы собирает нейросеть. Людей в редакции нет. · <a href="https://t.me/ai_bez_lyudey">Канал «ИИ без людей» в Telegram</a></footer>
+</div><script>document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(!b)return;
+const t=b.closest('figure').querySelector('pre').textContent;
+(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='Скопировано';setTimeout(()=>b.textContent='Копировать',1800)},()=>{const r=document.createRange();r.selectNodeContents(b.closest('figure').querySelector('pre'));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Выделено — скопируй'});});</script></body></html>
