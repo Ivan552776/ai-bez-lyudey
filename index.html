@@ -2006,6 +2006,13 @@ mark.s-fill-v{background:var(--s-acc-s);color:var(--s-acc-d);border-radius:4px;p
 .s-path-st{flex:none;display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:12.5px;color:var(--s-soft);white-space:nowrap}
 .s-path-st .s-ic{width:14px;height:14px}
 :root[data-n="1"] .s-path-n{background:#FFFFFF1F;color:var(--s-ink)}
+/* «Что было непонятно?» в конце урока (01.10) */
+.s-vopros{margin:14px 0 0;padding:12px 14px;border-radius:16px;background:var(--s-card)}
+.s-vopros summary{cursor:pointer;font-family:var(--s-font);font-size:15px;font-weight:600;color:var(--s-ink)}
+.s-vopros p{margin:10px 0 8px;font-size:14px;color:var(--s-soft)}
+.s-vopros textarea{box-sizing:border-box;width:100%;min-height:76px;resize:vertical;border:1px solid var(--s-line);border-radius:12px;background:var(--s-white);padding:10px 12px;font-family:var(--s-font);font-size:16px;line-height:1.4;color:var(--s-ink)}
+.s-vopros .s-btn{margin-top:8px}
+.s-vopros-ok{color:var(--s-acc)!important}
 /* ВИТРИНА END */
 </style>
 </head>
@@ -2942,8 +2949,19 @@ function share(текст, адрес=SHARE_URL){
 function поделитьсяУроком(si, li){
   const l = SECS[si]?.ls[li]; if(!l) return;
   шаг('поделился');
-  share('Урок «' + l.t + '»: одна задача, готовый запрос и разбор ответа. Первые уроки бесплатно.',
+  const ссылкой = () => share('Урок «' + l.t + '»: одна задача, готовый запрос и разбор ответа. Первые уроки бесплатно.',
         sDrugLink(si, li));   // с номером пригласившего — за нового человека неделя в подарок
+  /* Карточка с кнопкой «Открыть урок» (01.10): Telegram 8.0 отправляет
+     сообщение, заранее подготовленное ботом; номер пригласившего — в кнопке.
+     Нет поддержки или сервер старый — прежняя ссылка. */
+  if(ME?.kartochka === true && typeof TG?.shareMessage === 'function' && (!TG.isVersionAtLeast || TG.isVersionAtLeast('8.0'))){
+    post('/api/kartochka', {si, li, t: l.t, c: SECS[si].t, d: l.d || ''}).then(r => {
+      if(r?.ok && r.id){ try{ TG.shareMessage(r.id, () => {}); return; }catch(e){} }
+      ссылкой();
+    }).catch(ссылкой);
+    return;
+  }
+  ссылкой();
 }
 
 /* ---------- закладки ----------
@@ -3972,6 +3990,7 @@ readLesson=function(blocks,section,lesson){
     части.push(blk(b));
   });
   части.push(sCoach(section,lesson));
+  части.push(sVopros(section,lesson));
   части.push(`<p class="s-service-note"><button data-prep="${section}">Помощь со входом ${si('chev')}</button></p>`);
   return части.join('');
 };
@@ -4164,6 +4183,7 @@ function sPathsRow(){
 }
 function sPathOpen(id){
   const p=S_PATHS.find(x=>x.id===id);if(!p)return;
+  шаг('подборка');
   const ls=sPathLs(p),done=doneList(),paid=!!ME?.paid;
   const free=ls.filter(x=>!x.l.key).length;
   $('#doc-t').textContent=p.t;$('#doc-d').textContent=ls.length+' '+скл(ls.length,'урок','урока','уроков')+(free?' · '+free+' бесплатно':'');
@@ -4634,7 +4654,7 @@ async function sGiftPay(plan,btn){
     if(!r?.ok||!r.link){перейти(bot);return;}
     TG.openInvoice(r.link,st=>{
       if(st==='paid'){try{TG.HapticFeedback?.notificationOccurred('success');}catch(e){}
-        note.textContent='Подарок оплачен! Бот прислал тебе ссылку — перешли её другу.';note.hidden=false;}
+        note.textContent=ME?.kartochka===true?'Подарок оплачен! Бот прислал открытку — перешли её другу.':'Подарок оплачен! Бот прислал тебе ссылку — перешли её другу.';note.hidden=false;}
       else if(st==='cancelled'||st==='failed'){шаг('счёт-закрыт');   // как у своей оплаты: см. звёздыНеХватило()
         note.innerHTML='Не хватило звёзд? Купи пакет не меньше '+(plan==='gift_year'?'3 000':'300')+' в <button class="s-link" data-stars-buy>@PremiumBot</button> и нажми ещё раз. Ничего не списано.';note.hidden=false;}
     });
@@ -4747,6 +4767,43 @@ routePaint=function(){
 document.addEventListener('change',e=>{if(e.target.id!=='s-course-select')return;sRenderSec(+e.target.value);window.scrollTo({top:0,behavior:'instant'});});
 
 
+/* ---------- разрешение боту писать (01.10) ----------
+   Бот может написать только тому, кто сам нажимал «Старт» в нём. Кто пришёл
+   из канала прямо в приложение, остаётся без напоминаний о пробе, серии и
+   итогах недели. Просим один раз и только когда напоминание человеку нужно:
+   при включении пробы и напоминания о серии. Ответ Telegram бывает и
+   true/false, и {status:'allowed'} — принимаем оба. */
+function sПисать(){
+  try{
+    if(!вТелеграме()||typeof TG?.requestWriteAccess!=='function'||(TG.isVersionAtLeast&&!TG.isVersionAtLeast('6.9')))return;
+    if(TG.initDataUnsafe?.user?.allows_write_to_pm||S.get('pisat',false))return;
+    S.set('pisat',true);
+    TG.requestWriteAccess(r=>{if(r===true||r==='allowed'||r?.status==='allowed')шаг('разрешил-писать');});
+  }catch(e){}
+}
+/* ---------- «Что было непонятно?» (01.10) ----------
+   В конце урока, под «Получилось?». Строка уходит редакции в бот: так видно,
+   какие уроки переписывать. Только когда сервер это умеет (ME.vopros). */
+function sVopros(section,lesson){
+  if(ME?.vopros!==true)return '';
+  const s=SECS[section],l=s?.ls[lesson];if(!l)return '';
+  return `<details class="s-vopros" data-vopros-box="${section}-${lesson}"><summary>Что было непонятно?</summary>`
+    +`<p>Напиши в двух словах — редакция прочитает и поправит урок.</p>`
+    +`<textarea rows="3" maxlength="600" aria-label="Что было непонятно в уроке"></textarea>`
+    +`<button type="button" class="s-btn line" data-vopros-send>Отправить</button><p class="s-vopros-ok" role="status" hidden></p></details>`;
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-vopros-send]');if(!b)return;
+  const box=b.closest('[data-vopros-box]'),t=box.querySelector('textarea'),ok=box.querySelector('.s-vopros-ok');
+  const текст=t.value.trim();if(!текст){t.focus();return;}
+  const [si_,li]=box.dataset.voprosBox.split('-').map(Number),s=SECS[si_],l=s?.ls[li];
+  b.disabled=true;
+  post('/api/vopros',{urok:(l?.key||s?.slug+'-'+(li+1)),t:l?.t||'',текст}).then(r=>{
+    if(r?.ok){t.hidden=true;b.hidden=true;ok.textContent='Спасибо! Редакция прочитает и поправит урок, если он непонятен.';ok.hidden=false;xHaptic('success');}
+    else{b.disabled=false;ok.textContent='Не отправилось — попробуй ещё раз.';ok.hidden=false;}
+  }).catch(()=>{b.disabled=false;ok.textContent='Не отправилось — попробуй ещё раз.';ok.hidden=false;});
+});
+
 /* ---------- пробный доступ (30.09) ----------
    Один раз на человека: сервер отдаёт ME.proba=true, пока пробу можно включить,
    и её длину (proba_hours). Во время пробы ME.paid=true и ME.plan='proba':
@@ -4765,6 +4822,7 @@ async function sProbaStart(btn){
   const pr=$('#pay-proba');if(pr)pr.innerHTML='';
   await refreshAccess(true);
   appNotice('Пробный доступ открыт до '+sProbaDo()+'. Все уроки твои.');
+  sПисать();   // за день до конца пробы бот напомнит — если ему разрешено писать
   if($('#v-pay')?.classList.contains('on'))openLes(payLes,window.__lback||'route');
   else{xCheckout();routePaint();}
 }
@@ -4935,7 +4993,7 @@ document.addEventListener('click',e=>{
     post('/api/notify',{on,kind:'seriya'}).then(r=>{
       if(!r||typeof r.on!=='boolean'){note.textContent=вТелеграме()?'Не сохранилось. Попробуй ещё раз.':'Открой приложение в Telegram, чтобы настроить.';return;}
       sw.classList.toggle('off',!r.on);sw.setAttribute('aria-checked',String(r.on));
-      S.set('seriya',r.on);if(ME)ME.seriya=r.on;xHaptic('light');
+      S.set('seriya',r.on);if(ME)ME.seriya=r.on;xHaptic('light');if(r.on)sПисать();
       note.textContent=r.on?'Вечером напомню в боте, если серия два дня и больше, а урока ещё не было'+(ME?.itogi===true?'; в воскресенье пришлю итоги недели.':'.'):'Выключено. Можно включить в любой момент.';
     }).finally(()=>{sw.disabled=false;});
     return;
