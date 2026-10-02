@@ -1,0 +1,23 @@
+# Ночная проверка живого приложения (02.10.2026): робот проходит путь новичка,
+# проверяет сервер и страницы сайта. Итог утром забирает бот и пишет Ivan'у
+# (bot.py, ночная_проверка) — ключей бота здесь нет.
+name: nochnaya
+on:
+  schedule:
+    - cron: '0 2 * * *'     # 05:00 по Москве
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  proverka:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: qa
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Путь новичка, сервер, страницы сайта
+        run: CHROME=$(command -v google-chrome) node qa/nochnaya.mjs
