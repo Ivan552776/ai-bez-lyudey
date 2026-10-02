@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Метроном и Аккорды</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    background: #1a1a1a;
+    color: #eee;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    padding: calc(env(safe-area-inset-top) + 10px) env(safe-area-inset-right) calc(env(safe-area-inset-bottom) + 10px) env(safe-area-inset-left);
+    gap: 14px;
+  }
+
+  /* ---------- Вкладки ---------- */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px;
+    flex-shrink: 0;
+  }
+  .tab-btn {
+    flex: 1;
+    height: 48px;
+    border-radius: 12px;
+    border: none;
+    background: #333;
+    color: #ccc;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+  }
+  .tab-btn.active {
+    background: #ff9500;
+    color: #1a1a1a;
+  }
+
+  .panel {
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+    min-height: 0;
+  }
+  .panel.active {
+    display: flex;
+  }
+
+  /* ---------- Метроном ---------- */
+  .tempo-display {
+    text-align: center;
+    padding-top: 4px;
+  }
+  .tempo-number {
+    font-size: 96px;
+    font-weight: 700;
+    line-height: 1;
+    color: #ff9500;
+    font-variant-numeric: tabular-nums;
+  }
+  .tempo-label {
+    font-size: 13px;
+    color: #888;
+    margin-top: 4px;
+    letter-spacing: 2px;
+  }
+  .tempo-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+  }
+  .btn-step {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: #333;
+    color: #eee;
+    font-size: 28px;
+    font-weight: 700;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .btn-step:active { background: #444; }
+  input[type=range] {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: #333;
+    border-radius: 4px;
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    background: #ff9500;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 30px;
+    height: 30px;
+    background: #ff9500;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
+  .signatures {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px;
+    justify-content: center;
+  }
+  .sig-btn {
+    flex: 1;
+    max-width: 80px;
+    height: 48px;
+    border-radius: 10px;
+    border: none;
+    background: #333;
+    color: #ccc;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .sig-btn.active {
+    background: #ff9500;
+    color: #1a1a1a;
+  }
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    padding: 6px 0;
+    min-height: 48px;
+    align-items: center;
+  }
+  .dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #333;
+    transition: background 0.04s, transform 0.04s;
+  }
+  .dot.first {
+    box-shadow: inset 0 0 0 2px #666;
+  }
+  .dot.active {
+    background: #ff9500;
+    transform: scale(1.18);
+  }
+  .dot.first.active {
+    background: #ffcc00;
+  }
+  .main-buttons {
+    display: flex;
+    gap: 12px;
+    padding: 0 16px;
+    margin-top: auto;
+  }
+  .btn-start {
+    flex: 2;
+    height: 80px;
+    border-radius: 16px;
+    border: none;
+    background: #ff9500;
+    color: #1a1a1a;
+    font-size: 24px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+  .btn-start.playing {
+    background: #d04040;
+    color: #fff;
+  }
+  .btn-tap {
+    flex: 1;
+    height: 80px;
+    border-radius: 16px;
+    border: none;
+    background: #333;
+    color: #eee;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+  .btn-tap:active { background: #444; }
+
+  /* ---------- Аккорды ---------- */
+  .chords-panel {
+    gap: 10px;
+  }
+  .chord-toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .chord-btn {
+    height: 48px;
+    min-width: 48px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: none;
+    background: #333;
+    color: #eee;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .chord-btn:active { background: #444; }
+  .shift-info {
+    font-size: 14px;
+    color: #ff9500;
+    font-weight: 600;
+    padding: 0 16px;
+    min-height: 20px;
+  }
+  .capo-hint {
+    padding: 0 16px;
+    min-height: 0;
+  }
+  .capo-hint p {
+    background: rgba(255, 149, 0, 0.12);
+    border: 1px solid rgba(255, 149, 0, 0.35);
+    color: #ffb340;
+    font-size: 13px;
+    line-height: 1.4;
+    padding: 8px 12px;
+    border-radius: 10px;
+  }
+  .song-area {
+    flex: 1;
+    min-height: 0;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  textarea#songInput {
+    flex: 1;
+    width: 100%;
+    resize: none;
+    background: #222;
+    color: #eee;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 15px;
+    line-height: 1.35;
+    white-space: pre;
+    overflow: auto;
+    outline: none;
+    -webkit-user-select: text;
+    user-select: text;
+    touch-action: pan-y;
+  }
+  textarea#songInput:focus {
+    border-color: #ff9500;
+  }
+  .area-label {
+    font-size: 12px;
+    color: #888;
+    padding: 0 16px 2px;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+  <div class="tabs">
+    <button class="tab-btn active" id="tabMetronome">Метроном</button>
+    <button class="tab-btn" id="tabChords">Аккорды</button>
+  </div>
+
+  <!-- ============ ПАНЕЛЬ: МЕТРОНОМ ============ -->
+  <div class="panel active" id="panelMetronome">
+    <div class="tempo-display">
+      <div class="tempo-number" id="tempoNumber">120</div>
+      <div class="tempo-label">УДАРОВ В МИНУТУ</div>
+    </div>
+
+    <div class="tempo-controls">
+      <button class="btn-step" id="btnMinus" aria-label="Уменьшить темп">−</button>
+      <input type="range" id="tempoSlider" min="40" max="220" step="1" value="120">
+      <button class="btn-step" id="btnPlus" aria-label="Увеличить темп">+</button>
+    </div>
+
+    <div class="signatures" id="signatures">
+      <button class="sig-btn" data-sig="2/4">2/4</button>
+      <button class="sig-btn" data-sig="3/4">3/4</button>
+      <button class="sig-btn active" data-sig="4/4">4/4</button>
+      <button class="sig-btn" data-sig="6/8">6/8</button>
+    </div>
+
+    <div class="dots" id="dots"></div>
+
+    <div class="main-buttons">
+      <button class="btn-start" id="btnStart">СТАРТ</button>
+      <button class="btn-tap" id="btnTap">ТАП</button>
+    </div>
+  </div>
+
+  <!-- ============ ПАНЕЛЬ: АККОРДЫ ============ -->
+  <div class="panel chords-panel" id="panelChords">
+    <div class="chord-toolbar">
+      <button class="chord-btn" id="btnDown">−1</button>
+      <button class="chord-btn" id="btnUp">+1</button>
+      <button class="chord-btn" id="btnReset">Сбросить</button>
+    </div>
+    <div class="shift-info" id="shiftInfo"></div>
+    <div class="capo-hint" id="capoHint"></div>
+    <div class="area-label">ВСТАВЬТЕ ПЕСНЮ (АККОРДЫ НАД ТЕКСТОМ)</div>
+    <div class="song-area">
+      <textarea id="songInput" spellcheck="false" placeholder="Am        Dm&#10;Первый куплет песни...&#10;&#10;G         C&#10;Второй припев здесь..."></textarea>
+    </div>
+  </div>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ================================================================
+     ВКЛАДКИ
+  ================================================================ */
+  const tabMetronome = document.getElementById('tabMetronome');
+  const tabChords = document.getElementById('tabChords');
+  const panelMetronome = document.getElementById('panelMetronome');
+  const panelChords = document.getElementById('panelChords');
+
+  function switchTab(which) {
+    if (which === 'metronome') {
+      tabMetronome.classList.add('active');
+      tabChords.classList.remove('active');
+      panelMetronome.classList.add('active');
+      panelChords.classList.remove('active');
+    } else {
+      tabChords.classList.add('active');
+      tabMetronome.classList.remove('active');
+      panelChords.classList.add('active');
+      panelMetronome.classList.remove('active');
+    }
+  }
+
+  tabMetronome.addEventListener('click', function() { switchTab('metronome'); });
+  tabChords.addEventListener('click', function() { switchTab('chords'); });
+
+
+  /* ================================================================
+     МЕТРОНОМ
+  ================================================================ */
+  const SIGNATURES = {
+    '2/4': 2,
+    '3/4': 3,
+    '4/4': 4,
+    '6/8': 6
+  };
+
+  let tempo = 120;
+  let signature = '4/4';
+  let beatsPerMeasure = 4;
+
+  let audioCtx = null;
+  let isPlaying = false;
+  let nextNoteTime = 0;
+  let currentNote = 0;
+  let timerID = null;
+  let wakeLock = null;
+
+  const LOOKAHEAD = 0.1;
+  const SCHEDULE_INTERVAL = 25;
+
+  const tempoNumber = document.getElementById('tempoNumber');
+  const tempoSlider = document.getElementById('tempoSlider');
+  const btnMinus = document.getElementById('btnMinus');
+  const btnPlus = document.getElementById('btnPlus');
+  const sigContainer = document.getElementById('signatures');
+  const dotsContainer = document.getElementById('dots');
+  const btnStart = document.getElementById('btnStart');
+  const btnTap = document.getElementById('btnTap');
+
+  function loadSettings() {
+    try {
+      const t = localStorage.getItem('metro_tempo');
+      const s = localStorage.getItem('metro_sig');
+      if (t !== null) {
+        const parsed = parseInt(t, 10);
+        if (!isNaN(parsed) && parsed >= 40 && parsed <= 220) tempo = parsed;
+      }
+      if (s !== null && Object.prototype.hasOwnProperty.call(SIGNATURES, s)) signature = s;
+    } catch (e) {}
+    beatsPerMeasure = SIGNATURES[signature];
+  }
+
+  function saveSettings() {
+    try {
+      localStorage.setItem('metro_tempo', String(tempo));
+      localStorage.setItem('metro_sig', signature);
+    } catch (e) {}
+  }
+
+  function updateTempoDisplay() {
+    tempoNumber.textContent = tempo;
+    tempoSlider.value = tempo;
+  }
+
+  function updateSignatureDisplay() {
+    const buttons = sigContainer.querySelectorAll('.sig-btn');
+    buttons.forEach(b => {
+      b.classList.toggle('active', b.dataset.sig === signature);
+    });
+  }
+
+  function updateDots() {
+    dotsContainer.innerHTML = '';
+    for (let i = 0; i < beatsPerMeasure; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (i === 0 ? ' first' : '');
+      dotsContainer.appendChild(dot);
+    }
+  }
+
+  function setTempo(t) {
+    tempo = Math.max(40, Math.min(220, Math.round(t)));
+    updateTempoDisplay();
+    saveSettings();
+  }
+
+  function setSignature(s) {
+    if (!Object.prototype.hasOwnProperty.call(SIGNATURES, s)) return;
+    signature = s;
+    beatsPerMeasure = SIGNATURES[s];
+    updateSignatureDisplay();
+    updateDots();
+    saveSettings();
+  }
+
+  function ensureAudioContext() {
+    if (!audioCtx) {
+      const Ctor = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new Ctor();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    if (navigator.audioSession && 'type' in navigator.audioSession) {
+      try { navigator.audioSession.type = 'playback'; } catch (e) {}
+    }
+  }
+
+  function scheduleNote(noteNumber, time) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    const isAccent = (noteNumber === 0);
+    osc.type = 'triangle';
+    osc.frequency.value = isAccent ? 1600 : 1000;
+
+    const volume = isAccent ? 1.0 : 0.4;
+    gain.gain.setValueAtTime(0, time);
+    gain.gain.linearRampToValueAtTime(volume, time + 0.002);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
+
+    osc.start(time);
+    osc.stop(time + 0.1);
+
+    const delay = Math.max(0, (time - audioCtx.currentTime) * 1000);
+    setTimeout(function() {
+      if (isPlaying) highlightNote(noteNumber);
+    }, delay);
+  }
+
+  function nextNote() {
+    const secondsPerBeat = 60.0 / tempo;
+    nextNoteTime += secondsPerBeat;
+    currentNote = (currentNote + 1) % beatsPerMeasure;
+  }
+
+  function scheduler() {
+    if (!audioCtx) return;
+    while (nextNoteTime < audioCtx.currentTime + LOOKAHEAD) {
+      scheduleNote(currentNote, nextNoteTime);
+      nextNote();
+    }
+  }
+
+  function highlightNote(index) {
+    const dots = dotsContainer.children;
+    for (let i = 0; i < dots.length; i++) {
+      dots[i].classList.remove('active');
+    }
+    if (dots[index]) dots[index].classList.add('active');
+  }
+
+  function resetHighlights() {
+    const dots = dotsContainer.children;
+    for (let i = 0; i < dots.length; i++) {
+      dots[i].classList.remove('active');
+    }
+  }
+
+  async function requestWakeLock() {
+    try {
+      if ('wakeLock' in navigator && navigator.wakeLock.request) {
+        wakeLock = await navigator.wakeLock.request('screen');
+      }
+    } catch (e) {}
+  }
+
+  function releaseWakeLock() {
+    if (wakeLock) {
+      try { wakeLock.release(); } catch (e) {}
+      wakeLock = null;
+    }
+  }
+
+  function start() {
+    ensureAudioContext();
+    isPlaying = true;
+    currentNote = 0;
+    nextNoteTime = audioCtx.currentTime + 0.05;
+    timerID = setInterval(scheduler, SCHEDULE_INTERVAL);
+    btnStart.textContent = 'СТОП';
+    btnStart.classList.add('playing');
+    requestWakeLock();
+  }
+
+  function stop() {
+    isPlaying = false;
+    if (timerID) {
+      clearInterval(timerID);
+      timerID = null;
+    }
+    if (audioCtx) {
+      try { audioCtx.close(); } catch (e) {}
+      audioCtx = null;
+    }
+    btnStart.textContent = 'СТАРТ';
+    btnStart.classList.remove('playing');
+    resetHighlights();
+    releaseWakeLock();
+  }
+
+  function togglePlay() {
+    if (isPlaying) stop();
+    else start();
+  }
+
+  const tapTimes = [];
+  function handleTap() {
+    const now = performance.now();
+    if (tapTimes.length > 0 && (now - tapTimes[tapTimes.length - 1]) > 2000) {
+      tapTimes.length = 0;
+    }
+    tapTimes.push(now);
+    if (tapTimes.length > 4) tapTimes.shift();
+
+    if (tapTimes.length >= 2) {
+      let sum = 0;
+      for (let i = 1; i < tapTimes.length; i++) {
+        sum += tapTimes[i] - tapTimes[i - 1];
+      }
+      const avg = sum / (tapTimes.length - 1);
+      const bpm = Math.round(60000 / avg);
+      setTempo(bpm);
+    }
+  }
+
+  btnMinus.addEventListener('click', function() { setTempo(tempo - 1); });
+  btnPlus.addEventListener('click', function() { setTempo(tempo + 1); });
+  tempoSlider.addEventListener('input', function(e) {
+    setTempo(parseInt(e.target.value, 10));
+  });
+
+  sigContainer.addEventListener('click', function(e) {
+    const btn = e.target.closest('.sig-btn');
+    if (btn) setSignature(btn.dataset.sig);
+  });
+
+  btnStart.addEventListener('click', togglePlay);
+  btnTap.addEventListener('click', handleTap);
+
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      if (isPlaying) requestWakeLock();
+    }
+  });
+
+  loadSettings();
+  updateTempoDisplay();
+  updateSignatureDisplay();
+  updateDots();
+
+
+  /* ================================================================
+     АККОРДЫ
+  ================================================================ */
+  const songInput = document.getElementById('songInput');
+  const btnDown = document.getElementById('btnDown');
+  const btnUp = document.getElementById('btnUp');
+  const btnReset = document.getElementById('btnReset');
+  const shiftInfo = document.getElementById('shiftInfo');
+  const capoHint = document.getElementById('capoHint');
+
+  const SHARP_NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  const FLAT_NOTES  = ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B'];
+
+  const SHARP_RU = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','H'];
+  const FLAT_RU  = ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','H'];
+
+  // Разбор ноты. ВАЖНО: регулярка должна включать H (русская си).
+  function parseNoteToken(token) {
+    const m = /^([A-GH])([#b]?)(.*)$/.exec(token);
+    if (!m) return null;
+    const letter = m[1];
+    const accidental = m[2];
+    const rest = m[3];
+
+    let semitoneBase;
+    if (letter === 'H') {
+      semitoneBase = 11; // H = си = B
+    } else {
+      const idx = SHARP_NOTES.indexOf(letter);
+      if (idx === -1) return null;
+      semitoneBase = idx;
+    }
+
+    let semitone = semitoneBase;
+    if (accidental === '#') semitone = (semitone + 1) % 12;
+    else if (accidental === 'b') semitone = (semitone + 11) % 12;
+
+    return { semitone: semitone, suffix: rest };
+  }
+
+  function formatNote(semitone, useFlats, preferH) {
+    const sharpArr = preferH ? SHARP_RU : SHARP_NOTES;
+    const flatArr = preferH ? FLAT_RU : FLAT_NOTES;
+    const arr = useFlats ? flatArr : sharpArr;
+    return arr[((semitone % 12) + 12) % 12];
+  }
+
+  function looksLikeChord(token) {
+    if (!token) return false;
+    const first = token.charAt(0);
+    if (!((first >= 'A' && first <= 'G') || first === 'H')) return false;
+    if (/\s/.test(token)) return false;
+    const rootMatch = /^([A-GH])([#b]?)/.exec(token);
+    if (!rootMatch) return false;
+    const suffix = token.slice(rootMatch[1].length + rootMatch[2].length);
+    const suffixOk = /^[0-9a-zA-Z+\-ø#b\/]*$/.test(suffix);
+    if (!suffixOk) return false;
+
+    const parsed = parseNoteToken(token);
+    return parsed !== null;
+  }
+
+  function isChordLine(line) {
+    const trimmed = line.trim();
+    if (trimmed === '') return false;
+    const tokens = trimmed.split(/\s+/);
+    if (tokens.length === 0) return false;
+    for (const tok of tokens) {
+      if (!looksLikeChord(tok)) return false;
+    }
+    return true;
+  }
+
+  function transposeToken(token, delta, useFlats, preferH) {
+    const slashIdx = token.indexOf('/');
+    let rootPart, bassPart;
+    if (slashIdx !== -1) {
+      rootPart = token.slice(0, slashIdx);
+      bassPart = token.slice(slashIdx + 1);
+    } else {
+      rootPart = token;
+      bassPart = null;
+    }
+
+    const rootParsed = parseNoteToken(rootPart);
+    if (!rootParsed) return token;
+
+    const newRootSemi = ((rootParsed.semitone + delta) % 12 + 12) % 12;
+    const newRootStr = formatNote(newRootSemi, useFlats, preferH) + rootParsed.suffix;
+
+    if (bassPart !== null) {
+      const bassParsed = parseNoteToken(bassPart);
+      if (bassParsed) {
+        const newBassSemi = ((bassParsed.semitone + delta) % 12 + 12) % 12;
+        const newBassStr = formatNote(newBassSemi, useFlats, preferH);
+        return newRootStr + '/' + newBassStr;
+      } else {
+        return newRootStr + '/' + bassPart;
+      }
+    }
+    return newRootStr;
+  }
+
+  function detectPreferences(originalText) {
+    let hasFlat = false;
+    let hasSharp = false;
+    let hasH = false;
+
+    const lines = originalText.split('\n');
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed === '') continue;
+      const tokens = trimmed.split(/\s+/);
+      for (const tok of tokens) {
+        const rootMatch = /^([A-GH])([#b]?)/.exec(tok);
+        if (!rootMatch) continue;
+        const letter = rootMatch[1];
+        const acc = rootMatch[2];
+        if (acc === 'b') hasFlat = true;
+        if (acc === '#') hasSharp = true;
+        if (letter === 'H') hasH = true;
+      }
+    }
+
+    const useFlats = hasFlat && !hasSharp;
+    const preferH = hasH;
+
+    return { useFlats, preferH };
+  }
+
+  function processChordLine(line, delta, prefs) {
+    const tokens = [];
+    const re = /\S+/g;
+    let match;
+    while ((match = re.exec(line)) !== null) {
+      tokens.push({ text: match[0], index: match.index });
+    }
+
+    if (tokens.length === 0) return line;
+
+    const newTokens = tokens.map(t => ({
+      oldLen: t.text.length,
+      newStr: transposeToken(t.text, delta, prefs.useFlats, prefs.preferH)
+    }));
+
+    let result = '';
+    for (let i = 0; i < tokens.length; i++) {
+      const targetCol = tokens[i].index;
+      const curPos = result.length;
+      const spacesNeeded = Math.max(0, targetCol - curPos);
+      result += ' '.repeat(spacesNeeded) + newTokens[i].newStr;
+    }
+
+    return result;
+  }
+
+  function applyShift(text, delta) {
+    const prefs = detectPreferences(text);
+    const lines = text.split('\n');
+    const out = lines.map(line => {
+      if (isChordLine(line)) {
+        return processChordLine(line, delta, prefs);
+      }
+      return line;
+    });
+    return out.join('\n');
+  }
+
+  let baseSong = '';
+  let currentShift = 0;
+
+  function renderShiftInfo() {
+    if (currentShift === 0) {
+      shiftInfo.textContent = 'Сдвиг: 0 полутонов';
+    } else if (currentShift > 0) {
+      shiftInfo.textContent = 'Сдвиг: +' + currentShift + ' полутонов';
+    } else {
+      shiftInfo.textContent = 'Сдвиг: ' + currentShift + ' полутонов';
+    }
+
+    if (currentShift >= 1 && currentShift <= 7) {
+      capoHint.innerHTML = '<p>Можно не учить новые аккорды: каподастр на ' + currentShift +
+        ' лад, играй прежние.</p>';
+    } else {
+      capoHint.innerHTML = '';
+    }
+  }
+
+  function refreshView() {
+    const displayed = applyShift(baseSong, currentShift);
+    const selStart = songInput.selectionStart;
+    const selEnd = songInput.selectionEnd;
+    songInput.value = displayed;
+    try {
+      songInput.setSelectionRange(selStart, selEnd);
+    } catch (e) {}
+    renderShiftInfo();
+    saveChordsState();
+  }
+
+  function saveChordsState() {
+    try {
+      localStorage.setItem('chords_song', baseSong);
+      localStorage.setItem('chords_shift', String(currentShift));
+    } catch (e) {}
+  }
+
+  function loadChordsState() {
+    try {
+      const s = localStorage.getItem('chords_song');
+      const sh = localStorage.getItem('chords_shift');
+      if (s !== null) baseSong = s;
+      if (sh !== null) {
+        const parsed = parseInt(sh, 10);
+        if (!isNaN(parsed)) currentShift = parsed;
+      }
+    } catch (e) {}
+  }
+
+  let suppressInputEvent = false;
+
+  songInput.addEventListener('input', function() {
+    if (suppressInputEvent) return;
+    baseSong = songInput.value;
+    currentShift = 0;
+    renderShiftInfo();
+    saveChordsState();
+  });
+
+  btnUp.addEventListener('click', function() {
+    currentShift += 1;
+    refreshView();
+  });
+
+  btnDown.addEventListener('click', function() {
+    currentShift -= 1;
+    refreshView();
+  });
+
+  btnReset.addEventListener('click', function() {
+    currentShift = 0;
+    refreshView();
+  });
+
+  loadChordsState();
+  suppressInputEvent = true;
+  const displayedInitial = applyShift(baseSong, currentShift);
+  songInput.value = displayedInitial;
+  suppressInputEvent = false;
+  renderShiftInfo();
+
+})();
+</script>
+</body>
+</html>
