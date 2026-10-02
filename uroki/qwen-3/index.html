@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Как нарисовать картинку в Qwen без кривых надписей | ИИ без людей</title>
+<meta name="description" content="Нарисуешь картинку без кривых надписей и поменяешь деталь. Бесплатный урок для начинающих: готовый запрос, ответ с ошибкой и как её поймать. 11 минут.">
+<link rel="canonical" href="https://ivan552776.github.io/ai-bez-lyudey/uroki/qwen-3/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Как нарисовать картинку в Qwen без кривых надписей | ИИ без людей">
+<meta property="og:description" content="Нарисуешь картинку без кривых надписей и поменяешь деталь. Бесплатный урок для начинающих: готовый запрос, ответ с ошибкой и как её поймать. 11 минут.">
+<meta property="og:url" content="https://ivan552776.github.io/ai-bez-lyudey/uroki/qwen-3/">
+<meta property="og:locale" content="ru_RU">
+<style>@font-face{font-family:'Golos Text';font-weight:400;font-display:swap;src:url(../../assets/fonts/golos-text-400-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Golos Text';font-weight:600;font-display:swap;src:url(../../assets/fonts/golos-text-600-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Golos Text';font-weight:700;font-display:swap;src:url(../../assets/fonts/golos-text-700-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+:root{--bg:#FBFAF8;--card:#F3F2EE;--white:#fff;--ink:#14161A;--soft:#62666E;--line:#E9E7E1;--acc:#0B6E4F;--acc-s:#E2F3EA;--amb-s:#FDF0DE;--acc-c:#7A5300}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Golos Text',-apple-system,system-ui,sans-serif;font-size:17px;line-height:1.6}
+.wrap{max-width:720px;margin:0 auto;padding:20px 18px 64px}
+a{color:var(--acc)}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:22px;font-weight:700;text-decoration:none;color:var(--ink)}
+.mark-ii{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#0E2420;color:#fff;font-size:14px}
+.crumbs{font-size:14px;color:var(--soft);margin:0 0 8px}.crumbs a{color:var(--soft)}
+h1{font-size:32px;line-height:1.15;margin:0 0 12px;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:23px;line-height:1.25;margin:38px 0 12px}
+.lead{font-size:19px;color:var(--soft);margin:0 0 6px}.meta{font-size:14px;color:var(--soft);margin:0 0 18px}
+.cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0 26px}
+.btn{display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:14px;background:var(--ink);color:#fff;font-weight:600;text-decoration:none}
+.cta small{color:var(--soft);font-size:14px}
+figure{margin:20px 0}figcaption{font-size:13px;font-weight:600;color:var(--soft);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;font:inherit;font-size:16px;line-height:1.55}
+.data pre{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.prompt{background:var(--card);border-radius:18px;padding:14px 16px}.prompt figcaption{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.prompt button{font:inherit;font-size:14px;font-weight:600;text-transform:none;letter-spacing:0;color:var(--acc);background:var(--white);border:0;border-radius:10px;min-height:40px;padding:0 14px;cursor:pointer}
+.result,.remember,.mark{border-radius:16px;padding:14px 16px;margin:18px 0}.result{background:var(--acc-s)}.remember{background:var(--white);border-left:4px solid var(--acc)}
+.result p,.remember p,.mark p{margin:6px 0 0}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}.compare figcaption{grid-column:1/-1}
+.compare>div{border-radius:16px;padding:14px;background:var(--white);border:1px solid var(--line)}.compare .strong{background:var(--acc-s);border-color:transparent}
+.compare ul{margin:8px 0 0;padding-left:18px;font-size:15px}.compare.even .strong{background:var(--white);border-color:var(--line)}
+.steps ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.steps li{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:15px}.steps b{display:block}.steps span{color:var(--soft)}
+.shot{background:var(--card);border-radius:18px;padding:14px}.msg{border-radius:14px;padding:10px 12px;margin:8px 0;max-width:92%;font-size:16px}
+.msg small{display:block;font-size:12px;color:var(--soft)}.msg.me{background:var(--white);margin-left:auto}.msg.ai{background:var(--white);border:1px solid var(--line)}
+.mark{background:var(--amb-s)}
+.fix dt{font-weight:600;margin-top:12px}.fix dd{margin:4px 0 0;color:var(--ink)}
+.learned{padding-left:20px}.practice{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:4px 18px 10px;margin-top:30px}
+.practice h2{margin-top:16px}
+.tip{font-size:14px;color:var(--soft)}
+.guide{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:12px 16px;margin:20px 0}.guide summary{font-weight:600;cursor:pointer}
+.next{background:var(--acc-s);border-radius:20px;padding:18px;margin-top:36px}.next h2{margin:0 0 8px;font-size:21px}
+.course{margin-top:34px}.course h2{margin:0 0 4px}.course p{margin:0 0 12px;color:var(--soft)}
+.list{list-style:none;padding:0;margin:0;display:grid;gap:10px}.list a{display:block;background:var(--white);border:1px solid var(--line);border-radius:16px;padding:14px 16px;text-decoration:none;color:var(--ink)}
+.list b{display:block}.list span{color:var(--soft);font-size:15px}.list .n{color:var(--acc-c);font-weight:700;font-size:13px}
+.tbl>div{overflow-x:auto}.tbl table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.45;background:var(--white);border-radius:16px}
+.tbl th,.tbl td{text-align:left;vertical-align:top;padding:10px 10px;border-bottom:1px solid var(--line)}.tbl thead th{font-size:13px;color:var(--soft)}
+.tbl tbody th{font-weight:600}.tbl tr:last-child>*{border-bottom:0}
+.faq h3{font-size:18px;margin:22px 0 6px}.faq p{margin:0}
+.ai-card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:16px 18px;margin:16px 0;scroll-margin-top:12px}
+.ai-head{display:flex;gap:12px;align-items:center}.ai-head h3{margin:0;font-size:22px}.ai-head p{margin:0;color:var(--soft);font-size:15px;line-height:1.4}
+.ai-mark{display:inline-grid;place-items:center;flex:none;width:44px;height:44px;border-radius:12px;background:var(--chip-bg);color:var(--chip-col);font-weight:700}
+.ru{display:inline-block;font-size:13px;font-weight:600;color:var(--acc);background:var(--acc-s);border-radius:8px;padding:3px 9px;margin:12px 0 2px}
+.ai-card h4{font-size:15px;margin:14px 0 4px}.ai-card ol,.ai-card ul{margin:4px 0;padding-left:22px}.ai-card .prompt{margin:14px 0 0}
+.mat-t{margin:0;font-size:20px;line-height:1.3}.mat-d{margin:6px 0 0;color:var(--soft);font-size:16px}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.btn.line{background:var(--acc-s);color:var(--acc)}
+.tasks{list-style:none;padding:0;margin:0;display:grid;gap:10px}.tasks li{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:12px 16px}
+.tasks b{display:block}.tasks small{display:block;color:var(--soft);font-size:14px;margin-bottom:4px}.tasks a{font-weight:600;margin-right:10px}
+footer{margin-top:48px;font-size:14px;color:var(--soft)}
+@media(max-width:520px){h1{font-size:27px}.compare{grid-template-columns:1fr}}</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Картинка по описанию", "description": "Нарисуешь картинку без кривых надписей и поменяешь деталь.", "inLanguage": "ru", "isAccessibleForFree": true, "url": "https://ivan552776.github.io/ai-bez-lyudey/uroki/qwen-3/", "isPartOf": {"@type": "Course", "name": "Qwen", "description": "Нейросеть Alibaba: расчёты, поиск в сети, исследования, страницы и картинки. Открывается из России."}, "publisher": {"@type": "Organization", "name": "ИИ без людей", "url": "https://t.me/ai_bez_lyudey"}}</script>
+</head>
+<body><div class="wrap">
+<a class="top" href="../"><span class="mark-ii">ии</span>ИИ без людей</a><p class="crumbs"><a href="../">Бесплатные уроки</a> · Qwen</p><h1>Картинка по описанию</h1><p class="lead">Нарисуешь картинку без кривых надписей и поменяешь деталь.</p><p class="meta">Урок 3 из 8 · курс «Qwen» · 11 минут вместе с практикой</p><div class="cta"><a class="btn" href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=lesson_14_2__u-qwen-3">Открыть урок в Telegram</a><small>бесплатно · отметки, серия и следующий урок — там</small></div><p>Картинка к объявлению, обложка для поста, открытка — Qwen рисует их по описанию прямо в чате. Первая картинка редко получается такой, как задумано: то лишние предметы, то кривые буквы. Здесь учимся описывать картинку так, чтобы она получалась со второго раза, и менять в ней одну деталь, не теряя остального.</p><h2>Почему картинка выходит «не про то»</h2><p>Нейросеть рисует то, что чаще всего встречается рядом с твоими словами. «Кружок рисования для детей» — это в её опыте и мольберты, и надпись на вывеске, и десяток детей. Всё, что ты не назвал, она придумает сама. А буквы нейросети для картинок рисуют как узор: русский текст почти всегда выходит с ошибками. Лечится описанием из частей — что, где, свет, стиль — и запретом на надписи.</p><figure class="compare"><figcaption>Две просьбы об одном и том же</figcaption><div class="weak"><b>Так она додумает</b><ul><li>Картинка для кружка рисования</li><li>Сделай красиво</li><li>Надпись «Записывайтесь!»</li></ul></div><div class="strong"><b>Так проверишь за минуту</b><ul><li>Что в кадре: кисти и краски на столе</li><li>Свет, цвет и стиль — словами</li><li>Без надписей и букв</li></ul></div></figure><h2>Открой и попробуй</h2><ul><li>Начни новый чат в Qwen.</li><li>Нажми «+» слева от поля и выбери «Создать изображение».</li><li>Скопируй описание кнопкой ниже и отправь.</li><li>Проверь картинку по списку: всё ли названное есть и нет ли лишнего.</li><li>Меняя деталь, повтори описание целиком с одной правкой.</li></ul><figure class="steps"><figcaption>От исходника к результату</figcaption><ol><li><b>Объект</b><span>Что в кадре</span></li><li><b>Место</b><span>Где</span></li><li><b>Свет и цвет</b><span>Какие</span></li><li><b>Стиль</b><span>И без букв</span></li></ol></figure><h2>Случай первый: картинка для объявления кружка</h2><p>Учебная задача: объявление о детском кружке рисования. Текст объявления ты напишешь сам, от нейросети нужна только картинка — спокойная, без детей и без надписей.</p><figure class="data"><figcaption>Учебные данные</figcaption><pre>Что: кисти, баночки с краской и лист с ярким пятном акварели.
+Где: на деревянном столе у окна.
+Свет: дневной, мягкий.
+Стиль: акварель, светлые тона.
+Нельзя: людей, надписей, букв.</pre></figure><p>Кнопка копирует и данные, и задачу. Отправь всё одним сообщением.</p><figure class="prompt"><figcaption><span>Полный запрос</span><button type="button" data-copy>Копировать</button></figcaption><pre>Учебные данные:
+Что: кисти, баночки с краской и лист с ярким пятном акварели. Где: на деревянном столе у окна. Свет: дневной, мягкий. Стиль: акварель, светлые тона. Нельзя: людей, надписей, букв.
+
+Задача:
+Нарисуй картинку для объявления о детском кружке рисования по этому описанию. Без людей, без надписей и без букв.</pre></figure><aside class="result"><b>На что должен быть похож результат</b><p>Стол у окна, кисти, баночки и лист с пятном краски, мягкий дневной свет, светлая акварель. Ни людей, ни вывески, ни подписей — текст объявления ты добавишь сам.</p></aside><h2>Как выглядит ответ с подвохом</h2><figure class="shot"><figcaption>Учебный пример</figcaption><div class="msg me"><small>Ты</small>Нарисуй картинку для объявления кружка рисования для детей с надписью «Записывайтесь!»</div><div class="msg ai"><small>Нейросеть</small>[Картинка: класс, шесть детей за мольбертами, на стене вывеска «ЗАПИСЫВАЙТЕСЬЬ!» с лишней буквой]</div><aside class="mark"><b>Что проверить</b><p>Надпись с ошибкой, а дети на картинке — чужие лица в твоём объявлении. Ни того, ни другого ты не описывал: нейросеть дорисовала «обычное» для такой темы.</p></aside></figure><p>Картинка яркая, и в первый момент кажется удачной. Но с ошибкой в надписи объявление выглядит небрежно, а нарисованные дети вызывают вопрос: кто это? Всё, чего нет в описании, нейросеть берёт из привычного. Поэтому в описании называют не только то, что нужно, но и то, чего быть не должно.</p><h2>Что пошло не так и как поправить</h2><dl class="fix"><dt>Кривые буквы</dt><dd>Напиши: «Без надписей и букв. Текст я добавлю сам».</dd><dt>Лишние люди или предметы</dt><dd>Скажи: «Без людей. В кадре только стол, кисти, краски и лист».</dd><dt>Поменял цвет — изменилось всё</dt><dd>Повтори описание целиком и поменяй в нём одно слово: «то же самое, но краски синие».</dd></dl><h2>Доведи ответ до нужного вида</h2><p>Картинка подходит. Теперь нужен второй вариант — для обложки поста, где важно место слева под текст. Отправь в тот же чат полное описание с одной правкой.</p><figure class="prompt"><figcaption><span>Уточнение в том же чате</span><button type="button" data-copy>Копировать</button></figcaption><pre>То же описание: кисти, баночки с краской и лист с пятном акварели на деревянном столе у окна, мягкий дневной свет, акварель, светлые тона, без людей и букв. Одна правка: все предметы — в правой части картинки, слева спокойный светлый фон.</pre></figure><aside class="result"><b>Что должно получиться</b><p>Тот же стол и предметы, но сдвинутые вправо, слева — светлое пустое место. Стиль и свет прежние, людей и букв нет.</p></aside><p>Сравни с первой картинкой: изменилось только расположение? Если поменялись стиль или цвета — значит, в описании чего-то не хватило. Повтори его целиком, не сокращая.</p><h2>Случай второй: обложка для поста о выпечке</h2><p>Тот же навык в другой задаче. Пост о домашнем пироге: нужна обложка, по которой понятно, о чём пост, — без стоковых улыбок и надписей.</p><figure class="data"><figcaption>Учебные данные</figcaption><pre>Что: яблочный пирог с решёткой из теста, рядом корица и два яблока.
+Где: на светлой льняной скатерти.
+Свет: тёплый, вечерний.
+Стиль: фотография, вид сверху.
+Нельзя: людей, надписей, букв.</pre></figure><figure class="prompt"><figcaption><span>Второй случай</span><button type="button" data-copy>Копировать</button></figcaption><pre>Учебные данные:
+Что: яблочный пирог с решёткой из теста, рядом корица и два яблока. Где: на светлой льняной скатерти. Свет: тёплый, вечерний. Стиль: фотография, вид сверху. Нельзя: людей, надписей, букв.
+
+Задача:
+Нарисуй обложку для поста о домашней выпечке по этому описанию. Без людей, без надписей и без букв.</pre></figure><aside class="result"><b>На что должен быть похож результат</b><p>Пирог с решёткой сверху, корица и два яблока, льняная скатерть, тёплый свет. Похоже на фотографию, сделанную над столом. Ни рук, ни надписей.</p></aside><p>Если на картинке появились руки, ложки, лишние тарелки или подпись «Домашний пирог» — вернись к описанию и добавь запрет. Описание из частей работает для любой темы: что, где, свет, стиль, чего нельзя.</p><h2>Перенеси на свою задачу</h2><figure class="steps"><figcaption>Что заменить в запросе</figcaption><ol><li><b>Что</b><span>Предметы, которые должны быть</span></li><li><b>Где и свет</b><span>Место, время дня</span></li><li><b>Стиль</b><span>Акварель, фото, вид сверху</span></li><li><b>Нельзя</b><span>«Без людей, надписей и букв»</span></li></ol></figure><aside class="remember"><b>Запомни</b><p>Картинка получается из конкретных слов: что, где, свет, стиль и чего нельзя. Буквы и надписи добавляй сам — нейросеть рисует их с ошибками.</p></aside><h2>Итоги</h2><ul class="learned"><li>Описывать картинку по частям</li><li>Называть, чего быть не должно</li><li>Запрещать надписи и буквы</li><li>Менять деталь, повторяя описание целиком</li></ul><section class="practice"><h2>Теперь твоя очередь</h2><p>Придумай картинку для своей задачи: объявление, пост, открытка. Опиши её по пяти частям — что, где, свет, стиль, чего нельзя. Получи картинку в Qwen и сделай второй вариант с одной правкой.</p><ul><li>На картинке нет надписей и букв</li><li>Нет лишних людей и предметов</li><li>Во втором варианте изменилась одна деталь</li><li>Стиль и свет совпадают с описанием</li></ul></section><p class="tip">Урок рассчитан на веб-версию Qwen. Названия пунктов могут отличаться на телефоне и при обновлениях. Если функция недоступна на твоём аккаунте, используй вариант внутри урока. Подписка на наше обучение не включает платные тарифы нейросетей.</p><p><a href="https://chat.qwen.ai/" target="_blank" rel="noopener">Официальный сайт Qwen</a> · сверено 2 октября 2026. Примеры и задания — авторские, все имена и суммы учебные.</p><section class="next"><h2>Что дальше</h2><p>Дальше в курсе ещё 5 уроков, первый — «Файл: расходы по категориям». Они открываются в приложении в Telegram: там же отметки прочитанного, серия и практика.</p><a class="btn" href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=lesson_14_3__u-qwen-3">Открыть следующий урок в Telegram</a></section>
+<footer>Материалы собирает нейросеть. Людей в редакции нет. · <a href="https://t.me/ai_bez_lyudey">Канал «ИИ без людей» в Telegram</a></footer>
+</div><script>document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(!b)return;
+const t=b.closest('figure').querySelector('pre').textContent;
+(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='Скопировано';setTimeout(()=>b.textContent='Копировать',1800)},()=>{const r=document.createRange();r.selectNodeContents(b.closest('figure').querySelector('pre'));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Выделено — скопируй'});});</script></body></html>
