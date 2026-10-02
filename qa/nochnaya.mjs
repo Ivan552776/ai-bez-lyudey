@@ -99,16 +99,20 @@ if (!(await дождаться(`document.querySelector('.view.on')`, 30000))) {
     беда('Первый экран', 'нет кнопки «Начать бесплатно»');
   }
 
-  // ---------- 3. главная: все курсы ----------
+  // ---------- 3. «Учиться»: все курсы; «Материалы»: нейросети из России ----------
+  // До 02.10 здесь считались карточки на «Материалах» — а это 8 нейросетей, не курсы.
+  await ev(`document.querySelector('[data-go="route"]')?.click()`);
+  const курсовВСписке = await ev(`return SECS.filter(s => s.slug && !s.archived).length`);
+  const курсы = `#v-route .s-course-chip:not(.s-ai-chip):not(.s-path-chip)`;
+  await дождаться(`document.querySelectorAll('${курсы}').length >= ${курсовВСписке}`, 10000);
+  const курсов = await ev(`return document.querySelectorAll('${курсы}').length`);
+  if (курсов < курсовВСписке) беда('Учиться', `видно ${курсов} курсов из ${курсовВСписке}`);
+  else итог.push(`курсов на «Учиться»: ${курсов}`);
   await ev(`document.querySelector('[data-go="study"]')?.click()`);
-  if (!(await дождаться(`document.getElementById('v-study')?.classList.contains('on')`, 10000))) {
-    беда('Главная', 'не открылась');
-  } else {
-    await дождаться(`document.querySelectorAll('#v-study .s-course-chip').length >= 8`, 10000);
-    const курсов = await ev(`return document.querySelectorAll('#v-study .s-course-chip').length`);
-    if (курсов < 8) беда('Главная', `видно ${курсов} курсов вместо восьми`);
-    else итог.push(`на главной ${курсов} карточек курсов`);
-  }
+  await дождаться(`document.querySelectorAll('#v-study .s-ai-chip').length > 0`, 10000);
+  const нейросетей = await ev(`return document.querySelectorAll('#v-study .s-ai-chip').length`);
+  if (нейросетей < 8) беда('Материалы', `в «Работают из России» видно ${нейросетей} нейросетей`);
+  else итог.push(`нейросетей из России: ${нейросетей}`);
 
   // ---------- 4. поиск ----------
   await ev(`document.querySelector('[data-go="search"]')?.click()`);
