@@ -30,7 +30,7 @@ try{if(localStorage.getItem('mzr-big')==='1')document.documentElement.setAttribu
 (function(){try{
   var d=(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initDataUnsafe)||{},
       п=new URLSearchParams(location.search),
-      старт=String(d.start_param||п.get('tgWebAppStartParam')||''),
+      старт=String(d.start_param||п.get('tgWebAppStartParam')||'').split('__')[0],
       карточка=п.get('material')||(старт.indexOf('card_')===0?старт.slice(5):''),
       прямая=п.get('urok')||п.get('exercise')||п.get('zapros')||п.get('ekran')||(старт&&старт.indexOf('src_')!==0),
       видел=localStorage.getItem('mzr:'+((d.user&&d.user.id)||'guest')+':hello2')==='true',
@@ -5903,7 +5903,10 @@ function шаг(имя){ учесть('шаг', имя); }
 function источникЗапуска(){
   try{
     const п = new URLSearchParams(location.search);
-    const старт = String(TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam') || '');
+    /* Ссылки с открытого сайта (02.10) несут хвост «__<страница>»: lesson_12_0__u-gigachat-1,
+       card_<id>__l-gotovye-zaprosy, src_site__neyroseti. Без него урок с сайта считался «из канала». */
+    const [старт, сайт] = String(TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam') || '').split('__');
+    if(сайт) return ('сайт: ' + сайт).slice(0, 40);
     if(старт.startsWith('src_')) return старт.slice(0, 40);
     if(старт.startsWith('card_')) return 'материал из канала';
     if(старт.startsWith('drug_')) return 'от друга';
@@ -6258,7 +6261,7 @@ document.getElementById('subbar-go').addEventListener('click', openChannel);
 function отметитьДруга(){
   try{
     const п=new URLSearchParams(location.search);
-    const старт=String(TG?.initDataUnsafe?.start_param||п.get('tgWebAppStartParam')||'');
+    const старт=String(TG?.initDataUnsafe?.start_param||п.get('tgWebAppStartParam')||'').split('__')[0];
     const m=/^drug_\d+_\d+_(\d{3,15})$/.exec(старт);
     if(m && String(TG?.initDataUnsafe?.user?.id||'')!==m[1]) учесть('друг', m[1]);
   }catch(e){}
@@ -6676,7 +6679,7 @@ $('#hi-skip').addEventListener('click', ()=>closeHello(false));
 function прямаяСсылка(){
   try{
     const п = new URLSearchParams(location.search);
-    const старт = TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam');
+    const старт = String(TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam') || '').split('__')[0];
     // метка рекламы (src_…) — не адрес материала: новичку нужно знакомство
     const адрес = старт && !String(старт).startsWith('src_');
     return !!(п.get('urok') || п.get('exercise') || п.get('zapros') || п.get('material') || адрес);
@@ -6710,7 +6713,7 @@ function прямаяСсылка(){
   try{
     const п = new URLSearchParams(location.search);
     урок = п.get('urok') || п.get('exercise'); запрос = п.get('zapros');
-    const старт = TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam');
+    const старт = String(TG?.initDataUnsafe?.start_param || п.get('tgWebAppStartParam') || '').split('__')[0];
     const cardId=п.get('material')||(typeof старт==='string'&&старт.startsWith('card_')?старт.slice(5):null);
     if(cardId){feedDeepLink(cardId);return;}
     const адрес = typeof старт === 'string' && /^(?:lesson|exercise|drug)_(\d+)_(\d+)(?:_\d+)?$/.exec(старт);
