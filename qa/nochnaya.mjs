@@ -151,6 +151,7 @@ try {
 
 // ---------- 7. открытые страницы сайта ----------
 const страницы = ['/', '/ai-bez-lyudey/uroki/', '/ai-bez-lyudey/neyroseti/', '/ai-bez-lyudey/sitemap.xml',
+  '/ai-bez-lyudey/kursy/', '/ai-bez-lyudey/stati/', '/ai-bez-lyudey/sitemap-sayt.xml',
   '/robots.txt', '/yandex_88c739c6c4c16d75.html', '/google14408fe3eb5d61da.html'];
 let открылось = 0;
 for (const п of страницы) {

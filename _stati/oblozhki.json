@@ -1,0 +1,87 @@
+[
+ {
+  "slug": "kursy",
+  "title": "ИИ без людей",
+  "rubrika": "Курсы по нейросетям с нуля",
+  "robot": "privet",
+  "big": true
+ },
+ {
+  "slug": "glavnaya",
+  "title": "Нейросети простыми словами",
+  "rubrika": "Статьи и инструкции",
+  "robot": "chitaet"
+ },
+ {
+  "slug": "chto-takoe-neyroset",
+  "title": "Что такое нейросеть простыми словами",
+  "rubrika": "С чего начать",
+  "robot": "dumaet"
+ },
+ {
+  "slug": "kak-polzovatsya-neyrosetyu",
+  "title": "Как пользоваться нейросетью — пошагово",
+  "rubrika": "С чего начать",
+  "robot": "palec"
+ },
+ {
+  "slug": "analogi-chatgpt",
+  "title": "Аналоги ChatGPT, которые работают в России",
+  "rubrika": "Выбрать нейросеть",
+  "robot": "lupa"
+ },
+ {
+  "slug": "neyroset-dlya-teksta",
+  "title": "Нейросеть для текстов: без штампов и выдумок",
+  "rubrika": "Тексты",
+  "robot": "noutbuk"
+ },
+ {
+  "slug": "pozdravlenie-neyrosetyu",
+  "title": "Поздравление нейросетью без шаблонов",
+  "rubrika": "Тексты",
+  "robot": "raduetsya"
+ },
+ {
+  "slug": "rezyume-s-neyrosetyu",
+  "title": "Резюме с нейросетью — без чужих навыков",
+  "rubrika": "Работа",
+  "robot": "planshet"
+ },
+ {
+  "slug": "neyroset-dlya-raboty",
+  "title": "Нейросеть для работы: 10 задач",
+  "rubrika": "Работа",
+  "robot": "telezhka"
+ },
+ {
+  "slug": "prezentaciya-s-neyrosetyu",
+  "title": "Презентация с нейросетью: план, слайды, речь",
+  "rubrika": "Учёба и дети",
+  "robot": "ukazyvaet"
+ },
+ {
+  "slug": "neyroset-dlya-ucheby",
+  "title": "Нейросеть для учёбы — без выдуманных фактов",
+  "rubrika": "Учёба и дети",
+  "robot": "chitaet"
+ },
+ {
+  "slug": "domashka-s-neyrosetyu",
+  "title": "Домашка с нейросетью: объяснить, а не решить",
+  "rubrika": "Учёба и дети",
+  "robot": "kartochki"
+ },
+ {
+  "slug": "chto-nelzya-rasskazyvat-neyroseti",
+  "title": "Что нельзя рассказывать нейросети",
+  "rubrika": "Безопасность",
+  "robot": "shchit"
+ },
+ {
+  "slug": "slovar-neyrosetey",
+  "title": "Словарь нейросетей простым языком",
+  "rubrika": "С чего начать",
+  "robot": "plechi"
+ }
+]
