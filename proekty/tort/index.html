@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Калькулятор тортов на заказ</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f9f5f0;
+      padding: 16px 12px 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #2c2c2c;
+    }
+
+    .calculator {
+      max-width: 540px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 32px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      padding: 24px 18px 28px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      color: #3b2b1f;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h1 span {
+      font-size: 2rem;
+    }
+
+    .subhead {
+      font-size: 1rem;
+      color: #7a6a5e;
+      margin-bottom: 24px;
+      border-left: 4px solid #e7b89c;
+      padding-left: 12px;
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #3b2b1f;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title i {
+      font-style: normal;
+      font-size: 1.4rem;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fefcf9;
+      border: 1.5px solid #e6dbd1;
+      border-radius: 20px;
+      padding: 14px 18px;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .option-card.selected {
+      border-color: #c98b6b;
+      background: #fff7f2;
+      box-shadow: 0 4px 10px rgba(201, 139, 107, 0.15);
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.15rem;
+      font-weight: 500;
+    }
+
+    .option-label input[type="radio"],
+    .option-label input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      accent-color: #c98b6b;
+      margin: 0;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .price-badge {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #a1653b;
+      background: #f3e7df;
+      padding: 4px 12px;
+      border-radius: 40px;
+      white-space: nowrap;
+    }
+
+    .range-wrapper {
+      background: #fefcf9;
+      border-radius: 24px;
+      padding: 18px 18px 12px;
+      border: 1.5px solid #e6dbd1;
+    }
+
+    .weight-display {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #3b2b1f;
+    }
+
+    .weight-value {
+      background: #c98b6b;
+      color: white;
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 1.4rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 10px;
+      -webkit-appearance: none;
+      background: #e6dbd1;
+      border-radius: 10px;
+      outline: none;
+      margin: 8px 0 6px;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 32px;
+      height: 32px;
+      background: #c98b6b;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+    }
+
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #8b7a6e;
+      padding: 0 4px;
+    }
+
+    .date-input {
+      width: 100%;
+      padding: 16px 18px;
+      font-size: 1.15rem;
+      border: 1.5px solid #e6dbd1;
+      border-radius: 20px;
+      background: #fefcf9;
+      font-family: inherit;
+      color: #2c2c2c;
+      font-weight: 500;
+      outline: none;
+      transition: border 0.15s;
+    }
+
+    .date-input:focus {
+      border-color: #c98b6b;
+    }
+
+    .date-input.error {
+      border-color: #d64545;
+      background: #fff5f5;
+    }
+
+    .date-input::-webkit-calendar-picker-indicator {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    .date-hint {
+      color: #8b7a6e;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 8px;
+      padding-left: 6px;
+      display: none;
+    }
+
+    .date-hint.show {
+      display: block;
+    }
+
+    .date-error {
+      color: #d64545;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 8px;
+      padding-left: 6px;
+      display: none;
+    }
+
+    .date-error.show {
+      display: block;
+    }
+
+    .urgent-badge {
+      display: inline-block;
+      background: #ffe0d0;
+      color: #a13e1a;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 6px 16px;
+      border-radius: 40px;
+      margin-top: 10px;
+    }
+
+    .summary {
+      background: #f3ede8;
+      border-radius: 28px;
+      padding: 20px 18px;
+      margin: 28px 0 20px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      padding: 8px 0;
+      color: #4a3f38;
+    }
+
+    .summary-row.total {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #3b2b1f;
+      border-top: 2px solid #dccfc5;
+      margin-top: 8px;
+      padding-top: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .summary-row .sum {
+      font-weight: 600;
+    }
+
+    .summary-row.total .sum {
+      font-weight: 800;
+      color: #a1653b;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #8b7a6e;
+      margin-top: 6px;
+      padding-left: 4px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 60px;
+      padding: 20px 24px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      color: white;
+      background: #c98b6b;
+      box-shadow: 0 6px 14px rgba(201, 139, 107, 0.3);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 3px 8px rgba(201, 139, 107, 0.25);
+    }
+
+    .btn-telegram {
+      background: #1f8b9e;
+      box-shadow: 0 6px 14px rgba(31, 139, 158, 0.3);
+    }
+
+    .btn-copy {
+      background: #8b6b5c;
+      box-shadow: 0 6px 14px rgba(139, 107, 92, 0.3);
+    }
+
+    .btn:disabled,
+    .btn.disabled {
+      opacity: 0.45;
+      pointer-events: none;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .btn-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #3b2b1f;
+      color: white;
+      padding: 14px 30px;
+      border-radius: 60px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+      z-index: 999;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .toast.error {
+      background: #d64545;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h1><span>🎂</span> Торт на заказ</h1>
+    <div class="subhead">Выберите параметры — цена посчитается сама</div>
+
+    <!-- Начинка -->
+    <div class="section">
+      <div class="section-title"><i>🍰</i> Начинка</div>
+      <div class="options-grid" id="fillingOptions">
+        <label class="option-card" data-filling="Медовик">
+          <span class="option-label">
+            <input type="radio" name="filling" value="Медовик" data-price="1800" checked>
+            Медовик
+          </span>
+          <span class="price-badge">1 800 ₽/кг</span>
+        </label>
+        <label class="option-card" data-filling="Шоколадный">
+          <span class="option-label">
+            <input type="radio" name="filling" value="Шоколадный" data-price="2100">
+            Шоколадный
+          </span>
+          <span class="price-badge">2 100 ₽/кг</span>
+        </label>
+        <label class="option-card" data-filling="Ягодный">
+          <span class="option-label">
+            <input type="radio" name="filling" value="Ягодный" data-price="2400">
+            Ягодный
+          </span>
+          <span class="price-badge">2 400 ₽/кг</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Вес -->
+    <div class="section">
+      <div class="section-title"><i>⚖️</i> Вес торта</div>
+      <div class="range-wrapper">
+        <div class="weight-display">
+          <span>Вес:</span>
+          <span class="weight-value" id="weightDisplay">2 кг</span>
+        </div>
+        <input type="range" id="weightSlider" min="1.5" max="5" step="0.5" value="2">
+        <div class="range-labels">
+          <span>1,5 кг</span>
+          <span>5 кг</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Украшения -->
+    <div class="section">
+      <div class="section-title"><i>✨</i> Украшения (можно несколько)</div>
+      <div class="options-grid" id="decorOptions">
+        <label class="option-card" data-decor="Надпись">
+          <span class="option-label">
+            <input type="checkbox" name="decor" value="Надпись" data-price="300">
+            Надпись
+          </span>
+          <span class="price-badge">+300 ₽</span>
+        </label>
+        <label class="option-card" data-decor="Свежие ягоды">
+          <span class="option-label">
+            <input type="checkbox" name="decor" value="Свежие ягоды" data-price="600">
+            Свежие ягоды
+          </span>
+          <span class="price-badge">+600 ₽</span>
+        </label>
+        <label class="option-card" data-decor="Фигурка из мастики">
+          <span class="option-label">
+            <input type="checkbox" name="decor" value="Фигурка из мастики" data-price="900">
+            Фигурка из мастики
+          </span>
+          <span class="price-badge">+900 ₽</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Доставка -->
+    <div class="section">
+      <div class="section-title"><i>🚗</i> Доставка</div>
+      <div class="options-grid" id="deliveryOptions">
+        <label class="option-card" data-delivery="Самовывоз">
+          <span class="option-label">
+            <input type="radio" name="delivery" value="Самовывоз" data-price="0" checked>
+            Самовывоз
+          </span>
+          <span class="price-badge">0 ₽</span>
+        </label>
+        <label class="option-card" data-delivery="По городу">
+          <span class="option-label">
+            <input type="radio" name="delivery" value="По городу" data-price="500">
+            По городу
+          </span>
+          <span class="price-badge">500 ₽</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Дата -->
+    <div class="section">
+      <div class="section-title"><i>📅</i> Дата заказа</div>
+      <input type="date" id="orderDate" class="date-input">
+      <div id="dateHint" class="date-hint show">Выберите дату</div>
+      <div id="dateError" class="date-error">Эта дата уже прошла</div>
+      <div id="urgentMessage" class="urgent-badge" style="display: none;">⚡ Срочный заказ: +20% к торту и украшениям</div>
+    </div>
+
+    <!-- Итог -->
+    <div class="summary" id="summary">
+      <div class="summary-row"><span>Торт</span><span class="sum" id="cakeSum">0 ₽</span></div>
+      <div class="summary-row"><span>Украшения</span><span class="sum" id="decorSum">0 ₽</span></div>
+      <div class="summary-row"><span>Доставка</span><span class="sum" id="deliverySum">0 ₽</span></div>
+      <div class="summary-row" id="urgentRow" style="display: none; color: #a13e1a; font-weight: 600;">
+        <span>⚡ Срочность (+20%)</span><span class="sum" id="urgentSum">0 ₽</span>
+      </div>
+      <div class="summary-row total"><span>Итого</span><span class="sum" id="totalSum">0 ₽</span></div>
+    </div>
+
+    <!-- Кнопки -->
+    <div class="buttons">
+      <button class="btn btn-copy" id="copyBtn">
+        <span class="btn-icon">📋</span> Скопировать заказ
+      </button>
+      <a class="btn btn-telegram" id="telegramBtn" href="https://t.me/ai_bez_lyudey_bot" target="_blank" rel="noopener">
+        <span class="btn-icon">✈️</span> Написать в Telegram
+      </a>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Заказ скопирован</div>
+
+  <script>
+    (function() {
+      // === Элементы ===
+      const fillingRadios = document.querySelectorAll('input[name="filling"]');
+      const weightSlider = document.getElementById('weightSlider');
+      const weightDisplay = document.getElementById('weightDisplay');
+      const decorCheckboxes = document.querySelectorAll('input[name="decor"]');
+      const deliveryRadios = document.querySelectorAll('input[name="delivery"]');
+      const orderDateInput = document.getElementById('orderDate');
+      const dateHint = document.getElementById('dateHint');
+      const dateError = document.getElementById('dateError');
+      const urgentMessage = document.getElementById('urgentMessage');
+      const urgentRow = document.getElementById('urgentRow');
+
+      const cakeSumEl = document.getElementById('cakeSum');
+      const decorSumEl = document.getElementById('decorSum');
+      const deliverySumEl = document.getElementById('deliverySum');
+      const urgentSumEl = document.getElementById('urgentSum');
+      const totalSumEl = document.getElementById('totalSum');
+
+      const copyBtn = document.getElementById('copyBtn');
+      const toast = document.getElementById('toast');
+
+      // === Форматирование суммы ===
+      function formatPrice(num) {
+        return Math.round(num).toLocaleString('ru-RU') + ' ₽';
+      }
+
+      // === Получить выбранную начинку ===
+      function getSelectedFilling() {
+        for (let radio of fillingRadios) {
+          if (radio.checked) return { name: radio.value, price: Number(radio.dataset.price) };
+        }
+        return { name: 'Медовик', price: 1800 };
+      }
+
+      // === Получить выбранные украшения ===
+      function getSelectedDecor() {
+        const items = [];
+        let total = 0;
+        for (let cb of decorCheckboxes) {
+          if (cb.checked) {
+            items.push({ name: cb.value, price: Number(cb.dataset.price) });
+            total += Number(cb.dataset.price);
+          }
+        }
+        return { items, total };
+      }
+
+      // === Получить доставку ===
+      function getSelectedDelivery() {
+        for (let radio of deliveryRadios) {
+          if (radio.checked) return { name: radio.value, price: Number(radio.dataset.price) };
+        }
+        return { name: 'Самовывоз', price: 0 };
+      }
+
+      // === Проверка: дата выбрана? ===
+      function isDateChosen() {
+        return !!orderDateInput.value;
+      }
+
+      // === Проверка: дата в прошлом ===
+      function isPastDate() {
+        const dateVal = orderDateInput.value;
+        if (!dateVal) return false;
+        const selected = new Date(dateVal);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        selected.setHours(0, 0, 0, 0);
+        return selected < today;
+      }
+
+      // === Проверка срочности (только для выбранной будущей даты) ===
+      function isUrgent() {
+        if (!isDateChosen() || isPastDate()) return false;
+        const selected = new Date(orderDateInput.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        selected.setHours(0, 0, 0, 0);
+        const diffDays = (selected - today) / (1000 * 60 * 60 * 24);
+        return diffDays < 3;
+      }
+
+      // === Обновить все карточки (подсветка) ===
+      function updateCardHighlights() {
+        document.querySelectorAll('#fillingOptions .option-card').forEach(card => {
+          const radio = card.querySelector('input[type="radio"]');
+          card.classList.toggle('selected', radio.checked);
+        });
+        document.querySelectorAll('#decorOptions .option-card').forEach(card => {
+          const cb = card.querySelector('input[type="checkbox"]');
+          card.classList.toggle('selected', cb.checked);
+        });
+        document.querySelectorAll('#deliveryOptions .option-card').forEach(card => {
+          const radio = card.querySelector('input[type="radio"]');
+          card.classList.toggle('selected', radio.checked);
+        });
+      }
+
+      // === Обновить весовое отображение ===
+      function updateWeightDisplay() {
+        let val = parseFloat(weightSlider.value);
+        weightDisplay.textContent = val.toFixed(1).replace('.', ',') + ' кг';
+      }
+
+      // === Установить минимальную дату (сегодня), но не подставлять значение ===
+      function setMinDate() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        orderDateInput.min = `${yyyy}-${mm}-${dd}`;
+      }
+
+      // === Основной пересчёт ===
+      function calculate() {
+        const filling = getSelectedFilling();
+        const weight = parseFloat(weightSlider.value);
+        const decor = getSelectedDecor();
+        const delivery = getSelectedDelivery();
+
+        const chosen = isDateChosen();
+        const past = isPastDate();
+        const urgent = isUrgent();
+
+        // Подсказка «Выберите дату»
+        dateHint.classList.toggle('show', !chosen);
+
+        // Ошибка прошедшей даты
+        dateError.classList.toggle('show', past);
+        orderDateInput.classList.toggle('error', past);
+
+        // Базовая цена торта
+        let cakePrice = filling.price * weight;
+
+        // Украшения
+        let decorPrice = decor.total;
+
+        // Срочность
+        let urgentSurcharge = 0;
+        if (urgent) {
+          urgentSurcharge = (cakePrice + decorPrice) * 0.2;
+        }
+
+        // Доставка
+        let deliveryPrice = delivery.price;
+
+        // Если дата в прошлом — обнуляем итог
+        let total;
+        if (past) {
+          cakePrice = 0;
+          decorPrice = 0;
+          urgentSurcharge = 0;
+          deliveryPrice = 0;
+          total = 0;
+        } else {
+          total = cakePrice + decorPrice + urgentSurcharge + deliveryPrice;
+        }
+
+        // Обновляем DOM
+        cakeSumEl.textContent = formatPrice(cakePrice);
+        decorSumEl.textContent = formatPrice(decorPrice);
+        deliverySumEl.textContent = formatPrice(deliveryPrice);
+
+        if (urgent && !past) {
+          urgentRow.style.display = 'flex';
+          urgentSumEl.textContent = formatPrice(urgentSurcharge);
+          urgentMessage.style.display = 'inline-block';
+        } else {
+          urgentRow.style.display = 'none';
+          urgentMessage.style.display = 'none';
+        }
+
+        totalSumEl.textContent = formatPrice(total);
+
+        updateCardHighlights();
+
+        // Блокировка кнопки копирования: нет даты или дата в прошлом
+        if (!chosen || past) {
+          copyBtn.disabled = true;
+          copyBtn.classList.add('disabled');
+        } else {
+          copyBtn.disabled = false;
+          copyBtn.classList.remove('disabled');
+        }
+
+        return {
+          fillingName: filling.name,
+          weight: weight,
+          decorItems: decor.items.map(d => d.name),
+          deliveryName: delivery.name,
+          urgent: urgent,
+          cakePrice,
+          decorPrice,
+          urgentSurcharge,
+          deliveryPrice,
+          total,
+          past,
+          chosen
+        };
+      }
+
+      // === Сборка текста заказа ===
+      function buildOrderText() {
+        const data = calculate();
+        const dateVal = orderDateInput.value;
+        let dateStr = '';
+        if (dateVal) {
+          const d = new Date(dateVal);
+          dateStr = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        let lines = [];
+        lines.push('🎂 Заказ торта');
+        lines.push('————————————');
+        lines.push(`Начинка: ${data.fillingName}`);
+        lines.push(`Вес: ${data.weight.toFixed(1).replace('.', ',')} кг`);
+        lines.push(`Дата: ${dateStr}`);
+        if (data.decorItems.length > 0) {
+          lines.push(`Украшения: ${data.decorItems.join(', ')}`);
+        } else {
+          lines.push('Украшения: без украшений');
+        }
+        lines.push(`Доставка: ${data.deliveryName}`);
+        if (data.urgent) {
+          lines.push('⚡ Срочный заказ (до даты < 3 дней): +20% к торту и украшениям');
+        }
+        lines.push('————————————');
+        lines.push(`Торт: ${formatPrice(data.cakePrice)}`);
+        lines.push(`Украшения: ${formatPrice(data.decorPrice)}`);
+        if (data.urgent) {
+          lines.push(`Срочность (+20%): ${formatPrice(data.urgentSurcharge)}`);
+        }
+        lines.push(`Доставка: ${formatPrice(data.deliveryPrice)}`);
+        lines.push(`💰 Итого: ${formatPrice(data.total)}`);
+
+        return lines.join('\n');
+      }
+
+      // === Копирование ===
+      function copyOrder() {
+        if (!isDateChosen()) {
+          showToast('Сначала выберите дату', true);
+          return;
+        }
+        if (isPastDate()) {
+          showToast('Эта дата уже прошла', true);
+          return;
+        }
+        const text = buildOrderText();
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('Заказ скопирован');
+        }).catch(() => {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          showToast('Заказ скопирован');
+        });
+      }
+
+      function showToast(msg, isError) {
+        toast.textContent = msg;
+        toast.classList.toggle('error', !!isError);
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1800);
+      }
+
+      // === Инициализация ===
+      function init() {
+        setMinDate();
+        updateWeightDisplay();
+        calculate();
+
+        fillingRadios.forEach(r => r.addEventListener('change', calculate));
+        weightSlider.addEventListener('input', () => {
+          updateWeightDisplay();
+          calculate();
+        });
+        decorCheckboxes.forEach(cb => cb.addEventListener('change', calculate));
+        deliveryRadios.forEach(r => r.addEventListener('change', calculate));
+        orderDateInput.addEventListener('change', calculate);
+        orderDateInput.addEventListener('input', calculate);
+        orderDateInput.addEventListener('focus', setMinDate);
+
+        copyBtn.addEventListener('click', copyOrder);
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
