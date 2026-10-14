@@ -21,11 +21,7 @@ const куда = path.join(корень, 'stati', 'og');
 fs.mkdirSync(куда, { recursive: true });
 const ф = n => pathToFileURL(path.join(корень, 'assets', 'fonts', n)).href;
 const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
-// плотные позы есть не у всех: где есть — берём их, на мятном фоне так надёжнее
-const робот = п => {
-  const плотный = path.join(корень, 'assets', 'robot', 'sayt', п + '.webp');
-  return pathToFileURL(fs.existsSync(плотный) ? плотный : path.join(корень, 'assets', 'robot', п + '.webp')).href;
-};
+const робот = п => pathToFileURL(path.join(корень, 'assets', 'robot', п + '.webp')).href;
 
 const стиль = `
 @font-face{font-family:G;font-weight:500;src:url(${ф('golos-text-500-cyrillic.woff2')})}

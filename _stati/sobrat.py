@@ -645,6 +645,9 @@ def главная(статьи, данные):
 # ---------- главная сайта: о канале и приложении ----------
 
 ЛЕНДИНГ_CSS = (Path(__file__).resolve().parent / 'lending.css').read_text(encoding='utf-8')
+# Рыбка первого экрана: вырезанная картинка и её скелет (_stati/ryba_podgotovka.py пишет оба).
+# Рядом обязателен ISTOCHNIK.md: откуда картинка и по какой лицензии (без него сборка не пройдёт).
+РЫБКА = 'assets/ryba/koi.webp'
 ЛЕНДИНГ_JS = (Path(__file__).resolve().parent / 'lending.js').read_text(encoding='utf-8')
 
 
@@ -676,7 +679,7 @@ def лендинг(статьи, данные):
          'Список с датой проверки у каждой — в нашем гиде «Нейросети, которые работают в России без VPN».'),
         ('Почему «без людей»?',
          'Канал и приложение ведёт нейросеть: она собирает материалы, людей в редакции нет. '
-         'У неё есть лицо — робот, которого ты видишь на этой странице.'),
+         'У неё есть лицо — робот: он встречает тебя в приложении и в статьях.'),
     ]
     ld = {'@context': 'https://schema.org', '@graph': [
         {'@type': 'WebPage', 'name': title, 'url': f'{САЙТ}/{путь}', 'inLanguage': 'ru', 'description': description},
@@ -697,19 +700,23 @@ def лендинг(статьи, данные):
                      f'<span><b>{esc(c["t"])}</b><small>{len(c["ls"])} {склонение(len(c["ls"]), "урок", "урока", "уроков")} · {len(уроки)} бесплатно</small></span></span>'
                      f'<ol>{пункты}</ol><span class="go">Читать первый урок →</span></a>')
 
-    позы = [('privet', 397, ''), ('ukazyvaet', 365, 'data-'), ('raduetsya', 378, 'data-'), ('dumaet', 505, 'data-')]
-    робот = ('<div class="bot" aria-hidden="true"><span class="bot-ten"></span><div class="bot-t">'
-             + ''.join(f'<img data-p="{p}" {pre}src="{d}assets/robot/sayt/{p}.webp" width="320" height="{h}" alt=""'
-                       + (' class="on" fetchpriority="high"' if not pre else '') + '>'
-                       for p, h, pre in позы)
-             + '</div><span class="bot-replika"></span></div>')
-
     главные = sorted([с for с in статьи if с.get('nachalo')], key=lambda с: int(с['nachalo']))
     ещё = [с for с in статьи if с not in главные][:3]
 
+    картинка = КОРЕНЬ / РЫБКА
+    if картинка.exists():
+        if not (картинка.parent / 'ISTOCHNIK.md').exists():
+            беды.append(f'у {РЫБКА} нет ISTOCHNIK.md: откуда картинка и по какой лицензии')
+        if not картинка.with_suffix('.json').exists():
+            беды.append(f'у {РЫБКА} нет скелета {картинка.with_suffix(".json").name} — запусти _stati/ryba_podgotovka.py')
+        холст_рыбки = f'<canvas class="ryba" aria-hidden="true" data-src="{d}{РЫБКА}"></canvas>'
+    else:
+        print(f'  рыбки пока нет ({РЫБКА}) — первый экран без неё')
+        холст_рыбки = ''
+
     стр = (голова(d, title, description, путь, 'stati/og/kursy.jpg', 'website', ld, ЛЕНДИНГ_CSS)
            + '<body class="pg-land">' + шапка(d, 'kursy') + '<main id="glavnoe">'
-           + '<section class="scena">' + робот
+           + '<section class="scena">' + холст_рыбки
            + '<div class="scena-in"><h1><span class="giant"><span>ИИ без</span> <span>людей</span></span>'
            + '<span class="sub">Курсы по нейросетям с нуля — прямо в Telegram</span></h1>'
            + '<p class="pod">Живая задача, готовый запрос и проверка ответа. Ведёт нейросеть — людей в редакции нет.</p>'

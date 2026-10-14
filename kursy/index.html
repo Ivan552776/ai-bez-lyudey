@@ -272,35 +272,26 @@ h1{font-size:clamp(31px,5vw,50px);line-height:1.08;letter-spacing:-.025em;margin
 .ai .btns .btn{min-height:46px;padding:0 18px;font-size:15px}
 .ai-u{display:inline-flex;align-items:center;min-height:46px;font-weight:600;text-decoration:none;padding:0 4px}
 .tip{font-size:14px;color:var(--soft)}
-/* первый экран: огромное название канала и робот, который гуляет сам */
-/* фон мятный, как аватар канала: картинки робота сделаны под светлый фон, на тёмном тело просвечивает */
-.scena{position:relative;margin:8px 12px 0;border-radius:34px;background:var(--mint);color:var(--obs);overflow:hidden;min-height:min(760px,calc(100svh - 84px));display:flex;flex-direction:column;justify-content:center;isolation:isolate;touch-action:pan-y}
-.scena::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(900px 520px at 85% 0%,rgba(255,255,255,.75),transparent 62%),radial-gradient(800px 480px at 0% 100%,rgba(127,224,180,.55),transparent 60%)}
-.scena-in{position:relative;z-index:1;padding:56px 24px 40px;text-align:center}
+/* первый экран: пруд — огромное название канала под водой, над ним плавает карп кои (lending.js) */
+.scena{position:relative;margin:8px 12px 0;border-radius:34px;background:var(--acc);color:#fff;overflow:hidden;min-height:min(780px,calc(100svh - 84px));display:flex;flex-direction:column;justify-content:center;isolation:isolate;touch-action:pan-y}
+.scena::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(1100px 620px at 85% -10%,rgba(127,224,180,.32),transparent 60%),radial-gradient(900px 520px at -5% 110%,rgba(8,40,30,.55),transparent 60%)}
+.scena-in{position:relative;z-index:1;padding:56px 16px 44px;text-align:center}
 .scena h1{margin:0;font-weight:700;letter-spacing:0;line-height:1}
-.giant{display:block;font-size:clamp(64px,15vw,240px);line-height:1;letter-spacing:-.05em;text-transform:uppercase;color:var(--obs);text-wrap:balance}
-.giant span{display:inline-block;white-space:nowrap}
-.scena .sub{display:block;font-size:clamp(19px,2.4vw,26px);line-height:1.3;letter-spacing:-.01em;font-weight:600;color:var(--obs);margin:28px auto 0;max-width:720px;text-wrap:balance}
-.scena p.pod{margin:12px auto 0;max-width:600px;color:#2F4B42;font-size:clamp(16px,1.8vw,18px);line-height:1.5}
+/* надпись почти во всю ширину — как в образце */
+.giant{display:block;font-size:clamp(72px,19.5vw,300px);line-height:1.02;letter-spacing:-.055em;text-transform:uppercase;color:#FBFAF8;text-shadow:0 10px 30px rgba(6,40,28,.25)}
+.giant span{display:block;white-space:nowrap}
+.scena .sub{display:block;font-size:clamp(19px,2.4vw,26px);line-height:1.3;letter-spacing:-.01em;font-weight:600;color:#fff;margin:26px auto 0;max-width:720px;text-wrap:balance}
+.scena p.pod{margin:12px auto 0;max-width:600px;color:#D6F2E4;font-size:clamp(16px,1.8vw,18px);line-height:1.5}
 .scena .btns{justify-content:center;margin-top:28px}
-.scena .btn{min-height:54px;padding:0 26px;font-size:17px}
-.scena .btn.line{background:rgba(255,255,255,.55)}
-.scena .btn.line:hover{background:var(--ink);color:#fff}
-@media(max-width:620px){.scena{margin:6px 8px 0;border-radius:26px;min-height:calc(100svh - 76px)}.scena-in{padding:40px 16px 32px}.scena .btn{width:100%}}
-
-/* робот. Без скрипта он просто стоит справа внизу — видимость от движения не зависит.
-   Позы меняются мгновенно: при плавной смене обе картинки полупрозрачны и сквозь робота видна надпись */
-.bot{position:absolute;z-index:2;right:7%;bottom:9%;height:clamp(140px,22vw,270px);aspect-ratio:320/400;pointer-events:none;will-change:transform}
-.bot.zhivoy{left:0;top:0;right:auto;bottom:auto}
-.bot-t{position:absolute;inset:0;transform-origin:50% 100%}
-.bot img{position:absolute;bottom:0;left:50%;height:100%;width:auto;max-width:none;transform:translateX(-50%);opacity:0;filter:drop-shadow(0 16px 16px rgba(14,36,32,.16))}
-.bot img.on{opacity:1}
-.bot-ten{position:absolute;left:18%;right:18%;bottom:-6px;height:18px;border-radius:50%;background:rgba(14,36,32,.22);filter:blur(6px);transform-origin:50% 50%}
-.bot-replika{position:absolute;left:50%;bottom:100%;transform:translate(-50%,-4px);background:var(--obs);color:#fff;font-size:15px;font-weight:600;line-height:1.25;padding:9px 13px;border-radius:14px;white-space:nowrap;opacity:0;transition:opacity .25s;box-shadow:0 10px 24px -12px rgba(0,0,0,.45)}
-.bot-replika::after{content:'';position:absolute;left:50%;top:100%;margin-left:-7px;border:7px solid transparent;border-top-color:var(--obs)}
-.bot-replika.on{opacity:1}
-.bot-replika.l{left:0;transform:translate(0,-4px)}.bot-replika.l::after{left:34px}
-.bot-replika.r{left:auto;right:0;transform:translate(0,-4px)}.bot-replika.r::after{left:auto;right:27px}
+.scena .btn{background:#FBFAF8;color:var(--obs);min-height:54px;padding:0 26px;font-size:17px}
+.scena .btn:hover{background:#fff;color:var(--obs)}
+.scena .btn.line{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.75)}
+.scena .btn.line:hover{background:rgba(255,255,255,.14);color:#fff}
+/* рыбка над надписью, но нажатия проходят к кнопкам под ней */
+.ryba{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
+/* вода готова — огромную надпись рисует WebGL под водой; в HTML она остаётся для поиска и диктора */
+.scena.voda .giant{color:transparent;text-shadow:none}
+@media(max-width:620px){.scena{margin:6px 8px 0;border-radius:26px;min-height:calc(100svh - 76px)}.scena-in{padding:40px 12px 32px}.scena .btn{width:100%}}
 
 /* остальная главная */
 .l-blk{padding:72px 0 8px}
@@ -346,10 +337,9 @@ h1{font-size:clamp(31px,5vw,50px);line-height:1.08;letter-spacing:-.025em;margin
 .cena.glav .btn{background:var(--mint);color:var(--obs)}
 @media(max-width:760px){.ceny{grid-template-columns:1fr}.cena .btn{align-self:stretch}}
 .l-faq{max-width:820px}
-@media(max-width:620px){.giant{font-size:min(20vw,96px)}}
 </style>
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebPage", "name": "ИИ без людей — курсы по нейросетям с нуля в Telegram", "url": "https://ivan552776.github.io/ai-bez-lyudey/kursy/", "inLanguage": "ru", "description": "9 курсов по нейросетям для начинающих: GigaChat, Алиса, DeepSeek, Qwen, ChatGPT и другие. Живая задача, готовый запрос и проверка ответа. Первые 3 урока бесплатно."}, {"@type": "Organization", "name": "ИИ без людей", "url": "https://t.me/ai_bez_lyudey", "logo": "https://ivan552776.github.io/ai-bez-lyudey/stati/logo.png", "sameAs": ["https://t.me/ai_bez_lyudey"]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Нужно ли разбираться в технике?", "acceptedAnswer": {"@type": "Answer", "text": "Нет. Уроки — для тех, кто только начинает: открытка, жалоба в управляющую компанию, резюме, домашка ребёнка. Программировать не нужно."}}, {"@type": "Question", "name": "Какие нейросети разбираете?", "acceptedAnswer": {"@type": "Answer", "text": "9 курсов по 8 уроков: ChatGPT, Claude, Perplexity, Gemini, Gemini Notebook, DeepSeek, GigaChat, Алиса и Шедеврум, Qwen."}}, {"@type": "Question", "name": "Сколько стоит?", "acceptedAnswer": {"@type": "Answer", "text": "Первые 3 урока каждого курса бесплатны — всего 27. Полный доступ — 300 ⭐ в месяц или 3 000 ⭐ за год, звёздами Telegram, без автосписаний."}}, {"@type": "Question", "name": "Нужно ли платить за саму нейросеть?", "acceptedAnswer": {"@type": "Answer", "text": "Для уроков хватает бесплатных версий — на них мы и проверяем каждый запрос. Наша подписка не включает платные тарифы нейросетей."}}, {"@type": "Question", "name": "Какие нейросети открываются из России?", "acceptedAnswer": {"@type": "Answer", "text": "Список с датой проверки у каждой — в нашем гиде «Нейросети, которые работают в России без VPN»."}}, {"@type": "Question", "name": "Почему «без людей»?", "acceptedAnswer": {"@type": "Answer", "text": "Канал и приложение ведёт нейросеть: она собирает материалы, людей в редакции нет. У неё есть лицо — робот, которого ты видишь на этой странице."}}]}]}</script>
-</head><body class="pg-land"><a class="skip" href="#glavnoe">К тексту</a><header class="site"><div class="site-in"><a class="brand" href="../kursy/"><span class="mk">ии</span>ИИ без людей</a><nav class="nav" aria-label="Разделы"><a href="../kursy/" aria-current="page">О курсах</a><a href="../stati/">Статьи</a><a href="../uroki/">Бесплатные уроки</a><a href="../neyroseti/">Нейросети в России</a></nav><a class="tg" href="https://t.me/ai_bez_lyudey"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg><span>Канал</span></a></div></header><main id="glavnoe"><section class="scena"><div class="bot" aria-hidden="true"><span class="bot-ten"></span><div class="bot-t"><img data-p="privet" src="../assets/robot/sayt/privet.webp" width="320" height="397" alt="" class="on" fetchpriority="high"><img data-p="ukazyvaet" data-src="../assets/robot/sayt/ukazyvaet.webp" width="320" height="365" alt=""><img data-p="raduetsya" data-src="../assets/robot/sayt/raduetsya.webp" width="320" height="378" alt=""><img data-p="dumaet" data-src="../assets/robot/sayt/dumaet.webp" width="320" height="505" alt=""></div><span class="bot-replika"></span></div><div class="scena-in"><h1><span class="giant"><span>ИИ без</span> <span>людей</span></span><span class="sub">Курсы по нейросетям с нуля — прямо в Telegram</span></h1><p class="pod">Живая задача, готовый запрос и проверка ответа. Ведёт нейросеть — людей в редакции нет.</p><div class="btns"><a class="btn" href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=src_site__s-kursy"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg>Начать бесплатно</a><a class="btn line" href="../uroki/">Бесплатные уроки</a></div></div></section><div class="wrap"><section class="l-blk"><h2>Нейросеть объясняет, как пользоваться нейросетями</h2><p class="l-lead">Не лекции про будущее, а дела, которые есть у тебя на этой неделе. Каждый урок — одна задача от начала до готового результата.</p><div class="tri"><div><span class="num">1</span><h3>Живая задача</h3><p>Открытка, жалоба в управляющую компанию, резюме под вакансию, список литературы к реферату — то, что пригодится сегодня.</p></div><div><span class="num">2</span><h3>Готовый запрос</h3><p>Копируешь, меняешь слова в [скобках] на свои и отправляешь. Рядом — что пришло у нас и почему запрос составлен именно так.</p></div><div><span class="num">3</span><h3>Проверка ответа</h3><p>Нейросеть уверенно додумывает: книги, законы, цифры. В каждом уроке — где она ошибается и как поймать это за пару минут.</p></div></div></section><section class="l-blk"><h2>Как это выглядит в уроке</h2><p class="l-lead">Пример из бесплатного урока по Perplexity: список литературы для реферата по ГОСТу.</p><div class="primer"><div class="bylo"><b>Короткая просьба</b><p>«Список литературы для реферата по истории, 8 класс» — и пришли пять «книг» без единой ссылки.</p><p>Мы поискали каждую в каталоге Российской государственной библиотеки. Четырёх книг из пяти там нет.</p></div><div class="stalo"><b>Запрос из урока</b><p>У каждой строки появилась ссылка: каталог РГБ, Президентская библиотека, КиберЛенинка. Мы открыли все — книги и статьи настоящие.</p><p>Но одна книга стояла двумя строками — это ловит проверка за пять минут: та же книга, тот же автор, год и страницы как в каталоге.</p></div><div class="itog"><p><b>Так устроен каждый урок:</b> не «нейросеть всё знает», а запрос, ответ как есть и проверка. Урок открыт на сайте — посмотри целиком.</p><a class="btn mint" href="../uroki/perplexity-2/">Открыть урок</a></div></div></section><section class="l-blk" id="kursy"><h2>9 курсов по 8 уроков</h2><p class="l-lead">Первые 3 урока каждого курса открыты на сайте и в приложении. Остальные — в приложении, вместе с отметками, серией дней и практикой.</p><div class="kursy-l"><a class="kurs-l" href="../uroki/chatgpt-1/"><span class="kh"><span class="lt">C</span><span><b>ChatGPT</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Объявление с текстом за 2 минуты</li><li>Куда ушли деньги: выписка за 5 минут</li><li>Резюме под вакансию без чужих навыков</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/claude-1/"><span class="kh"><span class="lt">Cl</span><span><b>Claude</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Калькулятор обоев за 2 минуты</li><li>Настрой Claude: тон и правила</li><li>Редактор: меняй форму, сохраняй смысл</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/perplexity-1/"><span class="kh"><span class="lt">Px</span><span><b>Perplexity</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Выбор покупки: таблица и проверка цены</li><li>Список литературы для реферата за 5 минут</li><li>Новость о нейросети: можно ли мне?</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/gemini-1/"><span class="kh"><span class="lt">Ge</span><span><b>Gemini</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Фото для объявления за 2 минуты</li><li>Свой помощник Gem</li><li>Один текст — три формата</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/notebook-1/"><span class="kh"><span class="lt">Nb</span><span><b>Gemini Notebook</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Тест к контрольной за 5 минут</li><li>Таблица для доклада за 2 минуты</li><li>Плакат для доклада за 5 минут</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/deepseek-1/"><span class="kh"><span class="lt">DS</span><span><b>DeepSeek</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Таймер для тренировки за 2 минуты</li><li>Квитанция ЖКХ: найди переплату за 5 минут</li><li>Тренажёр таблицы умножения за 2 минуты</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/gigachat-1/"><span class="kh"><span class="lt">G</span><span><b>GigaChat</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Открытка за 5 минут — без входа</li><li>Жалоба в управляющую компанию за 5 минут</li><li>Домашка: объяснить ребёнку дроби за 5 минут</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/alice-1/"><span class="kh"><span class="lt">А</span><span><b>Алиса и Шедеврум</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Выходные: план дня и проверка по ссылкам</li><li>Инструкция к технике: ответ с цитатой и страницей</li><li>Афиша для чата класса за 5 минут</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/qwen-1/"><span class="kh"><span class="lt">Q</span><span><b>Qwen</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Викторина для ребёнка за 2 минуты</li><li>Цитата для поздравления: проверь, кто сказал</li><li>Раскраска для ребёнка за 2 минуты</li></ol><span class="go">Читать первый урок →</span></a></div></section><section class="l-blk" id="cena"><h2>Сколько стоит</h2><p class="l-lead">Оплата звёздами Telegram прямо в приложении. Без автосписаний: продлить или нет — решаешь сам.</p><div class="ceny"><div class="cena"><small>Бесплатно</small><div class="summa">27 уроков</div><ul><li>Первые 3 урока каждого курса</li><li>Читать можно на сайте и в Telegram</li><li>Без регистрации и без карты</li></ul><a class="btn line" href="../uroki/">Бесплатные уроки</a></div><div class="cena glav"><small>Полный доступ</small><div class="summa">300 ⭐ в месяц</div><p>или 3 000 ⭐ за год</p><ul><li>Все 72 урока во всех курсах</li><li>Уроки сохраняются на телефоне и открываются без сети</li><li>Звёздами Telegram, без автосписаний</li></ul><a class="btn" href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=src_site__s-kursy"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg>Открыть в Telegram</a></div></div></section><section class="l-blk"><div class="blk-h"><h2 class="l-h2">Статьи о нейросетях</h2><a class="more-l" href="../stati/">Все статьи →</a></div><div class="cards"><a class="card" href="../stati/chto-takoe-neyroset/" data-r="nachalo"><span class="chip">С чего начать</span><h3>Что такое нейросеть — простыми словами</h3><p>Как она устроена, чем отличается от поисковика, что умеет и где уверенно ошибается.</p><span class="min">7 минут чтения</span><img src="../assets/robot/dumaet.webp" width="320" height="400" alt="" loading="lazy"></a><a class="card" href="../stati/kak-polzovatsya-neyrosetyu/" data-r="nachalo"><span class="chip">С чего начать</span><h3>Как пользоваться нейросетью: пошагово для начинающих</h3><p>Пять шагов от «никогда не пробовал» до первого полезного результата — с готовыми запросами.</p><span class="min">7 минут чтения</span><img src="../assets/robot/palec.webp" width="320" height="400" alt="" loading="lazy"></a><a class="card" href="../stati/analogi-chatgpt/" data-r="vybor"><span class="chip">Выбрать нейросеть</span><h3>Аналоги ChatGPT, которые работают в России</h3><p>Нейросети, которые открываются из России напрямую и бесплатно: как войти и что спросить первым.</p><span class="min">8 минут чтения</span><img src="../assets/robot/lupa.webp" width="320" height="400" alt="" loading="lazy"></a><a class="card" href="../stati/neyroset-dlya-teksta/" data-r="teksty"><span class="chip">Тексты</span><h3>Нейросеть для текстов: письмо, пост, объявление — без штампов и выдумок</h3><p>Пост, письмо, объявление — без штампов, выдуманных фактов и лишних обещаний.</p><span class="min">6 минут чтения</span><img src="../assets/robot/noutbuk.webp" width="320" height="400" alt="" loading="lazy"></a><a class="card" href="../stati/pozdravlenie-neyrosetyu/" data-r="teksty"><span class="chip">Тексты</span><h3>Как написать поздравление с помощью нейросети — и чтобы не было стыдно</h3><p>День рождения, юбилей, Новый год: живые слова вместо «счастья, здоровья» — и открытка к ним.</p><span class="min">5 минут чтения</span><img src="../assets/robot/raduetsya.webp" width="320" height="400" alt="" loading="lazy"></a><a class="card" href="../stati/rezyume-s-neyrosetyu/" data-r="rabota"><span class="chip">Работа</span><h3>Как составить резюме с помощью нейросети — честно и под вакансию</h3><p>Резюме под вакансию за 10 минут — без приписанных навыков и с честным сопроводительным письмом.</p><span class="min">5 минут чтения</span><img src="../assets/robot/planshet.webp" width="320" height="400" alt="" loading="lazy"></a></div></section><aside class="kanal wide"><div><b>Канал «ИИ без людей»</b><p>Каждый день один материал: готовый запрос, короткий гайд или разбор нейросети. Ведёт нейросеть, людей в редакции нет.</p></div><a class="btn mint" href="https://t.me/ai_bez_lyudey"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg>Подписаться</a></aside><section class="l-blk l-faq faq"><h2>Частые вопросы</h2><details><summary>Нужно ли разбираться в технике?</summary><div class="otv"><p>Нет. Уроки — для тех, кто только начинает: открытка, жалоба в управляющую компанию, резюме, домашка ребёнка. Программировать не нужно.</p></div></details><details><summary>Какие нейросети разбираете?</summary><div class="otv"><p>9 курсов по 8 уроков: ChatGPT, Claude, Perplexity, Gemini, Gemini Notebook, DeepSeek, GigaChat, Алиса и Шедеврум, Qwen.</p></div></details><details><summary>Сколько стоит?</summary><div class="otv"><p>Первые 3 урока каждого курса бесплатны — всего 27. Полный доступ — 300 ⭐ в месяц или 3 000 ⭐ за год, звёздами Telegram, без автосписаний.</p></div></details><details><summary>Нужно ли платить за саму нейросеть?</summary><div class="otv"><p>Для уроков хватает бесплатных версий — на них мы и проверяем каждый запрос. Наша подписка не включает платные тарифы нейросетей.</p></div></details><details><summary>Какие нейросети открываются из России?</summary><div class="otv"><p>Список с датой проверки у каждой — в нашем гиде «Нейросети, которые работают в России без VPN». <a href="../neyroseti/">Открыть гид</a>.</p></div></details><details><summary>Почему «без людей»?</summary><div class="otv"><p>Канал и приложение ведёт нейросеть: она собирает материалы, людей в редакции нет. У неё есть лицо — робот, которого ты видишь на этой странице.</p></div></details></section><section class="app"><img src="../assets/robot/raduetsya.webp" width="320" height="397" alt="" loading="lazy"><div><h2>Учись на живых задачах</h2><p>9 курсов по 8 уроков в приложении в Telegram: GigaChat, Алиса и Шедеврум, DeepSeek, Qwen, Perplexity и другие. В каждом уроке — задача, готовый запрос и проверка ответа. Первые 3 урока каждого курса бесплатны.</p><div class="btns"><a class="btn" href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=src_site__s-kursy"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg>Открыть в Telegram</a><a class="btn line" href="../uroki/">Бесплатные уроки</a></div></div></section></div></main><footer class="ft"><div class="wrap ft-in"><div class="ft-about"><a class="brand" href="../kursy/"><span class="mk">ии</span>ИИ без людей</a><p>Нейросети для тех, кто только начинает. Материалы собирает нейросеть. Людей в редакции нет.</p></div><nav aria-label="Сайт"><b>Сайт</b><a href="../kursy/">Курсы по нейросетям</a><a href="../stati/">Статьи о нейросетях</a><a href="../uroki/">Бесплатные уроки</a><a href="../neyroseti/">Нейросети в России без VPN</a><a href="../neyroseti/gotovye-zaprosy/">Готовые запросы</a><a href="../stati/slovar-neyrosetey/">Словарь нейросетей</a></nav><nav aria-label="Telegram"><b>Telegram</b><a href="https://t.me/ai_bez_lyudey">Канал «ИИ без людей»</a><a href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=src_site__s-kursy">Приложение с курсами</a></nav></div></footer><script>(function(){
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebPage", "name": "ИИ без людей — курсы по нейросетям с нуля в Telegram", "url": "https://ivan552776.github.io/ai-bez-lyudey/kursy/", "inLanguage": "ru", "description": "9 курсов по нейросетям для начинающих: GigaChat, Алиса, DeepSeek, Qwen, ChatGPT и другие. Живая задача, готовый запрос и проверка ответа. Первые 3 урока бесплатно."}, {"@type": "Organization", "name": "ИИ без людей", "url": "https://t.me/ai_bez_lyudey", "logo": "https://ivan552776.github.io/ai-bez-lyudey/stati/logo.png", "sameAs": ["https://t.me/ai_bez_lyudey"]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Нужно ли разбираться в технике?", "acceptedAnswer": {"@type": "Answer", "text": "Нет. Уроки — для тех, кто только начинает: открытка, жалоба в управляющую компанию, резюме, домашка ребёнка. Программировать не нужно."}}, {"@type": "Question", "name": "Какие нейросети разбираете?", "acceptedAnswer": {"@type": "Answer", "text": "9 курсов по 8 уроков: ChatGPT, Claude, Perplexity, Gemini, Gemini Notebook, DeepSeek, GigaChat, Алиса и Шедеврум, Qwen."}}, {"@type": "Question", "name": "Сколько стоит?", "acceptedAnswer": {"@type": "Answer", "text": "Первые 3 урока каждого курса бесплатны — всего 27. Полный доступ — 300 ⭐ в месяц или 3 000 ⭐ за год, звёздами Telegram, без автосписаний."}}, {"@type": "Question", "name": "Нужно ли платить за саму нейросеть?", "acceptedAnswer": {"@type": "Answer", "text": "Для уроков хватает бесплатных версий — на них мы и проверяем каждый запрос. Наша подписка не включает платные тарифы нейросетей."}}, {"@type": "Question", "name": "Какие нейросети открываются из России?", "acceptedAnswer": {"@type": "Answer", "text": "Список с датой проверки у каждой — в нашем гиде «Нейросети, которые работают в России без VPN»."}}, {"@type": "Question", "name": "Почему «без людей»?", "acceptedAnswer": {"@type": "Answer", "text": "Канал и приложение ведёт нейросеть: она собирает материалы, людей в редакции нет. У неё есть лицо — робот: он встречает тебя в приложении и в статьях."}}]}]}</script>
+</head><body class="pg-land"><a class="skip" href="#glavnoe">К тексту</a><header class="site"><div class="site-in"><a class="brand" href="../kursy/"><span class="mk">ии</span>ИИ без людей</a><nav class="nav" aria-label="Разделы"><a href="../kursy/" aria-current="page">О курсах</a><a href="../stati/">Статьи</a><a href="../uroki/">Бесплатные уроки</a><a href="../neyroseti/">Нейросети в России</a></nav><a class="tg" href="https://t.me/ai_bez_lyudey"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg><span>Канал</span></a></div></header><main id="glavnoe"><section class="scena"><canvas class="ryba" aria-hidden="true" data-src="../assets/ryba/koi.webp"></canvas><div class="scena-in"><h1><span class="giant"><span>ИИ без</span> <span>людей</span></span><span class="sub">Курсы по нейросетям с нуля — прямо в Telegram</span></h1><p class="pod">Живая задача, готовый запрос и проверка ответа. Ведёт нейросеть — людей в редакции нет.</p><div class="btns"><a class="btn" href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=src_site__s-kursy"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg>Начать бесплатно</a><a class="btn line" href="../uroki/">Бесплатные уроки</a></div></div></section><div class="wrap"><section class="l-blk"><h2>Нейросеть объясняет, как пользоваться нейросетями</h2><p class="l-lead">Не лекции про будущее, а дела, которые есть у тебя на этой неделе. Каждый урок — одна задача от начала до готового результата.</p><div class="tri"><div><span class="num">1</span><h3>Живая задача</h3><p>Открытка, жалоба в управляющую компанию, резюме под вакансию, список литературы к реферату — то, что пригодится сегодня.</p></div><div><span class="num">2</span><h3>Готовый запрос</h3><p>Копируешь, меняешь слова в [скобках] на свои и отправляешь. Рядом — что пришло у нас и почему запрос составлен именно так.</p></div><div><span class="num">3</span><h3>Проверка ответа</h3><p>Нейросеть уверенно додумывает: книги, законы, цифры. В каждом уроке — где она ошибается и как поймать это за пару минут.</p></div></div></section><section class="l-blk"><h2>Как это выглядит в уроке</h2><p class="l-lead">Пример из бесплатного урока по Perplexity: список литературы для реферата по ГОСТу.</p><div class="primer"><div class="bylo"><b>Короткая просьба</b><p>«Список литературы для реферата по истории, 8 класс» — и пришли пять «книг» без единой ссылки.</p><p>Мы поискали каждую в каталоге Российской государственной библиотеки. Четырёх книг из пяти там нет.</p></div><div class="stalo"><b>Запрос из урока</b><p>У каждой строки появилась ссылка: каталог РГБ, Президентская библиотека, КиберЛенинка. Мы открыли все — книги и статьи настоящие.</p><p>Но одна книга стояла двумя строками — это ловит проверка за пять минут: та же книга, тот же автор, год и страницы как в каталоге.</p></div><div class="itog"><p><b>Так устроен каждый урок:</b> не «нейросеть всё знает», а запрос, ответ как есть и проверка. Урок открыт на сайте — посмотри целиком.</p><a class="btn mint" href="../uroki/perplexity-2/">Открыть урок</a></div></div></section><section class="l-blk" id="kursy"><h2>9 курсов по 8 уроков</h2><p class="l-lead">Первые 3 урока каждого курса открыты на сайте и в приложении. Остальные — в приложении, вместе с отметками, серией дней и практикой.</p><div class="kursy-l"><a class="kurs-l" href="../uroki/chatgpt-1/"><span class="kh"><span class="lt">C</span><span><b>ChatGPT</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Объявление с текстом за 2 минуты</li><li>Куда ушли деньги: выписка за 5 минут</li><li>Резюме под вакансию без чужих навыков</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/claude-1/"><span class="kh"><span class="lt">Cl</span><span><b>Claude</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Калькулятор обоев за 2 минуты</li><li>Настрой Claude: тон и правила</li><li>Редактор: меняй форму, сохраняй смысл</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/perplexity-1/"><span class="kh"><span class="lt">Px</span><span><b>Perplexity</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Выбор покупки: таблица и проверка цены</li><li>Список литературы для реферата за 5 минут</li><li>Новость о нейросети: можно ли мне?</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/gemini-1/"><span class="kh"><span class="lt">Ge</span><span><b>Gemini</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Фото для объявления за 2 минуты</li><li>Свой помощник Gem</li><li>Один текст — три формата</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/notebook-1/"><span class="kh"><span class="lt">Nb</span><span><b>Gemini Notebook</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Тест к контрольной за 5 минут</li><li>Таблица для доклада за 2 минуты</li><li>Плакат для доклада за 5 минут</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/deepseek-1/"><span class="kh"><span class="lt">DS</span><span><b>DeepSeek</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Таймер для тренировки за 2 минуты</li><li>Квитанция ЖКХ: найди переплату за 5 минут</li><li>Тренажёр таблицы умножения за 2 минуты</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/gigachat-1/"><span class="kh"><span class="lt">G</span><span><b>GigaChat</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Открытка за 5 минут — без входа</li><li>Жалоба в управляющую компанию за 5 минут</li><li>Домашка: объяснить ребёнку дроби за 5 минут</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/alice-1/"><span class="kh"><span class="lt">А</span><span><b>Алиса и Шедеврум</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Выходные: план дня и проверка по ссылкам</li><li>Инструкция к технике: ответ с цитатой и страницей</li><li>Афиша для чата класса за 5 минут</li></ol><span class="go">Читать первый урок →</span></a><a class="kurs-l" href="../uroki/qwen-1/"><span class="kh"><span class="lt">Q</span><span><b>Qwen</b><small>8 уроков · 3 бесплатно</small></span></span><ol><li>Викторина для ребёнка за 2 минуты</li><li>Цитата для поздравления: проверь, кто сказал</li><li>Раскраска для ребёнка за 2 минуты</li></ol><span class="go">Читать первый урок →</span></a></div></section><section class="l-blk" id="cena"><h2>Сколько стоит</h2><p class="l-lead">Оплата звёздами Telegram прямо в приложении. Без автосписаний: продлить или нет — решаешь сам.</p><div class="ceny"><div class="cena"><small>Бесплатно</small><div class="summa">27 уроков</div><ul><li>Первые 3 урока каждого курса</li><li>Читать можно на сайте и в Telegram</li><li>Без регистрации и без карты</li></ul><a class="btn line" href="../uroki/">Бесплатные уроки</a></div><div class="cena glav"><small>Полный доступ</small><div class="summa">300 ⭐ в месяц</div><p>или 3 000 ⭐ за год</p><ul><li>Все 72 урока во всех курсах</li><li>Уроки сохраняются на телефоне и открываются без сети</li><li>Звёздами Telegram, без автосписаний</li></ul><a class="btn" href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=src_site__s-kursy"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg>Открыть в Telegram</a></div></div></section><section class="l-blk"><div class="blk-h"><h2 class="l-h2">Статьи о нейросетях</h2><a class="more-l" href="../stati/">Все статьи →</a></div><div class="cards"><a class="card" href="../stati/chto-takoe-neyroset/" data-r="nachalo"><span class="chip">С чего начать</span><h3>Что такое нейросеть — простыми словами</h3><p>Как она устроена, чем отличается от поисковика, что умеет и где уверенно ошибается.</p><span class="min">7 минут чтения</span><img src="../assets/robot/dumaet.webp" width="320" height="400" alt="" loading="lazy"></a><a class="card" href="../stati/kak-polzovatsya-neyrosetyu/" data-r="nachalo"><span class="chip">С чего начать</span><h3>Как пользоваться нейросетью: пошагово для начинающих</h3><p>Пять шагов от «никогда не пробовал» до первого полезного результата — с готовыми запросами.</p><span class="min">7 минут чтения</span><img src="../assets/robot/palec.webp" width="320" height="400" alt="" loading="lazy"></a><a class="card" href="../stati/analogi-chatgpt/" data-r="vybor"><span class="chip">Выбрать нейросеть</span><h3>Аналоги ChatGPT, которые работают в России</h3><p>Нейросети, которые открываются из России напрямую и бесплатно: как войти и что спросить первым.</p><span class="min">8 минут чтения</span><img src="../assets/robot/lupa.webp" width="320" height="400" alt="" loading="lazy"></a><a class="card" href="../stati/neyroset-dlya-teksta/" data-r="teksty"><span class="chip">Тексты</span><h3>Нейросеть для текстов: письмо, пост, объявление — без штампов и выдумок</h3><p>Пост, письмо, объявление — без штампов, выдуманных фактов и лишних обещаний.</p><span class="min">6 минут чтения</span><img src="../assets/robot/noutbuk.webp" width="320" height="400" alt="" loading="lazy"></a><a class="card" href="../stati/pozdravlenie-neyrosetyu/" data-r="teksty"><span class="chip">Тексты</span><h3>Как написать поздравление с помощью нейросети — и чтобы не было стыдно</h3><p>День рождения, юбилей, Новый год: живые слова вместо «счастья, здоровья» — и открытка к ним.</p><span class="min">5 минут чтения</span><img src="../assets/robot/raduetsya.webp" width="320" height="400" alt="" loading="lazy"></a><a class="card" href="../stati/rezyume-s-neyrosetyu/" data-r="rabota"><span class="chip">Работа</span><h3>Как составить резюме с помощью нейросети — честно и под вакансию</h3><p>Резюме под вакансию за 10 минут — без приписанных навыков и с честным сопроводительным письмом.</p><span class="min">5 минут чтения</span><img src="../assets/robot/planshet.webp" width="320" height="400" alt="" loading="lazy"></a></div></section><aside class="kanal wide"><div><b>Канал «ИИ без людей»</b><p>Каждый день один материал: готовый запрос, короткий гайд или разбор нейросети. Ведёт нейросеть, людей в редакции нет.</p></div><a class="btn mint" href="https://t.me/ai_bez_lyudey"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg>Подписаться</a></aside><section class="l-blk l-faq faq"><h2>Частые вопросы</h2><details><summary>Нужно ли разбираться в технике?</summary><div class="otv"><p>Нет. Уроки — для тех, кто только начинает: открытка, жалоба в управляющую компанию, резюме, домашка ребёнка. Программировать не нужно.</p></div></details><details><summary>Какие нейросети разбираете?</summary><div class="otv"><p>9 курсов по 8 уроков: ChatGPT, Claude, Perplexity, Gemini, Gemini Notebook, DeepSeek, GigaChat, Алиса и Шедеврум, Qwen.</p></div></details><details><summary>Сколько стоит?</summary><div class="otv"><p>Первые 3 урока каждого курса бесплатны — всего 27. Полный доступ — 300 ⭐ в месяц или 3 000 ⭐ за год, звёздами Telegram, без автосписаний.</p></div></details><details><summary>Нужно ли платить за саму нейросеть?</summary><div class="otv"><p>Для уроков хватает бесплатных версий — на них мы и проверяем каждый запрос. Наша подписка не включает платные тарифы нейросетей.</p></div></details><details><summary>Какие нейросети открываются из России?</summary><div class="otv"><p>Список с датой проверки у каждой — в нашем гиде «Нейросети, которые работают в России без VPN». <a href="../neyroseti/">Открыть гид</a>.</p></div></details><details><summary>Почему «без людей»?</summary><div class="otv"><p>Канал и приложение ведёт нейросеть: она собирает материалы, людей в редакции нет. У неё есть лицо — робот: он встречает тебя в приложении и в статьях.</p></div></details></section><section class="app"><img src="../assets/robot/raduetsya.webp" width="320" height="397" alt="" loading="lazy"><div><h2>Учись на живых задачах</h2><p>9 курсов по 8 уроков в приложении в Telegram: GigaChat, Алиса и Шедеврум, DeepSeek, Qwen, Perplexity и другие. В каждом уроке — задача, готовый запрос и проверка ответа. Первые 3 урока каждого курса бесплатны.</p><div class="btns"><a class="btn" href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=src_site__s-kursy"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg>Открыть в Telegram</a><a class="btn line" href="../uroki/">Бесплатные уроки</a></div></div></section></div></main><footer class="ft"><div class="wrap ft-in"><div class="ft-about"><a class="brand" href="../kursy/"><span class="mk">ии</span>ИИ без людей</a><p>Нейросети для тех, кто только начинает. Материалы собирает нейросеть. Людей в редакции нет.</p></div><nav aria-label="Сайт"><b>Сайт</b><a href="../kursy/">Курсы по нейросетям</a><a href="../stati/">Статьи о нейросетях</a><a href="../uroki/">Бесплатные уроки</a><a href="../neyroseti/">Нейросети в России без VPN</a><a href="../neyroseti/gotovye-zaprosy/">Готовые запросы</a><a href="../stati/slovar-neyrosetey/">Словарь нейросетей</a></nav><nav aria-label="Telegram"><b>Telegram</b><a href="https://t.me/ai_bez_lyudey">Канал «ИИ без людей»</a><a href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=src_site__s-kursy">Приложение с курсами</a></nav></div></footer><script>(function(){
 /* Копирование запроса. В вебвью буфер обмена бывает закрыт — тогда выделяем текст,
    чтобы человек скопировал сам, а не остался с пустыми руками. */
 document.addEventListener('click',function(e){
@@ -399,100 +389,290 @@ if(кнопки.length){
 }
 })();
 (function(){
-/* Робот первого экрана гуляет сам: идёт к случайной точке, останавливается,
-   машет или думает и идёт дальше. Повёл мышью — подбегает к курсору;
-   на телефоне — туда, где коснулись. Курсор замер — снова гуляет сам.
-   Двигаем только transform: без перерисовки страницы и без рывков на слабых телефонах. */
+/* Первый экран — пруд (09.10, по ролику-образцу от Ivan'а): огромная надпись лежит
+   под водой, над ней плавает карп кои.
+   • Вода: сетка высот поверхности, волны бегут и затухают (уравнение волны на сетке).
+     Рыбка оставляет за собой след, нажатие пускает круги. Наклон поверхности
+     преломляет надпись — буквы ломаются и сдвигаются, как сквозь воду.
+   • Блики на дне: по буквам и рыбке бегут солнечные переливы, на гребнях волн — отблеск.
+   • Рыбка: картинка сверху + «скелет» (_stati/ryba_podgotovka.py); сетку гнём,
+     как позвоночник: волна от головы к хвосту, на повороте тело ложится дугой.
+     Плавает сама, иногда замирает; есть курсор — кружит рядом; на телефоне касание
+     зовёт к пальцу; нажатие по рыбке — рывок прочь.
+   Всё рисует один WebGL-холст. Нет WebGL — видна обычная надпись из HTML, без рыбки.
+   Надпись в HTML остаётся всегда: её читают поиск и экранный диктор, мы лишь прячем краску. */
 var сцена=document.querySelector('.scena');
 if(!сцена)return;
-var бот=сцена.querySelector('.bot'),тело=бот.querySelector('.bot-t'),тень=бот.querySelector('.bot-ten'),реплика=бот.querySelector('.bot-replika');
-var позы={};[].forEach.call(бот.querySelectorAll('img[data-p]'),function(i){позы[i.dataset.p]=i});
-if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;   // стоит и машет, без беготни
+var холст=сцена.querySelector('.ryba'),надпись=сцена.querySelector('.giant');
+if(!холст||!холст.dataset.src||!надпись)return;
+var gl=холст.getContext('webgl',{alpha:true,premultipliedAlpha:true,antialias:true});
+if(!gl){холст.style.display='none';return}
+var тихо=matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* выше 1.75 разницы под водой не видно, а старые телефоны греются от каждого лишнего пикселя */
+var плотность=Math.min(1.75,window.devicePixelRatio||1);
 
-/* Остальные позы догружаем после первой отрисовки: первый экран не ждёт картинок, которых ещё не видно */
-addEventListener('load',function(){[].forEach.call(бот.querySelectorAll('img[data-src]'),function(i){i.src=i.dataset.src;i.removeAttribute('data-src')})});
+/* ---------- шейдеры ---------- */
+function шейдер(тип,код){var s=gl.createShader(тип);gl.shaderSource(s,код);gl.compileShader(s);return s}
+function программа(в,ф){var p=gl.createProgram();gl.attachShader(p,шейдер(gl.VERTEX_SHADER,в));gl.attachShader(p,шейдер(gl.FRAGMENT_SHADER,ф));gl.linkProgram(p);
+  if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw new Error('шейдер');return p}
+/* блики на дне: три бегущие синусоиды под углом, слегка закрученные, — светлые жилки там,
+   где они гасят друг друга. Своё, без чужих шейдеров */
+var БЛИКИ='float blik(vec2 p,float t){vec2 q=p+vec2(sin(p.y*1.7+t*.6),cos(p.x*1.3-t*.5))*.35;'+
+ 'float a=sin(dot(q,vec2(1.,.35))*3.1+t*.9);float b=sin(dot(q,vec2(-.55,1.))*3.6-t*1.05);'+
+ 'float c=sin(dot(q,vec2(.45,-1.))*2.7+t*.75+a*.8);return pow(1.-abs((a+b+c)/3.),7.);}';
+var прогВода,прогРыба;
+try{
+  прогВода=программа(
+   'attribute vec2 p;varying vec2 v;void main(){v=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}',
+   'precision mediump float;uniform sampler2D txt;uniform sampler2D voda;uniform float t;uniform float rezhim;uniform vec2 vid;varying vec2 v;'+БЛИКИ+
+   'void main(){vec2 g=(texture2D(voda,v).rg-.5)*2.;'+
+   ' vec2 kol=vec2(sin(v.y*22.+t*1.6),cos(v.x*17.+t*1.3))*.0016;'+
+   ' float bl=blik(v*vid*5.+g*1.5,t*.8);'+
+   ' if(rezhim<.5){vec4 c=texture2D(txt,v+g*.04+kol);'+
+   '  c.rgb=min(c.rgb*(.91+.3*bl),vec3(c.a));gl_FragColor=c;}'+
+   ' else{float s=-(g.x*.6+g.y*.8);float svet=bl*.11+max(s,0.)*.6;'+
+   '  gl_FragColor=vec4(vec3(.9,1.,.96)*svet,max(-s,0.)*.22);}}');
+  прогРыба=программа(
+   'attribute vec2 p;attribute vec2 uv;uniform vec2 res;uniform vec2 sdvig;varying vec2 v;'+
+   'void main(){vec2 q=(p+sdvig)/res*2.-1.;gl_Position=vec4(q.x,-q.y,0.,1.);v=uv;}',
+   /* тень — та же картинка, но прозрачность из уменьшенной копии текстуры: выходит размытой даром */
+   'precision mediump float;uniform sampler2D tex;uniform float ten;varying vec2 v;'+
+   'void main(){if(ten>.5){float a=texture2D(tex,v,3.).a*.34;gl_FragColor=vec4(.02,.16,.11,1.)*a;}else gl_FragColor=texture2D(tex,v);}');
+}catch(e){холст.style.display='none';return}
+gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
 
-var W=0,H=0,bw=0,bh=0;
-function мерить(){var r=сцена.getBoundingClientRect();W=r.width;H=r.height;bw=бот.offsetWidth;bh=бот.offsetHeight}
-мерить();
-/* Стартуем ровно с того места, где робот стоял без скрипта, — без прыжка */
-var r0=бот.getBoundingClientRect(),rs=сцена.getBoundingClientRect();
-var x=r0.left-rs.left,y=r0.top-rs.top,vx=0,vy=0;
-бот.classList.add('zhivoy');
+var буфЭкран=gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER,буфЭкран);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+function текстура(){var т=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,т);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+  /* пустая точка, пока не пришла настоящая картинка: иначе браузер ругается на пустую текстуру */
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array(4));return т}
+var тНадпись=текстура(),тВода=текстура(),тРыба=null;
+gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,true);
 
-var режим='идёт',цельX=x,цельY=y,ждать=0,курсорX=0,курсорY=0,курсорКогда=0,касание=false;
-var шаг=0,взгляд=-1,поза='privet',прежде=performance.now(),идёт=false,реплТаймер=0;
-var РЕПЛИКИ=['Привет! Я веду этот канал','Людей в редакции нет — только я','Выбери нейросеть — научу','Попробуй бесплатный урок','Запрос копируй — и пробуй'];
-var номерРеплики=0;
-
-function показатьПозу(п){if(п===поза||!позы[п]||позы[п].dataset.src)return;позы[поза]&&позы[поза].classList.remove('on');позы[п].classList.add('on');поза=п}
-function сказать(){реплика.textContent=РЕПЛИКИ[номерРеплики++%РЕПЛИКИ.length];
-  /* у края сцены облачко прижимается к роботу с внутренней стороны, иначе его обрежет */
-  var центр=x+bw/2,пол=Math.min(130,W/2);реплика.classList.toggle('l',центр<пол);реплика.classList.toggle('r',центр>W-пол);реплика.classList.add('on');clearTimeout(реплТаймер);реплТаймер=setTimeout(function(){реплика.classList.remove('on')},2600)}
-function новаяЦель(){
-    /* сверху запас под облачко с репликой */
-  var поляX=Math.max(8,W*.04),верх=64,низ=Math.max(8,H*.05);
-  for(var k=0;k<8;k++){
-    var nx=поляX+Math.random()*Math.max(1,W-bw-2*поляX),ny=верх+Math.random()*Math.max(1,H-bh-верх-низ);
-    if(Math.hypot(nx-x,ny-y)>Math.min(W,H)*.3)break;
-  }
-  цельX=nx;цельY=ny;
+/* ---------- размеры ---------- */
+var W=0,H=0,М=.4,надписьГотова=false,скелет=null;
+function мерить(){
+  var r=сцена.getBoundingClientRect();W=r.width;H=r.height;
+  холст.width=Math.round(W*плотность);холст.height=Math.round(H*плотность);
+  gl.viewport(0,0,холст.width,холст.height);
+  /* крупная, как в образце: от носа до кончика хвоста — больше половины ширины */
+  if(скелет)М=Math.max(260,Math.min(W*.58,H*1.1,760))/скелет.dlina;
+  водаСетка();
+  if(надписьГотова)нарисоватьНадпись();
 }
-новаяЦель();ждать=1.2;показатьПозу('privet');
 
+/* ---------- надпись: каждую букву — туда же, где она стоит в HTML ---------- */
+function нарисоватьНадпись(){
+  var c=document.createElement('canvas');c.width=холст.width;c.height=холст.height;
+  var x2=c.getContext('2d'),rs=сцена.getBoundingClientRect(),cs=getComputedStyle(надпись);
+  var размер=parseFloat(cs.fontSize);
+  x2.scale(плотность,плотность);
+  x2.font='700 '+размер+'px "Golos Text", sans-serif';x2.textBaseline='alphabetic';
+  x2.fillStyle='#FBFAF8';x2.shadowColor='rgba(6,40,28,.25)';x2.shadowBlur=30*плотность;x2.shadowOffsetY=10*плотность;
+  var м=x2.measureText('ЙБ'),подъём=м.fontBoundingBoxAscent||размер*.92;
+  var обход=document.createTreeWalker(надпись,NodeFilter.SHOW_TEXT),узел,диап=document.createRange();
+  while((узел=обход.nextNode())){
+    for(var i=0;i<узел.length;i++){
+      var буква=узел.data[i];if(!буква.trim())continue;
+      диап.setStart(узел,i);диап.setEnd(узел,i+1);
+      var п=диап.getClientRects()[0];if(!п)continue;
+      x2.fillText(буква.toLocaleUpperCase('ru'),п.left-rs.left,п.top-rs.top+подъём);
+    }
+  }
+  gl.bindTexture(gl.TEXTURE_2D,тНадпись);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,c);
+  сцена.classList.add('voda');   // HTML-надпись прозрачна, видна нарисованная
+}
+
+/* ---------- вода: сетка высот ---------- */
+var GW=0,GH=0,А,Б,пиксели;
+function водаСетка(){
+  GW=Math.round(Math.max(96,Math.min(200,W/6)));GH=Math.max(48,Math.round(GW*H/Math.max(1,W)));
+  А=new Float32Array(GW*GH);Б=new Float32Array(GW*GH);пиксели=new Uint8Array(GW*GH*4);
+  for(var i=0;i<GW*GH;i++){пиксели[i*4]=128;пиксели[i*4+1]=128;пиксели[i*4+3]=255}
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,false);
+  gl.bindTexture(gl.TEXTURE_2D,тВода);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,GW,GH,0,gl.RGBA,gl.UNSIGNED_BYTE,пиксели);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,true);
+}
+function капля(px,py,радиус,сила){
+  var cx=px/W*GW,cy=py/H*GH,r=Math.max(1,радиус/W*GW);
+  for(var yy=Math.max(1,Math.floor(cy-r));yy<=Math.min(GH-2,Math.ceil(cy+r));yy++)
+    for(var xx=Math.max(1,Math.floor(cx-r));xx<=Math.min(GW-2,Math.ceil(cx+r));xx++){
+      var d=Math.hypot(xx-cx,yy-cy);if(d<r)А[yy*GW+xx]+=сила*(.5+.5*Math.cos(d/r*Math.PI));
+    }
+}
+function водаШаг(){
+  for(var yy=1;yy<GH-1;yy++)for(var xx=1,i=yy*GW+1;xx<GW-1;xx++,i++){
+    Б[i]=((А[i-1]+А[i+1]+А[i-GW]+А[i+GW])*.5-Б[i])*.982;
+  }
+  var т=А;А=Б;Б=т;
+}
+function водаВТекстуру(){
+  for(var yy=1;yy<GH-1;yy++)for(var xx=1,i=yy*GW+1;xx<GW-1;xx++,i++){
+    var gx=(А[i+1]-А[i-1])*55,gy=(А[i+GW]-А[i-GW])*55,k=i*4;
+    пиксели[k]=gx>127?255:gx<-128?0:128+gx;пиксели[k+1]=gy>127?255:gy<-128?0:128+gy;
+  }
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,false);
+  gl.bindTexture(gl.TEXTURE_2D,тВода);gl.texSubImage2D(gl.TEXTURE_2D,0,0,0,GW,GH,gl.RGBA,gl.UNSIGNED_BYTE,пиксели);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,true);
+}
+
+/* ---------- рыбка: скелет и сетка ---------- */
+var рис=null,готово=false,КОЛ=7;
+var ПОЗ,УВ,точек,длины,покой,смещения,опора=12,индексов=0;
+var буфP=gl.createBuffer(),буфUV=gl.createBuffer(),буфИ=gl.createBuffer();
+function собрать(){
+  var h=скелет.hrebet,n=h.length,i,j;точек=n;
+  /* хребет в покое: длины звеньев и углы без скачков через ±π */
+  длины=[];покой=[];var пред=null;
+  for(i=0;i<n-1;i++){
+    var dx=h[i+1][0]-h[i][0],dy=h[i+1][1]-h[i][1];длины.push(Math.hypot(dx,dy));
+    var a=Math.atan2(dy,dx);if(пред!==null){while(a-пред>Math.PI)a-=2*Math.PI;while(a-пред<-Math.PI)a+=2*Math.PI}
+    покой.push(a);пред=a;
+  }
+  /* поперёк: от левого края через хребет к правому; нормаль та же, что в ryba_podgotovka.py */
+  смещения=[];УВ=new Float32Array(n*КОЛ*2);ПОЗ=new Float32Array(n*КОЛ*2);
+  for(i=0;i<n;i++){
+    var a0=h[Math.max(0,i-1)],b0=h[Math.min(n-1,i+1)],ddx=b0[0]-a0[0],ddy=b0[1]-a0[1],d=Math.hypot(ddx,ddy)||1;
+    var nx=-ddy/d,ny=ddx/d,ряд=[];
+    for(j=0;j<КОЛ;j++){
+      var u=j/(КОЛ-1),с=u<.5?h[i][2]*(1-u*2):-h[i][3]*(u*2-1);
+      ряд.push(с);УВ[(i*КОЛ+j)*2]=(h[i][0]+nx*с)/скелет.w;УВ[(i*КОЛ+j)*2+1]=(h[i][1]+ny*с)/скелет.h;
+    }
+    смещения.push(ряд);
+  }
+  var инд=[];
+  for(i=0;i<n-1;i++)for(j=0;j<КОЛ-1;j++){var a1=i*КОЛ+j,b1=a1+1,c1=a1+КОЛ,d1=c1+1;инд.push(a1,c1,b1,b1,c1,d1)}
+  индексов=инд.length;
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,буфИ);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(инд),gl.STATIC_DRAW);
+  gl.bindBuffer(gl.ARRAY_BUFFER,буфUV);gl.bufferData(gl.ARRAY_BUFFER,УВ,gl.STATIC_DRAW);
+  gl.bindBuffer(gl.ARRAY_BUFFER,буфP);gl.bufferData(gl.ARRAY_BUFFER,ПОЗ,gl.DYNAMIC_DRAW);
+  /* текстура 1024×1024: со степенью двойки работают уменьшенные копии — мелкая рыбка не рябит,
+     а тень берёт размытую копию */
+  var c=document.createElement('canvas');c.width=c.height=1024;c.getContext('2d').drawImage(рис,0,0,1024,1024);
+  тРыба=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,тРыба);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,c);gl.generateMipmap(gl.TEXTURE_2D);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+  готово=true;мерить();
+}
+
+/* ---------- поза: гнём хребет ---------- */
+var РАСПРЯМИТЬ=.5;    // насколько распрямить свёрнутый на картинке хвост: 0 — как нарисован, 1 — в струнку
+var x=0,y=0,vx=-330,vy=-20,курс=Math.PI,угВ=0,фаза=0,t=0,изгиб=0,нос=[0,0],хвост=[0,0];
+function поза(скорость){
+  var n=точек,звенья=n-1,общ=0,i;for(i=0;i<звенья;i++)общ+=длины[i];
+  var размах=.2+Math.min(.18,скорость/2600);                 // радиан на кончике хвоста
+  var кривизна=Math.max(-.0016,Math.min(.0016,изгиб));      // дуга по траектории, 1/px
+  var px=0,py=0,s=0,углы=[],хр=[[0,0]];
+  for(i=0;i<звенья;i++){
+    var u=(s+длины[i]/2)/общ,гибк=Math.pow(Math.max(0,(u-.2)/.8),1.4);
+    var фи=покой[0]+(покой[i]-покой[0])*(1-РАСПРЯМИТЬ*Math.min(1,u*2.2))
+           +размах*гибк*Math.sin(фаза-u*5.6)-кривизна*(s+длины[i]/2)*М;
+    углы.push(фи);px+=Math.cos(фи)*длины[i];py+=Math.sin(фи)*длины[i];хр.push([px,py]);s+=длины[i];
+  }
+  /* нос — по курсу; вращаем вокруг середины тела у грудных плавников, голова чуть водит в такт хвосту */
+  var R=курс-(углы[0]+Math.PI)-Math.sin(фаза)*.035,cR=Math.cos(R)*М,sR=Math.sin(R)*М,ox=хр[опора][0],oy=хр[опора][1];
+  for(i=0;i<n;i++){
+    var т1=углы[Math.max(0,i-1)],т2=углы[Math.min(звенья-1,i)];
+    var кс=Math.cos(т1)+Math.cos(т2),сн=Math.sin(т1)+Math.sin(т2),d=Math.hypot(кс,сн)||1,nx=-сн/d,ny=кс/d;
+    for(var j=0;j<КОЛ;j++){
+      var с=смещения[i][j],lx=хр[i][0]+nx*с-ox,ly=хр[i][1]+ny*с-oy,k=(i*КОЛ+j)*2;
+      ПОЗ[k]=x+lx*cR-ly*sR;ПОЗ[k+1]=y+lx*sR+ly*cR;
+    }
+  }
+  var сер=(КОЛ-1)/2*2;нос=[ПОЗ[сер],ПОЗ[сер+1]];var кх=((n-8)*КОЛ)*2+сер;хвост=[ПОЗ[кх],ПОЗ[кх+1]];
+}
+
+/* ---------- кадр ---------- */
+var лВода={},лРыба={};
+['txt','voda','t','rezhim','vid'].forEach(function(k){лВода[k]=gl.getUniformLocation(прогВода,k)});
+['res','sdvig','ten','tex'].forEach(function(k){лРыба[k]=gl.getUniformLocation(прогРыба,k)});
+var лЭкран=gl.getAttribLocation(прогВода,'p'),лP=gl.getAttribLocation(прогРыба,'p'),лUV=gl.getAttribLocation(прогРыба,'uv');
+function вода(режим){
+  gl.useProgram(прогВода);
+  gl.bindBuffer(gl.ARRAY_BUFFER,буфЭкран);gl.enableVertexAttribArray(лЭкран);gl.vertexAttribPointer(лЭкран,2,gl.FLOAT,false,0,0);
+  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,тНадпись);gl.uniform1i(лВода.txt,0);
+  gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,тВода);gl.uniform1i(лВода.voda,1);
+  gl.uniform1f(лВода.t,t);gl.uniform1f(лВода.rezhim,режим);gl.uniform2f(лВода.vid,W/Math.max(1,H),1);
+  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.activeTexture(gl.TEXTURE0);
+}
+function нарисовать(скорость){
+  gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+  if(надписьГотова)вода(0);                       // надпись под водой
+  if(готово){                                     // тень и рыбка
+    поза(скорость);
+    gl.useProgram(прогРыба);
+    gl.bindBuffer(gl.ARRAY_BUFFER,буфP);gl.bufferSubData(gl.ARRAY_BUFFER,0,ПОЗ);
+    gl.enableVertexAttribArray(лP);gl.vertexAttribPointer(лP,2,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,буфUV);gl.enableVertexAttribArray(лUV);gl.vertexAttribPointer(лUV,2,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,буфИ);gl.bindTexture(gl.TEXTURE_2D,тРыба);gl.uniform1i(лРыба.tex,0);
+    gl.uniform2f(лРыба.res,W,H);
+    gl.uniform1f(лРыба.ten,1);gl.uniform2f(лРыба.sdvig,W*.012+8,H*.02+12);gl.drawElements(gl.TRIANGLES,индексов,gl.UNSIGNED_SHORT,0);
+    gl.uniform1f(лРыба.ten,0);gl.uniform2f(лРыба.sdvig,0,0);gl.drawElements(gl.TRIANGLES,индексов,gl.UNSIGNED_SHORT,0);
+    gl.disableVertexAttribArray(лUV);
+  }
+  вода(1);                                        // блики и отблески волн поверх всего
+}
+
+/* ---------- движение ---------- */
+var курсорX=0,курсорY=0,курсорКогда=-1e9,касание=false,орбита=0,замер=0,замерЧерез=7+Math.random()*3,рывок=0;
+var ф=[Math.random()*6,Math.random()*6,Math.random()*6,Math.random()*6];
+function кратчайший(a){while(a>Math.PI)a-=2*Math.PI;while(a<-Math.PI)a+=2*Math.PI;return a}
+function путь(t){var ax=W*.42,ay=H*.36;
+  return [W*.5+ax*(.6*Math.sin(t*.17+ф[0])+.4*Math.sin(t*.41+ф[1])),H*.5+ay*(.55*Math.sin(t*.25+ф[2])+.4*Math.sin(t*.53+ф[3]))]}
+var прежде=performance.now(),идёт=false,копилка=0;
 function кадр(сейчас){
   if(!идёт)return;
-  var dt=Math.min(.05,(сейчас-прежде)/1000);прежде=сейчас;
-  if(режим==='за курсором'&&сейчас-курсорКогда>(касание?2600:2200)){режим='идёт';новаяЦель();ждать=.6}
-  var tx,ty,скорость;
-  if(режим==='за курсором'){
-    /* встаём рядом с курсором, а не на нём: стрелка видна, робот «смотрит» на неё */
-    var сбоку=курсорX>x+bw/2?-1:1;
-    tx=курсорX-bw/2+сбоку*bw*.55;ty=курсорY-bh*.7;
-    tx=Math.max(-bw*.2,Math.min(W-bw*.8,tx));ty=Math.max(-bh*.1,Math.min(H-bh*.9,ty));
-    скорость=Math.max(W,600)*.9;
-  }else{tx=цельX;ty=цельY;скорость=Math.max(70,Math.min(140,W*.09))}
-  var dx=tx-x,dy=ty-y,d=Math.hypot(dx,dy);
-  var нужноX=0,нужноY=0;
-  if(режим==='идёт'&&ждать>0){
-    ждать-=dt;if(ждать<=0)новаяЦель();
-  }else if(d>4){
-    var v=Math.min(скорость,d*(режим==='за курсором'?5:3));
-    нужноX=dx/d*v;нужноY=dy/d*v;
-  }else if(режим==='идёт'){
-    ждать=1.4+Math.random()*1.6;
-    показатьПозу(Math.random()<.6?'privet':'dumaet');
-    if(Math.random()<.5)сказать();
-  }
-  var мягко=Math.min(1,dt*(режим==='за курсором'?7:4));
-  vx+=(нужноX-vx)*мягко;vy+=(нужноY-vy)*мягко;
+  var dt=Math.min(.04,(сейчас-прежде)/1000);прежде=сейчас;t+=dt;
+  var курсор=сейчас-курсорКогда<(касание?2600:3500),tx,ty,макс,тяга;
+  if(курсор){орбита+=dt*1.15;var Rr=Math.min(W,H)*.16+60;tx=курсорX+Math.cos(орбита)*Rr;ty=курсорY+Math.sin(орбита)*Rr*.7;макс=Math.max(520,W*.6);тяга=4}
+  else{var p=путь(t*.85);tx=p[0];ty=p[1];макс=Math.max(120,Math.min(200,W*.15));тяга=1.8;
+    замерЧерез-=dt;if(замерЧерез<=0&&замер<=0&&x>W*.2&&x<W*.8&&y>H*.2&&y<H*.8){замер=2.8;замерЧерез=10+Math.random()*6}}
+  if(замер>0&&!курсор){замер-=dt;tx=x+Math.cos(курс)*4;ty=y+Math.sin(курс)*4}
+  if(рывок>0){рывок-=dt;vx*=1-dt*1.1;vy*=1-dt*1.1}
+  else{var dx=tx-x,dy=ty-y,d=Math.hypot(dx,dy)||1,хочет=Math.min(макс,d*тяга),m=Math.min(1,dt*(курсор?3:1.9));vx+=(dx/d*хочет-vx)*m;vy+=(dy/d*хочет-vy)*m}
   x+=vx*dt;y+=vy*dt;
-  var быстрота=Math.hypot(vx,vy);
-  if(Math.abs(vx)>12)взгляд=vx>0?1:-1;
-  if(быстрота>25){
-    показатьПозу(быстрота>260?'raduetsya':'ukazyvaet');
-    шаг+=dt*Math.min(16,4+быстрота/22);
-  }else if(режим==='за курсором'&&d<=24){показатьПозу('privet')}
-  /* походка: подскок на каждом шаге, лёгкое покачивание и наклон по ходу */
-  var ход=Math.min(1,быстрота/80),подскок=-Math.abs(Math.sin(шаг))*(быстрота>260?22:9)*ход;
-  var качка=Math.sin(шаг)*5*ход,наклон=Math.max(-12,Math.min(12,vx/45));
-  var дышит=быстрота<25?Math.sin(сейчас/520)*1.6:0;
-  бот.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0)';
-  тело.style.transform='translateY('+(подскок+дышит).toFixed(1)+'px) rotate('+(качка+наклон).toFixed(2)+'deg) scaleX('+(поза==='ukazyvaet'?взгляд:1)+')';
-  тень.style.transform='scale('+(1+подскок/60).toFixed(3)+')';
-  тень.style.opacity=(1+подскок/50).toFixed(2);
+  var скорость=Math.hypot(vx,vy);
+  /* нос — по ходу; сверху рыбка правильна при любом повороте, переворачивать не нужно */
+  if(скорость>15){var нов=курс+кратчайший(Math.atan2(vy,vx)-курс)*Math.min(1,dt*(курсор||рывок>0?4.5:2.6));угВ=кратчайший(нов-курс)/Math.max(dt,.001);курс=кратчайший(нов)}else угВ*=.9;
+  изгиб+=((скорость>40?угВ/скорость:0)-изгиб)*Math.min(1,dt*5);   // тело дугой по траектории
+  фаза+=dt*Math.min(16,2.4+скорость/30);                            // быстрее плывёт — чаще бьёт хвостом
+  /* след на воде: у носа — бурун, у хвоста — толчки в такт; вода шагает 60 раз в секунду при любой частоте экрана */
+  if(готово){капля(нос[0],нос[1],16,-.45*Math.min(1.4,скорость/220));капля(хвост[0],хвост[1],20,.55*Math.sin(фаза)*Math.min(1.2,.3+скорость/300))}
+  копилка+=dt;var шагов=0;while(копилка>1/60&&шагов<3){водаШаг();копилка-=1/60;шагов++}
+  водаВТекстуру();
+  нарисовать(скорость);
   requestAnimationFrame(кадр);
 }
-function пуск(){if(идёт)return;идёт=true;прежде=performance.now();requestAnimationFrame(кадр)}
+function пуск(){if(идёт||тихо)return;идёт=true;прежде=performance.now();requestAnimationFrame(кадр)}
 function стоп(){идёт=false}
 
-function куда(e){var r=сцена.getBoundingClientRect();курсорX=e.clientX-r.left;курсорY=e.clientY-r.top;курсорКогда=performance.now();режим='за курсором'}
+function куда(e){var r=сцена.getBoundingClientRect();курсорX=e.clientX-r.left;курсорY=e.clientY-r.top;курсорКогда=performance.now()}
 сцена.addEventListener('pointermove',function(e){if(e.pointerType==='mouse'||e.pointerType==='pen'){касание=false;куда(e)}});
-/* на телефоне — по касанию; прокрутку не трогаем */
-сцена.addEventListener('pointerdown',function(e){if(e.pointerType==='touch'){касание=true;куда(e)}},{passive:true});
-сцена.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse')курсорКогда=0});
-addEventListener('resize',function(){мерить();x=Math.min(x,W-bw);y=Math.min(y,H-bh);новаяЦель()});
+сцена.addEventListener('pointerdown',function(e){
+  var r=сцена.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top;
+  капля(px,py,26,3.2);                            // круги по воде от нажатия
+  /* нажали по рыбке — пугается и уходит рывком */
+  if(готово&&Math.hypot(px-x,py-y)<Math.max(70,240*М)){var a=Math.atan2(y-py,x-px)+(Math.random()-.5)*.8;vx=Math.cos(a)*880;vy=Math.sin(a)*880;рывок=.9;курсорКогда=-1e9;return}
+  if(e.pointerType==='touch'){касание=true;куда(e)}
+},{passive:true});
+сцена.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse')курсорКогда=-1e9});
+addEventListener('resize',function(){мерить();if(тихо){x=W*.68;y=H*.55;нарисовать(0)}});
 
+мерить();
+x=W+180;y=H*.45;                                  // вплывает из-за правого края
+if(тихо){x=W*.68;y=H*.55;курс=-.35}               // без движения: пруд и рыбка замерли
+/* скелет, картинка и шрифт грузятся вместе; что-то не пришло — без рыбки, надпись на месте */
+var ждём=2;
+function пришло(){if(--ждём===0)try{собрать();if(тихо)нарисовать(0)}catch(e){}}
+fetch(холст.dataset.src.replace(/\.webp$/,'.json')).then(function(r){return r.json()}).then(function(j){скелет=j;пришло()}).catch(function(){});
+рис=new Image();рис.onload=пришло;рис.src=холст.dataset.src;
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(function(){
+  надписьГотова=true;нарисоватьНадпись();if(тихо)нарисовать(0);
+});
+if(тихо)return;
 /* Не тратим батарею, когда первый экран прокручен или вкладка скрыта */
 var виден=true;
 if('IntersectionObserver' in window){new IntersectionObserver(function(es){виден=es[0].isIntersecting;виден&&!document.hidden?пуск():стоп()}).observe(сцена)}
