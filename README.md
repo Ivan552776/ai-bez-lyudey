@@ -9,5 +9,8 @@ DeepSeek, Perplexity, ChatGPT, Claude, Gemini и Gemini Notebook. В каждо�
 — по три первых урока каждого курса. Страницы собирает `editorial/2026-10-01-stranicy/sobrat.py`
 в закрытой мастерской.
 
+**Сайт канала и статьи о нейросетях:** [ivan552776.github.io/ai-bez-lyudey/kursy/](https://ivan552776.github.io/ai-bez-lyudey/kursy/)
+и [/stati/](https://ivan552776.github.io/ai-bez-lyudey/stati/) — собирает `_stati/sobrat.py` здесь же, см. `_stati/README.md`.
+
 Открывается внутри Telegram через бота [@ai_bez_lyudey_bot](https://t.me/ai_bez_lyudey_bot).
 Одна страница без сборки и зависимостей; облик и правила — в `DESIGN.md` (раздел «Газета»).

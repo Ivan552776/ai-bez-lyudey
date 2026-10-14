@@ -13,6 +13,8 @@ import os from 'node:os';
 import path from 'node:path';
 
 const САЙТ = 'https://ivan552776.github.io';
+// Отдельная база публичных страниц позволяет проверить ветку до выкладки.
+const СТРАНИЦЫ = process.env.SITE_URL || САЙТ;
 const ПРИЛОЖЕНИЕ = process.env.APP_URL || САЙТ + '/ai-bez-lyudey/';   // APP_URL — только для проверки самой проверки
 const СЕРВЕР = 'https://abstract-tolerant-ember.ruweb.place';
 const CHROME = process.env.CHROME || '/usr/bin/google-chrome';
@@ -151,11 +153,12 @@ try {
 
 // ---------- 7. открытые страницы сайта ----------
 const страницы = ['/', '/ai-bez-lyudey/uroki/', '/ai-bez-lyudey/neyroseti/', '/ai-bez-lyudey/sitemap.xml',
+  '/ai-bez-lyudey/kursy/', '/ai-bez-lyudey/stati/', '/ai-bez-lyudey/sitemap-sayt.xml',
   '/robots.txt', '/yandex_88c739c6c4c16d75.html', '/google14408fe3eb5d61da.html'];
 let открылось = 0;
 for (const п of страницы) {
   try {
-    const r = await fetch(САЙТ + п, { signal: AbortSignal.timeout(15000) });
+    const r = await fetch(СТРАНИЦЫ + п, { signal: AbortSignal.timeout(15000) });
     if (r.ok) открылось++;
     else беда('Сайт', `${п} отвечает ${r.status}`);
   } catch (e) { беда('Сайт', `${п} не открылся: ${e.message}`); }
@@ -165,7 +168,7 @@ for (const п of страницы) {
 // ---------- 8. пример из урока-проекта (02.10): наш метроном — ответ Qwen без правок ----------
 // Ссылка Qwen «Развернуть» на телефоне закрыта плашкой «Go to Qwen» — поэтому пример живёт у нас.
 try {
-  const r = await fetch(САЙТ + '/ai-bez-lyudey/proekty/metronom/', { signal: AbortSignal.timeout(15000) });
+  const r = await fetch(СТРАНИЦЫ + '/ai-bez-lyudey/proekty/metronom/', { signal: AbortSignal.timeout(15000) });
   const t = await r.text();
   if (r.ok && t.includes('Метроном') && t.includes('AudioContext')) итог.push('пример метронома на месте');
   else беда('Проекты', `пример метронома отвечает ${r.status} или пуст`);
