@@ -6,7 +6,8 @@
 <title>Нейросеть для учёбы: реферат, доклад, подготовка к контрольной</title>
 <meta name="description" content="Как учиться с нейросетью честно и без ошибок: разобраться в теме, собрать список литературы без выдуманных книг, сделать таблицу для доклада и тест к контрольной.">
 <link rel="canonical" href="https://ivan552776.github.io/ai-bez-lyudey/stati/neyroset-dlya-ucheby/">
-<meta name="theme-color" content="#FBFAF8">
+<meta name="theme-color" content="#FBFAF8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161819" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/png" sizes="120x120" href="../../stati/favicon.png">
 <link rel="apple-touch-icon" href="../../stati/favicon.png">
 <meta property="og:type" content="article">
@@ -76,7 +77,7 @@ svg{flex:none}
 .hero-text{grid-area:text}
 .hero-bot{grid-area:bot;align-self:center;justify-self:center;width:200px;height:auto;filter:drop-shadow(0 18px 22px rgba(14,36,32,.13))}
 .crumbs{font-size:15px;color:var(--soft);margin:0;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
-.crumbs a{color:var(--soft);min-height:32px;display:inline-flex;align-items:center}
+.crumbs a{color:var(--soft);min-height:44px;display:inline-flex;align-items:center}
 h1{font-size:clamp(31px,5vw,50px);line-height:1.08;letter-spacing:-.025em;margin:10px 0 16px;text-wrap:balance;font-weight:700}
 .lead{font-size:clamp(18px,2.1vw,21px);line-height:1.5;color:var(--ink2);margin:0 0 16px;max-width:700px}
 .meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:14px;color:var(--soft);margin:0}
@@ -272,6 +273,49 @@ h1{font-size:clamp(31px,5vw,50px);line-height:1.08;letter-spacing:-.025em;margin
 .ai .btns .btn{min-height:46px;padding:0 18px;font-size:15px}
 .ai-u{display:inline-flex;align-items:center;min-height:46px;font-weight:600;text-decoration:none;padding:0 4px}
 .tip{font-size:14px;color:var(--soft)}
+
+/* Общие переходы остаются обычными ссылками и работают без JavaScript. */
+:root{color-scheme:light;--motion:cubic-bezier(.22,1,.36,1)}
+::selection{background:var(--mint);color:var(--obs)}
+.btn,.tg,.copy,.f{transition:transform 140ms var(--motion),background-color 160ms ease,color 160ms ease}
+.btn:active,.tg:active,.copy:active,.f:active{transform:scale(.98)}
+.urok-t{min-height:44px;display:flex;align-items:center}
+.toc a{min-height:44px;display:flex;align-items:center}
+.faq .otv>a{display:inline-flex;align-items:center;min-height:44px}
+.zapros figcaption{flex-wrap:wrap}.zapros .copy{flex-shrink:0}
+.wrap,.site-in{padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
+.ft-in{padding-bottom:max(40px,env(safe-area-inset-bottom))}
+@media(max-width:900px){
+ .site-in{height:auto;min-height:64px;flex-wrap:wrap;gap:0 12px;padding-top:10px}
+ .nav{display:flex;order:3;width:100%;margin:4px -8px 0;overflow-x:auto;scrollbar-width:none;flex:none}
+ .nav a{flex:none;padding:0 10px;font-size:14px}.nav::-webkit-scrollbar{display:none}
+ html{scroll-padding-top:128px}.slovar dt,.ai{scroll-margin-top:128px}
+}
+@media(hover:none){.card:hover,.card:hover img{transform:none}.card:hover{box-shadow:none}}
+@media(prefers-color-scheme:dark){
+ :root{color-scheme:dark;--bg:#161819;--paper:#202324;--card:#292D2E;--ink:#F3F4F2;--ink2:#D9DEDB;--soft:#B5BDB8;--line:#414846;--acc:#8CE0B8;--acc-d:#A5EACA;--acc-s:#203F33;--amb-s:#3E3020;--amb-t:#F3C384}
+ .site{background:rgba(22,24,25,.94)}
+ .btn,.tg,.f[aria-pressed="true"]{background:var(--mint);color:var(--obs)}
+ .btn:hover,.tg:hover{background:#fff;color:var(--obs)}
+ .btn.line{background:transparent;color:var(--ink)}.btn.line:hover{background:var(--mint);color:var(--obs)}
+ .chip{color:#08563E}.cards.big .card{color:#0E2420}.cards.big .card .chip{color:#08563E}
+ .app{color:#0E2420}.skip:focus{background:var(--paper)}
+}
+@view-transition{navigation:auto}
+@media(prefers-reduced-motion:no-preference){
+ ::view-transition-group(root){animation-duration:180ms;animation-timing-function:var(--motion)}
+ ::view-transition-old(root){animation:180ms ease-out both page-out}
+ ::view-transition-new(root){animation:180ms var(--motion) both page-in}
+ @keyframes page-out{to{opacity:0}}
+ @keyframes page-in{from{opacity:0;transform:translateY(6px)}}
+}
+@media(prefers-reduced-motion:reduce){
+ .btn:active,.tg:active,.copy:active,.f:active{transform:none}
+ ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}
+}
+
+.body p a,.body li>a{display:inline-flex;align-items:center;min-height:44px;min-width:44px;vertical-align:baseline}
+@media(prefers-color-scheme:dark){.tri .num,.bukvy a:hover{color:var(--obs)}.app .btn{background:var(--obs);color:var(--mint)}}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Нейросеть для учёбы: реферат, доклад и контрольная без выдуманных фактов", "description": "Как учиться с нейросетью честно и без ошибок: разобраться в теме, собрать список литературы без выдуманных книг, сделать таблицу для доклада и тест к контрольной.", "inLanguage": "ru", "datePublished": "2026-10-09", "dateModified": "2026-10-09", "url": "https://ivan552776.github.io/ai-bez-lyudey/stati/neyroset-dlya-ucheby/", "mainEntityOfPage": "https://ivan552776.github.io/ai-bez-lyudey/stati/neyroset-dlya-ucheby/", "image": "https://ivan552776.github.io/ai-bez-lyudey/stati/og/neyroset-dlya-ucheby.jpg", "wordCount": 853, "author": {"@type": "Organization", "name": "ИИ без людей", "url": "https://t.me/ai_bez_lyudey"}, "publisher": {"@type": "Organization", "name": "ИИ без людей", "url": "https://t.me/ai_bez_lyudey", "logo": {"@type": "ImageObject", "url": "https://ivan552776.github.io/ai-bez-lyudey/stati/logo.png"}}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Статьи о нейросетях", "item": "https://ivan552776.github.io/ai-bez-lyudey/stati/"}, {"@type": "ListItem", "position": 2, "name": "Нейросеть для учёбы: реферат, доклад и контрольная без выдуманных фактов", "item": "https://ivan552776.github.io/ai-bez-lyudey/stati/neyroset-dlya-ucheby/"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Какая нейросеть лучше для учёбы?", "acceptedAnswer": {"@type": "Answer", "text": "Для объяснений — GigaChat, Алиса AI, DeepSeek. Для списка литературы и свежих фактов со ссылками — Perplexity и Алиса AI. Для доклада по своему материалу — Gemini Notebook."}}, {"@type": "Question", "name": "Учитель поймёт, что работу писала нейросеть?", "acceptedAnswer": {"@type": "Answer", "text": "Выдуманные книги и числа, которых нет в учебнике, выдают её быстрее всего. Поэтому используй нейросеть, чтобы разобраться, и проверяй каждый источник. Отвечать на вопросы по работе всё равно тебе."}}, {"@type": "Question", "name": "Можно ли решать задачи с нейросетью?", "acceptedAnswer": {"@type": "Answer", "text": "Можно — проси решение по шагам и проверку каждого условия в конце. Нейросети ошибаются в арифметике, поэтому ответ пересчитай сам. Как помочь с задачами ребёнку — в статье про домашнее задание."}}]}]}</script>
 </head><body class="pg-art"><div class="prog" aria-hidden="true"><i></i></div><a class="skip" href="#glavnoe">К тексту</a><header class="site"><div class="site-in"><a class="brand" href="../../kursy/"><span class="mk">ии</span>ИИ без людей</a><nav class="nav" aria-label="Разделы"><a href="../../kursy/">О курсах</a><a href="../../stati/" aria-current="page">Статьи</a><a href="../../uroki/">Бесплатные уроки</a><a href="../../neyroseti/">Нейросети в России</a></nav><a class="tg" href="https://t.me/ai_bez_lyudey"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg><span>Канал</span></a></div></header><main id="glavnoe"><div class="wrap"><div class="hero"><div class="hero-top"><p class="crumbs"><a href="../../stati/">Статьи</a><span aria-hidden="true">/</span><a href="../../stati/#r-ucheba">Учёба и дети</a></p></div><img class="hero-bot" src="../../assets/robot/chitaet.webp" width="320" height="400" alt="" fetchpriority="high"><div class="hero-text"><h1>Нейросеть для учёбы: реферат, доклад и контрольная без выдуманных фактов</h1><p class="lead">Нейросеть объяснит тему простыми словами, соберёт список литературы и сделает тест для самопроверки. Но именно в учёбе она чаще всего выдумывает: книги, которых нет, и числа, которых нет в учебнике. Показываем, как пользоваться ею так, чтобы учитель не нашёл ни одной ошибки.</p><p class="meta"><span>Обновлено <time datetime="2026-10-09">9 октября 2026</time></span><span>6 минут чтения</span></p></div></div><div class="layout"><article class="body"><details class="toc-m"><summary>Содержание</summary><ol><li><a href="#kak-uchitsya-s-neyrosetyu-a-ne-vmesto-sebya">Как учиться с нейросетью, а не вместо себя</a></li><li><a href="#razobratsya-v-slozhnoy-teme">Разобраться в сложной теме</a></li><li><a href="#spisok-literatury-samoe-opasnoe-mesto">Список литературы: самое опасное место</a></li><li><a href="#doklad-po-svoemu-uchebniku">Доклад по своему учебнику</a></li><li><a href="#podgotovitsya-k-kontrolnoy-ili-ekzamenu">Подготовиться к контрольной или экзамену</a></li><li><a href="#proverit-svoe-sochinenie-ili-referat">Проверить своё сочинение или реферат</a></li><li><a href="#chastye-voprosy">Частые вопросы</a></li></ol></details><h2 id="kak-uchitsya-s-neyrosetyu-a-ne-vmesto-sebya">Как учиться с нейросетью, а не вместо себя</h2>
@@ -312,6 +356,17 @@ h1{font-size:clamp(31px,5vw,50px);line-height:1.08;letter-spacing:-.025em;margin
 <figure class="zapros"><figcaption><span>Замечания к тексту</span><button type="button" class="copy" data-copy>Копировать</button></figcaption><pre>Прочитай мой текст и дай замечания списком: где мысль непонятна, где повторы, где нет доказательства. Сам текст не переписывай — я исправлю. Текст: <span class="ph">[текст]</span></pre></figure>
 
 <section class="faq"><h2 id="chastye-voprosy">Частые вопросы</h2><details><summary>Какая нейросеть лучше для учёбы?</summary><div class="otv"><p>Для объяснений — GigaChat, Алиса AI, DeepSeek. Для списка литературы и свежих фактов со ссылками — Perplexity и Алиса AI. Для доклада по своему материалу — Gemini Notebook.</p></div></details><details><summary>Учитель поймёт, что работу писала нейросеть?</summary><div class="otv"><p>Выдуманные книги и числа, которых нет в учебнике, выдают её быстрее всего. Поэтому используй нейросеть, чтобы разобраться, и проверяй каждый источник. Отвечать на вопросы по работе всё равно тебе.</p></div></details><details><summary>Можно ли решать задачи с нейросетью?</summary><div class="otv"><p>Можно — проси решение по шагам и проверку каждого условия в конце. Нейросети ошибаются в арифметике, поэтому ответ пересчитай сам. Как помочь с задачами ребёнку — в статье про домашнее задание.</p></div></details></section><section class="app"><img src="../../assets/robot/privet.webp" width="320" height="397" alt="" loading="lazy"><div><h2>Учись на живых задачах</h2><p>9 курсов по 8 уроков в приложении в Telegram: GigaChat, Алиса и Шедеврум, DeepSeek, Qwen, Perplexity и другие. В каждом уроке — задача, готовый запрос и проверка ответа. Первые 3 урока каждого курса бесплатны.</p><div class="btns"><a class="btn" href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=src_site__s-ucheba"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg>Открыть в Telegram</a><a class="btn line" href="../../uroki/">Бесплатные уроки</a></div></div></section></article><aside class="side"><div class="side-in"><nav class="toc" aria-label="Содержание"><b>Содержание</b><ol><li><a href="#kak-uchitsya-s-neyrosetyu-a-ne-vmesto-sebya">Как учиться с нейросетью, а не вместо себя</a></li><li><a href="#razobratsya-v-slozhnoy-teme">Разобраться в сложной теме</a></li><li><a href="#spisok-literatury-samoe-opasnoe-mesto">Список литературы: самое опасное место</a></li><li><a href="#doklad-po-svoemu-uchebniku">Доклад по своему учебнику</a></li><li><a href="#podgotovitsya-k-kontrolnoy-ili-ekzamenu">Подготовиться к контрольной или экзамену</a></li><li><a href="#proverit-svoe-sochinenie-ili-referat">Проверить своё сочинение или реферат</a></li><li><a href="#chastye-voprosy">Частые вопросы</a></li></ol></nav><div class="side-cta"><b>Канал «ИИ без людей»</b><p>Готовые запросы и короткие гайды — каждый день.</p><a class="btn mint" href="https://t.me/ai_bez_lyudey"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.5c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4-1.5-4.8 10.6-6.7-8.7 7.5Z"/></svg>Подписаться</a></div></div></aside></div><section class="more"><h2>Читать дальше</h2><div class="cards"><a class="card" href="../../stati/domashka-s-neyrosetyu/" data-r="ucheba"><span class="chip">Учёба и дети</span><h3>Домашнее задание с нейросетью: объяснить ребёнку, а не решить за него</h3><p>Объяснить тему, придумать задачки, собрать тренажёр и викторину — и проверить их до ребёнка.</p><span class="min">6 минут чтения</span><img src="../../assets/robot/kartochki.webp" width="320" height="400" alt="" loading="lazy"></a><a class="card" href="../../stati/prezentaciya-s-neyrosetyu/" data-r="ucheba"><span class="chip">Учёба и дети</span><h3>Как сделать презентацию с помощью нейросети</h3><p>План слайдов, тексты, речь и картинки — и проверка, чтобы на экране не было опечаток и чужих чисел.</p><span class="min">5 минут чтения</span><img src="../../assets/robot/ukazyvaet.webp" width="320" height="400" alt="" loading="lazy"></a><a class="card" href="../../stati/chto-takoe-neyroset/" data-r="nachalo"><span class="chip">С чего начать</span><h3>Что такое нейросеть — простыми словами</h3><p>Как она устроена, чем отличается от поисковика, что умеет и где уверенно ошибается.</p><span class="min">7 минут чтения</span><img src="../../assets/robot/dumaet.webp" width="320" height="400" alt="" loading="lazy"></a></div></section></div></main><footer class="ft"><div class="wrap ft-in"><div class="ft-about"><a class="brand" href="../../kursy/"><span class="mk">ии</span>ИИ без людей</a><p>Нейросети для тех, кто только начинает. Материалы собирает нейросеть. Людей в редакции нет.</p></div><nav aria-label="Сайт"><b>Сайт</b><a href="../../kursy/">Курсы по нейросетям</a><a href="../../stati/">Статьи о нейросетях</a><a href="../../uroki/">Бесплатные уроки</a><a href="../../neyroseti/">Нейросети в России без VPN</a><a href="../../neyroseti/gotovye-zaprosy/">Готовые запросы</a><a href="../../stati/slovar-neyrosetey/">Словарь нейросетей</a></nav><nav aria-label="Telegram"><b>Telegram</b><a href="https://t.me/ai_bez_lyudey">Канал «ИИ без людей»</a><a href="https://t.me/ai_bez_lyudey_bot/kurs?startapp=src_site__s-ucheba">Приложение с курсами</a></nav></div></footer><script>(function(){
+/* Быстрый возврат и переход к старой странице могут отменить снимок перехода.
+   Это штатный возврат к обычной ссылке, не ошибка страницы. */
+['pageswap','pagereveal'].forEach(function(name){addEventListener(name,function(e){
+  if(e.viewTransition){
+    e.viewTransition.ready.catch(function(){});e.viewTransition.finished.catch(function(){});
+    // У страниц уроков другой шаблон без переходов: покидаем их обычной ссылкой.
+    var next=e.activation&&e.activation.entry&&e.activation.entry.url;
+    if(name==='pageswap'&&next&&!/\/(kursy|stati)\//.test(new URL(next).pathname))e.viewTransition.skipTransition();
+  }
+})});
+
 /* Копирование запроса. В вебвью буфер обмена бывает закрыт — тогда выделяем текст,
    чтобы человек скопировал сам, а не остался с пустыми руками. */
 document.addEventListener('click',function(e){

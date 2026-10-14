@@ -1,4 +1,15 @@
 (function(){
+/* Быстрый возврат и переход к старой странице могут отменить снимок перехода.
+   Это штатный возврат к обычной ссылке, не ошибка страницы. */
+['pageswap','pagereveal'].forEach(function(name){addEventListener(name,function(e){
+  if(e.viewTransition){
+    e.viewTransition.ready.catch(function(){});e.viewTransition.finished.catch(function(){});
+    // У страниц уроков другой шаблон без переходов: покидаем их обычной ссылкой.
+    var next=e.activation&&e.activation.entry&&e.activation.entry.url;
+    if(name==='pageswap'&&next&&!/\/(kursy|stati)\//.test(new URL(next).pathname))e.viewTransition.skipTransition();
+  }
+})});
+
 /* Копирование запроса. В вебвью буфер обмена бывает закрыт — тогда выделяем текст,
    чтобы человек скопировал сам, а не остался с пустыми руками. */
 document.addEventListener('click',function(e){

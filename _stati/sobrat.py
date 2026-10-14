@@ -7,7 +7,7 @@
 разметка для поиска (Article, BreadcrumbList, FAQPage), оглавление, ссылки
 в канал и в приложение с меткой источника.
 
-Пишет: stati/index.html, stati/<slug>/index.html, stati/sitemap.xml
+Пишет: kursy/index.html, stati/index.html, stati/<slug>/index.html, sitemap-sayt.xml
 и _stati/oblozhki.json — список для картинок-превью (oblozhki.mjs).
 
 Папка начинается с «_», поэтому GitHub Pages её не публикует.
@@ -427,7 +427,8 @@ def голова(d, title, description, путь, og_img, тип='article', ld=N
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(description)}">
 <link rel="canonical" href="{url}">
-<meta name="theme-color" content="#FBFAF8">
+<meta name="theme-color" content="#FBFAF8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161819" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/png" sizes="120x120" href="{d}stati/favicon.png">
 <link rel="apple-touch-icon" href="{d}stati/favicon.png">
 <meta property="og:type" content="{тип}">
@@ -647,7 +648,7 @@ def главная(статьи, данные):
 ЛЕНДИНГ_CSS = (Path(__file__).resolve().parent / 'lending.css').read_text(encoding='utf-8')
 # Рыбка первого экрана: вырезанная картинка и её скелет (_stati/ryba_podgotovka.py пишет оба).
 # Рядом обязателен ISTOCHNIK.md: откуда картинка и по какой лицензии (без него сборка не пройдёт).
-РЫБКА = 'assets/ryba/koi.webp'
+РЫБКА = 'assets/ryba/koi-v2.webp'
 ЛЕНДИНГ_JS = (Path(__file__).resolve().parent / 'lending.js').read_text(encoding='utf-8')
 
 
@@ -714,9 +715,10 @@ def лендинг(статьи, данные):
         print(f'  рыбки пока нет ({РЫБКА}) — первый экран без неё')
         холст_рыбки = ''
 
-    стр = (голова(d, title, description, путь, 'stati/og/kursy.jpg', 'website', ld, ЛЕНДИНГ_CSS)
+    стр = (голова(d, title, description, путь, 'stati/og/kursy-prud-v2.jpg', 'website', ld, ЛЕНДИНГ_CSS)
            + '<body class="pg-land">' + шапка(d, 'kursy') + '<main id="glavnoe">'
            + '<section class="scena">' + холст_рыбки
+           + '<button class="pond-pause" type="button" data-pond-pause aria-pressed="false" hidden>Остановить пруд</button>'
            + '<div class="scena-in"><h1><span class="giant"><span>ИИ без</span> <span>людей</span></span>'
            + '<span class="sub">Курсы по нейросетям с нуля — прямо в Telegram</span></h1>'
            + '<p class="pod">Живая задача, готовый запрос и проверка ответа. Ведёт нейросеть — людей в редакции нет.</p>'

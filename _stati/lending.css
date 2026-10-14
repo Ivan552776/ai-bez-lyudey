@@ -1,7 +1,7 @@
 /* первый экран: пруд — огромное название канала под водой, над ним плавает карп кои (lending.js) */
-.scena{position:relative;margin:8px 12px 0;border-radius:34px;background:var(--acc);color:#fff;overflow:hidden;min-height:min(780px,calc(100svh - 84px));display:flex;flex-direction:column;justify-content:center;isolation:isolate;touch-action:pan-y}
+.scena{position:relative;margin:8px 12px 0;border-radius:34px;background:#0B6E4F;color:#fff;overflow:hidden;min-height:min(780px,calc(100svh - 84px));display:flex;flex-direction:column;justify-content:center;isolation:isolate;touch-action:pan-y}
 .scena::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(1100px 620px at 85% -10%,rgba(127,224,180,.32),transparent 60%),radial-gradient(900px 520px at -5% 110%,rgba(8,40,30,.55),transparent 60%)}
-.scena-in{position:relative;z-index:1;padding:56px 16px 44px;text-align:center}
+.scena-in{position:relative;padding:56px 16px 44px;text-align:center}
 .scena h1{margin:0;font-weight:700;letter-spacing:0;line-height:1}
 /* надпись почти во всю ширину — как в образце */
 .giant{display:block;font-size:clamp(72px,19.5vw,300px);line-height:1.02;letter-spacing:-.055em;text-transform:uppercase;color:#FBFAF8;text-shadow:0 10px 30px rgba(6,40,28,.25)}
@@ -63,3 +63,12 @@
 .cena.glav .btn{background:var(--mint);color:var(--obs)}
 @media(max-width:760px){.ceny{grid-template-columns:1fr}.cena .btn{align-self:stretch}}
 .l-faq{max-width:820px}
+
+/* Рыбка плывёт над названием; объяснение и кнопки остаются читаемыми. */
+.scena .sub,.scena .pod,.scena .btns{position:relative;z-index:3}
+.pond-pause{position:absolute;right:16px;top:14px;z-index:4;min-height:44px;min-width:44px;padding:0 14px;border:1px solid rgba(255,255,255,.45);border-radius:14px;background:#08563E;color:#fff;font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer}
+.pond-pause[hidden]{display:none}.pond-pause:disabled{cursor:default}
+@media(max-width:620px){.scena-in{padding-top:68px}.scena{min-height:calc(100svh - 124px)}}
+@media(hover:none){.kurs-l:hover{transform:none}}
+/* Ни рыбка, ни солнечный блик не снижают контраст пояснения под названием. */
+.scena .sub::before{content:'';position:absolute;z-index:-1;inset:-28px -80px -500px;pointer-events:none;background:linear-gradient(transparent,#0B6E4F 28px,#0B6E4F)}

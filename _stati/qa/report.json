@@ -1,0 +1,433 @@
+{
+  "layouts": [
+    {
+      "route": "kursy/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/analogi-chatgpt/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/chto-nelzya-rasskazyvat-neyroseti/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/chto-takoe-neyroset/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/domashka-s-neyrosetyu/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/kak-polzovatsya-neyrosetyu/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/neyroset-dlya-raboty/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/neyroset-dlya-teksta/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/neyroset-dlya-ucheby/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/pozdravlenie-neyrosetyu/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/prezentaciya-s-neyrosetyu/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/rezyume-s-neyrosetyu/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "stati/slovar-neyrosetey/",
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "route": "kursy/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/analogi-chatgpt/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/chto-nelzya-rasskazyvat-neyroseti/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/chto-takoe-neyroset/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/domashka-s-neyrosetyu/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/kak-polzovatsya-neyrosetyu/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/neyroset-dlya-raboty/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/neyroset-dlya-teksta/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/neyroset-dlya-ucheby/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/pozdravlenie-neyrosetyu/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/prezentaciya-s-neyrosetyu/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/rezyume-s-neyrosetyu/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "stati/slovar-neyrosetey/",
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "route": "kursy/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/analogi-chatgpt/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/chto-nelzya-rasskazyvat-neyroseti/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/chto-takoe-neyroset/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/domashka-s-neyrosetyu/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/kak-polzovatsya-neyrosetyu/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/neyroset-dlya-raboty/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/neyroset-dlya-teksta/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/neyroset-dlya-ucheby/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/pozdravlenie-neyrosetyu/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/prezentaciya-s-neyrosetyu/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/rezyume-s-neyrosetyu/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "stati/slovar-neyrosetey/",
+      "width": 430,
+      "theme": "light"
+    },
+    {
+      "route": "kursy/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/analogi-chatgpt/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/chto-nelzya-rasskazyvat-neyroseti/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/chto-takoe-neyroset/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/domashka-s-neyrosetyu/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/kak-polzovatsya-neyrosetyu/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/neyroset-dlya-raboty/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/neyroset-dlya-teksta/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/neyroset-dlya-ucheby/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/pozdravlenie-neyrosetyu/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/prezentaciya-s-neyrosetyu/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/rezyume-s-neyrosetyu/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/slovar-neyrosetey/",
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "route": "kursy/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/analogi-chatgpt/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/chto-nelzya-rasskazyvat-neyroseti/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/chto-takoe-neyroset/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/domashka-s-neyrosetyu/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/kak-polzovatsya-neyrosetyu/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/neyroset-dlya-raboty/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/neyroset-dlya-teksta/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/neyroset-dlya-ucheby/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/pozdravlenie-neyrosetyu/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/prezentaciya-s-neyrosetyu/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/rezyume-s-neyrosetyu/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/slovar-neyrosetey/",
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "route": "kursy/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/analogi-chatgpt/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/chto-nelzya-rasskazyvat-neyroseti/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/chto-takoe-neyroset/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/domashka-s-neyrosetyu/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/kak-polzovatsya-neyrosetyu/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/neyroset-dlya-raboty/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/neyroset-dlya-teksta/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/neyroset-dlya-ucheby/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/pozdravlenie-neyrosetyu/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/prezentaciya-s-neyrosetyu/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/rezyume-s-neyrosetyu/",
+      "width": 430,
+      "theme": "dark"
+    },
+    {
+      "route": "stati/slovar-neyrosetey/",
+      "width": 430,
+      "theme": "dark"
+    }
+  ],
+  "checks": [
+    "14 страниц × 3 ширины × 2 темы: переполнение и кнопки",
+    "Пруд: движение, пауза, прокрутка, изменение reduced-motion без перезагрузки",
+    "Курс → урок → назад; статьи → рубрика → статья → оглавление; копирование и отказ буфера",
+    "FAQ; потеря WebGL возвращает заголовок и обычные ссылки",
+    "Без JavaScript: заголовок, курсы и переход к уроку доступны"
+  ],
+  "errors": [],
+  "passed": true
+}

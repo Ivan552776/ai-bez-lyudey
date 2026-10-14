@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-"""Рыбка первого экрана: из присланной картинки — вырезанная рыбка и её «скелет» (09.10.2026).
+"""Рыбка первого экрана: собственная генерация и её «скелет» (14.10.2026).
 
-Исходник — _stati/ryba/iskhodnik.webp: карп кои сверху, «шахматка» прозрачности
-нарисована прямо на картинке (так отдают сайты-сборники PNG). Скрипт:
-  1. вырезает фон: клетки шахматки серые без оттенка, а белое у рыбки кремовое —
-     заливаем от краёв картинки только по бесцветным светлым точкам;
+Исходник — _stati/ryba/koi-generated-v2.png: карп кои сверху с настоящей
+прозрачностью; происхождение и запрос — assets/ryba/ISTOCHNIK.md. Скрипт:
+  1. сохраняет исходную прозрачность, включая тонкие полупрозрачные плавники;
   2. по хребту (точки ниже, размечены руками от носа к кончику хвоста) строит
      сетку: в каждой точке хребта — насколько рыбка с плавниками простирается
-     влево и вправо. Идём от хребта наружу до первой прозрачной щели: так внутрь
-     изгиба не попадает лопасть хвоста, что лежит рядом с телом;
-  3. пишет assets/ryba/koi.webp (обрезанная, с прозрачностью) и assets/ryba/koi.json —
+     влево и вправо. У почти прямой рыбки берём весь поперечник: щель в
+     раздвоенном хвосте не должна отсечь его вторую лопасть;
+  3. пишет assets/ryba/koi-v2.webp (обрезанная, с прозрачностью) и koi-v2.json —
      сетку для lending.js, который гнёт рыбку волной.
 Запуск: python3 _stati/ryba_podgotovka.py [--proverka путь.png] — картинка с сеткой для глаза.
 """
@@ -19,44 +18,26 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw
 
 КОРЕНЬ = Path(__file__).resolve().parent.parent
-ИСХОДНИК = КОРЕНЬ / '_stati' / 'ryba' / 'iskhodnik.webp'
+ИСХОДНИК = КОРЕНЬ / '_stati' / 'ryba' / 'koi-generated-v2.png'
 КУДА = КОРЕНЬ / 'assets' / 'ryba'
 
-# хребет от кончика носа к кончику хвоста, точки исходной картинки 920×990
-ХРЕБЕТ = [(880, 772), (800, 745), (700, 702), (600, 662), (500, 618), (400, 572), (310, 522),
-          (232, 466), (168, 402), (128, 332), (116, 272), (124, 226), (165, 190), (225, 162),
-          (295, 138), (365, 112), (420, 92)]
+# Хребет исходника 1024×1536. Последняя точка — между лопастями хвоста:
+# прозрачный просвет остаётся в текстуре, обе лопасти входят в сетку.
+ХРЕБЕТ = [(512, 17), (512, 220), (512, 420), (512, 620), (512, 820),
+          (512, 1020), (512, 1220), (512, 1410), (512, 1518)]
 ТОЧЕК = 44            # столько поперечных рядов сетки
-ЩЕЛЬ = 7              # столько прозрачных точек подряд — уже не рыбка, а просвет
-ДАЛЬШЕ = 300          # дальше от хребта не ищем
 ЗАПАС = 5             # к краю сетки — немного прозрачного запаса, чтобы не резать сглаживание
 
 
-def вырезать(im):
-    a = np.asarray(im.convert('RGB'), dtype=np.int16)
-    разброс = a.max(axis=2) - a.min(axis=2)
-    клетка = (разброс <= 10) & (a.min(axis=2) >= 212)
-    # .copy(): картинка из numpy только для чтения, заливка в неё молча не пишет
-    маска = Image.fromarray((клетка * 255).astype(np.uint8)).copy()
-    h, w = клетка.shape
-    for x in range(w):
-        for y in (0, h - 1):
-            if маска.getpixel((x, y)) == 255:
-                ImageDraw.floodfill(маска, (x, y), 128)
-    for y in range(h):
-        for x in (0, w - 1):
-            if маска.getpixel((x, y)) == 255:
-                ImageDraw.floodfill(маска, (x, y), 128)
-    фон = np.asarray(маска) == 128
-    альфа = Image.fromarray(((~фон) * 255).astype(np.uint8))
-    # край: на 1 точку внутрь (там светлая кайма от сжатия) и мягкое сглаживание
-    альфа = альфа.filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(.8))
-    out = im.convert('RGBA')
-    out.putalpha(альфа)
-    return out
+def подготовить(im):
+    if im.mode != 'RGBA' or im.getchannel('A').getextrema()[0] != 0:
+        raise ValueError('Нужен исходник RGBA с настоящим прозрачным фоном')
+    if im.size != (1024, 1536):
+        raise ValueError('Сменился исходник: сначала разметь ХРЕБЕТ под его размер')
+    return im.copy()
 
 
 def сплайн(точки, n):
@@ -92,15 +73,13 @@ def ширины(альфа, точки):
         n = (-dy / d, dx / d)          # «левая» нормаль
         стороны = []
         for знак in (1, -1):
-            даль, пусто = 0, 0
-            for r in range(1, ДАЛЬШЕ):
+            даль = 0
+            for r in range(1, math.ceil(math.hypot(w, h))):
                 px, py = int(round(x + знак * n[0] * r)), int(round(y + знак * n[1] * r))
-                if not (0 <= px < w and 0 <= py < h) or альфа[py, px] < 20:
-                    пусто += 1
-                    if пусто > ЩЕЛЬ:
-                        break
-                else:
-                    пусто, даль = 0, r
+                if not (0 <= px < w and 0 <= py < h):
+                    break
+                if альфа[py, px] >= 20:
+                    даль = r
             стороны.append(даль)
         res.append(стороны)
     # плавники стоят под углом к поперечнику: соседние ряды подтягиваем друг к другу,
@@ -114,7 +93,7 @@ def ширины(альфа, точки):
 
 def главная():
     im = Image.open(ИСХОДНИК)
-    рыба = вырезать(im)
+    рыба = подготовить(im)
     альфа = np.asarray(рыба.getchannel('A'))
     точки, длина = сплайн(ХРЕБЕТ, ТОЧЕК)
     ш = ширины(альфа, точки)
@@ -132,12 +111,12 @@ def главная():
     x1, y1 = min(рыба.width, int(max(xs)) + 3), min(рыба.height, int(max(ys)) + 3)
     рыба = рыба.crop((x0, y0, x1, y1))
     КУДА.mkdir(parents=True, exist_ok=True)
-    рыба.save(КУДА / 'koi.webp', 'WEBP', quality=90, method=6)
+    рыба.save(КУДА / 'koi-v2.webp', 'WEBP', quality=90, method=6)
     сетка = {'w': рыба.width, 'h': рыба.height, 'dlina': round(длина, 1),
              'hrebet': [[round(x - x0, 1), round(y - y0, 1), round(l, 1), round(r, 1)] for (x, y), (l, r) in zip(точки, ш)]}
-    (КУДА / 'koi.json').write_text(json.dumps(сетка, ensure_ascii=False) + '\n', encoding='utf-8')
-    print(f'assets/ryba/koi.webp  {рыба.width}×{рыба.height}  {(КУДА / "koi.webp").stat().st_size // 1024} КБ')
-    print(f'assets/ryba/koi.json  {ТОЧЕК} рядов, длина хребта {длина:.0f}')
+    (КУДА / 'koi-v2.json').write_text(json.dumps(сетка, ensure_ascii=False) + '\n', encoding='utf-8')
+    print(f'assets/ryba/koi-v2.webp  {рыба.width}×{рыба.height}  {(КУДА / "koi-v2.webp").stat().st_size // 1024} КБ')
+    print(f'assets/ryba/koi-v2.json  {ТОЧЕК} рядов, длина хребта {длина:.0f}')
 
     if '--proverka' in sys.argv:
         путь = sys.argv[sys.argv.index('--proverka') + 1]

@@ -17,9 +17,11 @@ var холст=сцена.querySelector('.ryba'),надпись=сцена.query
 if(!холст||!холст.dataset.src||!надпись)return;
 var gl=холст.getContext('webgl',{alpha:true,premultipliedAlpha:true,antialias:true});
 if(!gl){холст.style.display='none';return}
-var тихо=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var меньшеДвижения=matchMedia('(prefers-reduced-motion: reduce)'),тихо=меньшеДвижения.matches;
+var пауза=false,потерян=false,виден=true,номерКадра=0;
+var кнопка=сцена.querySelector('[data-pond-pause]');
 /* выше 1.75 разницы под водой не видно, а старые телефоны греются от каждого лишнего пикселя */
-var плотность=Math.min(1.75,window.devicePixelRatio||1);
+var плотность=Math.min(innerWidth<620?1.5:1.75,window.devicePixelRatio||1);
 
 /* ---------- шейдеры ---------- */
 function шейдер(тип,код){var s=gl.createShader(тип);gl.shaderSource(s,код);gl.compileShader(s);return s}
@@ -64,6 +66,7 @@ gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,true);
 /* ---------- размеры ---------- */
 var W=0,H=0,М=.4,надписьГотова=false,скелет=null;
 function мерить(){
+  if(потерян)return;
   var r=сцена.getBoundingClientRect();W=r.width;H=r.height;
   холст.width=Math.round(W*плотность);холст.height=Math.round(H*плотность);
   gl.viewport(0,0,холст.width,холст.height);
@@ -75,6 +78,7 @@ function мерить(){
 
 /* ---------- надпись: каждую букву — туда же, где она стоит в HTML ---------- */
 function нарисоватьНадпись(){
+  if(потерян)return;
   var c=document.createElement('canvas');c.width=холст.width;c.height=холст.height;
   var x2=c.getContext('2d'),rs=сцена.getBoundingClientRect(),cs=getComputedStyle(надпись);
   var размер=parseFloat(cs.fontSize);
@@ -92,7 +96,7 @@ function нарисоватьНадпись(){
     }
   }
   gl.bindTexture(gl.TEXTURE_2D,тНадпись);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,c);
-  сцена.classList.add('voda');   // HTML-надпись прозрачна, видна нарисованная
+  // Прячем HTML только после готового кадра: загрузка и пауза не оставляют пустоту.
 }
 
 /* ---------- вода: сетка высот ---------- */
@@ -209,6 +213,7 @@ function вода(режим){
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.activeTexture(gl.TEXTURE0);
 }
 function нарисовать(скорость){
+  if(потерян)return;
   gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
   if(надписьГотова)вода(0);                       // надпись под водой
   if(готово){                                     // тень и рыбка
@@ -224,6 +229,7 @@ function нарисовать(скорость){
     gl.disableVertexAttribArray(лUV);
   }
   вода(1);                                        // блики и отблески волн поверх всего
+  if(надписьГотова)сцена.classList.add('voda');
 }
 
 /* ---------- движение ---------- */
@@ -234,7 +240,10 @@ function путь(t){var ax=W*.42,ay=H*.36;
   return [W*.5+ax*(.6*Math.sin(t*.17+ф[0])+.4*Math.sin(t*.41+ф[1])),H*.5+ay*(.55*Math.sin(t*.25+ф[2])+.4*Math.sin(t*.53+ф[3]))]}
 var прежде=performance.now(),идёт=false,копилка=0;
 function кадр(сейчас){
+  номерКадра=0;
   if(!идёт)return;
+  // На экране 120 Гц пруду достаточно 60 кадров: вдвое меньше работы для GPU.
+  if(сейчас-прежде<1000/60-.75){номерКадра=requestAnimationFrame(кадр);return}
   var dt=Math.min(.04,(сейчас-прежде)/1000);прежде=сейчас;t+=dt;
   var курсор=сейчас-курсорКогда<(касание?2600:3500),tx,ty,макс,тяга;
   if(курсор){орбита+=dt*1.15;var Rr=Math.min(W,H)*.16+60;tx=курсорX+Math.cos(орбита)*Rr;ty=курсорY+Math.sin(орбита)*Rr*.7;макс=Math.max(520,W*.6);тяга=4}
@@ -254,14 +263,26 @@ function кадр(сейчас){
   копилка+=dt;var шагов=0;while(копилка>1/60&&шагов<3){водаШаг();копилка-=1/60;шагов++}
   водаВТекстуру();
   нарисовать(скорость);
-  requestAnimationFrame(кадр);
+  номерКадра=requestAnimationFrame(кадр);
 }
-function пуск(){if(идёт||тихо)return;идёт=true;прежде=performance.now();requestAnimationFrame(кадр)}
-function стоп(){идёт=false}
+function пуск(){if(идёт||тихо||пауза||потерян||document.hidden||!виден)return;идёт=true;прежде=performance.now();номерКадра=requestAnimationFrame(кадр)}
+function стоп(){идёт=false;cancelAnimationFrame(номерКадра);номерКадра=0}
+function состояние(){
+  if(кнопка){кнопка.hidden=потерян;кнопка.disabled=тихо;кнопка.textContent=тихо?'Пруд без движения':пауза?'Оживить пруд':'Остановить пруд';кнопка.setAttribute('aria-pressed',String(пауза||тихо))}
+}
+if(кнопка){кнопка.hidden=false;кнопка.addEventListener('click',function(){пауза=!пауза;состояние();пауза?стоп():пуск()})}
+function движениеИзменилось(e){тихо=e.matches;состояние();if(тихо){стоп();x=W*.68;y=H*.4;нарисовать(0)}else пуск()}
+if(меньшеДвижения.addEventListener)меньшеДвижения.addEventListener('change',движениеИзменилось);
+else меньшеДвижения.addListener(движениеИзменилось);
+// При потере GPU (память/свёрнутое приложение) сразу возвращается обычный заголовок.
+// Не перехватываем восстановление контекста: возвращаемся к надёжной статичной странице.
+холст.addEventListener('webglcontextlost',function(){потерян=true;стоп();сцена.classList.remove('voda');холст.style.display='none';состояние()});
+состояние();
 
 function куда(e){var r=сцена.getBoundingClientRect();курсорX=e.clientX-r.left;курсорY=e.clientY-r.top;курсорКогда=performance.now()}
 сцена.addEventListener('pointermove',function(e){if(e.pointerType==='mouse'||e.pointerType==='pen'){касание=false;куда(e)}});
 сцена.addEventListener('pointerdown',function(e){
+  if(тихо||пауза||потерян||e.target.closest('a,button'))return;
   var r=сцена.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top;
   капля(px,py,26,3.2);                            // круги по воде от нажатия
   /* нажали по рыбке — пугается и уходит рывком */
@@ -269,23 +290,23 @@ function куда(e){var r=сцена.getBoundingClientRect();курсорX=e.cl
   if(e.pointerType==='touch'){касание=true;куда(e)}
 },{passive:true});
 сцена.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse')курсорКогда=-1e9});
-addEventListener('resize',function(){мерить();if(тихо){x=W*.68;y=H*.55;нарисовать(0)}});
+addEventListener('resize',function(){мерить();if(тихо){x=W*.68;y=H*.4}if(!идёт)нарисовать(0)});
 
 мерить();
 x=W+180;y=H*.45;                                  // вплывает из-за правого края
-if(тихо){x=W*.68;y=H*.55;курс=-.35}               // без движения: пруд и рыбка замерли
+if(тихо){x=W*.68;y=H*.4;курс=-.35}               // без движения: пруд и рыбка замерли
 /* скелет, картинка и шрифт грузятся вместе; что-то не пришло — без рыбки, надпись на месте */
 var ждём=2;
-function пришло(){if(--ждём===0)try{собрать();if(тихо)нарисовать(0)}catch(e){}}
+function пришло(){if(--ждём===0&&!потерян)try{собрать();if(!идёт)нарисовать(0)}catch(e){}}
 fetch(холст.dataset.src.replace(/\.webp$/,'.json')).then(function(r){return r.json()}).then(function(j){скелет=j;пришло()}).catch(function(){});
 рис=new Image();рис.onload=пришло;рис.src=холст.dataset.src;
 (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(function(){
-  надписьГотова=true;нарисоватьНадпись();if(тихо)нарисовать(0);
+  надписьГотова=true;нарисоватьНадпись();if(!идёт)нарисовать(0);
 });
-if(тихо)return;
 /* Не тратим батарею, когда первый экран прокручен или вкладка скрыта */
-var виден=true;
 if('IntersectionObserver' in window){new IntersectionObserver(function(es){виден=es[0].isIntersecting;виден&&!document.hidden?пуск():стоп()}).observe(сцена)}
 document.addEventListener('visibilitychange',function(){document.hidden||!виден?стоп():пуск()});
+addEventListener('pagehide',стоп);
+addEventListener('pageshow',function(){if(!потерян){мерить();нарисовать(0);пуск()}});
 пуск();
 })();

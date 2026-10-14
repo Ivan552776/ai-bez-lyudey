@@ -8,6 +8,7 @@
 // Telegram долго помнит превью по адресу картинки.
 import fs from 'node:fs';
 import path from 'node:path';
+import http from 'node:http';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const здесь = path.dirname(fileURLToPath(import.meta.url));
@@ -40,9 +41,31 @@ img{position:absolute;right:48px;bottom:30px;height:520px;max-width:440px;object
 .big .chip{font-size:28px}
 `;
 
-const b = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {});
+// Пруд снимается с настоящей страницы: file:// не даёт загрузить JSON скелета.
+const server = http.createServer((req,res)=>{
+  let name;try{name=decodeURIComponent(new URL(req.url,'http://localhost').pathname)}catch{res.writeHead(400).end();return}
+  const file=path.resolve(корень,'.'+name+(name.endsWith('/')?'index.html':''));
+  if(!file.startsWith(корень+path.sep)){res.writeHead(403).end();return}
+  const mime={'.html':'text/html; charset=utf-8','.json':'application/json','.webp':'image/webp','.woff2':'font/woff2'};
+  fs.readFile(file,(err,data)=>{if(err){res.writeHead(404).end();return}res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.end(data)});
+});
+await new Promise(r=>server.listen(0,'127.0.0.1',r));
+const b = await chromium.launch({...(process.env.CHROME ? { executablePath: process.env.CHROME } : {}),args:['--enable-unsafe-swiftshader']});
 const p = await b.newPage({ viewport: { width: 1200, height: 630 } });
-for (const o of список) {
+for (const o of список.filter(o=>!process.argv.includes('--tolko-kursy')||o.slug==='kursy')) {
+  if(o.slug==='kursy'){
+    await p.emulateMedia({colorScheme:'light',reducedMotion:'reduce'});
+    await p.goto(`http://127.0.0.1:${server.address().port}/kursy/`);
+    await p.evaluate(()=>document.fonts.ready);
+    await p.addStyleTag({content:'.site,.ft,.scena~.wrap,.pod,.btns,.pond-pause{display:none!important}.scena{margin:0;border-radius:0;height:630px;min-height:630px}.scena-in{padding:40px 16px}.giant{font-size:200px}.scena .sub{font-size:24px;max-width:1000px}'});
+    await p.evaluate(()=>dispatchEvent(new Event('resize')));
+    await p.waitForSelector('.scena.voda');
+    await p.waitForFunction(()=>{const i=performance.getEntriesByType('resource').find(x=>x.name.includes('koi-v2.webp'));return !!i});
+    await p.waitForTimeout(250);
+    await p.screenshot({path:path.join(куда,'kursy-prud-v2.jpg'),type:'jpeg',quality:88});
+    console.log('stati/og/kursy-prud-v2.jpg — кадр пруда');
+    continue;
+  }
   // длинный заголовок — мельче, чтобы влез в три строки
   const размер = o.big ? '' : o.title.length > 60 ? 'font-size:50px' : o.title.length > 42 ? 'font-size:56px' : '';
   const html = `<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>${стиль}</style></head>
@@ -60,3 +83,4 @@ for (const o of список) {
   fs.unlinkSync(tmp);
 }
 await b.close();
+server.close();
